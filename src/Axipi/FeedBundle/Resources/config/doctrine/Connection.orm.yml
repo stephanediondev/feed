@@ -1,0 +1,56 @@
+Axipi\FeedBundle\Entity\Connection:
+    type: entity
+    table: connection
+    indexes:
+        member_id:
+            columns:
+                - member_id
+    uniqueConstraints:
+        token:
+            columns:
+                - token
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        token:
+            type: string
+            nullable: true
+            length: 40
+            options:
+                fixed: true
+        ip:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        agent:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        dateCreated:
+            type: datetime
+            nullable: false
+            column: date_created
+    manyToOne:
+        member:
+            targetEntity: Member
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                member_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

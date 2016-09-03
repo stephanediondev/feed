@@ -1,0 +1,48 @@
+Axipi\FeedBundle\Entity\Member:
+    type: entity
+    table: member
+    uniqueConstraints:
+        email:
+            columns:
+                - email
+        nickname:
+            columns:
+                - nickname
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        email:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        password:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        nickname:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        administrator:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+        dateCreated:
+            type: datetime
+            nullable: false
+            column: date_created
+    lifecycleCallbacks: {  }

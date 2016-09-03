@@ -1,0 +1,48 @@
+Axipi\FeedBundle\Entity\ItemCategory:
+    type: entity
+    table: item_category
+    indexes:
+        IDX_6A41D10A126F525E:
+            columns:
+                - item_id
+        IDX_6A41D10A12469DE2:
+            columns:
+                - category_id
+    uniqueConstraints:
+        item_id_category_id:
+            columns:
+                - item_id
+                - category_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        category:
+            targetEntity: Category
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
+        item:
+            targetEntity: Item
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                item_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
