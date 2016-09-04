@@ -1,0 +1,23 @@
+<div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col{% if toggle is defined and toggle %} toggle{% endif %}"{% if id is defined %} id ="{{ id }}"{% endif %}>
+    <div class="mdl-card__actions">
+        {% block card__actions %}{% endblock %}
+    </div>
+    {% if no_title is not defined %}
+    <div class="mdl-card__title">
+        <h1 class="mdl-card__title-text">
+            {% block card__title %}{% endblock %}
+        </h1>
+    </div>
+    {% endif %}
+    {% if form is defined %}
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+    {% endif %}
+    <div class="mdl-card__supporting-text mdl-grid{% if dropzone is defined %} dropzone{% endif %}{% if sortzone is defined %} sortzone{% endif %}">
+        {% block card__supporting %}{% endblock %}
+    </div>
+    {% block pagination %}{% endblock %}
+    {% if form is defined %}
+        {{ form_end(form) }}
+    {% endif %}
+</div>

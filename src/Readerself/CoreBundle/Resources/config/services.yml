@@ -5,8 +5,8 @@ services:
         calls:
             - [ "setContainer", [ "@service_container" ] ]
 
-    readerself_core_controller_default:
-        class: Readerself\CoreBundle\Controller\DefaultController
+    readerself_core_controller_setting:
+        class: Readerself\CoreBundle\Controller\SettingController
         parent: "readerself_core_controller_abstract"
 
     readerself_core_manager_abstract:
