@@ -8,48 +8,12 @@ include('vendor/simplepie/simplepie/library/SimplePie.php');
 
 class CollectionManager extends AbstractManager
 {
-    public function insert($table, $fields)
-    {
-        $sql = 'INSERT INTO '.$table.' ('.implode(', ', array_keys($fields)).') VALUES ('.implode(', ', array_map(function($n) {return ':'.$n;}, array_keys($fields))).')';
-        $stmt = $this->em->getConnection()->prepare($sql);
-        foreach($fields as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-        $stmt->execute();
-        return $this->em->getConnection()->lastInsertId();
-    }
-
-    public function update($table, $fields, $where)
-    {
-        $sql = 'UPDATE '.$table.' SET '.implode(', ', array_map(function($n) {return $n.' = :'.$n;}, array_keys($fields))).' WHERE '.implode(', ', array_map(function($n) {return $n.' = :'.$n;}, array_keys($where)));
-        $stmt = $this->em->getConnection()->prepare($sql);
-        foreach($fields as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-        foreach($where as $k => $v) {
-            $stmt->bindValue($k, $v);
-        }
-        $stmt->execute();
-    }
-
-    public function toAscii($url)
-    {
-        $parse_url = parse_url($url);
-        if(!isset($parse_url['host'])) {
-            return $url;
-        }
-        if(mb_detect_encoding($parse_url['host']) != 'ASCII') {
-            $url = str_replace($parse_url['host'], idn_to_ascii($parse_url['host']), $url);
-        }
-        return $url;
-    }
-
     public function start()
     {
         $startTime = microtime(1);
 
-        $sql = 'SELECT * FROM feed';
-        $stmt = $this->em->getConnection()->prepare($sql);
+        $sql = 'SELECT id, link FROM feed LIMIT 100,100';
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
 
@@ -120,8 +84,10 @@ class CollectionManager extends AbstractManager
                             $updateFeed['next_collection'] = $nextCollection;
                         }
 
-                        $this->update('feed', $updateFeed, ['id' => $feed['id']]);
+                        $this->update('feed', $updateFeed, $feed['id']);
                     }
+                    $sp_feed->__destruct();
+                    unset($sp_feed);
                 } catch (Exception $e) {
                     $errors++;
                     $insertCollectionFeed['error'] = $e->getMessage();
@@ -145,13 +111,13 @@ class CollectionManager extends AbstractManager
         $updateCollection['errors'] = $errors;
         $updateCollection['time'] = microtime(1) - $startTime;
         $updateCollection['memory'] = memory_get_peak_usage();
-        $this->update('collection', $updateCollection, ['id' => $collection_id]);
+        $this->update('collection', $updateCollection, $collection_id);
     }
 
     public function getLastItem($feed)
     {
         $sql = 'SELECT date_created FROM item WHERE feed_id = :feed_id GROUP BY id ORDER BY id DESC';
-        $stmt = $this->em->getConnection()->prepare($sql);
+        $stmt = $this->connection->prepare($sql);
         $stmt->bindValue('feed_id', $feed['id']);
         $stmt->execute();
         $result = $stmt->fetch();
@@ -181,13 +147,13 @@ class CollectionManager extends AbstractManager
         foreach($items as $sp_item) {
             $link = str_replace('&amp;', '&', $sp_item->get_link());
 
-            $sql = 'SELECT COUNT(*) AS count FROM item WHERE link = :link';
-            $stmt = $this->em->getConnection()->prepare($sql);
+            $sql = 'SELECT id FROM item WHERE link = :link';
+            $stmt = $this->connection->prepare($sql);
             $stmt->bindValue('link', $link);
             $stmt->execute();
             $result = $stmt->fetch();
 
-            if($result['count'] > 0) {
+            if($result) {
                 continue;
             }
 
@@ -233,6 +199,8 @@ class CollectionManager extends AbstractManager
             $this->setCategories($item_id, $sp_item->get_categories());
 
             $this->setEnclosures($item_id, $sp_item->get_enclosures());
+
+            unset($sp_item);
         }
     }
 
@@ -243,7 +211,7 @@ class CollectionManager extends AbstractManager
         if($sp_author = $sp_item->get_author()) {
             if($sp_author->get_name() != '') {
                 $sql = 'SELECT id FROM author WHERE title = :title';
-                $stmt = $this->em->getConnection()->prepare($sql);
+                $stmt = $this->connection->prepare($sql);
                 $stmt->bindValue('title', $sp_author->get_name());
                 $stmt->execute();
                 $result = $stmt->fetch();
@@ -292,7 +260,7 @@ class CollectionManager extends AbstractManager
             $titles = array_unique($titles);
             foreach($titles as $title) {
                 $sql = 'SELECT id FROM category WHERE title = :title';
-                $stmt = $this->em->getConnection()->prepare($sql);
+                $stmt = $this->connection->prepare($sql);
                 $stmt->bindValue('title', $title);
                 $stmt->execute();
                 $result = $stmt->fetch();
@@ -313,6 +281,7 @@ class CollectionManager extends AbstractManager
                 ];
                 $this->insert('item_category', $insertItemCategory);
             }
+            unset($titles);
         }
     }
 
