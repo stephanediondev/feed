@@ -42,5 +42,6 @@ Readerself\CoreBundle\Entity\Notification:
                 member_id:
                     nullable: false
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
     lifecycleCallbacks: {  }

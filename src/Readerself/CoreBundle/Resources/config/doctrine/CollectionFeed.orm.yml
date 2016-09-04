@@ -44,6 +44,7 @@ Readerself\CoreBundle\Entity\CollectionFeed:
                 collection_id:
                     nullable: false
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
         feed:
             targetEntity: Feed
@@ -55,5 +56,6 @@ Readerself\CoreBundle\Entity\CollectionFeed:
                 feed_id:
                     nullable: false
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
     lifecycleCallbacks: {  }

@@ -51,6 +51,7 @@ Readerself\CoreBundle\Entity\Subscription:
             joinColumns:
                 folder_id:
                     referencedColumnName: id
+                    onDelete: "set null"
             orphanRemoval: false
         feed:
             targetEntity: Feed
@@ -62,6 +63,7 @@ Readerself\CoreBundle\Entity\Subscription:
                 feed_id:
                     nullable: false
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
         member:
             targetEntity: Member
@@ -73,5 +75,6 @@ Readerself\CoreBundle\Entity\Subscription:
                 member_id:
                     nullable: false
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
     lifecycleCallbacks: {  }

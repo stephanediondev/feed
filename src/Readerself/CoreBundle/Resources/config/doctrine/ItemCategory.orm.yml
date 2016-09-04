@@ -33,6 +33,7 @@ Readerself\CoreBundle\Entity\ItemCategory:
                 category_id:
                     nullable: false
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
         item:
             targetEntity: Item
@@ -44,5 +45,6 @@ Readerself\CoreBundle\Entity\ItemCategory:
                 item_id:
                     nullable: false
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
     lifecycleCallbacks: {  }

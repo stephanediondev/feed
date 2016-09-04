@@ -78,6 +78,7 @@ Readerself\CoreBundle\Entity\Item:
                 feed_id:
                     nullable: false
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
         author:
             targetEntity: Author
@@ -88,5 +89,6 @@ Readerself\CoreBundle\Entity\Item:
             joinColumns:
                 author_id:
                     referencedColumnName: id
+                    onDelete: "set null"
             orphanRemoval: false
     lifecycleCallbacks: {  }

@@ -59,5 +59,6 @@ Readerself\CoreBundle\Entity\Enclosure:
             joinColumns:
                 item_id:
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
     lifecycleCallbacks: {  }

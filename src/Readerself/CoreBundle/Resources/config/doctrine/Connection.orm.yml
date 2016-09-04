@@ -52,5 +52,6 @@ Readerself\CoreBundle\Entity\Connection:
                 member_id:
                     nullable: false
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
     lifecycleCallbacks: {  }

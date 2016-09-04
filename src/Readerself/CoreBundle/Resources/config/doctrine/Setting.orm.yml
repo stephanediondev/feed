@@ -64,5 +64,6 @@ Readerself\CoreBundle\Entity\Setting:
             joinColumns:
                 section_id:
                     referencedColumnName: id
+                    onDelete: "cascade"
             orphanRemoval: false
     lifecycleCallbacks: {  }
