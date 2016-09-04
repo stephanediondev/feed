@@ -48,9 +48,9 @@ class Setting
     private $dateCreated;
 
     /**
-     * @var \Readerself\CoreBundle\Entity\SettingSection
+     * @var \Readerself\CoreBundle\Entity\Module
      */
-    private $section;
+    private $module;
 
 
     /**
@@ -232,27 +232,27 @@ class Setting
     }
 
     /**
-     * Set section
+     * Set module
      *
-     * @param \Readerself\CoreBundle\Entity\SettingSection $section
+     * @param \Readerself\CoreBundle\Entity\Module $module
      *
      * @return Setting
      */
-    public function setSection(\Readerself\CoreBundle\Entity\SettingSection $section = null)
+    public function setModule(\Readerself\CoreBundle\Entity\Module $module = null)
     {
-        $this->section = $section;
+        $this->module = $module;
 
         return $this;
     }
 
     /**
-     * Get section
+     * Get module
      *
-     * @return \Readerself\CoreBundle\Entity\SettingSection
+     * @return \Readerself\CoreBundle\Entity\Module
      */
-    public function getSection()
+    public function getModule()
     {
-        return $this->section;
+        return $this->module;
     }
 }
 

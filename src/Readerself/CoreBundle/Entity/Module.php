@@ -3,9 +3,9 @@
 namespace Readerself\CoreBundle\Entity;
 
 /**
- * SettingSection
+ * Module
  */
-class SettingSection
+class Module
 {
     /**
      * @var integer
@@ -38,7 +38,7 @@ class SettingSection
      *
      * @param string $title
      *
-     * @return SettingSection
+     * @return Module
      */
     public function setTitle($title)
     {
@@ -62,7 +62,7 @@ class SettingSection
      *
      * @param \DateTime $dateCreated
      *
-     * @return SettingSection
+     * @return Module
      */
     public function setDateCreated($dateCreated)
     {

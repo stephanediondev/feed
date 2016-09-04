@@ -1,6 +1,6 @@
-Readerself\CoreBundle\Entity\SettingSection:
+Readerself\CoreBundle\Entity\Module:
     type: entity
-    table: setting_section
+    table: module
     id:
         id:
             type: integer

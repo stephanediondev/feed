@@ -2,9 +2,9 @@ Readerself\CoreBundle\Entity\Setting:
     type: entity
     table: setting
     indexes:
-        section_id:
+        module_id:
             columns:
-                - section_id
+                - module_id
     id:
         id:
             type: integer
@@ -55,14 +55,14 @@ Readerself\CoreBundle\Entity\Setting:
             nullable: false
             column: date_created
     manyToOne:
-        section:
-            targetEntity: SettingSection
+        module:
+            targetEntity: Module
             cascade: {  }
             fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
-                section_id:
+                module_id:
                     referencedColumnName: id
                     onDelete: "cascade"
             orphanRemoval: false
