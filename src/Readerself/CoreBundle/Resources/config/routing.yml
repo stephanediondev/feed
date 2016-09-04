@@ -1,0 +1,4 @@
+readerself_core_home:
+    path:  /
+    defaults:
+        _controller: "readerself_core_controller_default:indexAction"

@@ -1,0 +1,59 @@
+Readerself\CoreBundle\Entity\CollectionFeed:
+    type: entity
+    table: collection_feed
+    indexes:
+        IDX_69376845514956FD:
+            columns:
+                - collection_id
+        IDX_6937684551A5BC03:
+            columns:
+                - feed_id
+    uniqueConstraints:
+        collection_id_feed_id:
+            columns:
+                - collection_id
+                - feed_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        error:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
+        dateCreated:
+            type: datetime
+            nullable: false
+            column: date_created
+    manyToOne:
+        collection:
+            targetEntity: Collection
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                collection_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
+        feed:
+            targetEntity: Feed
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                feed_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

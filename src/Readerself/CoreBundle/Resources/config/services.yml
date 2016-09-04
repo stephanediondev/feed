@@ -1,0 +1,22 @@
+services:
+    readerself_core_controller_abstract:
+        class: Readerself\CoreBundle\Controller\AbstractController
+        abstract: true
+        calls:
+            - [ "setContainer", [ "@service_container" ] ]
+
+    readerself_core_controller_default:
+        class: Readerself\CoreBundle\Controller\DefaultController
+        parent: "readerself_core_controller_abstract"
+
+    readerself_core_manager_abstract:
+        class: Readerself\CoreBundle\Manager\AbstractManager
+        abstract: true
+        calls:
+            - [ "setEntityManager", [ "@doctrine.orm.entity_manager" ] ]
+            - [ "setEventDispatcher", [ "@event_dispatcher" ] ]
+
+    readerself_core_manager_collection:
+        class: Readerself\CoreBundle\Manager\CollectionManager
+        parent: "readerself_core_manager_abstract"
+        public: true

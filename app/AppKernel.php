@@ -14,8 +14,10 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Axipi\FeedBundle\AxipiFeedBundle(),
+
             new Minishlink\Bundle\WebPushBundle\MinishlinkWebPushBundle(),
+
+            new Readerself\CoreBundle\ReaderselfCoreBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

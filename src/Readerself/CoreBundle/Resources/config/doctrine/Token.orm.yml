@@ -1,0 +1,54 @@
+Readerself\CoreBundle\Entity\Token:
+    type: entity
+    table: token
+    indexes:
+        member_id:
+            columns:
+                - member_id
+        type:
+            columns:
+                - type
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        type:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        value:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        sandbox:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+        dateCreated:
+            type: datetime
+            nullable: false
+            column: date_created
+    manyToOne:
+        member:
+            targetEntity: Member
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                member_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

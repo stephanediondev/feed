@@ -1,0 +1,48 @@
+Readerself\CoreBundle\Entity\ActionCategory:
+    type: entity
+    table: action_category
+    indexes:
+        IDX_D19B69A712469DE2:
+            columns:
+                - category_id
+        IDX_D19B69A79D32F035:
+            columns:
+                - action_id
+    uniqueConstraints:
+        action_id_category_id:
+            columns:
+                - action_id
+                - category_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        category:
+            targetEntity: Category
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
+        action:
+            targetEntity: Action
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                action_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

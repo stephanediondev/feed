@@ -1,0 +1,46 @@
+Readerself\CoreBundle\Entity\Notification:
+    type: entity
+    table: notification
+    indexes:
+        IDX_A765AD32A76ED395:
+            columns:
+                - member_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        title:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        options:
+            type: text
+            nullable: false
+            length: 65535
+            options:
+                fixed: false
+        dateCreated:
+            type: datetime
+            nullable: false
+            column: date_created
+    manyToOne:
+        member:
+            targetEntity: Member
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                member_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

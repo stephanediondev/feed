@@ -1,4 +1,3 @@
-axipi_core_home:
-    path:  /
-    defaults:
-        _controller: "axipi_core_controller_default:indexAction"
+ReaderselfCoreBundle:
+    resource: "@ReaderselfCoreBundle/Resources/config/routing.yml"
+    prefix: "/"
