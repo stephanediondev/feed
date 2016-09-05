@@ -1,4 +1,11 @@
 readerself_core_setting:
-    path:  /
+    path:  /setting
     defaults:
         _controller: "readerself_core_controller_setting:indexAction"
+
+readerself_core_feed:
+    path:  /feed
+    defaults:
+        _controller: "readerself_core_controller_feed:dispatchAction"
+        action: "index"
+        id: null

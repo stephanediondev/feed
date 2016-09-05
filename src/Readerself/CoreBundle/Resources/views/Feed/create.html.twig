@@ -1,0 +1,39 @@
+{% extends 'AxipiBackendBundle::base.html.twig' %}
+
+{% block title %}{{ 'components'|trans({}, 'axipi_backend') }}{% endblock %}
+
+{% block body %}
+    {% embed 'AxipiBackendBundle::card.html.twig' with {form: form} %}
+        {% block card__title %}
+            <span><a class="mdl-color-text--pink" href="{{ path('axipi_backend_component', {action: 'index'}) }}"><i class="fa fa-{{ 'icons.component'|trans({}, 'axipi_backend') }}"></i>{{ 'components'|trans({}, 'axipi_backend') }}</a></span>
+        {% endblock %}
+        {% block card__supporting %}
+            <div class="mdl-cell mdl-cell--4-col">
+                {{ form_row(form.category) }}
+                {{ form_row(form.service) }}
+                {{ form_row(form.template) }}
+                {{ form_row(form.title) }}
+                {{ form_row(form.zone) }}
+                {{ form_row(form.parent) }}
+                {{ form_row(form.icon) }}
+                {{ form_row(form.submit) }}
+            </div>
+            <div class="mdl-cell mdl-cell--8-col">
+                {{ form_row(form.isUnique) }}
+                {{ form_row(form.isHome) }}
+                {{ form_row(form.excludeSitemap) }}
+                {{ form_row(form.excludeSearch) }}
+                {{ form_row(form.isActive) }}
+                {{ form_row(form.attributesSchema) }}
+            </div>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block style %}
+    {{ parent() }}
+{% endblock %}
+
+{% block script %}
+    {{ parent() }}
+{% endblock %}

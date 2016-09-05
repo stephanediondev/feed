@@ -1,0 +1,26 @@
+{% extends 'ReaderselfCoreBundle::base.html.twig' %}
+
+{% block title %}{{ 'components'|trans({}, 'axipi_backend') }}{% endblock %}
+
+{% block body %}
+    {% embed 'ReaderselfCoreBundle::card.html.twig' %}
+        {% block card__title %}
+            <span><i class="fa fa-{{ 'icons.widget'|trans({}, 'axipi_backend') }}"></i>{{ 'category.widget'|trans({}, 'axipi_backend') }}</span>
+        {% endblock %}
+        {% block card__supporting %}
+            {% for object in feeds %}
+                <div class="mdl-cell mdl-cell--2-col">
+                    <a href="{{ path('readerself_core_feed', {action: 'read', id: object.id}) }}">{{ object.title }}</a>
+                </div>
+            {% endfor %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
+
+{% block style %}
+    {{ parent() }}
+{% endblock %}
+
+{% block script %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'AxipiBackendBundle::base.html.twig' %}
+
+{% import '@AxipiBackend/Component/macro.html.twig' as helper %}
+
+{% block title %}{{ component.title }} - {{ 'components'|trans({}, 'axipi_backend') }}{% endblock %}
+
+{% block body %}
+    {% embed 'AxipiBackendBundle::card.html.twig' %}
+        {% block card__actions %}
+            <a class="mdl-button mdl-color--pink mdl-color-text--white" href="{{ path('axipi_backend_component', {action: 'update', 'id': component.id}) }}">{{ 'actions.update'|trans({}, 'axipi_backend') }}</a>
+            <a class="mdl-button mdl-color--pink mdl-color-text--white" href="{{ path('axipi_backend_component', {action: 'delete', 'id': component.id}) }}">{{ 'actions.delete'|trans({}, 'axipi_backend') }}</a>
+        {% endblock %}
+        {% block card__title %}
+            <span><a class="mdl-color-text--pink" href="{{ path('axipi_backend_component', {action: 'index'}) }}"><i class="fa fa-{{ 'icons.component'|trans({}, 'axipi_backend') }}"></i>{{ 'components'|trans({}, 'axipi_backend') }}</a></span>
+            {% if component.parent %}
+                {{ helper.path_loop(component.parent) }}
+            {% endif %}
+            <span>{{ component.title }}</span>
+        {% endblock %}
+        {% block card__supporting %}
+            <div class="mdl-cell mdl-cell--4-col">
+                {{ macro.read_field('component.category'|trans({}, 'axipi_backend'), component.category) }}
+                {{ macro.read_field('component.service'|trans({}, 'axipi_backend'), component.service) }}
+                {{ macro.read_field('component.template'|trans({}, 'axipi_backend'), component.template) }}
+                {{ macro.read_field('component.title'|trans({}, 'axipi_backend'), component.title) }}
+                {% if component.zone %}{{ macro.read_field('component.zone'|trans({}, 'axipi_backend'), component.zone.code) }}{% endif %}
+                {% if component.parent %}{{ macro.read_field('component.parent'|trans({}, 'axipi_backend'), component.parent.title) }}{% endif %}
+                {{ macro.read_field('component.icon'|trans({}, 'axipi_backend'), component.icon) }}
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+                {{ macro.read_field('component.isUnique'|trans({}, 'axipi_backend'), component.isUnique) }}
+                {{ macro.read_field('component.isHome'|trans({}, 'axipi_backend'), component.isHome) }}
+                {{ macro.read_field('component.excludeSitemap'|trans({}, 'axipi_backend'), component.excludeSitemap) }}
+                {{ macro.read_field('component.excludeSearch'|trans({}, 'axipi_backend'), component.excludeSearch) }}
+                {{ macro.read_field('component.isActive'|trans({}, 'axipi_backend'), component.isActive) }}
+                {% set attributes = component.attributesSchema|jsonDecode %}
+                {% for k, v in attributes %}
+                    {{ macro.read_field(k, v.type) }}
+                {% endfor %}
+            </div>
+        {% endblock %}
+    {% endembed %}
+
+    {% if component.children|length %}
+        {% embed 'AxipiBackendBundle::card.html.twig' %}
+            {% block card__title %}
+                <span><i class="fa fa-{{ 'icons.component'|trans({}, 'axipi_backend') }}"></i>{{ 'component.children'|trans({}, 'axipi_backend') }}</span>
+            {% endblock %}
+            {% block card__supporting %}
+                {% for object in component.children %}
+                    <div class="mdl-cell mdl-cell--2-col">
+                        <a href="{{ path('axipi_backend_component', {action: 'read', id: object.id}) }}"><i class="fa fa-3x fa-{{ object.icon }}"></i><br>{{ object.title }}</a>
+                    </div>
+                {% endfor %}
+            {% endblock %}
+        {% endembed %}
+    {% endif %}
+{% endblock %}
+
+{% block style %}
+    {{ parent() }}
+{% endblock %}
+
+{% block script %}
+    {{ parent() }}
+{% endblock %}

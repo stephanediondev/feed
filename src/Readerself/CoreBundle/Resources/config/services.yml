@@ -1,4 +1,5 @@
 services:
+    #controller
     readerself_core_controller_abstract:
         class: Readerself\CoreBundle\Controller\AbstractController
         abstract: true
@@ -9,6 +10,13 @@ services:
         class: Readerself\CoreBundle\Controller\SettingController
         parent: "readerself_core_controller_abstract"
 
+    readerself_core_controller_feed:
+        class: Readerself\CoreBundle\Controller\FeedController
+        parent: "readerself_core_controller_abstract"
+        arguments:
+            - "@readerself_core_manager_feed"
+
+    #manager
     readerself_core_manager_abstract:
         class: Readerself\CoreBundle\Manager\AbstractManager
         abstract: true
@@ -18,5 +26,10 @@ services:
 
     readerself_core_manager_collection:
         class: Readerself\CoreBundle\Manager\CollectionManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_feed:
+        class: Readerself\CoreBundle\Manager\FeedManager
         parent: "readerself_core_manager_abstract"
         public: true
