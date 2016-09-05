@@ -1,0 +1,9 @@
+{
+    "name": "axipi",
+    "license": "GPL-3.0",
+    "dependencies": {
+        "jquery": "*",
+        "backbone": "*",
+        "material-design-lite": "*"
+    }
+}

@@ -1,4 +1,4 @@
-<div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col{% if toggle is defined and toggle %} toggle{% endif %}"{% if id is defined %} id ="{{ id }}"{% endif %}>
+<div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--{{ columns }}-col{% if toggle is defined and toggle %} toggle{% endif %}"{% if id is defined %} id ="{{ id }}"{% endif %}>
     <div class="mdl-card__actions">
         {% block card__actions %}{% endblock %}
     </div>
