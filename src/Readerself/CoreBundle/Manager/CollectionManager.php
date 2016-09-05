@@ -146,6 +146,7 @@ class CollectionManager extends AbstractManager
     {
         foreach($items as $sp_item) {
             $link = str_replace('&amp;', '&', $sp_item->get_link());
+            $link = mb_substr($link, 0, 255, 'UTF-8');
 
             $sql = 'SELECT id FROM item WHERE link = :link';
             $stmt = $this->connection->prepare($sql);
@@ -154,7 +155,7 @@ class CollectionManager extends AbstractManager
             $result = $stmt->fetch();
 
             if($result) {
-                continue;
+                break;
             }
 
             $insertItem = [];
@@ -163,7 +164,7 @@ class CollectionManager extends AbstractManager
 
             if($sp_item->get_title()) {
                 $title = preg_replace('/[^(\x20-\x7F)]*/', '', $sp_item->get_title());
-                $insertItem['title'] = $title;
+                $insertItem['title'] = mb_substr($title, 0, 255, 'UTF-8');
             } else {
                 $insertItem['title'] = '-';
             }
