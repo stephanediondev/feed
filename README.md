@@ -1,4 +1,6 @@
-sdion1
+Reader Self
 ======
 
-A Symfony project created on August 31, 2016, 1:08 pm.
+Server API (Symfony)
+
+Standalone html client

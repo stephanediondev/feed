@@ -27,7 +27,7 @@ var FeedModel = Backbone.Model.extend({
 var FeedsCollection = Backbone.Collection.extend({
     model: FeedModel,
     //url: 'feeds.php',
-    url: '../web/app_dev.php/feed',
+    url: '../app_dev.php/feed',
     parse: function(data) {
         console.log(data);
         return data.feeds;
