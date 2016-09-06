@@ -2,15 +2,12 @@
 namespace Readerself\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
 use Readerself\CoreBundle\Manager\FeedManager;
-use Readerself\CoredBundle\Form\Type\DeleteType;
-use Readerself\CoredBundle\Form\Type\FeedType;
 use Readerself\CoreBundle\Entity\Feed;
 
 class FeedController extends AbstractController
@@ -68,10 +65,6 @@ class FeedController extends AbstractController
             ];
         }
         return new JsonResponse($data);
-
-        $parameterBag->set('feeds', $this->feedManager->getList());
-
-        return $this->render('ReaderselfCoreBundle:Feed:index.html.twig', $parameterBag->all());
     }
 
     public function createAction(Request $request, ParameterBag $parameterBag)

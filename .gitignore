@@ -14,5 +14,4 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
-/web/vendor/
-/CLIENT/vendor/
+/web/client/vendor/
