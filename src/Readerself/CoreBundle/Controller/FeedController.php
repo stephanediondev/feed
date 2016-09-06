@@ -3,6 +3,7 @@ namespace Readerself\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Readerself\CoreBundle\Controller\AbstractController;
@@ -57,6 +58,18 @@ class FeedController extends AbstractController
 
     public function indexAction(Request $request, ParameterBag $parameterBag)
     {
+        $data = [];
+        $data['feeds'] = [];
+        foreach($this->feedManager->getList() as $feed) {
+            $data['feeds'][] = [
+               'id' => $feed->getId(),
+               'title' => $feed->getTitle(),
+               'website' => $feed->getWebsite(),
+               'condition' => true,
+            ];
+        }
+        return new JsonResponse($data);
+
         $parameterBag->set('feeds', $this->feedManager->getList());
 
         return $this->render('ReaderselfCoreBundle:Feed:index.html.twig', $parameterBag->all());

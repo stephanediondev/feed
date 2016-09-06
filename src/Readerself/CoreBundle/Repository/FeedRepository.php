@@ -37,7 +37,10 @@ class FeedRepository extends AbstractRepository
         $query->addSelect('fed');
         $query->from('ReaderselfCoreBundle:Feed', 'fed');
 
+        $query->andWhere('fed.title IS NOT NULL');
+
         $query->addOrderBy('fed.title');
+        //$query->setMaxResults(2);
 
         $getQuery = $query->getQuery();
 

@@ -46,7 +46,10 @@ a:link, a:visited {
     padding: 8px;
 }
 .mdl-card__title-text {
+    display: block;
     font-size: 18px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .mdl-card__title-text span {
     margin-right: 15px;

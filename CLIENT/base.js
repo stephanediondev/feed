@@ -26,7 +26,8 @@ var FeedModel = Backbone.Model.extend({
 
 var FeedsCollection = Backbone.Collection.extend({
     model: FeedModel,
-    url: 'feeds.php',
+    //url: 'feeds.php',
+    url: '../web/app_dev.php/feed',
     parse: function(data) {
         console.log(data);
         return data.feeds;
@@ -46,7 +47,7 @@ feeds.on('add', function(feed) {
 // The DOM element for a todo item...
 var TodoView = Backbone.View.extend({
     tagName: "div",
-    className: "mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col",
+    className: "mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col",
     template: _.template($('#item-template').html()),
     // Re-render the titles of the todo item.
     render: function() {
