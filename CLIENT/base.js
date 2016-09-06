@@ -45,7 +45,8 @@ feeds.on('add', function(feed) {
 
 // The DOM element for a todo item...
 var TodoView = Backbone.View.extend({
-    tagName: "p",
+    tagName: "div",
+    className: "mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col",
     template: _.template($('#item-template').html()),
     // Re-render the titles of the todo item.
     render: function() {

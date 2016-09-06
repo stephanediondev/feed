@@ -1,28 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>test</title>
+<title>Welcome!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="HandheldFriendly" content="true">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#3e4eb8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" type="text/css" href="vendor/material-design-lite/material.min.css">
+<!--<link rel="stylesheet" type="text/css" href="base.css">-->
 </head>
+
 <body>
 
-<p><a href="">Home</a></p>
-<p><a href="posts/12">Post 12</a></p>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+    <header class="mdl-layout__header mdl-color--indigo">
+        <div class="mdl-layout__header-row">
+            <div class="mdl-layout-spacer">
+            </div>
+            <a class="mdl-button mdl-color--pink mdl-color-text--white" href="posts/12">Post 12</a>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer">
+        <ul class="mdl-list">
+            <li class="mdl-list__item"><a href=""><i class="fa-lg fa fa-home"></i>Home</a></li>
+        </ul>
+    </div>
 
-<div id="todo-list">
+    <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="mdl-grid" id="todo-list">
+            <div class="mdl-snackbar mdl-js-snackbar">
+                <div class="mdl-snackbar__text"></div>
+                <button type="button" class="mdl-snackbar__action"></button>
+            </div>
 
-<script type="text/template" id="item-template">
-    <%- title %>
-</script>
+            <script type="text/template" id="item-template">
+                <div class="mdl-card__title">
+                    <h1 class="mdl-card__title-text">
+                        <%- title %>
+                    </h1>
+                </div>
+                <div class="mdl-card__supporting-text mdl-grid">
+                    <% if (condition) { %>
+                        condition true
+                    <% } %>
+                </div>
+            </script>
+        </div>
+    </main>
+</div>
 
 <script type="text/javascript">
 var base_dir = location.pathname;
 </script>
-
-<script src="vendor/jquery/dist/jquery.min.js"></script>
-<script src="vendor/underscore/underscore-min.js"></script>
-<script src="vendor/backbone/backbone-min.js"></script>
-
-<script src="base.js"></script>
-
+<script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="vendor/material-design-lite/material.min.js"></script>
+<script type="text/javascript" src="vendor/underscore/underscore-min.js"></script>
+<script type="text/javascript" src="vendor/backbone/backbone-min.js"></script>
+<script type="text/javascript" src="base.js"></script>
 </body>
 </html>
