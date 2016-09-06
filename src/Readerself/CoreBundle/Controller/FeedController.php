@@ -65,7 +65,6 @@ class FeedController extends AbstractController
                'id' => $feed->getId(),
                'title' => $feed->getTitle(),
                'website' => $feed->getWebsite(),
-               'condition' => true,
             ];
         }
         return new JsonResponse($data);

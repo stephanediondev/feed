@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" type="text/css" href="vendor/material-design-lite/material.min.css">
 <link rel="stylesheet" type="text/css" href="base.css">
+<link rel="manifest" href="manifest.json">
 </head>
 
 <body>
@@ -45,9 +46,6 @@
                 </div>
                 <div class="mdl-card__supporting-text">
                     <p><a href="<%- website %>" target="_blank"><%- website %></a></p>
-                    <% if (condition) { %>
-                        <p>condition true</p>
-                    <% } %>
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
                     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
@@ -63,6 +61,7 @@ var base_dir = location.pathname;
 </script>
 <script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="vendor/material-design-lite/material.min.js"></script>
+<script type="text/javascript" src="vendor/store.js/store.min.js"></script>
 <script type="text/javascript" src="vendor/underscore/underscore-min.js"></script>
 <script type="text/javascript" src="vendor/backbone/backbone-min.js"></script>
 <script type="text/javascript" src="base.js"></script>

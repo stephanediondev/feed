@@ -39,6 +39,8 @@ var feeds = new FeedsCollection();
 feeds.on('add', function(feed) {
     console.log(feed.get("id") + " / " + feed.get("title") + "!");
 
+    store.set('feed_' + feed.get('id'), feed);
+
     var view = new TodoView({model: feed});
     $("#todo-list").append(view.render().el);
 });

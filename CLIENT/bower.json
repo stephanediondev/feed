@@ -4,6 +4,7 @@
     "dependencies": {
         "jquery": "*",
         "backbone": "*",
-        "material-design-lite": "*"
+        "material-design-lite": "*",
+        "store.js": "*"
     }
 }

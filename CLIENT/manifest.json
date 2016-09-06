@@ -1,0 +1,8 @@
+{
+  "name": "Reader Self",
+  "short_name": "Reader Self",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#757575",
+  "theme_color": "#3e4eb8"
+}

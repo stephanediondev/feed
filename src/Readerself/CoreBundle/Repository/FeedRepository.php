@@ -36,10 +36,12 @@ class FeedRepository extends AbstractRepository
         $query = $em->createQueryBuilder();
         $query->addSelect('fed');
         $query->from('ReaderselfCoreBundle:Feed', 'fed');
+        //$query->leftJoin('ReaderselfCoreBundle:Item', 'itm');
 
         $query->andWhere('fed.title IS NOT NULL');
 
         $query->addOrderBy('fed.title');
+        $query->groupBy('fed.id');
         //$query->setMaxResults(2);
 
         $getQuery = $query->getQuery();
