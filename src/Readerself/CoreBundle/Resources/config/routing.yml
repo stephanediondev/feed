@@ -1,3 +1,10 @@
+client:
+    path:  /
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /client
+        permanent: true
+
 readerself_core_setting:
     path:  /setting
     defaults:
