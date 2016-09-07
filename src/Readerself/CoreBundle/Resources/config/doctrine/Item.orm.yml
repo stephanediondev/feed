@@ -92,4 +92,8 @@ Readerself\CoreBundle\Entity\Item:
                     referencedColumnName: id
                     onDelete: "set null"
             orphanRemoval: false
+    oneToMany:
+        enclosures:
+            targetEntity: Enclosure
+            mappedBy: item
     lifecycleCallbacks: {  }

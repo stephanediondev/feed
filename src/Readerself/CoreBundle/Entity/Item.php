@@ -62,6 +62,11 @@ class Item
      */
     private $author;
 
+    /**
+     * @var ArrayCollection
+     */
+    private $enclosures;
+
 
     /**
      * Get id
@@ -312,5 +317,12 @@ class Item
     {
         return $this->author;
     }
-}
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getEnclosures()
+    {
+        return $this->enclosures;
+    }
+}

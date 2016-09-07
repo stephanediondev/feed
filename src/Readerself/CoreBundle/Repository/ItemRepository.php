@@ -10,8 +10,10 @@ class ItemRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('fed');
-        $query->from('ReaderselfCoreBundle:Feed', 'fed');
+        $query->addSelect('itm', 'fed', 'aut');
+        $query->from('ReaderselfCoreBundle:Item', 'itm');
+        $query->leftJoin('itm.feed', 'fed');
+        $query->leftJoin('itm.author', 'aut');
 
         if(isset($parameters['id']) == 1) {
             $query->andWhere('cmp.id = :id');
@@ -34,9 +36,13 @@ class ItemRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('itm');
+        $query->addSelect('itm', 'fed', 'aut');
         $query->from('ReaderselfCoreBundle:Item', 'itm');
-        //$query->leftJoin('ReaderselfCoreBundle:Item', 'itm');
+        $query->leftJoin('itm.feed', 'fed');
+        $query->leftJoin('itm.author', 'aut');
+
+        //$query->andWhere('itm.id = :id');
+        //$query->setParameter(':id', 16436);
 
         $query->addOrderBy('itm.date', 'DESC');
         $query->groupBy('itm.id');
@@ -44,9 +50,9 @@ class ItemRepository extends AbstractRepository
 
         $getQuery = $query->getQuery();
 
-        if(isset($parameters['active']) == 1 && $parameters['active'] == true && $this->cacheAvailable()) {
+        if($this->cacheAvailable()) {
             $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-            $cacheDriver->setNamespace('readerself_feed_');
+            $cacheDriver->setNamespace('readerself_item_');
             $getQuery->setResultCacheDriver($cacheDriver);
             $getQuery->setResultCacheLifetime(86400);
         }

@@ -58,10 +58,22 @@ class ItemController extends AbstractController
         $data = [];
         $data['items'] = [];
         foreach($this->itemManager->getList() as $item) {
+            $enclosures = [];
+            foreach($item->getEnclosures() as $enclosure) {
+                $enclosures[] = [
+                   'id' => $enclosure->getId(),
+                   'link' => $enclosure->getLink(),
+                   'type' => $enclosure->getType(),
+                ];
+            }
             $data['items'][] = [
                'id' => $item->getId(),
                'title' => $item->getTitle(),
                'content' => $item->getContent(),
+               'enclosures' => $enclosures,
+               'author' => [
+                    'title' => 'test',
+                ],
             ];
         }
         return new JsonResponse($data);

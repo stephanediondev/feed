@@ -13,13 +13,15 @@ class CollectionManager extends AbstractManager
         Simplepie $simplepie
     ) {
         $this->simplepie = $simplepie;
+
+        $this->cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
     }
 
     public function start()
     {
         $startTime = microtime(1);
 
-        $sql = 'SELECT id, link FROM feed LIMIT 0,10';//1311 latin1 //1179 utf8 4 bytes
+        $sql = 'SELECT id, link FROM feed LIMIT 420,30';//1311 latin1 //1179 utf8 4 bytes
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -175,9 +177,7 @@ class CollectionManager extends AbstractManager
                 $insertItem['title'] = '-';
             }
 
-            if($author_id = $this->setAuthor($sp_item)) {
-                $insertItem['author_id'] = $author_id;
-            }
+            $insertItem['author_id'] = $this->setAuthor($sp_item);
 
             $insertItem['link'] = $link;
 
@@ -210,26 +210,35 @@ class CollectionManager extends AbstractManager
         }
     }
 
-    public function setAUthor($sp_item)
+    public function setAuthor($sp_item)
     {
-        $author_id = false;
+        $author_id = null;
 
         if($sp_author = $sp_item->get_author()) {
             if($sp_author->get_name() != '') {
-                $sql = 'SELECT id FROM author WHERE title = :title';
-                $stmt = $this->connection->prepare($sql);
-                $stmt->bindValue('title', $sp_author->get_name());
-                $stmt->execute();
-                $result = $stmt->fetch();
+                $cache_id = 'readerself/author/'.$sp_author->get_name();
 
-                if($result) {
-                    $author_id = $result['id'];
+                if($this->cacheDriver->contains($cache_id)) {
+                    $author_id = $this->cacheDriver->fetch($cache_id);
+    
                 } else {
-                    $insertAuthor = [
-                        'title' => $sp_author->get_name(),
-                        'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
-                    ];
-                    $author_id = $this->insert('author', $insertAuthor);
+                    $sql = 'SELECT id FROM author WHERE title = :title';
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindValue('title', $sp_author->get_name());
+                    $stmt->execute();
+                    $result = $stmt->fetch();
+
+                    if($result) {
+                        $author_id = $result['id'];
+                    } else {
+                        $insertAuthor = [
+                            'title' => $sp_author->get_name(),
+                            'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                        ];
+                        $author_id = $this->insert('author', $insertAuthor);
+                    }
+                    echo $cache_id."<br>\r\n";
+                    $this->cacheDriver->save($cache_id, $author_id);
                 }
             }
             unset($sp_author);
@@ -265,30 +274,43 @@ class CollectionManager extends AbstractManager
 
             $titles = array_unique($titles);
             foreach($titles as $title) {
-                $sql = 'SELECT id FROM category WHERE title = :title';
-                $stmt = $this->connection->prepare($sql);
-                $stmt->bindValue('title', $title);
-                $stmt->execute();
-                $result = $stmt->fetch();
-
-                if($result) {
-                    $category_id = $result['id'];
-                } else {
-                    $insertCategory = [
-                        'title' => $title,
-                        'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
-                    ];
-                    $category_id = $this->insert('category', $insertCategory);
-                }
-
                 $insertItemCategory = [
                     'item_id' => $item_id,
-                    'category_id' => $category_id,
+                    'category_id' => $this->setCategory($title),
                 ];
                 $this->insert('item_category', $insertItemCategory);
+
             }
             unset($titles);
         }
+    }
+
+    public function setCategory($title) {
+        $cache_id = 'readerself/category/'.$title;
+
+        if($this->cacheDriver->contains($cache_id)) {
+            $category_id = $this->cacheDriver->fetch($cache_id);
+
+        } else {
+            $sql = 'SELECT id FROM category WHERE title = :title';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue('title', $title);
+            $stmt->execute();
+            $result = $stmt->fetch();
+
+            if($result) {
+                $category_id = $result['id'];
+            } else {
+                $insertCategory = [
+                    'title' => $title,
+                    'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                ];
+                $category_id = $this->insert('category', $insertCategory);
+            }
+            echo $cache_id."<br>\r\n";
+            $this->cacheDriver->save($cache_id, $category_id);
+        }
+        return $category_id;
     }
 
     public function setEnclosures($item_id, $enclosures)

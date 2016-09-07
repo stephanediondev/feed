@@ -55,7 +55,7 @@ Readerself\CoreBundle\Entity\Enclosure:
             cascade: {  }
             fetch: LAZY
             mappedBy: null
-            inversedBy: null
+            inversedBy: enclosures
             joinColumns:
                 item_id:
                     referencedColumnName: id
