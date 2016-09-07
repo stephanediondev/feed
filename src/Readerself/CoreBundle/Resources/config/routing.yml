@@ -16,3 +16,10 @@ readerself_core_feed:
         _controller: "readerself_core_controller_feed:dispatchAction"
         action: "index"
         id: null
+
+readerself_core_item:
+    path:  /items
+    defaults:
+        _controller: "readerself_core_controller_item:dispatchAction"
+        action: "index"
+        id: null

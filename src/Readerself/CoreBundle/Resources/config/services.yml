@@ -1,4 +1,7 @@
 services:
+    simplepie:
+        class: SimplePie
+
     #controller
     readerself_core_controller_abstract:
         class: Readerself\CoreBundle\Controller\AbstractController
@@ -16,6 +19,12 @@ services:
         arguments:
             - "@readerself_core_manager_feed"
 
+    readerself_core_controller_item:
+        class: Readerself\CoreBundle\Controller\ItemController
+        parent: "readerself_core_controller_abstract"
+        arguments:
+            - "@readerself_core_manager_item"
+
     #manager
     readerself_core_manager_abstract:
         class: Readerself\CoreBundle\Manager\AbstractManager
@@ -28,8 +37,15 @@ services:
         class: Readerself\CoreBundle\Manager\CollectionManager
         parent: "readerself_core_manager_abstract"
         public: true
+        arguments:
+            - "@simplepie"
 
     readerself_core_manager_feed:
         class: Readerself\CoreBundle\Manager\FeedManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_item:
+        class: Readerself\CoreBundle\Manager\ItemManager
         parent: "readerself_core_manager_abstract"
         public: true

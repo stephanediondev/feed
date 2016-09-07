@@ -4,15 +4,22 @@ namespace Readerself\CoreBundle\Manager;
 use Readerself\CoreBundle\Manager\AbstractManager;
 
 use Simplepie;
-include('vendor/simplepie/simplepie/library/SimplePie.php');
 
 class CollectionManager extends AbstractManager
 {
+    protected $simplepie;
+
+    public function __construct(
+        Simplepie $simplepie
+    ) {
+        $this->simplepie = $simplepie;
+    }
+
     public function start()
     {
         $startTime = microtime(1);
 
-        $sql = 'SELECT id, link FROM feed LIMIT 100,100';
+        $sql = 'SELECT id, link FROM feed LIMIT 0,10';//1311 latin1 //1179 utf8 4 bytes
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -53,7 +60,7 @@ class CollectionManager extends AbstractManager
 
             } else {
                 try {
-                    $sp_feed = new Simplepie();
+                    $sp_feed = clone $this->simplepie;
                     $sp_feed->set_feed_url($this->toAscii($feed['link']));
                     $sp_feed->enable_cache(false);
                     $sp_feed->set_timeout(5);
@@ -163,8 +170,7 @@ class CollectionManager extends AbstractManager
             $insertItem['feed_id'] = $feed['id'];
 
             if($sp_item->get_title()) {
-                $title = preg_replace('/[^(\x20-\x7F)]*/', '', $sp_item->get_title());
-                $insertItem['title'] = mb_substr($title, 0, 255, 'UTF-8');
+                $insertItem['title'] = mb_substr($sp_item->get_title(), 0, 255, 'UTF-8');
             } else {
                 $insertItem['title'] = '-';
             }
@@ -176,8 +182,7 @@ class CollectionManager extends AbstractManager
             $insertItem['link'] = $link;
 
             if($sp_item->get_content()) {
-                $content = preg_replace('/[^(\x20-\x7F)]*/', '', $sp_item->get_content());
-                $insertItem['content']  = $content;
+                $insertItem['content']  = $sp_item->get_content();
             } else {
                 $insertItem['content'] = '-';
             }

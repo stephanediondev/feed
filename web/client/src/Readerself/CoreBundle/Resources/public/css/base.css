@@ -81,24 +81,6 @@ a:link, a:visited {
     padding: 0px;
     text-align: center;
 }
-.mdl-card__supporting-text.mdl-grid .mdl-cell--2-col a:link, .mdl-card__supporting-text.mdl-grid .mdl-cell--2-col a:visited {
-    display: block;
-    line-height: 1.9;
-    overflow: hidden;
-    padding: 8px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.mdl-card__supporting-text.mdl-grid .mdl-cell--2-col a:hover, .mdl-card__supporting-text.mdl-grid .ui-sortable-helper a {
-    background-color: #e0e0e0;
-}
-
-.mdl-card__supporting-text.mdl-grid .mdl-cell--2-col a img {
-    max-height: 90px;
-}
-.mdl-tabs__panel, .mdl-card.toggle {
-    display: none;
-}
 .mdl-tabs__panel.is-active {
     display: block;
 }
