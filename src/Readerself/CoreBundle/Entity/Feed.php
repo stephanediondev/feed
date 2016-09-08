@@ -254,5 +254,19 @@ class Feed
     {
         return $this->dateCreated;
     }
-}
 
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'link' => $this->getLink(),
+            'website' => $this->getWebsite(),
+            'hostname' => $this->getHostname(),
+            'description' => $this->getDescription(),
+        ];
+    }
+}

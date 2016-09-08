@@ -325,4 +325,30 @@ class Item
     {
         return $this->enclosures;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $enclosures = [];
+        foreach($this->getEnclosures() as $enclosure) {
+            $enclosures[] = $enclosure->toArray();
+        }
+
+        if($this->getAuthor()) {
+            $author = $this->getAuthor()->toArray();
+        } else {
+            $author = false;
+        }
+
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'content' => $this->getContent(),
+            'enclosures' => $enclosures,
+            'feed' => $this->getFeed()->toArray(),
+            'author' => $author,
+        ];
+    }
 }

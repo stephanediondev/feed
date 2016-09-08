@@ -225,5 +225,16 @@ class Enclosure
     {
         return $this->item;
     }
-}
 
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'link' => $this->getLink(),
+            'type' => $this->getType(),
+        ];
+    }
+}

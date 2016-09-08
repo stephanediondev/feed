@@ -41,8 +41,8 @@ class ItemRepository extends AbstractRepository
         $query->leftJoin('itm.feed', 'fed');
         $query->leftJoin('itm.author', 'aut');
 
-        //$query->andWhere('itm.id = :id');
-        //$query->setParameter(':id', 16436);
+        //$query->andWhere('fed.id = :id');
+        //$query->setParameter(':id', 1236);
 
         $query->addOrderBy('itm.date', 'DESC');
         $query->groupBy('itm.id');
