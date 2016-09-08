@@ -21,7 +21,7 @@ class CollectionManager extends AbstractManager
     {
         $startTime = microtime(1);
 
-        $sql = 'SELECT id, link FROM feed LIMIT 200,30';//1311 latin1 //1179 utf8 4 bytes
+        $sql = 'SELECT id, link FROM feed LIMIT 300,100';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -89,9 +89,7 @@ class CollectionManager extends AbstractManager
                         }
                         $updateFeed['description'] = $sp_feed->get_description();
 
-                        if($nextCollection = $this->getLastItem($feed)) {
-                            $updateFeed['next_collection'] = $nextCollection;
-                        }
+                        $updateFeed['next_collection'] = $this->setNextCollection($feed);
 
                         $this->update('feed', $updateFeed, $feed['id']);
                     }
@@ -120,7 +118,7 @@ class CollectionManager extends AbstractManager
         $this->update('collection', $updateCollection, $collection_id);
     }
 
-    public function getLastItem($feed)
+    public function setNextCollection($feed)
     {
         $sql = 'SELECT date_created FROM item WHERE feed_id = :feed_id GROUP BY id ORDER BY id DESC';
         $stmt = $this->connection->prepare($sql);
@@ -145,7 +143,7 @@ class CollectionManager extends AbstractManager
                 return $nextCollection->format('Y-m-d H:i:s');
             }
         }
-        return false;
+        return null;
     }
 
     public function setItems($feed, $items)
@@ -153,20 +151,11 @@ class CollectionManager extends AbstractManager
         foreach($items as $sp_item) {
             $link = $this->cleanLink($sp_item->get_link());
 
-            $cache_id = 'readerself.item_link.'.$link;
-
-            if($this->cacheDriver->contains($cache_id)) {
-                $result = $this->cacheDriver->fetch($cache_id);
-
-            } else {
-                $sql = 'SELECT id FROM item WHERE link = :link';
-                $stmt = $this->connection->prepare($sql);
-                $stmt->bindValue('link', $link);
-                $stmt->execute();
-                $result = $stmt->fetch();
-
-                $this->cacheDriver->save($cache_id, $result);
-            }
+            $sql = 'SELECT id FROM item WHERE link = :link';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue('link', $link);
+            $stmt->execute();
+            $result = $stmt->fetch();
 
             if($result) {
                 break;

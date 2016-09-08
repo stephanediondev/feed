@@ -42,8 +42,8 @@ class ItemRepository extends AbstractRepository
 
         $query->andWhere('itm.author IS NOT NULL');
 
-        //$query->andWhere('fed.id = :id');
-        //$query->setParameter(':id', 1236);
+        $query->andWhere('fed.id = :id');
+        $query->setParameter(':id', 1359);
 
         $query->addOrderBy('itm.date', 'DESC');
         $query->groupBy('itm.id');

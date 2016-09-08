@@ -68,14 +68,16 @@
             <script type="text/template" id="cell-item">
                 <div class="mdl-card__title">
                     <h1 class="mdl-card__title-text">
-                        {{ title }}
+                        <a href="{{ link }}" target="_blank">{{ title }}</a>
                     </h1>
                 </div>
                 <div class="mdl-card__supporting-text">
                     {{#if categories }}
+                        <p>
                         {{#each categories }}
-                            <p>{{ title }}</p>
+                            <a href="#items/category/{{ id }}">{{ title }}</a>
                         {{/each}}
+                        </p>
                     {{/if}}
 
                     {{#if enclosures }}
@@ -85,7 +87,7 @@
                     {{/if}}
 
                     {{#if author}}
-                        <p>{{ author.title }}</p>
+                        <p><a href="#items/author/{{ author.id }}">{{ author.title }}</a></p>
                     {{/if}}
 
                     {{{ content }}}

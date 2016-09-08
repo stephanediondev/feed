@@ -339,10 +339,15 @@ class Item
 
         return [
             'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'content' => $this->getContent(),
             'feed' => $this->getFeed()->toArray(),
             'author' => $author,
+            'title' => $this->getTitle(),
+            'link' => $this->getLink(),
+            'date' => $this->getDate(),
+            'content' => $this->getContent(),
+            'content_full' => $this->getContentFull(),
+            'latitude' => $this->getLatitude(),
+            'longitude' => $this->getLongitude(),
         ];
     }
 }
