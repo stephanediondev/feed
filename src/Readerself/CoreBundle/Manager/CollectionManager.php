@@ -29,7 +29,7 @@ class CollectionManager extends AbstractManager
         /*foreach($this->pushManager->getList([]) as $push) {
             $payload = json_encode(array(
                 'title' => 'title dyn '.$push->getId(),
-                'body' => 'body dyn',
+                'body' => $push->getAgent(),
             ));
             $this->pushManager->send($push, $payload);
         }

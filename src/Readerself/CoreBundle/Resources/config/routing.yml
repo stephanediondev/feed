@@ -11,15 +11,22 @@ readerself_core_setting:
         _controller: "readerself_core_controller_setting:indexAction"
 
 readerself_core_feed:
-    path:  /feed
+    path:  /feeds/{action}/{id}
     defaults:
         _controller: "readerself_core_controller_feed:dispatchAction"
         action: "index"
         id: null
 
 readerself_core_item:
-    path:  /items
+    path:  /items/{action}/{id}
     defaults:
         _controller: "readerself_core_controller_item:dispatchAction"
+        action: "index"
+        id: null
+
+readerself_core_push:
+    path:  /pushs/{action}/{id}
+    defaults:
+        _controller: "readerself_core_controller_push:dispatchAction"
         action: "index"
         id: null

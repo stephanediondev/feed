@@ -27,6 +27,13 @@ services:
             - "@readerself_core_manager_item_category"
             - "@readerself_core_manager_enclosure"
 
+    readerself_core_controller_push:
+        class: Readerself\CoreBundle\Controller\PushController
+        parent: "readerself_core_controller_abstract"
+        arguments:
+            - "@readerself_core_manager_push"
+            - "@readerself_core_manager_member"
+
     #manager
     readerself_core_manager_abstract:
         class: Readerself\CoreBundle\Manager\AbstractManager
@@ -60,6 +67,11 @@ services:
 
     readerself_core_manager_enclosure:
         class: Readerself\CoreBundle\Manager\EnclosureManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_member:
+        class: Readerself\CoreBundle\Manager\MemberManager
         parent: "readerself_core_manager_abstract"
         public: true
 

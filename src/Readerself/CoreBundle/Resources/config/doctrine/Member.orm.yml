@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\Member:
+    repositoryClass: Readerself\CoreBundle\Repository\MemberRepository
     type: entity
     table: member
     uniqueConstraints:

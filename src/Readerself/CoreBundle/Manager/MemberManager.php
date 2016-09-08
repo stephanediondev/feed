@@ -2,29 +2,19 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
-use Readerself\CoreBundle\Entity\Feed;
-use Readerself\CoreBundle\Event\FeedEvent;
+use Readerself\CoreBundle\Entity\Member;
+use Readerself\CoreBundle\Event\MemberEvent;
 
-use Minishlink\WebPush\WebPush;
-
-class PushManager extends AbstractManager
+class MemberManager extends AbstractManager
 {
-    protected $gcm;
-
-    public function __construct(
-        string $gcm
-    ) {
-        $this->gcm = $gcm;
-    }
-
     public function getOne($paremeters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Push')->getOne($paremeters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Member')->getOne($paremeters);
     }
 
     public function getList($parameters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Push')->getList($parameters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Member')->getList($parameters);
     }
 
     public function persist($data)
@@ -57,22 +47,5 @@ class PushManager extends AbstractManager
         $this->em->flush();
 
         $this->removeCache();
-    }
-
-    public function send($push, $payload)
-    {
-        $apiKeys = array(
-            'GCM' => $this->gcm,
-        );
-
-        $webPush = new WebPush($apiKeys);
-
-        $endPoint = $push->getEndpoint();
-        $userPublicKey = $push->getPublicKey();
-        $userAuthToken = $push->getAuthenticationSecret();
-
-        $webPush->sendNotification($endPoint, $payload, $userPublicKey, $userAuthToken, true);
-
-        $webPush->flush();
     }
 }
