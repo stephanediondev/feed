@@ -97,7 +97,7 @@ var TodoView = Backbone.View.extend({
 var ItemView = Backbone.View.extend({
     tagName: "div",
     className: "mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col",
-    template: _.template($('#cell-item').html()),
+    template: Handlebars.compile( $('#cell-item').html() ),
     // Re-render the titles of the todo item.
     render: function() {
         console.log('ItemView render');

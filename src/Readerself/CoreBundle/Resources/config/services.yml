@@ -24,6 +24,7 @@ services:
         parent: "readerself_core_controller_abstract"
         arguments:
             - "@readerself_core_manager_item"
+            - "@readerself_core_manager_item_category"
             - "@readerself_core_manager_enclosure"
 
     #manager
@@ -48,6 +49,11 @@ services:
 
     readerself_core_manager_item:
         class: Readerself\CoreBundle\Manager\ItemManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_item_category:
+        class: Readerself\CoreBundle\Manager\ItemCategoryManager
         parent: "readerself_core_manager_abstract"
         public: true
 

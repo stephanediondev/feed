@@ -80,5 +80,15 @@ class ItemCategory
     {
         return $this->item;
     }
-}
 
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getCategory()->getId(),
+            'title' => $this->getCategory()->getTitle(),
+        ];
+    }
+}

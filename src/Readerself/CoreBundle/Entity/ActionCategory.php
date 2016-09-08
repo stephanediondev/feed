@@ -81,4 +81,3 @@ class ActionCategory
         return $this->action;
     }
 }
-

@@ -5,6 +5,7 @@
         "jquery": "*",
         "backbone": "*",
         "material-design-lite": "*",
-        "store.js": "*"
+        "store.js": "*",
+        "handlebars": "*"
     }
 }

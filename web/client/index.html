@@ -53,11 +53,11 @@
             <script type="text/template" id="cell-feed">
                 <div class="mdl-card__title">
                     <h1 class="mdl-card__title-text">
-                        <%- title %>
+                        {{ title }}
                     </h1>
                 </div>
                 <div class="mdl-card__supporting-text">
-                    <p><a href="<%- website %>" target="_blank"><%- website %></a></p>
+                    <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
                     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
@@ -68,12 +68,27 @@
             <script type="text/template" id="cell-item">
                 <div class="mdl-card__title">
                     <h1 class="mdl-card__title-text">
-                        <%- title %>
+                        {{ title }}
                     </h1>
                 </div>
                 <div class="mdl-card__supporting-text">
-                    <p><%- author.title %></p>
-                    <%= content %></a>
+                    {{#if categories }}
+                        {{#each categories }}
+                            <p>{{ title }}</p>
+                        {{/each}}
+                    {{/if}}
+
+                    {{#if enclosures }}
+                        {{#each enclosures }}
+                            <p>{{ link }}</p>
+                        {{/each}}
+                    {{/if}}
+
+                    {{#if author}}
+                        <p>{{ author.title }}</p>
+                    {{/if}}
+
+                    {{{ content }}}
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
                     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
@@ -90,6 +105,7 @@ var base_dir = location.pathname;
 <script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="vendor/material-design-lite/material.min.js"></script>
 <script type="text/javascript" src="vendor/store.js/store.min.js"></script>
+<script type="text/javascript" src="vendor/handlebars/handlebars.min.js"></script>
 <script type="text/javascript" src="vendor/underscore/underscore-min.js"></script>
 <script type="text/javascript" src="vendor/backbone/backbone-min.js"></script>
 <script type="text/javascript" src="src/Readerself/CoreBundle/Resources/public/js/base.js"></script>

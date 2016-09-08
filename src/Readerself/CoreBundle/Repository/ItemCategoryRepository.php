@@ -2,18 +2,17 @@
 namespace Readerself\CoreBundle\Repository;
 
 use Readerself\CoreBundle\Repository\AbstractRepository;
-use Readerself\CoreBundle\Entity\Component;
 
-class ItemRepository extends AbstractRepository
+class ItemCategoryRepository extends AbstractRepository
 {
     public function getOne($parameters = []) {
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('itm', 'fed', 'aut');
-        $query->from('ReaderselfCoreBundle:Item', 'itm');
-        $query->leftJoin('itm.feed', 'fed');
-        $query->leftJoin('itm.author', 'aut');
+        $query->addSelect('itm_cat', 'cat');
+        $query->from('ReaderselfCoreBundle:ItemCategory', 'itm_cat');
+        $query->leftJoin('itm_cat.item', 'itm');
+        $query->leftJoin('itm_cat.category', 'cat');
 
         if(isset($parameters['id']) == 1) {
             $query->andWhere('cmp.id = :id');
@@ -35,24 +34,22 @@ class ItemRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('itm', 'fed', 'aut');
-        $query->from('ReaderselfCoreBundle:Item', 'itm');
-        $query->leftJoin('itm.feed', 'fed');
-        $query->leftJoin('itm.author', 'aut');
+        $query->addSelect('itm_cat', 'cat');
+        $query->from('ReaderselfCoreBundle:ItemCategory', 'itm_cat');
+        $query->leftJoin('itm_cat.item', 'itm');
+        $query->leftJoin('itm_cat.category', 'cat');
 
-        $query->andWhere('itm.author IS NOT NULL');
+        if(isset($parameters['item']) == 1) {
+            $query->andWhere('itm_cat.item = :item');
+            $query->setParameter(':item', $parameters['item']);
+        }
 
-        //$query->andWhere('fed.id = :id');
-        //$query->setParameter(':id', 1236);
-
-        $query->addOrderBy('itm.date', 'DESC');
-        $query->groupBy('itm.id');
-        $query->setMaxResults(20);
+        $query->groupBy('itm_cat.id');
 
         $getQuery = $query->getQuery();
 
         $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.item.');
+        $cacheDriver->setNamespace('readerself.item_category.');
         $getQuery->setResultCacheDriver($cacheDriver);
         $getQuery->setResultCacheLifetime(86400);
 

@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\ItemCategory:
+    repositoryClass: Readerself\CoreBundle\Repository\ItemCategoryRepository
     type: entity
     table: item_category
     indexes:
