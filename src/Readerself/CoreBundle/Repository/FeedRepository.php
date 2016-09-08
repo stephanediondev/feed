@@ -21,12 +21,11 @@ class FeedRepository extends AbstractRepository
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 
-        if(isset($parameters['active']) == 1 && $parameters['active'] == true && $this->cacheAvailable()) {
-            $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-            $cacheDriver->setNamespace('readerself_feed_');
-            $getQuery->setResultCacheDriver($cacheDriver);
-            $getQuery->setResultCacheLifetime(86400);
-        }
+        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+        $cacheDriver->setNamespace('readerself.feed.');
+        $getQuery->setResultCacheDriver($cacheDriver);
+        $getQuery->setResultCacheLifetime(86400);
+
         return $getQuery->getOneOrNullResult();
     }
 
@@ -46,12 +45,11 @@ class FeedRepository extends AbstractRepository
 
         $getQuery = $query->getQuery();
 
-        if(isset($parameters['active']) == 1 && $parameters['active'] == true && $this->cacheAvailable()) {
-            $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-            $cacheDriver->setNamespace('readerself_feed_');
-            $getQuery->setResultCacheDriver($cacheDriver);
-            $getQuery->setResultCacheLifetime(86400);
-        }
+        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+        $cacheDriver->setNamespace('readerself.feed.');
+        $getQuery->setResultCacheDriver($cacheDriver);
+        $getQuery->setResultCacheLifetime(86400);
+
         return $getQuery->getResult();
     }
 }
