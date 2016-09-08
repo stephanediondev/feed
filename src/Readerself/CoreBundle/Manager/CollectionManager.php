@@ -21,7 +21,7 @@ class CollectionManager extends AbstractManager
     {
         $startTime = microtime(1);
 
-        $sql = 'SELECT id, link FROM feed LIMIT 420,30';//1311 latin1 //1179 utf8 4 bytes
+        $sql = 'SELECT id, link FROM feed LIMIT 200,30';//1311 latin1 //1179 utf8 4 bytes
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -81,9 +81,9 @@ class CollectionManager extends AbstractManager
                         $parse_url = parse_url($sp_feed->get_link());
 
                         $updateFeed = [];
-                        $updateFeed['title'] = $sp_feed->get_title();
+                        $updateFeed['title'] = $this->cleanTitle($sp_feed->get_title());
                         $updateFeed['website'] = $sp_feed->get_link();
-                        $updateFeed['link'] = $sp_feed->subscribe_url();
+                        $updateFeed['link'] = $this->cleanLink($sp_feed->subscribe_url());
                         if(isset($parse_url['host']) == 1) {
                             $updateFeed['hostname'] = $parse_url['host'];
                         }
@@ -105,15 +105,12 @@ class CollectionManager extends AbstractManager
 
             $this->insert('collection_feed', $insertCollectionFeed);
 
-            echo number_format(memory_get_peak_usage(), 0, '.', ' ')."<br>\r\n";
-
             if($u == 100) {
                 break;
             } else {
                 $u++;
             }
         }
-        echo number_format(memory_get_peak_usage(), 0, '.', ' ')."<br>\r\n";
 
         $updateCollection = [];
         $updateCollection['feeds'] = $feeds;
@@ -154,14 +151,22 @@ class CollectionManager extends AbstractManager
     public function setItems($feed, $items)
     {
         foreach($items as $sp_item) {
-            $link = str_replace('&amp;', '&', $sp_item->get_link());
-            $link = mb_substr($link, 0, 255, 'UTF-8');
+            $link = $this->cleanLink($sp_item->get_link());
 
-            $sql = 'SELECT id FROM item WHERE link = :link';
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue('link', $link);
-            $stmt->execute();
-            $result = $stmt->fetch();
+            $cache_id = 'readerself.item_link.'.$link;
+
+            if($this->cacheDriver->contains($cache_id)) {
+                $result = $this->cacheDriver->fetch($cache_id);
+
+            } else {
+                $sql = 'SELECT id FROM item WHERE link = :link';
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue('link', $link);
+                $stmt->execute();
+                $result = $stmt->fetch();
+
+                $this->cacheDriver->save($cache_id, $result);
+            }
 
             if($result) {
                 break;
@@ -172,7 +177,7 @@ class CollectionManager extends AbstractManager
             $insertItem['feed_id'] = $feed['id'];
 
             if($sp_item->get_title()) {
-                $insertItem['title'] = mb_substr($sp_item->get_title(), 0, 255, 'UTF-8');
+                $insertItem['title'] = $this->cleanTitle($sp_item->get_title());
             } else {
                 $insertItem['title'] = '-';
             }
@@ -216,7 +221,9 @@ class CollectionManager extends AbstractManager
 
         if($sp_author = $sp_item->get_author()) {
             if($sp_author->get_name() != '') {
-                $cache_id = 'readerself/author/'.$sp_author->get_name();
+                $title = $this->cleanTitle($sp_author->get_name());
+
+                $cache_id = 'readerself.author_title.'.$title;
 
                 if($this->cacheDriver->contains($cache_id)) {
                     $author_id = $this->cacheDriver->fetch($cache_id);
@@ -224,7 +231,7 @@ class CollectionManager extends AbstractManager
                 } else {
                     $sql = 'SELECT id FROM author WHERE title = :title';
                     $stmt = $this->connection->prepare($sql);
-                    $stmt->bindValue('title', $sp_author->get_name());
+                    $stmt->bindValue('title', $title);
                     $stmt->execute();
                     $result = $stmt->fetch();
 
@@ -232,16 +239,14 @@ class CollectionManager extends AbstractManager
                         $author_id = $result['id'];
                     } else {
                         $insertAuthor = [
-                            'title' => $sp_author->get_name(),
+                            'title' => $title,
                             'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                         ];
                         $author_id = $this->insert('author', $insertAuthor);
                     }
-                    echo $cache_id."<br>\r\n";
                     $this->cacheDriver->save($cache_id, $author_id);
                 }
             }
-            unset($sp_author);
         }
         unset($sp_item);
 
@@ -256,16 +261,18 @@ class CollectionManager extends AbstractManager
                 if($sp_category->get_label()) {
                     if(strstr($sp_category->get_label(), ',')) {
                         $categoriesPart = explode(',', $sp_category->get_label());
-                        foreach($categoriesPart as $categoryPart) {
-                            $categoryPart = trim( strip_tags( html_entity_decode( $categoryPart ) ) );
-                            if($categoryPart != '') {
-                                $titles[] = mb_strtolower($categoryPart, 'UTF-8');
+                        foreach($categoriesPart as $title) {
+                            $title = mb_strtolower($title, 'UTF-8');
+                            $title = $this->cleanTitle($title);
+                            if($title != '') {
+                                $titles[] = $title;
                             }
                         }
                     } else {
-                        $categoryPart = trim( strip_tags( html_entity_decode( $sp_category->get_label() ) ) );
-                        if($categoryPart != '') {
-                            $titles[] = mb_strtolower($categoryPart, 'UTF-8');
+                        $title = mb_strtolower($sp_category->get_label(), 'UTF-8');
+                        $title = $this->cleanTitle($title);
+                        if($title != '') {
+                            $titles[] = $title;
                         }
                     }
                 }
@@ -285,8 +292,9 @@ class CollectionManager extends AbstractManager
         }
     }
 
-    public function setCategory($title) {
-        $cache_id = 'readerself/category/'.$title;
+    public function setCategory($title)
+    {
+        $cache_id = 'readerself.category_title.'.$title;
 
         if($this->cacheDriver->contains($cache_id)) {
             $category_id = $this->cacheDriver->fetch($cache_id);
@@ -307,7 +315,6 @@ class CollectionManager extends AbstractManager
                 ];
                 $category_id = $this->insert('category', $insertCategory);
             }
-            echo $cache_id."<br>\r\n";
             $this->cacheDriver->save($cache_id, $category_id);
         }
         return $category_id;
@@ -318,8 +325,9 @@ class CollectionManager extends AbstractManager
         if($enclosures) {
             $links = [];
             foreach($enclosures as $sp_enclosure) {
-                if($sp_enclosure->get_link() && $sp_enclosure->get_type() && $sp_enclosure->get_length()) {
-                    $link = $sp_enclosure->get_link();
+                if($sp_enclosure->get_link() && $sp_enclosure->get_type()) {
+                    $link = $this->cleanLink($sp_enclosure->get_link());
+
                     if(substr($link, -2) == '?#') {
                         $link = substr($link, 0, -2);
                     }
@@ -342,5 +350,22 @@ class CollectionManager extends AbstractManager
             }
             unset($links);
         }
+    }
+
+    public function cleanLink($link)
+    {
+        $link = str_replace('&amp;', '&', $link);
+        $link = mb_substr($link, 0, 255, 'UTF-8');
+
+        return $link;
+    }
+
+    public function cleanTitle($title)
+    {
+        $title = trim( strip_tags( html_entity_decode( $title ) ) );
+        $title = str_replace('&amp;', '&', $title);
+        $title = mb_substr($title, 0, 255, 'UTF-8');
+
+        return $title;
     }
 }
