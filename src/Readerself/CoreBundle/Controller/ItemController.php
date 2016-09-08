@@ -8,16 +8,18 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Readerself\CoreBundle\Controller\AbstractController;
 
 use Readerself\CoreBundle\Manager\ItemManager;
-use Readerself\CoreBundle\Entity\Feed;
+use Readerself\CoreBundle\Manager\EnclosureManager;
 
 class ItemController extends AbstractController
 {
     protected $itemManager;
 
     public function __construct(
-        ItemManager $itemManager
+        ItemManager $itemManager,
+        EnclosureManager $enclosureManager
     ) {
         $this->itemManager = $itemManager;
+        $this->enclosureManager = $enclosureManager;
     }
 
     public function dispatchAction(Request $request, $action, $id)
@@ -57,8 +59,16 @@ class ItemController extends AbstractController
     {
         $data = [];
         $data['items'] = [];
+        $index = 0;
         foreach($this->itemManager->getList() as $item) {
-            $data['items'][] = $item->toArray();
+            $enclosures = [];
+            foreach($this->enclosureManager->getList(['item' => $item]) as $enclosure) {
+                $enclosures[] = $enclosure->toArray();
+            }
+
+            $data['items'][$index] = $item->toArray();
+            $data['items'][$index]['enclosures'] = $enclosures;
+            $index++;
         }
         return new JsonResponse($data);
     }

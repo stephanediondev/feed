@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\Enclosure:
+    repositoryClass: Readerself\CoreBundle\Repository\EnclosureRepository
     type: entity
     table: enclosure
     indexes:
