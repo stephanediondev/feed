@@ -4,15 +4,20 @@ namespace Readerself\CoreBundle\Manager;
 use Readerself\CoreBundle\Manager\AbstractManager;
 
 use Simplepie;
+use Readerself\CoreBundle\Manager\PushManager;
 
 class CollectionManager extends AbstractManager
 {
     protected $simplepie;
 
+    protected $pushManager;
+
     public function __construct(
-        Simplepie $simplepie
+        Simplepie $simplepie,
+        PushManager $pushManager
     ) {
         $this->simplepie = $simplepie;
+        $this->pushManager = $pushManager;
 
         $this->cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
     }
@@ -21,7 +26,16 @@ class CollectionManager extends AbstractManager
     {
         $startTime = microtime(1);
 
-        $sql = 'SELECT id, link FROM feed LIMIT 300,100';
+        /*foreach($this->pushManager->getList([]) as $push) {
+            $payload = json_encode(array(
+                'title' => 'title dyn '.$push->getId(),
+                'body' => 'body dyn',
+            ));
+            $this->pushManager->send($push, $payload);
+        }
+        exit(0);*/
+
+        $sql = 'SELECT id, link FROM feed LIMIT 0,1';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();

@@ -41,6 +41,7 @@ services:
         public: true
         arguments:
             - "@simplepie"
+            - "@readerself_core_manager_push"
 
     readerself_core_manager_feed:
         class: Readerself\CoreBundle\Manager\FeedManager
@@ -61,3 +62,10 @@ services:
         class: Readerself\CoreBundle\Manager\EnclosureManager
         parent: "readerself_core_manager_abstract"
         public: true
+
+    readerself_core_manager_push:
+        class: Readerself\CoreBundle\Manager\PushManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+        arguments:
+            - "%android_gcm_api_key%"

@@ -20,12 +20,12 @@ class Push
     /**
      * @var string
      */
-    private $publickey;
+    private $publicKey;
 
     /**
      * @var string
      */
-    private $authenticationsecret;
+    private $authenticationSecret;
 
     /**
      * @var string
@@ -83,51 +83,51 @@ class Push
     }
 
     /**
-     * Set publickey
+     * Set publicKey
      *
-     * @param string $publickey
+     * @param string $publicKey
      *
      * @return Push
      */
-    public function setPublickey($publickey)
+    public function setPublicKey($publicKey)
     {
-        $this->publickey = $publickey;
+        $this->publicKey = $publicKey;
 
         return $this;
     }
 
     /**
-     * Get publickey
+     * Get publicKey
      *
      * @return string
      */
-    public function getPublickey()
+    public function getPublicKey()
     {
-        return $this->publickey;
+        return $this->publicKey;
     }
 
     /**
-     * Set authenticationsecret
+     * Set authenticationSecret
      *
-     * @param string $authenticationsecret
+     * @param string $authenticationSecret
      *
      * @return Push
      */
-    public function setAuthenticationsecret($authenticationsecret)
+    public function setAuthenticationSecret($authenticationSecret)
     {
-        $this->authenticationsecret = $authenticationsecret;
+        $this->authenticationSecret = $authenticationSecret;
 
         return $this;
     }
 
     /**
-     * Get authenticationsecret
+     * Get authenticationSecret
      *
      * @return string
      */
-    public function getAuthenticationsecret()
+    public function getAuthenticationSecret()
     {
-        return $this->authenticationsecret;
+        return $this->authenticationSecret;
     }
 
     /**

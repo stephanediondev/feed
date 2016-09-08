@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\Push:
+    repositoryClass: Readerself\CoreBundle\Repository\PushRepository
     type: entity
     table: push
     indexes:
@@ -25,20 +26,20 @@ Readerself\CoreBundle\Entity\Push:
             length: 255
             options:
                 fixed: false
-        publickey:
+        publicKey:
             type: string
             nullable: true
             length: 255
             options:
                 fixed: false
-            column: publicKey
-        authenticationsecret:
+            column: public_key
+        authenticationSecret:
             type: string
             nullable: true
             length: 255
             options:
                 fixed: false
-            column: authenticationSecret
+            column: authentication_secret
         agent:
             type: string
             nullable: true
