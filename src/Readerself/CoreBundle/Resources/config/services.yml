@@ -67,6 +67,11 @@ services:
         calls:
             - [ "setReadability", [ "%readability_parser_enabled%", "%readability_parser_key%" ] ]
 
+    readerself_core_manager_author:
+        class: Readerself\CoreBundle\Manager\AuthorManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
     readerself_core_manager_enclosure:
         class: Readerself\CoreBundle\Manager\EnclosureManager
         parent: "readerself_core_manager_abstract"
@@ -91,6 +96,7 @@ services:
         arguments:
             - "@readerself_core_manager_connection"
             - "@readerself_core_manager_push"
+            - "@readerself_core_manager_folder"
 
     readerself_core_manager_connection:
         class: Readerself\CoreBundle\Manager\ConnectionManager
@@ -104,8 +110,8 @@ services:
         arguments:
             - "%android_gcm_api_key%"
 
-    readerself_core_manager_connection:
-        class: Readerself\CoreBundle\Manager\ConnectionManager
+    readerself_core_manager_folder:
+        class: Readerself\CoreBundle\Manager\FolderManager
         parent: "readerself_core_manager_abstract"
         public: true
 

@@ -36,7 +36,7 @@ class FeedManager extends AbstractManager
         $this->em->flush();
 
         $event = new FeedEvent($data, $mode);
-        $this->eventDispatcher->dispatch('feed.after_persist', $event);
+        $this->eventDispatcher->dispatch('Feed.after_persist', $event);
 
         $this->removeCache();
 
@@ -46,7 +46,7 @@ class FeedManager extends AbstractManager
     public function remove($data)
     {
         $event = new FeedEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('feed.before_remove', $event);
+        $this->eventDispatcher->dispatch('Feed.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

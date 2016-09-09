@@ -64,6 +64,10 @@ Readerself\CoreBundle\Entity\Feed:
             type: datetime
             nullable: false
             column: date_created
+        dateModified:
+            type: datetime
+            nullable: false
+            column: date_modified
     oneToMany:
         subscriptions:
             targetEntity: Subscription

@@ -46,4 +46,8 @@ Readerself\CoreBundle\Entity\Member:
             type: datetime
             nullable: false
             column: date_created
+        dateModified:
+            type: datetime
+            nullable: false
+            column: date_modified
     lifecycleCallbacks: {  }

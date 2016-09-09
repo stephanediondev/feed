@@ -20,11 +20,6 @@ class MemberRepository extends AbstractRepository
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 
-        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.member.');
-        $getQuery->setResultCacheDriver($cacheDriver);
-        $getQuery->setResultCacheLifetime(86400);
-
         return $getQuery->getOneOrNullResult();
     }
 
@@ -39,11 +34,6 @@ class MemberRepository extends AbstractRepository
         $query->groupBy('mbr.id');
 
         $getQuery = $query->getQuery();
-
-        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.member.');
-        $getQuery->setResultCacheDriver($cacheDriver);
-        $getQuery->setResultCacheLifetime(86400);
 
         return $getQuery->getResult();
     }

@@ -53,6 +53,11 @@ class Feed
     private $dateCreated;
 
     /**
+     * @var \DateTime
+     */
+    private $dateModified;
+
+    /**
      * @var ArrayCollection
      */
     private $subscriptions;
@@ -258,6 +263,30 @@ class Feed
     public function getDateCreated()
     {
         return $this->dateCreated;
+    }
+
+    /**
+     * Set dateModified
+     *
+     * @param \DateTime $dateModified
+     *
+     * @return Push
+     */
+    public function setDateModified($dateModified)
+    {
+        $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModified
+     *
+     * @return \DateTime
+     */
+    public function getDateModified()
+    {
+        return $this->dateModified;
     }
 
     /**

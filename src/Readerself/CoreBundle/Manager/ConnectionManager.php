@@ -19,7 +19,7 @@ class ConnectionManager extends AbstractManager
 
     public function init()
     {
-        return new Feed();
+        return new Connection();
     }
 
     public function persist($data)
@@ -36,7 +36,7 @@ class ConnectionManager extends AbstractManager
         $this->em->flush();
 
         $event = new ConnectionEvent($data, $mode);
-        $this->eventDispatcher->dispatch('connection.after_persist', $event);
+        $this->eventDispatcher->dispatch('Connection.after_persist', $event);
 
         $this->removeCache();
 
@@ -46,7 +46,7 @@ class ConnectionManager extends AbstractManager
     public function remove($data)
     {
         $event = new ConnectionEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('connection.before_remove', $event);
+        $this->eventDispatcher->dispatch('Connection.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

@@ -29,13 +29,21 @@ Readerself\CoreBundle\Entity\Collection:
             nullable: false
             precision: 10
             scale: 0
+            options:
+                unsigned: true
+                default: '0'
         memory:
             type: integer
             nullable: false
             options:
                 unsigned: true
+                default: '0'
         dateCreated:
             type: datetime
             nullable: false
             column: date_created
+        dateModified:
+            type: datetime
+            nullable: false
+            column: date_modified
     lifecycleCallbacks: {  }

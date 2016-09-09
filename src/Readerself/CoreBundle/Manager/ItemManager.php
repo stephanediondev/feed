@@ -19,12 +19,6 @@ class ItemManager extends AbstractManager
         $this->enclosureManager = $enclosureManager;
     }
 
-    public function setReadability($enabled, $key)
-    {
-        $this->readabilityEnabled = $enabled;
-        $this->readabilityKey = $key;
-    }
-
     public function getOne($paremeters = [])
     {
         return $this->em->getRepository('ReaderselfCoreBundle:Item')->getOne($paremeters);
@@ -54,7 +48,7 @@ class ItemManager extends AbstractManager
         $this->em->flush();
 
         $event = new ItemEvent($data, $mode);
-        $this->eventDispatcher->dispatch('item.after_persist', $event);
+        $this->eventDispatcher->dispatch('Item.after_persist', $event);
 
         $this->removeCache();
 
@@ -64,12 +58,18 @@ class ItemManager extends AbstractManager
     public function remove($data)
     {
         $event = new ItemEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('item.before_remove', $event);
+        $this->eventDispatcher->dispatch('Item.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();
 
         $this->removeCache();
+    }
+
+    public function setReadability($enabled, $key)
+    {
+        $this->readabilityEnabled = $enabled;
+        $this->readabilityKey = $key;
     }
 
     public function getContentFull(Item $item)

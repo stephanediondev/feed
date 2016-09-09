@@ -17,6 +17,11 @@ class SubscriptionManager extends AbstractManager
         return $this->em->getRepository('ReaderselfCoreBundle:Subscription')->getList($parameters);
     }
 
+    public function init()
+    {
+        return new Subscription();
+    }
+
     public function persist($data)
     {
         if($data->getDateCreated() == null) {
@@ -25,13 +30,12 @@ class SubscriptionManager extends AbstractManager
         } else {
             $mode = 'update';
         }
-        $data->setDateModified(new \Datetime());
 
         $this->em->persist($data);
         $this->em->flush();
 
         $event = new SubscriptionEvent($data, $mode);
-        $this->eventDispatcher->dispatch('subscription.after_persist', $event);
+        $this->eventDispatcher->dispatch('Subscription.after_persist', $event);
 
         $this->removeCache();
 
@@ -41,7 +45,7 @@ class SubscriptionManager extends AbstractManager
     public function remove($data)
     {
         $event = new SubscriptionEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('subscription.before_remove', $event);
+        $this->eventDispatcher->dispatch('Subscription.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

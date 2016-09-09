@@ -2,10 +2,11 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
+use Readerself\CoreBundle\Entity\Collection;
+use Readerself\CoreBundle\Event\CollectionEvent;
 
 use Simplepie;
 use Facebook;
-use Readerself\CoreBundle\Manager\PushManager;
 
 class CollectionManager extends AbstractManager
 {
@@ -27,6 +28,58 @@ class CollectionManager extends AbstractManager
         $this->pushManager = $pushManager;
 
         $this->cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+    }
+
+    public function getOne($paremeters = [])
+    {
+        return $this->em->getRepository('ReaderselfCoreBundle:Collection')->getOne($paremeters);
+    }
+
+    public function getList($parameters = [])
+    {
+        return $this->em->getRepository('ReaderselfCoreBundle:Collection')->getList($parameters);
+    }
+
+    public function init()
+    {
+        $collection = new Collection();
+        $collection->setFeeds(0);
+        $collection->setErrors(0);
+        $collection->setTime(0);
+        $collection->setMemory(0);
+        return $collection;
+    }
+
+    public function persist($data)
+    {
+        if($data->getDateCreated() == null) {
+            $mode = 'insert';
+            $data->setDateCreated(new \Datetime());
+        } else {
+            $mode = 'update';
+        }
+        $data->setDateModified(new \Datetime());
+
+        $this->em->persist($data);
+        $this->em->flush();
+
+        $event = new CollectionEvent($data, $mode);
+        $this->eventDispatcher->dispatch('Collection.after_persist', $event);
+
+        $this->removeCache();
+
+        return $data->getId();
+    }
+
+    public function remove($data)
+    {
+        $event = new CollectionEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('Collection.before_remove', $event);
+
+        $this->em->remove($data);
+        $this->em->flush();
+
+        $this->removeCache();
     }
 
     public function setFacebook($enabled, $id, $secret)
@@ -58,7 +111,7 @@ class CollectionManager extends AbstractManager
         }
         exit(0);*/
 
-        $sql = 'SELECT id, link FROM feed LIMIT 0,50';
+        $sql = 'SELECT id, link FROM feed LIMIT 0,5';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -74,6 +127,7 @@ class CollectionManager extends AbstractManager
             'time' => $time,
             'memory' => $memory,
             'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+            'date_modified' => (new \Datetime())->format('Y-m-d H:i:s'),
         ];
         $collection_id = $this->insert('collection', $insertCollection);
 
@@ -118,6 +172,8 @@ class CollectionManager extends AbstractManager
 
                     $updateFeed['next_collection'] = $this->setNextCollection($feed);
 
+                    $updateFeed['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
+
                     $this->update('feed', $updateFeed, $feed['id']);
 
                 } catch(Facebook\Exceptions\FacebookResponseException $e) {
@@ -160,6 +216,8 @@ class CollectionManager extends AbstractManager
 
                         $updateFeed['next_collection'] = $this->setNextCollection($feed);
 
+                        $updateFeed['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
+
                         $this->update('feed', $updateFeed, $feed['id']);
                     }
                     $sp_feed->__destruct();
@@ -184,6 +242,7 @@ class CollectionManager extends AbstractManager
         $updateCollection['errors'] = $errors;
         $updateCollection['time'] = microtime(1) - $startTime;
         $updateCollection['memory'] = memory_get_peak_usage();
+        $updateCollection['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
         $this->update('collection', $updateCollection, $collection_id);
     }
 
@@ -262,6 +321,7 @@ class CollectionManager extends AbstractManager
             }
 
             $insertItem['date_created'] = (new \Datetime())->format('Y-m-d H:i:s');
+            $insertItem['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
 
             $item_id = $this->insert('item', $insertItem);
 
@@ -326,6 +386,7 @@ class CollectionManager extends AbstractManager
             }
 
             $insertItem['date_created'] = (new \Datetime())->format('Y-m-d H:i:s');
+            $insertItem['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
 
             $item_id = $this->insert('item', $insertItem);
 

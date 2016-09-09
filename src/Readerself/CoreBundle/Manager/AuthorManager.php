@@ -2,24 +2,24 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
-use Readerself\CoreBundle\Entity\ActionItem;
-use Readerself\CoreBundle\Event\ActionItemEvent;
+use Readerself\CoreBundle\Entity\Author;
+use Readerself\CoreBundle\Event\AuthorEvent;
 
-class ActionItemManager extends AbstractManager
+class AuthorManager extends AbstractManager
 {
     public function getOne($paremeters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:ActionItem')->getOne($paremeters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Author')->getOne($paremeters);
     }
 
     public function getList($parameters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:ActionItem')->getList($parameters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Author')->getList($parameters);
     }
 
     public function init()
     {
-        return new ActionItem();
+        return new Author();
     }
 
     public function persist($data)
@@ -34,8 +34,8 @@ class ActionItemManager extends AbstractManager
         $this->em->persist($data);
         $this->em->flush();
 
-        $event = new ActionItemEvent($data, $mode);
-        $this->eventDispatcher->dispatch('ActionItem.after_persist', $event);
+        $event = new AuthorEvent($data, $mode);
+        $this->eventDispatcher->dispatch('Author.after_persist', $event);
 
         $this->removeCache();
 
@@ -44,8 +44,8 @@ class ActionItemManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new ActionItemEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('ActionItem.before_remove', $event);
+        $event = new AuthorEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('Author.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

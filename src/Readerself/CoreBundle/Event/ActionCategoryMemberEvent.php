@@ -1,16 +1,16 @@
 <?php
 namespace Readerself\CoreBundle\Event;
 
-use Readerself\CoreBundle\Entity\ActionItem;
+use Readerself\CoreBundle\Entity\ActionCategoryMember;
 use Symfony\Component\EventDispatcher\Event;
 
-class ActionItemEvent extends Event
+class ActionCategoryMemberEvent extends Event
 {
     protected $data;
 
     protected $mode;
 
-    public function __construct(ActionItem $data, $mode)
+    public function __construct(ActionCategoryMember $data, $mode)
     {
         $this->data = $data;
         $this->mode = $mode;

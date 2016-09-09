@@ -35,7 +35,7 @@ class ActionItemMemberManager extends AbstractManager
         $this->em->flush();
 
         $event = new ActionItemMemberEvent($data, $mode);
-        $this->eventDispatcher->dispatch('action_item_member.after_persist', $event);
+        $this->eventDispatcher->dispatch('ActionItemMember.after_persist', $event);
 
         $this->removeCache();
 
@@ -45,7 +45,7 @@ class ActionItemMemberManager extends AbstractManager
     public function remove($data)
     {
         $event = new ActionItemMemberEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('action_item_member.before_remove', $event);
+        $this->eventDispatcher->dispatch('ActionItemMember.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

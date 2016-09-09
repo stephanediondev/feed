@@ -46,7 +46,7 @@ class PushManager extends AbstractManager
         $this->em->flush();
 
         $event = new PushEvent($data, $mode);
-        $this->eventDispatcher->dispatch('push.after_persist', $event);
+        $this->eventDispatcher->dispatch('Push.after_persist', $event);
 
         $this->removeCache();
 
@@ -56,7 +56,7 @@ class PushManager extends AbstractManager
     public function remove($data)
     {
         $event = new PushEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('push.before_remove', $event);
+        $this->eventDispatcher->dispatch('Push.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

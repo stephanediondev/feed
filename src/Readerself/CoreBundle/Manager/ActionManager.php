@@ -46,13 +46,12 @@ class ActionManager extends AbstractManager
         } else {
             $mode = 'update';
         }
-        $data->setDateModified(new \Datetime());
 
         $this->em->persist($data);
         $this->em->flush();
 
         $event = new ActionEvent($data, $mode);
-        $this->eventDispatcher->dispatch('action.after_persist', $event);
+        $this->eventDispatcher->dispatch('Action.after_persist', $event);
 
         $this->removeCache();
 
@@ -62,7 +61,7 @@ class ActionManager extends AbstractManager
     public function remove($data)
     {
         $event = new ActionEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('action.before_remove', $event);
+        $this->eventDispatcher->dispatch('Action.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

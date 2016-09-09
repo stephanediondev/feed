@@ -2,24 +2,24 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
-use Readerself\CoreBundle\Entity\ActionItem;
-use Readerself\CoreBundle\Event\ActionItemEvent;
+use Readerself\CoreBundle\Entity\Folder;
+use Readerself\CoreBundle\Event\FolderEvent;
 
-class ActionItemManager extends AbstractManager
+class FolderManager extends AbstractManager
 {
     public function getOne($paremeters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:ActionItem')->getOne($paremeters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Folder')->getOne($paremeters);
     }
 
     public function getList($parameters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:ActionItem')->getList($parameters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Folder')->getList($parameters);
     }
 
     public function init()
     {
-        return new ActionItem();
+        return new Folder();
     }
 
     public function persist($data)
@@ -34,8 +34,8 @@ class ActionItemManager extends AbstractManager
         $this->em->persist($data);
         $this->em->flush();
 
-        $event = new ActionItemEvent($data, $mode);
-        $this->eventDispatcher->dispatch('ActionItem.after_persist', $event);
+        $event = new FolderEvent($data, $mode);
+        $this->eventDispatcher->dispatch('Folder.after_persist', $event);
 
         $this->removeCache();
 
@@ -44,8 +44,8 @@ class ActionItemManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new ActionItemEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('ActionItem.before_remove', $event);
+        $event = new FolderEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('Folder.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

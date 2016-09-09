@@ -1,16 +1,16 @@
 <?php
 namespace Readerself\CoreBundle\Event;
 
-use Readerself\CoreBundle\Entity\ActionItem;
+use Readerself\CoreBundle\Entity\Connection;
 use Symfony\Component\EventDispatcher\Event;
 
-class ActionItemEvent extends Event
+class ConnectionEvent extends Event
 {
     protected $data;
 
     protected $mode;
 
-    public function __construct(ActionItem $data, $mode)
+    public function __construct(Connection $data, $mode)
     {
         $this->data = $data;
         $this->mode = $mode;

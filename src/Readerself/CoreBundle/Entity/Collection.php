@@ -37,6 +37,11 @@ class Collection
      */
     private $dateCreated;
 
+    /**
+     * @var \DateTime
+     */
+    private $dateModified;
+
 
     /**
      * Get id
@@ -167,5 +172,28 @@ class Collection
     {
         return $this->dateCreated;
     }
-}
 
+    /**
+     * Set dateModified
+     *
+     * @param \DateTime $dateModified
+     *
+     * @return Push
+     */
+    public function setDateModified($dateModified)
+    {
+        $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModified
+     *
+     * @return \DateTime
+     */
+    public function getDateModified()
+    {
+        return $this->dateModified;
+    }
+}

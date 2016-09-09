@@ -48,7 +48,7 @@ class MemberManager extends AbstractManager
         $this->em->flush();
 
         $event = new MemberEvent($data, $mode);
-        $this->eventDispatcher->dispatch('member.after_persist', $event);
+        $this->eventDispatcher->dispatch('Member.after_persist', $event);
 
         $this->removeCache();
 
@@ -58,7 +58,7 @@ class MemberManager extends AbstractManager
     public function remove($data)
     {
         $event = new MemberEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('member.before_remove', $event);
+        $this->eventDispatcher->dispatch('Member.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

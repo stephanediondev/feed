@@ -16,7 +16,7 @@ class SubscriptionRepository extends AbstractRepository
         $query->leftJoin('sub.folder', 'flr');
 
         if(isset($parameters['id']) == 1) {
-            $query->andWhere('itm.id = :id');
+            $query->andWhere('sub.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 

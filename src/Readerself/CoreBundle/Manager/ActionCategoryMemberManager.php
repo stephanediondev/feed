@@ -35,7 +35,7 @@ class ActionCategoryMemberManager extends AbstractManager
         $this->em->flush();
 
         $event = new ActionCategoryMemberEvent($data, $mode);
-        $this->eventDispatcher->dispatch('action_category_member.after_persist', $event);
+        $this->eventDispatcher->dispatch('ActionCategoryMember.after_persist', $event);
 
         $this->removeCache();
 
@@ -45,7 +45,7 @@ class ActionCategoryMemberManager extends AbstractManager
     public function remove($data)
     {
         $event = new ActionCategoryMemberEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('action_category_member.before_remove', $event);
+        $this->eventDispatcher->dispatch('ActionCategoryMember.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

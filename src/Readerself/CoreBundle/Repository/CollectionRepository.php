@@ -3,23 +3,18 @@ namespace Readerself\CoreBundle\Repository;
 
 use Readerself\CoreBundle\Repository\AbstractRepository;
 
-class ActionRepository extends AbstractRepository
+class CollectionRepository extends AbstractRepository
 {
     public function getOne($parameters = []) {
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('act');
-        $query->from('ReaderselfCoreBundle:Action', 'act');
+        $query->addSelect('col');
+        $query->from('ReaderselfCoreBundle:Collection', 'col');
 
         if(isset($parameters['id']) == 1) {
-            $query->andWhere('act.id = :id');
+            $query->andWhere('col.id = :id');
             $query->setParameter(':id', $parameters['id']);
-        }
-
-        if(isset($parameters['title']) == 1) {
-            $query->andWhere('act.title = :title');
-            $query->setParameter(':title', $parameters['title']);
         }
 
         $getQuery = $query->getQuery();
@@ -33,7 +28,7 @@ class ActionRepository extends AbstractRepository
 
         $query = $em->createQueryBuilder();
         $query->addSelect('itm', 'fed', 'aut');
-        $query->from('ReaderselfCoreBundle:Item', 'itm');
+        $query->from('ReaderselfCoreBundle:Collection', 'itm');
         $query->leftJoin('itm.feed', 'fed');
         $query->leftJoin('itm.author', 'aut');
 

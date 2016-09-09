@@ -17,6 +17,11 @@ class EnclosureManager extends AbstractManager
         return $this->em->getRepository('ReaderselfCoreBundle:Enclosure')->getList($parameters);
     }
 
+    public function init()
+    {
+        return new Enclosure();
+    }
+
     public function persist($data)
     {
         if($data->getDateCreated() == null) {
@@ -31,7 +36,7 @@ class EnclosureManager extends AbstractManager
         $this->em->flush();
 
         $event = new EnclosureEvent($data, $mode);
-        $this->eventDispatcher->dispatch('enclosure.after_persist', $event);
+        $this->eventDispatcher->dispatch('Enclosure.after_persist', $event);
 
         $this->removeCache();
 
@@ -41,7 +46,7 @@ class EnclosureManager extends AbstractManager
     public function remove($data)
     {
         $event = new EnclosureEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('enclosure.before_remove', $event);
+        $this->eventDispatcher->dispatch('Enclosure.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

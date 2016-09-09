@@ -13,7 +13,7 @@ class CategoryRepository extends AbstractRepository
         $query->from('ReaderselfCoreBundle:Category', 'cat');
 
         if(isset($parameters['id']) == 1) {
-            $query->andWhere('cmp.id = :id');
+            $query->andWhere('cat.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 

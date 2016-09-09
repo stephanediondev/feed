@@ -14,17 +14,12 @@ class FolderRepository extends AbstractRepository
         $query->leftJoin('flr.member', 'mbr');
 
         if(isset($parameters['id']) == 1) {
-            $query->andWhere('itm.id = :id');
+            $query->andWhere('flr.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
-
-        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.folder.');
-        $getQuery->setResultCacheDriver($cacheDriver);
-        $getQuery->setResultCacheLifetime(86400);
 
         return $getQuery->getOneOrNullResult();
     }
@@ -46,11 +41,6 @@ class FolderRepository extends AbstractRepository
         $query->groupBy('flr.id');
 
         $getQuery = $query->getQuery();
-
-        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.folder.');
-        $getQuery->setResultCacheDriver($cacheDriver);
-        $getQuery->setResultCacheLifetime(86400);
 
         return $getQuery->getResult();
     }

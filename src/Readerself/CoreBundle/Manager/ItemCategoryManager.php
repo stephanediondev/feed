@@ -17,6 +17,11 @@ class ItemCategoryManager extends AbstractManager
         return $this->em->getRepository('ReaderselfCoreBundle:ItemCategory')->getList($parameters);
     }
 
+    public function init()
+    {
+        return new ItemCategory();
+    }
+
     public function persist($data)
     {
         if($data->getDateCreated() == null) {
@@ -31,7 +36,7 @@ class ItemCategoryManager extends AbstractManager
         $this->em->flush();
 
         $event = new ItemCategoryEvent($data, $mode);
-        $this->eventDispatcher->dispatch('item_category.after_persist', $event);
+        $this->eventDispatcher->dispatch('ItemCategory.after_persist', $event);
 
         $this->removeCache();
 
@@ -41,7 +46,7 @@ class ItemCategoryManager extends AbstractManager
     public function remove($data)
     {
         $event = new ItemCategoryEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('item_category.before_remove', $event);
+        $this->eventDispatcher->dispatch('ItemCategory.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();
