@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\Action:
+    repositoryClass: Readerself\CoreBundle\Repository\ActionRepository
     type: entity
     table: action
     uniqueConstraints:

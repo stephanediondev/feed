@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\Share:
+    repositoryClass: Readerself\CoreBundle\Repository\ShareRepository
     type: entity
     table: share
     id:

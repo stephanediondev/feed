@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\Category:
+    repositoryClass: Readerself\CoreBundle\Repository\CategoryRepository
     type: entity
     table: category
     uniqueConstraints:

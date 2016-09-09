@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\Setting:
+    repositoryClass: Readerself\CoreBundle\Repository\SettingRepository
     type: entity
     table: setting
     indexes:

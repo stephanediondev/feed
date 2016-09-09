@@ -44,6 +44,11 @@ class ItemCategoryRepository extends AbstractRepository
             $query->setParameter(':item', $parameters['item']);
         }
 
+        if(isset($parameters['category']) == 1) {
+            $query->andWhere('itm_cat.category = :category');
+            $query->setParameter(':category', $parameters['category']);
+        }
+
         $query->groupBy('itm_cat.id');
 
         $getQuery = $query->getQuery();

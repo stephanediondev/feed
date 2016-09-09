@@ -3,11 +3,11 @@ Readerself\CoreBundle\Entity\Push:
     type: entity
     table: push
     indexes:
-        IDX_13E501FFA76ED395:
+        member_id:
             columns:
                 - member_id
     uniqueConstraints:
-        UNIQ_13E501FFC4420F7B:
+        endpoint:
             columns:
                 - endpoint
     id:

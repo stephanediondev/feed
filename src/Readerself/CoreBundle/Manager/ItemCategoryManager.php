@@ -30,8 +30,8 @@ class ItemCategoryManager extends AbstractManager
         $this->em->persist($data);
         $this->em->flush();
 
-        $event = new EnclosureEvent($data, $mode);
-        $this->eventDispatcher->dispatch('enclosure.after_persist', $event);
+        $event = new ItemCategoryEvent($data, $mode);
+        $this->eventDispatcher->dispatch('item_category.after_persist', $event);
 
         $this->removeCache();
 
@@ -40,8 +40,8 @@ class ItemCategoryManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new FeedEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('enclosure.before_remove', $event);
+        $event = new ItemCategoryEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('item_category.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

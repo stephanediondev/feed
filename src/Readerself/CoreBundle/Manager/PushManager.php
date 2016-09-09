@@ -2,8 +2,8 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
-use Readerself\CoreBundle\Entity\Feed;
-use Readerself\CoreBundle\Event\FeedEvent;
+use Readerself\CoreBundle\Entity\Push;
+use Readerself\CoreBundle\Event\PushEvent;
 
 use Minishlink\WebPush\WebPush;
 
@@ -40,8 +40,8 @@ class PushManager extends AbstractManager
         $this->em->persist($data);
         $this->em->flush();
 
-        //$event = new FeedEvent($data, $mode);
-        //$this->eventDispatcher->dispatch('feed.after_persist', $event);
+        $event = new PushEvent($data, $mode);
+        $this->eventDispatcher->dispatch('push.after_persist', $event);
 
         $this->removeCache();
 
@@ -50,8 +50,8 @@ class PushManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new FeedEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('feed.before_remove', $event);
+        $event = new PushEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('push.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

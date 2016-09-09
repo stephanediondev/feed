@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\Connection:
+    repositoryClass: Readerself\CoreBundle\Repository\ConnectionRepository
     type: entity
     table: connection
     indexes:
@@ -21,10 +22,10 @@ Readerself\CoreBundle\Entity\Connection:
     fields:
         token:
             type: string
-            nullable: true
-            length: 40
+            nullable: false
+            length: 255
             options:
-                fixed: true
+                fixed: false
         ip:
             type: string
             nullable: true

@@ -1,4 +1,5 @@
 Readerself\CoreBundle\Entity\ActionItemMember:
+    repositoryClass: Readerself\CoreBundle\Repository\ActionItemMemberRepository
     type: entity
     table: action_item_member
     indexes:

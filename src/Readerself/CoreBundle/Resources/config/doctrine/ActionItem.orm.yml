@@ -1,11 +1,12 @@
 Readerself\CoreBundle\Entity\ActionItem:
+    repositoryClass: Readerself\CoreBundle\Repository\ActionItemRepository
     type: entity
     table: action_item
     indexes:
-        IDX_69FA9E10126F525E:
+        item_id:
             columns:
                 - item_id
-        IDX_69FA9E109D32F035:
+        action_id:
             columns:
                 - action_id
     uniqueConstraints:

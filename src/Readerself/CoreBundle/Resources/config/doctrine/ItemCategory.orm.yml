@@ -3,10 +3,10 @@ Readerself\CoreBundle\Entity\ItemCategory:
     type: entity
     table: item_category
     indexes:
-        IDX_6A41D10A126F525E:
+        item_id:
             columns:
                 - item_id
-        IDX_6A41D10A12469DE2:
+        category_id:
             columns:
                 - category_id
     uniqueConstraints:

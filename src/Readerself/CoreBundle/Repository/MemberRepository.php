@@ -2,7 +2,6 @@
 namespace Readerself\CoreBundle\Repository;
 
 use Readerself\CoreBundle\Repository\AbstractRepository;
-use Readerself\CoreBundle\Entity\Component;
 
 class MemberRepository extends AbstractRepository
 {
@@ -36,11 +35,8 @@ class MemberRepository extends AbstractRepository
         $query->addSelect('fed');
         $query->from('ReaderselfCoreBundle:Member', 'mbr');
 
-        $query->andWhere('fed.title IS NOT NULL');
-
-        $query->addOrderBy('fed.title');
-        $query->groupBy('fed.id');
-        //$query->setMaxResults(2);
+        $query->addOrderBy('mbr.email');
+        $query->groupBy('mbr.id');
 
         $getQuery = $query->getQuery();
 

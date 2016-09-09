@@ -2,7 +2,6 @@
 namespace Readerself\CoreBundle\Repository;
 
 use Readerself\CoreBundle\Repository\AbstractRepository;
-use Readerself\CoreBundle\Entity\Component;
 
 class FeedRepository extends AbstractRepository
 {
@@ -14,7 +13,7 @@ class FeedRepository extends AbstractRepository
         $query->from('ReaderselfCoreBundle:Feed', 'fed');
 
         if(isset($parameters['id']) == 1) {
-            $query->andWhere('cmp.id = :id');
+            $query->andWhere('fed.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
@@ -35,13 +34,9 @@ class FeedRepository extends AbstractRepository
         $query = $em->createQueryBuilder();
         $query->addSelect('fed');
         $query->from('ReaderselfCoreBundle:Feed', 'fed');
-        //$query->leftJoin('ReaderselfCoreBundle:Item', 'itm');
-
-        $query->andWhere('fed.title IS NOT NULL');
 
         $query->addOrderBy('fed.title');
         $query->groupBy('fed.id');
-        //$query->setMaxResults(2);
 
         $getQuery = $query->getQuery();
 

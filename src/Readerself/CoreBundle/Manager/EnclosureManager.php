@@ -40,7 +40,7 @@ class EnclosureManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new FeedEvent($data, 'delete');
+        $event = new EnclosureEvent($data, 'delete');
         $this->eventDispatcher->dispatch('enclosure.before_remove', $event);
 
         $this->em->remove($data);

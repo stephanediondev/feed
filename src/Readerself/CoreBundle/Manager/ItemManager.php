@@ -30,8 +30,8 @@ class ItemManager extends AbstractManager
         $this->em->persist($data);
         $this->em->flush();
 
-        $event = new FeedEvent($data, $mode);
-        $this->eventDispatcher->dispatch('feed.after_persist', $event);
+        $event = new ItemEvent($data, $mode);
+        $this->eventDispatcher->dispatch('item.after_persist', $event);
 
         $this->removeCache();
 
@@ -40,8 +40,8 @@ class ItemManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new FeedEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('feed.before_remove', $event);
+        $event = new ItemEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('item.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

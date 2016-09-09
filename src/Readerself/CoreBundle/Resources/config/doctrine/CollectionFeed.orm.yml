@@ -1,11 +1,12 @@
 Readerself\CoreBundle\Entity\CollectionFeed:
+    repositoryClass: Readerself\CoreBundle\Repository\CollectionFeedRepository
     type: entity
     table: collection_feed
     indexes:
-        IDX_69376845514956FD:
+        collection_id:
             columns:
                 - collection_id
-        IDX_6937684551A5BC03:
+        feed_id:
             columns:
                 - feed_id
     uniqueConstraints:

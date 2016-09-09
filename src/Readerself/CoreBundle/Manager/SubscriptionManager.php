@@ -2,19 +2,19 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
-use Readerself\CoreBundle\Entity\Member;
-use Readerself\CoreBundle\Event\MemberEvent;
+use Readerself\CoreBundle\Entity\Subscription;
+use Readerself\CoreBundle\Event\SubscriptionEvent;
 
-class MemberManager extends AbstractManager
+class SubscriptionManager extends AbstractManager
 {
     public function getOne($paremeters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Member')->getOne($paremeters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Subscription')->getOne($paremeters);
     }
 
     public function getList($parameters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Member')->getList($parameters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Subscription')->getList($parameters);
     }
 
     public function persist($data)
@@ -30,8 +30,8 @@ class MemberManager extends AbstractManager
         $this->em->persist($data);
         $this->em->flush();
 
-        $event = new MemberEvent($data, $mode);
-        $this->eventDispatcher->dispatch('member.after_persist', $event);
+        $event = new SubscriptionEvent($data, $mode);
+        $this->eventDispatcher->dispatch('subscription.after_persist', $event);
 
         $this->removeCache();
 
@@ -40,8 +40,8 @@ class MemberManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new MemberEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('member.before_remove', $event);
+        $event = new SubscriptionEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('subscription.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

@@ -1,11 +1,12 @@
 Readerself\CoreBundle\Entity\ActionCategory:
+    repositoryClass: Readerself\CoreBundle\Repository\ActionCategoryRepository
     type: entity
     table: action_category
     indexes:
-        IDX_D19B69A712469DE2:
+        category_id:
             columns:
                 - category_id
-        IDX_D19B69A79D32F035:
+        action_id:
             columns:
                 - action_id
     uniqueConstraints:
