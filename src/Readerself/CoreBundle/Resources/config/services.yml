@@ -49,6 +49,8 @@ services:
         arguments:
             - "@simplepie"
             - "@readerself_core_manager_push"
+        calls:
+            - [ "setFacebook", [ "%facebook_enabled%", "%facebook_id%", "%facebook_secret%" ] ]
 
     readerself_core_manager_feed:
         class: Readerself\CoreBundle\Manager\FeedManager
@@ -81,3 +83,18 @@ services:
         public: true
         arguments:
             - "%android_gcm_api_key%"
+
+    readerself_core_manager_connection:
+        class: Readerself\CoreBundle\Manager\ConnectionManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_subscription:
+        class: Readerself\CoreBundle\Manager\SubscriptionManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_action:
+        class: Readerself\CoreBundle\Manager\ActionManager
+        parent: "readerself_core_manager_abstract"
+        public: true

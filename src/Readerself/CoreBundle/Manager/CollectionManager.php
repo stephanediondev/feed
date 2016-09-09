@@ -4,6 +4,7 @@ namespace Readerself\CoreBundle\Manager;
 use Readerself\CoreBundle\Manager\AbstractManager;
 
 use Simplepie;
+use Facebook;
 use Readerself\CoreBundle\Manager\PushManager;
 
 class CollectionManager extends AbstractManager
@@ -11,6 +12,12 @@ class CollectionManager extends AbstractManager
     protected $simplepie;
 
     protected $pushManager;
+
+    protected $facebookEnabled;
+
+    protected $facebookId;
+
+    protected $facebookSecret;
 
     public function __construct(
         Simplepie $simplepie,
@@ -22,9 +29,25 @@ class CollectionManager extends AbstractManager
         $this->cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
     }
 
+    public function setFacebook($enabled, $id, $secret)
+    {
+        $this->facebookEnabled = $enabled;
+        $this->facebookId = $id;
+        $this->facebookSecret = $secret;
+    }
+
     public function start()
     {
         $startTime = microtime(1);
+
+        if($this->facebookEnabled) {
+            $fb = new Facebook\Facebook(array(
+                'app_id' => $this->facebookId,
+                'app_secret' => $this->facebookSecret,
+            ));
+            $fbApp = $fb->getApp();
+            $accessToken = $fbApp->getAccessToken();
+        }
 
         /*foreach($this->pushManager->getList([]) as $push) {
             $payload = json_encode(array(
@@ -35,7 +58,7 @@ class CollectionManager extends AbstractManager
         }
         exit(0);*/
 
-        $sql = 'SELECT id, link FROM feed LIMIT 0,1';
+        $sql = 'SELECT id, link FROM feed WHERE link LIKE \'%www.facebook.com%\'';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -73,6 +96,40 @@ class CollectionManager extends AbstractManager
             } else if(isset($parse_url['host']) == 1 && $parse_url['host'] == 'instagram.com') {
 
             } else if(isset($parse_url['host']) == 1 && $parse_url['host'] == 'www.facebook.com') {
+                try {
+                    $parts = explode('/', rtrim($parse_url['path'], '/'));
+                    $total_parts = count($parts);
+                    $last_part = $parts[$total_parts - 1 ];
+                    $request = new Facebook\FacebookRequest($fbApp, $accessToken, 'GET', $last_part.'?fields=link,name,about');
+                    $response = $fb->getClient()->sendRequest($request);
+                    $result = $response->getDecodedBody();
+
+                    $request = new Facebook\FacebookRequest($fbApp, $accessToken, 'GET', $last_part.'?fields=feed{created_time,id,message,story,full_picture,place,type,status_type,link,name}');
+                    $response = $fb->getClient()->sendRequest($request);
+                    $posts = $response->getDecodedBody();
+                    $this->setItemsFacebook($feed, $posts['feed']['data']);
+
+                    $updateFeed = [];
+                    $updateFeed['title'] = $this->cleanTitle($result['name']);
+                    $updateFeed['website'] = $result['link'];
+                    $updateFeed['link'] = $this->cleanLink($result['link']);
+                    if(isset($parse_url['host']) == 1) {
+                        $updateFeed['hostname'] = $parse_url['host'];
+                    }
+                    $updateFeed['description'] = $result['about'];
+
+                    $updateFeed['next_collection'] = $this->setNextCollection($feed);
+
+                    $this->update('feed', $updateFeed, $feed['id']);
+
+                } catch(Facebook\Exceptions\FacebookResponseException $e) {
+                    $errors++;
+                    $insertCollectionFeed['error'] = $e->getMessage();
+
+                } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                    $errors++;
+                    $insertCollectionFeed['error'] = $e->getMessage();
+                }
 
             } else {
                 try {
@@ -213,6 +270,77 @@ class CollectionManager extends AbstractManager
             $this->setCategories($item_id, $sp_item->get_categories());
 
             $this->setEnclosures($item_id, $sp_item->get_enclosures());
+
+            unset($sp_item);
+        }
+    }
+
+    public function setItemsFacebook($feed, $items)
+    {
+        foreach($items as $sp_item) {
+            if(isset($sp_item['link']) == 0) {
+                continue;
+            }
+
+            $link = $this->cleanLink($sp_item['link']);
+
+            $sql = 'SELECT id FROM item WHERE link = :link';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue('link', $link);
+            $stmt->execute();
+            $result = $stmt->fetch();
+
+            if($result) {
+                break;
+            }
+
+            $insertItem = [];
+
+            $insertItem['feed_id'] = $feed['id'];
+
+            if(isset($sp_item['story'])) {
+                $insertItem['title'] = $this->cleanTitle($sp_item['story']);
+            } else if(isset($sp_item['name'])) {
+                $insertItem['title'] = $this->cleanTitle($sp_item['name']);
+            } else {
+                $insertItem['title'] = '-';
+            }
+
+            $insertItem['link'] = $link;
+
+            if(isset($sp_item['message']) == 1) {
+                $insertItem['content']  = nl2br($sp_item['message']);
+            } else {
+                $insertItem['content'] = '-';
+            }
+
+            if(isset($sp_item['place'])) {
+                if($sp_item['place']['location']['latitude'] && $sp_item['place']['location']['longitude']) {
+                    $insertItem['latitude'] = $sp_item['place']['location']['latitude'];
+                    $insertItem['longitude'] = $sp_item['place']['location']['longitude'];
+                }
+            }
+
+            $sp_itm_date = $sp_item['created_time'];
+            if($sp_itm_date) {
+                $insertItem['date'] = (new \Datetime($sp_itm_date))->format('Y-m-d H:i:s');;
+            } else {
+                $insertItem['date'] = (new \Datetime())->format('Y-m-d H:i:s');
+            }
+
+            $insertItem['date_created'] = (new \Datetime())->format('Y-m-d H:i:s');
+
+            $item_id = $this->insert('item', $insertItem);
+
+            if(isset($sp_item['full_picture']) == 1) {
+                $insertEnclosure = [
+                    'item_id' => $item_id,
+                    'link' => $this->cleanLink($sp_item['full_picture']),
+                    'type' => 'image/jpeg',
+                    'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                ];
+                $this->insert('enclosure', $insertEnclosure);
+            }
 
             unset($sp_item);
         }

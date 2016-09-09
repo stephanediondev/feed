@@ -44,16 +44,18 @@ class ItemRepository extends AbstractRepository
             $query->setParameter(':feed', $parameters['feed']);
         }
 
+        $query->andWhere('fed.link LIKE \'%www.facebook.com%\'');
+
         $query->addOrderBy('itm.date', 'DESC');
         $query->groupBy('itm.id');
         $query->setMaxResults(20);
 
         $getQuery = $query->getQuery();
 
-        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+        /*$cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
         $cacheDriver->setNamespace('readerself.item.');
         $getQuery->setResultCacheDriver($cacheDriver);
-        $getQuery->setResultCacheLifetime(86400);
+        $getQuery->setResultCacheLifetime(86400);*/
 
         return $getQuery->getResult();
     }
