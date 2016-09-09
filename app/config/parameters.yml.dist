@@ -19,5 +19,10 @@ parameters:
     elasticsearch_url: http://127.0.0.1:9200
 
     facebook_enabled: false
-    facebook_id: readerself
-    facebook_secret: http://127.0.0.1:9200
+    facebook_id: ~
+    facebook_secret: ~
+
+    instagram_enabled: false
+    instagram_id: ~
+    instagram_secret: ~
+    instagram_token: ~

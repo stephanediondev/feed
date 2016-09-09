@@ -13,10 +13,13 @@ class CollectionManager extends AbstractManager
 
     protected $pushManager;
 
+    protected $instagramEnabled;
+    protected $instagramId;
+    protected $instagramSecret;
+    protected $instagramToken;
+
     protected $facebookEnabled;
-
     protected $facebookId;
-
     protected $facebookSecret;
 
     public function __construct(
@@ -27,6 +30,14 @@ class CollectionManager extends AbstractManager
         $this->pushManager = $pushManager;
 
         $this->cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+    }
+
+    public function setInstagram($enabled, $id, $secret, $token)
+    {
+        $this->instagramEnabled = $enabled;
+        $this->instagramId = $id;
+        $this->instagramSecret = $secret;
+        $this->instagramToken = $token;
     }
 
     public function setFacebook($enabled, $id, $secret)
@@ -58,7 +69,7 @@ class CollectionManager extends AbstractManager
         }
         exit(0);*/
 
-        $sql = 'SELECT id, link FROM feed WHERE link LIKE \'%www.facebook.com%\'';
+        $sql = 'SELECT id, link FROM feed WHERE link LIKE \'%instagram.com%\'';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -93,9 +104,43 @@ class CollectionManager extends AbstractManager
                 $errors++;
                 $insertCollectionFeed['error'] = 'Unvalid scheme';
 
-            } else if(isset($parse_url['host']) == 1 && $parse_url['host'] == 'instagram.com') {
+            } else if(isset($parse_url['host']) == 1 && $parse_url['host'] == 'instagram.com' && $this->instagramEnabled) {
+                if($this->instagramToken) {
+                    $parts = explode('/', rtrim($parse_url['path'], '/'));
+                    $total_parts = count($parts);
+                    $last_part = $parts[$total_parts - 1 ];
 
-            } else if(isset($parse_url['host']) == 1 && $parse_url['host'] == 'www.facebook.com') {
+                    $result = json_decode(file_get_contents('https://api.instagram.com/v1/users/search?q='.$last_part.'&count=15&access_token='.$this->instagramToken));
+                    if(count($result->data) == 0) {
+                        $errors++;
+                        $insertCollectionFeed['error'] = 'User not found';
+
+                    } else {
+                        $user_id = false;
+                        foreach($result->data as $user) {
+                            if($user->username == $last_part) {
+                                $user_id = $user->id;
+                                break;
+                            }
+                        }
+
+                        if(!$user_id) {
+                            $errors++;
+                            $insertCollectionFeed['error'] = 'User not found';
+
+                        } else {
+                            /*$result = json_decode(file_get_contents('https://api.instagram.com/v1/users/'.$user_id.'/media/recent?access_token='.$this->instagramToken));
+                            $this->readerself_library->crawl_items_instagram($fed->fed_id, $result->data);*/
+
+                            $updateFeed = [];
+                            $updateFeed['next_collection'] = $this->setNextCollection($feed);
+
+                            $this->update('feed', $updateFeed, $feed['id']);
+                        }
+                    }
+                }
+
+            } else if(isset($parse_url['host']) == 1 && $parse_url['host'] == 'www.facebook.com' && $this->facebookEnabled) {
                 try {
                     $parts = explode('/', rtrim($parse_url['path'], '/'));
                     $total_parts = count($parts);
@@ -321,9 +366,8 @@ class CollectionManager extends AbstractManager
                 }
             }
 
-            $sp_itm_date = $sp_item['created_time'];
-            if($sp_itm_date) {
-                $insertItem['date'] = (new \Datetime($sp_itm_date))->format('Y-m-d H:i:s');;
+            if($date = $sp_item['created_time']) {
+                $insertItem['date'] = (new \Datetime($date))->format('Y-m-d H:i:s');;
             } else {
                 $insertItem['date'] = (new \Datetime())->format('Y-m-d H:i:s');
             }

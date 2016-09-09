@@ -50,6 +50,7 @@ services:
             - "@simplepie"
             - "@readerself_core_manager_push"
         calls:
+            - [ "setInstagram", [ "%instagram_enabled%", "%instagram_id%", "%instagram_secret%", "%instagram_token%" ] ]
             - [ "setFacebook", [ "%facebook_enabled%", "%facebook_id%", "%facebook_secret%" ] ]
 
     readerself_core_manager_feed:
