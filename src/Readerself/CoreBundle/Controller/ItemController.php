@@ -8,25 +8,30 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Readerself\CoreBundle\Controller\AbstractController;
 
 use Readerself\CoreBundle\Manager\ItemManager;
-use Readerself\CoreBundle\Manager\ItemCategoryManager;
-use Readerself\CoreBundle\Manager\EnclosureManager;
+use Readerself\CoreBundle\Manager\CategoryManager;
+use Readerself\CoreBundle\Manager\MemberManager;
+use Readerself\CoreBundle\Manager\ActionManager;
 
 class ItemController extends AbstractController
 {
     protected $itemManager;
 
-    protected $itemCategoryManager;
+    protected $categoryManager;
 
-    protected $enclosureManager;
+    protected $memberManager;
+
+    protected $actionManager;
 
     public function __construct(
         ItemManager $itemManager,
-        ItemCategoryManager $itemCategoryManager,
-        EnclosureManager $enclosureManager
+        CategoryManager $categoryManager,
+        MemberManager $memberManager,
+        ActionManager $actionManager
     ) {
         $this->itemManager = $itemManager;
-        $this->itemCategoryManager = $itemCategoryManager;
-        $this->enclosureManager = $enclosureManager;
+        $this->categoryManager = $categoryManager;
+        $this->memberManager = $memberManager;
+        $this->actionManager = $actionManager;
     }
 
     public function dispatchAction(Request $request, $action, $id)
@@ -38,9 +43,9 @@ class ItemController extends AbstractController
         $parameterBag = new ParameterBag();
 
         if(null !== $id) {
-            $language = $this->itemManager->getOne(['id' => $id]);
-            if($language) {
-                $parameterBag->set('language', $language);
+            $item = $this->itemManager->getOne(['id' => $id]);
+            if($item) {
+                $parameterBag->set('item', $item);
             } else {
                 return $this->displayError(404);
             }
@@ -49,14 +54,16 @@ class ItemController extends AbstractController
         switch ($action) {
             case 'index':
                 return $this->indexAction($request, $parameterBag);
-            case 'create':
-                return $this->createAction($request, $parameterBag);
             case 'read':
                 return $this->readAction($request, $parameterBag);
-            case 'update':
-                return $this->updateAction($request, $parameterBag);
-            case 'delete':
-                return $this->deleteAction($request, $parameterBag);
+            case 'star':
+                return $this->starAction($request, $parameterBag);
+            case 'share':
+                return $this->shareAction($request, $parameterBag);
+            case 'readability':
+                return $this->readabilityAction($request, $parameterBag);
+            case 'email':
+                return $this->emailAction($request, $parameterBag);
         }
 
         return $this->displayError(404);
@@ -67,14 +74,14 @@ class ItemController extends AbstractController
         $data = [];
         $data['items'] = [];
         $index = 0;
-        foreach($this->itemManager->getList() as $item) {
+        foreach($this->itemManager->getList(['member' => $this->memberManager->getOne(['id' => 1])]) as $item) {
             $categories = [];
-            foreach($this->itemCategoryManager->getList(['item' => $item]) as $itemCategory) {
+            foreach($this->categoryManager->itemCategoryManager->getList(['item' => $item]) as $itemCategory) {
                 $categories[] = $itemCategory->toArray();
             }
 
             $enclosures = [];
-            foreach($this->enclosureManager->getList(['item' => $item]) as $enclosure) {
+            foreach($this->itemManager->enclosureManager->getList(['item' => $item]) as $enclosure) {
                 $enclosures[] = $enclosure->toArray();
             }
 
@@ -86,69 +93,84 @@ class ItemController extends AbstractController
         return new JsonResponse($data);
     }
 
-    public function createAction(Request $request, ParameterBag $parameterBag)
-    {
-        $language = new Language();
-        $language->setIsActive(true);
-
-        $form = $this->createForm(LanguageType::class, $language, [
-            'language' => $language,
-        ]);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted()) {
-            if($form->isValid()) {
-                $id = $this->itemManager->persist($form->getData());
-                $this->addFlash('success', 'created');
-                return $this->redirectToRoute('readerself_core_feed', ['action' => 'read', 'id' => $id]);
-            }
-        }
-
-        $parameterBag->set('form', $form->createView());
-
-        return $this->render('ReaderselfCoreBundle:Feed:create.html.twig', $parameterBag->all());
-    }
-
     public function readAction(Request $request, ParameterBag $parameterBag)
     {
-        return $this->render('ReaderselfCoreBundle:Feed:read.html.twig', $parameterBag->all());
+        return $this->setAction('read', $request, $parameterBag);
     }
 
-    public function updateAction(Request $request, ParameterBag $parameterBag)
+    public function starAction(Request $request, ParameterBag $parameterBag)
     {
-        $form = $this->createForm(LanguageType::class, $parameterBag->get('language'), [
-            'language' => $parameterBag->get('language'),
-        ]);
-        $form->handleRequest($request);
-
-        if($form->isSubmitted()) {
-            if($form->isValid()) {
-                $this->itemManager->persist($form->getData());
-                $this->addFlash('success', 'updated');
-                return $this->redirectToRoute('readerself_core_feed', ['action' => 'read', 'id' => $parameterBag->get('language')->getId()]);
-            }
-        }
-
-        $parameterBag->set('form', $form->createView());
-
-        return $this->render('ReaderselfCoreBundle:Feed:update.html.twig', $parameterBag->all());
+        return $this->setAction('star', $request, $parameterBag);
     }
 
-    public function deleteAction(Request $request, ParameterBag $parameterBag)
+    public function shareAction(Request $request, ParameterBag $parameterBag)
     {
-        $form = $this->createForm(DeleteType::class, null, []);
-        $form->handleRequest($request);
+        return $this->setAction('share', $request, $parameterBag);
+    }
 
-        if($form->isSubmitted()) {
-            if($form->isValid()) {
-                $this->itemManager->remove($parameterBag->get('language'));
-                $this->addFlash('success', 'deleted');
-                return $this->redirectToRoute('readerself_core_feed', []);
-            }
+    private function setAction($case, Request $request, ParameterBag $parameterBag)
+    {
+        $data = [];
+        $parameterBag->set('member', $this->memberManager->getOne(['member' => 1]));
+        $parameterBag->set('action', $this->actionManager->getOne(['title' => $case]));
+
+        if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
+            'action' => $parameterBag->get('action'),
+            'item' => $parameterBag->get('item'),
+            'member' => $parameterBag->get('member'),
+        ])) {
+            $this->actionManager->actionItemMemberManager->remove($actionItemMember);
+        } else {
+            $actionItemMember = $this->actionManager->actionItemMemberManager->init();
+            $actionItemMember->setAction($parameterBag->get('action'));
+            $actionItemMember->setItem($parameterBag->get('item'));
+            $actionItemMember->setMember($parameterBag->get('member'));
+
+            $this->actionManager->actionItemMemberManager->persist($actionItemMember);
         }
 
-        $parameterBag->set('form', $form->createView());
+        return new JsonResponse($data);
+    }
 
-        return $this->render('ReaderselfCoreBundle:Feed:delete.html.twig', $parameterBag->all());
+    private function readabilityAction(Request $request, ParameterBag $parameterBag)
+    {
+        $data = [];
+        $parameterBag->set('action', $this->actionManager->getOne(['title' => 'readability']));
+
+        if($actionItem = $this->actionManager->actionItemManager->getOne([
+            'action' => $parameterBag->get('action'),
+            'item' => $parameterBag->get('item'),
+        ])) {
+        } else {
+            $actionItem = $this->actionManager->actionItemManager->init();
+            $actionItem->setAction($parameterBag->get('action'));
+            $actionItem->setItem($parameterBag->get('item'));
+
+            $this->actionManager->actionItemManager->persist($actionItem);
+        }
+
+        $this->itemManager->getContentFull($parameterBag->get('item'));
+
+        return new JsonResponse($data);
+    }
+
+    public function emailAction(Request $request, ParameterBag $parameterBag)
+    {
+        $data = [];
+        $parameterBag->set('action', $this->actionManager->getOne(['title' => 'email']));
+
+        if($actionItem = $this->actionManager->actionItemManager->getOne([
+            'action' => $parameterBag->get('action'),
+            'item' => $parameterBag->get('item'),
+        ])) {
+        } else {
+            $actionItem = $this->actionManager->actionItemManager->init();
+            $actionItem->setAction($parameterBag->get('action'));
+            $actionItem->setItem($parameterBag->get('item'));
+
+            $this->actionManager->actionItemManager->persist($actionItem);
+        }
+
+        return new JsonResponse($data);
     }
 }

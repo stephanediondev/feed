@@ -17,6 +17,11 @@ class MemberManager extends AbstractManager
         return $this->em->getRepository('ReaderselfCoreBundle:Member')->getList($parameters);
     }
 
+    public function init()
+    {
+        return new Member();
+    }
+
     public function persist($data)
     {
         if($data->getDateCreated() == null) {

@@ -197,4 +197,3 @@ class Subscription
         return $this->member;
     }
 }
-

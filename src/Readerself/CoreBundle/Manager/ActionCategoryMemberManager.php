@@ -2,24 +2,24 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
-use Readerself\CoreBundle\Entity\Feed;
-use Readerself\CoreBundle\Event\FeedEvent;
+use Readerself\CoreBundle\Entity\ActionCategoryMember;
+use Readerself\CoreBundle\Event\ActionCategoryMemberEvent;
 
-class FeedManager extends AbstractManager
+class ActionCategoryMemberManager extends AbstractManager
 {
     public function getOne($paremeters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Feed')->getOne($paremeters);
+        return $this->em->getRepository('ReaderselfCoreBundle:ActionCategoryMember')->getOne($paremeters);
     }
 
     public function getList($parameters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Feed')->getList($parameters);
+        return $this->em->getRepository('ReaderselfCoreBundle:ActionCategoryMember')->getList($parameters);
     }
 
     public function init()
     {
-        return new Feed();
+        return new ActionCategoryMember();
     }
 
     public function persist($data)
@@ -30,13 +30,12 @@ class FeedManager extends AbstractManager
         } else {
             $mode = 'update';
         }
-        $data->setDateModified(new \Datetime());
 
         $this->em->persist($data);
         $this->em->flush();
 
-        $event = new FeedEvent($data, $mode);
-        $this->eventDispatcher->dispatch('feed.after_persist', $event);
+        $event = new ActionCategoryMemberEvent($data, $mode);
+        $this->eventDispatcher->dispatch('action_category_member.after_persist', $event);
 
         $this->removeCache();
 
@@ -45,8 +44,8 @@ class FeedManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new FeedEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('feed.before_remove', $event);
+        $event = new ActionCategoryMemberEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('action_category_member.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

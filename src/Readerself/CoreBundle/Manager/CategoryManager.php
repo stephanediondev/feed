@@ -2,24 +2,32 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
-use Readerself\CoreBundle\Entity\Feed;
-use Readerself\CoreBundle\Event\FeedEvent;
+use Readerself\CoreBundle\Entity\Category;
+use Readerself\CoreBundle\Event\CategoryEvent;
 
-class FeedManager extends AbstractManager
+class CategoryManager extends AbstractManager
 {
+    public $itemCategoryManager;
+
+    public function __construct(
+        ItemCategoryManager $itemCategoryManager
+    ) {
+        $this->itemCategoryManager = $itemCategoryManager;
+    }
+
     public function getOne($paremeters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Feed')->getOne($paremeters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Category')->getOne($paremeters);
     }
 
     public function getList($parameters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Feed')->getList($parameters);
+        return $this->em->getRepository('ReaderselfCoreBundle:Category')->getList($parameters);
     }
 
     public function init()
     {
-        return new Feed();
+        return new Action();
     }
 
     public function persist($data)
@@ -35,8 +43,8 @@ class FeedManager extends AbstractManager
         $this->em->persist($data);
         $this->em->flush();
 
-        $event = new FeedEvent($data, $mode);
-        $this->eventDispatcher->dispatch('feed.after_persist', $event);
+        $event = new CategoryEvent($data, $mode);
+        $this->eventDispatcher->dispatch('category.after_persist', $event);
 
         $this->removeCache();
 
@@ -45,8 +53,8 @@ class FeedManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new FeedEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('feed.before_remove', $event);
+        $event = new CategoryEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('category.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

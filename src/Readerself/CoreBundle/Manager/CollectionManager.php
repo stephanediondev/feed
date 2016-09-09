@@ -13,13 +13,10 @@ class CollectionManager extends AbstractManager
 
     protected $pushManager;
 
-    protected $instagramEnabled;
-    protected $instagramId;
-    protected $instagramSecret;
-    protected $instagramToken;
-
     protected $facebookEnabled;
+
     protected $facebookId;
+
     protected $facebookSecret;
 
     public function __construct(
@@ -30,14 +27,6 @@ class CollectionManager extends AbstractManager
         $this->pushManager = $pushManager;
 
         $this->cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-    }
-
-    public function setInstagram($enabled, $id, $secret, $token)
-    {
-        $this->instagramEnabled = $enabled;
-        $this->instagramId = $id;
-        $this->instagramSecret = $secret;
-        $this->instagramToken = $token;
     }
 
     public function setFacebook($enabled, $id, $secret)
@@ -69,7 +58,7 @@ class CollectionManager extends AbstractManager
         }
         exit(0);*/
 
-        $sql = 'SELECT id, link FROM feed WHERE link LIKE \'%instagram.com%\'';
+        $sql = 'SELECT id, link FROM feed LIMIT 0,50';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -103,42 +92,6 @@ class CollectionManager extends AbstractManager
             if(isset($parse_url['scheme']) == 0 || ($parse_url['scheme'] != 'http' && $parse_url['scheme'] != 'https')) {
                 $errors++;
                 $insertCollectionFeed['error'] = 'Unvalid scheme';
-
-            } else if(isset($parse_url['host']) == 1 && $parse_url['host'] == 'instagram.com' && $this->instagramEnabled) {
-                if($this->instagramToken) {
-                    $parts = explode('/', rtrim($parse_url['path'], '/'));
-                    $total_parts = count($parts);
-                    $last_part = $parts[$total_parts - 1 ];
-
-                    $result = json_decode(file_get_contents('https://api.instagram.com/v1/users/search?q='.$last_part.'&count=15&access_token='.$this->instagramToken));
-                    if(count($result->data) == 0) {
-                        $errors++;
-                        $insertCollectionFeed['error'] = 'User not found';
-
-                    } else {
-                        $user_id = false;
-                        foreach($result->data as $user) {
-                            if($user->username == $last_part) {
-                                $user_id = $user->id;
-                                break;
-                            }
-                        }
-
-                        if(!$user_id) {
-                            $errors++;
-                            $insertCollectionFeed['error'] = 'User not found';
-
-                        } else {
-                            /*$result = json_decode(file_get_contents('https://api.instagram.com/v1/users/'.$user_id.'/media/recent?access_token='.$this->instagramToken));
-                            $this->readerself_library->crawl_items_instagram($fed->fed_id, $result->data);*/
-
-                            $updateFeed = [];
-                            $updateFeed['next_collection'] = $this->setNextCollection($feed);
-
-                            $this->update('feed', $updateFeed, $feed['id']);
-                        }
-                    }
-                }
 
             } else if(isset($parse_url['host']) == 1 && $parse_url['host'] == 'www.facebook.com' && $this->facebookEnabled) {
                 try {

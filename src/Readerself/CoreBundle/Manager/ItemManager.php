@@ -7,6 +7,24 @@ use Readerself\CoreBundle\Event\ItemEvent;
 
 class ItemManager extends AbstractManager
 {
+    public $enclosureManager;
+
+    protected $readabilityEnabled;
+
+    protected $readabilityKey;
+
+    public function __construct(
+        EnclosureManager $enclosureManager
+    ) {
+        $this->enclosureManager = $enclosureManager;
+    }
+
+    public function setReadability($enabled, $key)
+    {
+        $this->readabilityEnabled = $enabled;
+        $this->readabilityKey = $key;
+    }
+
     public function getOne($paremeters = [])
     {
         return $this->em->getRepository('ReaderselfCoreBundle:Item')->getOne($paremeters);
@@ -15,6 +33,11 @@ class ItemManager extends AbstractManager
     public function getList($parameters = [])
     {
         return $this->em->getRepository('ReaderselfCoreBundle:Item')->getList($parameters);
+    }
+
+    public function init()
+    {
+        return new Item();
     }
 
     public function persist($data)
@@ -47,5 +70,22 @@ class ItemManager extends AbstractManager
         $this->em->flush();
 
         $this->removeCache();
+    }
+
+    public function getContentFull(Item $item)
+    {
+        if($this->readabilityEnabled && !$item->getContentFull()) {
+            $url = 'https://www.readability.com/api/content/v1/parser?url='.urlencode($item->getLink()).'&token='.$this->readabilityKey;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            $result = json_decode(curl_exec($ch), true);
+            curl_close($ch);
+
+            if(isset($result['error']) == 0) {
+                $item->setContentFull($result['content']);
+                $this->persist($item);
+            }
+        }
     }
 }

@@ -52,6 +52,11 @@ class Feed
      */
     private $dateCreated;
 
+    /**
+     * @var ArrayCollection
+     */
+    private $subscriptions;
+
 
     /**
      * Get id
@@ -253,6 +258,14 @@ class Feed
     public function getDateCreated()
     {
         return $this->dateCreated;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
     }
 
     /**

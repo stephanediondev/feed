@@ -22,7 +22,10 @@ parameters:
     facebook_id: ~
     facebook_secret: ~
 
-    instagram_enabled: false
-    instagram_id: ~
-    instagram_secret: ~
-    instagram_token: ~
+    readability_parser_enabled: false
+    readability_parser_key: ~
+
+    evernote_enabled: false
+    evernote_key: ~
+    evernote_secret: ~
+    evernote_sandbox: true

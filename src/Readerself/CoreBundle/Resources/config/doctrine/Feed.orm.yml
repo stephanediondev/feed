@@ -64,4 +64,8 @@ Readerself\CoreBundle\Entity\Feed:
             type: datetime
             nullable: false
             column: date_created
+    oneToMany:
+        subscriptions:
+            targetEntity: Subscription
+            mappedBy: feed
     lifecycleCallbacks: {  }

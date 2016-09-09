@@ -24,8 +24,9 @@ services:
         parent: "readerself_core_controller_abstract"
         arguments:
             - "@readerself_core_manager_item"
-            - "@readerself_core_manager_item_category"
-            - "@readerself_core_manager_enclosure"
+            - "@readerself_core_manager_category"
+            - "@readerself_core_manager_member"
+            - "@readerself_core_manager_action"
 
     readerself_core_controller_push:
         class: Readerself\CoreBundle\Controller\PushController
@@ -50,7 +51,6 @@ services:
             - "@simplepie"
             - "@readerself_core_manager_push"
         calls:
-            - [ "setInstagram", [ "%instagram_enabled%", "%instagram_id%", "%instagram_secret%", "%instagram_token%" ] ]
             - [ "setFacebook", [ "%facebook_enabled%", "%facebook_id%", "%facebook_secret%" ] ]
 
     readerself_core_manager_feed:
@@ -62,6 +62,17 @@ services:
         class: Readerself\CoreBundle\Manager\ItemManager
         parent: "readerself_core_manager_abstract"
         public: true
+        arguments:
+            - "@readerself_core_manager_enclosure"
+        calls:
+            - [ "setReadability", [ "%readability_parser_enabled%", "%readability_parser_key%" ] ]
+
+    readerself_core_manager_category:
+        class: Readerself\CoreBundle\Manager\CategoryManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+        arguments:
+            - "@readerself_core_manager_item_category"
 
     readerself_core_manager_item_category:
         class: Readerself\CoreBundle\Manager\ItemCategoryManager
@@ -97,5 +108,24 @@ services:
 
     readerself_core_manager_action:
         class: Readerself\CoreBundle\Manager\ActionManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+        arguments:
+            - "@readerself_core_manager_action_item"
+            - "@readerself_core_manager_action_item_member"
+            - "@readerself_core_manager_action_category_member"
+
+    readerself_core_manager_action_item:
+        class: Readerself\CoreBundle\Manager\ActionItemManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_action_item_member:
+        class: Readerself\CoreBundle\Manager\ActionItemMemberManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_action_category_member:
+        class: Readerself\CoreBundle\Manager\ActionCategoryMemberManager
         parent: "readerself_core_manager_abstract"
         public: true

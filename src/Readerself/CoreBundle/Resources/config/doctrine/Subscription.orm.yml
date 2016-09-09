@@ -59,7 +59,7 @@ Readerself\CoreBundle\Entity\Subscription:
             cascade: {  }
             fetch: LAZY
             mappedBy: null
-            inversedBy: null
+            inversedBy: subscriptions
             joinColumns:
                 feed_id:
                     nullable: false

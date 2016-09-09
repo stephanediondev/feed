@@ -74,12 +74,8 @@ a:link, a:visited {
     overflow: visible;
     padding: 0px 8px;
 }
-.mdl-card__supporting-text.dropzone {
-    min-height: 105px;
-}
-.mdl-card__supporting-text.mdl-grid .mdl-cell--2-col {
-    padding: 0px;
-    text-align: center;
+.mdl-card__supporting-text img {
+    max-width: 100%
 }
 .mdl-tabs__panel.is-active {
     display: block;

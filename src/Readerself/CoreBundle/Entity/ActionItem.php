@@ -13,6 +13,11 @@ class ActionItem
     private $id;
 
     /**
+     * @var \DateTime
+     */
+    private $dateCreated;
+
+    /**
      * @var \Readerself\CoreBundle\Entity\Item
      */
     private $item;
@@ -31,6 +36,30 @@ class ActionItem
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set dateCreated
+     *
+     * @param \DateTime $dateCreated
+     *
+     * @return ActionItemMember
+     */
+    public function setDateCreated($dateCreated)
+    {
+        $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    /**
+     * Get dateCreated
+     *
+     * @return \DateTime
+     */
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
     }
 
     /**

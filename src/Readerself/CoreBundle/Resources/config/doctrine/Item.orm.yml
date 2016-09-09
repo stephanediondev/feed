@@ -68,6 +68,10 @@ Readerself\CoreBundle\Entity\Item:
             type: datetime
             nullable: false
             column: date_created
+        dateModified:
+            type: datetime
+            nullable: false
+            column: date_modified
     manyToOne:
         feed:
             targetEntity: Feed

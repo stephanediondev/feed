@@ -2,24 +2,24 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
-use Readerself\CoreBundle\Entity\Feed;
-use Readerself\CoreBundle\Event\FeedEvent;
+use Readerself\CoreBundle\Entity\ActionItem;
+use Readerself\CoreBundle\Event\ActionItemEvent;
 
-class FeedManager extends AbstractManager
+class ActionItemManager extends AbstractManager
 {
     public function getOne($paremeters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Feed')->getOne($paremeters);
+        return $this->em->getRepository('ReaderselfCoreBundle:ActionItem')->getOne($paremeters);
     }
 
     public function getList($parameters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:Feed')->getList($parameters);
+        return $this->em->getRepository('ReaderselfCoreBundle:ActionItem')->getList($parameters);
     }
 
     public function init()
     {
-        return new Feed();
+        return new ActionItem();
     }
 
     public function persist($data)
@@ -30,13 +30,12 @@ class FeedManager extends AbstractManager
         } else {
             $mode = 'update';
         }
-        $data->setDateModified(new \Datetime());
 
         $this->em->persist($data);
         $this->em->flush();
 
-        $event = new FeedEvent($data, $mode);
-        $this->eventDispatcher->dispatch('feed.after_persist', $event);
+        $event = new ActionItemEvent($data, $mode);
+        $this->eventDispatcher->dispatch('action_item.after_persist', $event);
 
         $this->removeCache();
 
@@ -45,8 +44,8 @@ class FeedManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new FeedEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('feed.before_remove', $event);
+        $event = new ActionItemEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('action_item.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

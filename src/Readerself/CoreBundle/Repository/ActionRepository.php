@@ -3,27 +3,30 @@ namespace Readerself\CoreBundle\Repository;
 
 use Readerself\CoreBundle\Repository\AbstractRepository;
 
-class ItemRepository extends AbstractRepository
+class ActionRepository extends AbstractRepository
 {
     public function getOne($parameters = []) {
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('itm', 'fed', 'aut');
-        $query->from('ReaderselfCoreBundle:Item', 'itm');
-        $query->leftJoin('itm.feed', 'fed');
-        $query->leftJoin('itm.author', 'aut');
+        $query->addSelect('act');
+        $query->from('ReaderselfCoreBundle:Action', 'act');
 
         if(isset($parameters['id']) == 1) {
-            $query->andWhere('itm.id = :id');
+            $query->andWhere('act.id = :id');
             $query->setParameter(':id', $parameters['id']);
+        }
+
+        if(isset($parameters['title']) == 1) {
+            $query->andWhere('act.title = :title');
+            $query->setParameter(':title', $parameters['title']);
         }
 
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 
         $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.item.');
+        $cacheDriver->setNamespace('readerself.action.');
         $getQuery->setResultCacheDriver($cacheDriver);
         $getQuery->setResultCacheLifetime(86400);
 
@@ -46,7 +49,7 @@ class ItemRepository extends AbstractRepository
 
         if(isset($parameters['member']) == 1) {
             $query->leftJoin('fed.subscriptions', 'sub');
-            $query->andWhere('sub.member = :member');
+            $query->andWhere('sub.member = :action');
             $query->setParameter(':member', $parameters['member']);
         }
 

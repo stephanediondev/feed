@@ -27,6 +27,11 @@ class PushManager extends AbstractManager
         return $this->em->getRepository('ReaderselfCoreBundle:Push')->getList($parameters);
     }
 
+    public function init()
+    {
+        return new Push();
+    }
+
     public function persist($data)
     {
         if($data->getDateCreated() == null) {
