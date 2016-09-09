@@ -30,7 +30,6 @@ class EnclosureManager extends AbstractManager
         } else {
             $mode = 'update';
         }
-        $data->setDateModified(new \Datetime());
 
         $this->em->persist($data);
         $this->em->flush();

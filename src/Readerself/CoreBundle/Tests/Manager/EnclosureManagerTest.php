@@ -1,13 +1,16 @@
 <?php
 namespace Axipi\MCoreBundle\Tests\Manager;
 
+use Readerself\CoreBundle\Entity\Enclosure;
 use Readerself\CoreBundle\Entity\Item;
 use Readerself\CoreBundle\Entity\Feed;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class ItemManagerTest extends KernelTestCase
+class EnclosureManagerTest extends KernelTestCase
 {
+    protected $enclosureManager;
+
     protected $itemManager;
 
     protected $feedManager;
@@ -15,6 +18,8 @@ class ItemManagerTest extends KernelTestCase
     protected function setUp()
     {
         self::bootKernel();
+
+        $this->enclosureManager = static::$kernel->getContainer()->get('readerself_core_manager_enclosure');
 
         $this->itemManager = static::$kernel->getContainer()->get('readerself_core_manager_item');
 
@@ -37,14 +42,23 @@ class ItemManagerTest extends KernelTestCase
 
         $item_id = $this->itemManager->persist($item);
 
-        $test = $this->itemManager->getOne(['id' => $item_id]);
+        $enclosure = $this->enclosureManager->init();
+        $enclosure->setItem($item);
+        $enclosure->setLink('test-unitaire-'.uniqid('', true));
+        $enclosure->setType('test-unitaire-'.uniqid('', true));
+
+        $enclosure_id = $this->enclosureManager->persist($enclosure);
+
+        $test = $this->enclosureManager->getOne(['id' => $enclosure_id]);
         $this->assertNotNull($test);
-        $this->assertInstanceOf(Item::class, $test);
+        $this->assertInstanceOf(Enclosure::class, $test);
+
+        $this->enclosureManager->remove($enclosure);
+
+        $test = $this->itemManager->getOne(['id' => $enclosure_id]);
+        $this->assertNull($test);
 
         $this->itemManager->remove($item);
-
-        $test = $this->itemManager->getOne(['id' => $item_id]);
-        $this->assertNull($test);
 
         $this->feedManager->remove($feed);
     }
