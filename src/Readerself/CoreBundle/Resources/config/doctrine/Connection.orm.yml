@@ -7,8 +7,9 @@ Readerself\CoreBundle\Entity\Connection:
             columns:
                 - member_id
     uniqueConstraints:
-        token:
+        type_token:
             columns:
+                - type
                 - token
     id:
         id:
@@ -20,6 +21,12 @@ Readerself\CoreBundle\Entity\Connection:
             generator:
                 strategy: IDENTITY
     fields:
+        type:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
         token:
             type: string
             nullable: false
@@ -42,6 +49,10 @@ Readerself\CoreBundle\Entity\Connection:
             type: datetime
             nullable: false
             column: date_created
+        dateModified:
+            type: datetime
+            nullable: false
+            column: date_modified
     manyToOne:
         member:
             targetEntity: Member

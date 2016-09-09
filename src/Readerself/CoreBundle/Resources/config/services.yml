@@ -67,6 +67,11 @@ services:
         calls:
             - [ "setReadability", [ "%readability_parser_enabled%", "%readability_parser_key%" ] ]
 
+    readerself_core_manager_enclosure:
+        class: Readerself\CoreBundle\Manager\EnclosureManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
     readerself_core_manager_category:
         class: Readerself\CoreBundle\Manager\CategoryManager
         parent: "readerself_core_manager_abstract"
@@ -79,13 +84,16 @@ services:
         parent: "readerself_core_manager_abstract"
         public: true
 
-    readerself_core_manager_enclosure:
-        class: Readerself\CoreBundle\Manager\EnclosureManager
-        parent: "readerself_core_manager_abstract"
-        public: true
-
     readerself_core_manager_member:
         class: Readerself\CoreBundle\Manager\MemberManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+        arguments:
+            - "@readerself_core_manager_connection"
+            - "@readerself_core_manager_push"
+
+    readerself_core_manager_connection:
+        class: Readerself\CoreBundle\Manager\ConnectionManager
         parent: "readerself_core_manager_abstract"
         public: true
 

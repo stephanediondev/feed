@@ -15,6 +15,11 @@ class Connection
     /**
      * @var string
      */
+    private $type;
+
+    /**
+     * @var string
+     */
     private $token;
 
     /**
@@ -33,6 +38,11 @@ class Connection
     private $dateCreated;
 
     /**
+     * @var \DateTime
+     */
+    private $dateModified;
+
+    /**
      * @var \Readerself\CoreBundle\Entity\Member
      */
     private $member;
@@ -47,6 +57,31 @@ class Connection
     {
         return $this->id;
     }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Connection
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
 
     /**
      * Set token
@@ -142,6 +177,30 @@ class Connection
     public function getDateCreated()
     {
         return $this->dateCreated;
+    }
+
+    /**
+     * Set dateModified
+     *
+     * @param \DateTime $dateModified
+     *
+     * @return Push
+     */
+    public function setDateModified($dateModified)
+    {
+        $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModified
+     *
+     * @return \DateTime
+     */
+    public function getDateModified()
+    {
+        return $this->dateModified;
     }
 
     /**

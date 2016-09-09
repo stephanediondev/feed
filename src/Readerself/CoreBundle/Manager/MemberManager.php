@@ -7,6 +7,18 @@ use Readerself\CoreBundle\Event\MemberEvent;
 
 class MemberManager extends AbstractManager
 {
+    public $connectionManager;
+
+    public $pushManager;
+
+    public function __construct(
+        ConnectionManager $connectionManager,
+        PushManager $pushManager
+    ) {
+        $this->connectionManager = $connectionManager;
+        $this->pushManager = $pushManager;
+    }
+
     public function getOne($paremeters = [])
     {
         return $this->em->getRepository('ReaderselfCoreBundle:Member')->getOne($paremeters);
