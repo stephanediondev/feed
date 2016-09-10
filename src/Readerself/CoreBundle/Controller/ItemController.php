@@ -4,6 +4,7 @@ namespace Readerself\CoreBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
@@ -34,42 +35,17 @@ class ItemController extends AbstractController
         $this->actionManager = $actionManager;
     }
 
-    public function dispatchAction(Request $request, $action, $id)
-    {
-        if(!$this->isGranted('ROLE_FEEDS')) {
-            //return $this->displayError(403);
-        }
-
-        $parameterBag = new ParameterBag();
-
-        if(null !== $id) {
-            $item = $this->itemManager->getOne(['id' => $id]);
-            if($item) {
-                $parameterBag->set('item', $item);
-            } else {
-                return $this->displayError(404);
-            }
-        }
-
-        switch ($action) {
-            case 'index':
-                return $this->indexAction($request, $parameterBag);
-            case 'read':
-                return $this->readAction($request, $parameterBag);
-            case 'star':
-                return $this->starAction($request, $parameterBag);
-            case 'share':
-                return $this->shareAction($request, $parameterBag);
-            case 'readability':
-                return $this->readabilityAction($request, $parameterBag);
-            case 'email':
-                return $this->emailAction($request, $parameterBag);
-        }
-
-        return $this->displayError(404);
-    }
-
-    public function indexAction(Request $request, ParameterBag $parameterBag)
+    /**
+     * Retrieve all items.
+     *
+     * @ApiDoc(
+     *     section="Item",
+     *     headers={
+     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *     },
+     * )
+     */
+    public function indexAction(Request $request)
     {
         $data = [];
         $data['items'] = [];
@@ -93,16 +69,47 @@ class ItemController extends AbstractController
         return new JsonResponse($data);
     }
 
+    /**
+     * Set "read" action / Remove "read" action.
+     *
+     * @ApiDoc(
+     *     section="Item",
+     *     headers={
+     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *     },
+     * )
+     */
     public function readAction(Request $request, ParameterBag $parameterBag)
     {
         return $this->setAction('read', $request, $parameterBag);
     }
 
+    /**
+     * Set "star" action / Remove "star" action.
+     *
+     * @ApiDoc(
+     *     section="Item",
+     *     headers={
+     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *     },
+     * )
+     */
     public function starAction(Request $request, ParameterBag $parameterBag)
     {
         return $this->setAction('star', $request, $parameterBag);
     }
 
+
+    /**
+     * Set "share" action / Remove "share" action.
+     *
+     * @ApiDoc(
+     *     section="Item",
+     *     headers={
+     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *     },
+     * )
+     */
     public function shareAction(Request $request, ParameterBag $parameterBag)
     {
         return $this->setAction('share', $request, $parameterBag);
@@ -132,7 +139,17 @@ class ItemController extends AbstractController
         return new JsonResponse($data);
     }
 
-    private function readabilityAction(Request $request, ParameterBag $parameterBag)
+    /**
+     * Retrieve content with Readability.
+     *
+     * @ApiDoc(
+     *     section="Item",
+     *     headers={
+     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *     },
+     * )
+     */
+    public function readabilityAction(Request $request, ParameterBag $parameterBag)
     {
         $data = [];
         $parameterBag->set('action', $this->actionManager->getOne(['title' => 'readability']));

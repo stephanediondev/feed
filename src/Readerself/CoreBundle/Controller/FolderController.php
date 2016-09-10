@@ -7,54 +7,33 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
-use Readerself\CoreBundle\Manager\FeedManager;
 
-class FeedController extends AbstractController
+class FolderController extends AbstractController
 {
-    protected $feedManager;
-
-    public function __construct(
-        FeedManager $feedManager
-    ) {
-        $this->feedManager = $feedManager;
-    }
-
     /**
-     * Retrieve all feeds.
+     * Retrieve all folders.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Folder",
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"=true},
      *     },
      * )
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, ParameterBag $parameterBag)
     {
-        $data = [];
-        $data['feeds'] = [];
-        foreach($this->feedManager->getList() as $feed) {
-            $data['feeds'][] = [
-               'id' => $feed->getId(),
-               'title' => $feed->getTitle(),
-               'website' => $feed->getWebsite(),
-            ];
-        }
-        return new JsonResponse($data);
     }
 
     /**
-     * Create a feed.
+     * Create a folder.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Folder",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"="true"},
+     *         {"name"="X-AUTHORIZE-KEY","required"=true},
      *     },
      *     parameters={
-     *         {"name"="title", "dataType"="string", "required"=false},
-     *         {"name"="link", "dataType"="string", "required"=true},
-     *         {"name"="website", "dataType"="string", "required"=false},
+     *         {"name"="title", "dataType"="string", "required"=true},
      *     },
      * )
      */
@@ -63,10 +42,10 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Retrieve a feed.
+     * Retrieve a folder.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Folder",
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"=true},
      *     },
@@ -77,17 +56,15 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Update a feed.
+     * Update a folder.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Folder",
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"="true"},
      *     },
      *     parameters={
-     *         {"name"="title", "dataType"="string", "required"=false},
-     *         {"name"="link", "dataType"="string", "required"=true},
-     *         {"name"="website", "dataType"="string", "required"=false},
+     *         {"name"="title", "dataType"="string", "required"=true},
      *     },
      * )
      */
@@ -96,10 +73,10 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Delete a feed.
+     * Delete a folder.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Folder",
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"=true},
      *     },

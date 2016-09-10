@@ -28,8 +28,9 @@
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "^2.0",
-        "minishlink/web-push-bundle": "^1.0",
+        "minishlink/web-push-bundle": "*",
         "simplepie/simplepie": "*",
+        "nelmio/api-doc-bundle": "*",
         "facebook/php-sdk-v4" : "~5.0"
     },
     "require-dev": {

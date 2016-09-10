@@ -9,7 +9,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Readerself\CoreBundle\Controller\AbstractController;
 use Readerself\CoreBundle\Manager\FeedManager;
 
-class FeedController extends AbstractController
+class SubscriptionController extends AbstractController
 {
     protected $feedManager;
 
@@ -20,41 +20,42 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Retrieve all feeds.
+     * Retrieve all subscriptions.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Subscription",
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"=true},
      *     },
      * )
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, ParameterBag $parameterBag)
     {
         $data = [];
-        $data['feeds'] = [];
-        foreach($this->feedManager->getList() as $feed) {
-            $data['feeds'][] = [
-               'id' => $feed->getId(),
-               'title' => $feed->getTitle(),
-               'website' => $feed->getWebsite(),
+        $data['subscriptions'] = [];
+        foreach($this->subscriptionManager->getList() as $subscription) {
+            $data['subscriptions'][] = [
+               'id' => $subscription->getId(),
+               'title' => $subscription->getTitle(),
+               'website' => $subscription->getWebsite(),
             ];
         }
         return new JsonResponse($data);
     }
 
     /**
-     * Create a feed.
+     * Create a subscription.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Subscription",
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"="true"},
      *     },
      *     parameters={
-     *         {"name"="title", "dataType"="string", "required"=false},
-     *         {"name"="link", "dataType"="string", "required"=true},
-     *         {"name"="website", "dataType"="string", "required"=false},
+     *         {"name"="feed_id", "dataType"="integer", "required"=true},
+     *         {"name"="folder_id", "dataType"="integer", "required"=false},
+     *         {"name"="priority", "dataType"="boolean", "required"=false},
+     *         {"name"="direction", "dataType"="string", "required"=false},
      *     },
      * )
      */
@@ -63,10 +64,10 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Retrieve a feed.
+     * Retrieve a subscription.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Subscription",
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"=true},
      *     },
@@ -77,17 +78,17 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Update a feed.
+     * Update a subscription.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Subscription",
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"="true"},
      *     },
      *     parameters={
-     *         {"name"="title", "dataType"="string", "required"=false},
-     *         {"name"="link", "dataType"="string", "required"=true},
-     *         {"name"="website", "dataType"="string", "required"=false},
+     *         {"name"="folder_id", "dataType"="string", "required"=false},
+     *         {"name"="priority", "dataType"="boolean", "required"=false},
+     *         {"name"="direction", "dataType"="string", "required"=false},
      *     },
      * )
      */
@@ -96,10 +97,10 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Delete a feed.
+     * Delete a subscription.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="Subscription",
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"=true},
      *     },

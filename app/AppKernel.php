@@ -16,6 +16,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 
             new Minishlink\Bundle\WebPushBundle\MinishlinkWebPushBundle(),
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
 
             new Readerself\CoreBundle\ReaderselfCoreBundle(),
         ];

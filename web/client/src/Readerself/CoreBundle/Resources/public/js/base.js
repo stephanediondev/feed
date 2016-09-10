@@ -43,7 +43,7 @@ var ItemModel = Backbone.Model.extend({
 var FeedsCollection = Backbone.Collection.extend({
     model: FeedModel,
     //url: 'feeds.php',
-    url: '../app_dev.php/feed',
+    url: '../app_dev.php/api/feeds',
     parse: function(data) {
         console.log(data);
         return data.feeds;
@@ -63,7 +63,7 @@ feeds.on('add', function(feed) {
 
 var ItemsCollection = Backbone.Collection.extend({
     model: ItemModel,
-    url: '../app_dev.php/items',
+    url: '../app_dev.php/api/items',
     parse: function(data) {
         console.log(data);
         return data.items;
@@ -75,7 +75,7 @@ var items = new ItemsCollection();
 items.on('add', function(item) {
     console.log(item.get("id") + " / " + item.get("title") + "!");
 
-    store.set('item_' + item.get('id'), item);
+    //store.set('item_' + item.get('id'), item);
 
     var view = new ItemView({model: item});
     $("#todo-list").append(view.render().el);

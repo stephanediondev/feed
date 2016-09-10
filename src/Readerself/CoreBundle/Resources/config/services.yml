@@ -2,19 +2,27 @@ services:
     simplepie:
         class: SimplePie
 
-    #controller
+    #Controller
     readerself_core_controller_abstract:
         class: Readerself\CoreBundle\Controller\AbstractController
         abstract: true
         calls:
             - [ "setContainer", [ "@service_container" ] ]
 
-    readerself_core_controller_setting:
-        class: Readerself\CoreBundle\Controller\SettingController
+    readerself_core_controller_action:
+        class: Readerself\CoreBundle\Controller\ActionController
         parent: "readerself_core_controller_abstract"
+        arguments:
+            - "@readerself_core_manager_feed"
 
     readerself_core_controller_feed:
         class: Readerself\CoreBundle\Controller\FeedController
+        parent: "readerself_core_controller_abstract"
+        arguments:
+            - "@readerself_core_manager_feed"
+
+    readerself_core_controller_subscription:
+        class: Readerself\CoreBundle\Controller\SubscriptionController
         parent: "readerself_core_controller_abstract"
         arguments:
             - "@readerself_core_manager_feed"
@@ -41,7 +49,11 @@ services:
         arguments:
             - "@readerself_core_manager_member"
 
-    #manager
+    readerself_core_controller_folder:
+        class: Readerself\CoreBundle\Controller\FolderController
+        parent: "readerself_core_controller_abstract"
+
+    #Manager
     readerself_core_manager_abstract:
         class: Readerself\CoreBundle\Manager\AbstractManager
         abstract: true

@@ -5,25 +5,6 @@ client:
         path: /client
         permanent: true
 
-readerself_core_setting:
-    path:  /setting
-    defaults:
-        _controller: "readerself_core_controller_setting:indexAction"
-
-readerself_core_feed:
-    path:  /feeds/{action}/{id}
-    defaults:
-        _controller: "readerself_core_controller_feed:dispatchAction"
-        action: "index"
-        id: null
-
-readerself_core_item:
-    path:  /items/{action}/{id}
-    defaults:
-        _controller: "readerself_core_controller_item:dispatchAction"
-        action: "index"
-        id: null
-
 readerself_core_push:
     path:  /pushs/{action}/{id}
     defaults:
@@ -37,3 +18,160 @@ readerself_core_member:
         _controller: "readerself_core_controller_member:dispatchAction"
         action: "index"
         id: null
+
+#Item
+readerself_api_items:
+    path:  /items
+    defaults:
+        _controller: "readerself_core_controller_item:indexAction"
+    methods: GET
+
+readerself_api_item_read:
+    path:  /item/read/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:readAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_item_star:
+    path:  /item/star/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:starAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_item_share:
+    path:  /item/share/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:shareAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_item_readability:
+    path:  /item/readability/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:readabilityAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+#Action
+readerself_api_actions:
+    path:  /actions
+    defaults:
+        _controller: "readerself_core_controller_action:indexAction"
+    methods: GET
+
+#Feed
+readerself_api_feeds:
+    path:  /feeds
+    defaults:
+        _controller: "readerself_core_controller_feed:indexAction"
+    methods: GET
+
+readerself_api_feed_create:
+    path:  /feed
+    defaults:
+        _controller: "readerself_core_controller_feed:createAction"
+    methods: POST
+
+readerself_api_feed_read:
+    path:  /feed/{id}
+    defaults:
+        _controller: "readerself_core_controller_feed:readAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_feed_update:
+    path:  /feed/{id}
+    defaults:
+        _controller: "readerself_core_controller_feed:updateAction"
+    requirements:
+        id: '\d+'
+    methods: PUT
+
+readerself_api_feed_delete:
+    path:  /feed/{id}
+    defaults:
+        _controller: "readerself_core_controller_feed:deleteAction"
+    requirements:
+        id: '\d+'
+    methods: DELETE
+
+#Subscription
+readerself_api_subscriptions:
+    path:  /subscriptions
+    defaults:
+        _controller: "readerself_core_controller_subscription:indexAction"
+    methods: GET
+
+readerself_api_subscription_create:
+    path:  /subscription
+    defaults:
+        _controller: "readerself_core_controller_subscription:createAction"
+    methods: POST
+
+readerself_api_subscription_read:
+    path:  /subscription/{id}
+    defaults:
+        _controller: "readerself_core_controller_subscription:readAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_subscription_update:
+    path:  /subscription/{id}
+    defaults:
+        _controller: "readerself_core_controller_subscription:updateAction"
+    requirements:
+        id: '\d+'
+    methods: PUT
+
+readerself_api_subscription_delete:
+    path:  /subscription/{id}
+    defaults:
+        _controller: "readerself_core_controller_subscription:deleteAction"
+    requirements:
+        id: '\d+'
+    methods: DELETE
+
+#Folder
+readerself_api_folders:
+    path:  /folders
+    defaults:
+        _controller: "readerself_core_controller_folder:indexAction"
+    methods: GET
+
+readerself_api_folder_create:
+    path:  /folder
+    defaults:
+        _controller: "readerself_core_controller_folder:createAction"
+    methods: POST
+
+readerself_api_folder_read:
+    path:  /folder/{id}
+    defaults:
+        _controller: "readerself_core_controller_folder:readAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_folder_update:
+    path:  /folder/{id}
+    defaults:
+        _controller: "readerself_core_controller_folder:updateAction"
+    requirements:
+        id: '\d+'
+    methods: PUT
+
+readerself_api_folder_delete:
+    path:  /folder/{id}
+    defaults:
+        _controller: "readerself_core_controller_folder:deleteAction"
+    requirements:
+        id: '\d+'
+    methods: DELETE
