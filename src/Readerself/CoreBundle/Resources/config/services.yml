@@ -35,6 +35,12 @@ services:
             - "@readerself_core_manager_push"
             - "@readerself_core_manager_member"
 
+    readerself_core_controller_member:
+        class: Readerself\CoreBundle\Controller\MemberController
+        parent: "readerself_core_controller_abstract"
+        arguments:
+            - "@readerself_core_manager_member"
+
     #manager
     readerself_core_manager_abstract:
         class: Readerself\CoreBundle\Manager\AbstractManager

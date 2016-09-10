@@ -1,0 +1,12 @@
+Readerselef\CoreBundle\Entity\Member:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
+    properties:
+        email:
+            - NotBlank: ~
+            - Email: ~
+        plainPassword:
+            - NotBlank: { groups: [insert] }
+            - Type: string
+            - Length:
+                min: 6

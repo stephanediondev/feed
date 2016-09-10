@@ -30,3 +30,10 @@ readerself_core_push:
         _controller: "readerself_core_controller_push:dispatchAction"
         action: "index"
         id: null
+
+readerself_core_member:
+    path:  /members/{action}/{id}
+    defaults:
+        _controller: "readerself_core_controller_member:dispatchAction"
+        action: "index"
+        id: null

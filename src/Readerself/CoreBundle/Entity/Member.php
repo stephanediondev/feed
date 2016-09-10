@@ -1,11 +1,12 @@
 <?php
-
 namespace Readerself\CoreBundle\Entity;
+
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * Member
  */
-class Member
+class Member implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer
@@ -42,6 +43,10 @@ class Member
      */
     private $dateModified;
 
+    /**
+     * @var string
+     */
+    private $plainPassword;
 
     /**
      * Get id
@@ -195,5 +200,93 @@ class Member
     public function getDateModified()
     {
         return $this->dateModified;
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set plain password
+     *
+     * @param string $plainPassword
+     *
+     * @return Member
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get plain password
+     *
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getRoles()
+    {
+        $roles = [];
+        $roles[] = 'ROLE_MEMBER';
+        if($this->getAdministrator()) {
+            $roles[] = 'ROLE_ADMINISTRATOR';
+        }
+        return $roles;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            $this->nickname,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            $this->nickname,
+        ) = unserialize($serialized);
+    }
+
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return true;
     }
 }
