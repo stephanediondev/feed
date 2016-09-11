@@ -1,5 +1,5 @@
 <?php
-namespace Axipi\MCoreBundle\Tests\Manager;
+namespace Readerself\CoreBundle\Tests\Manager;
 
 use Readerself\CoreBundle\Entity\Enclosure;
 use Readerself\CoreBundle\Entity\Item;
@@ -9,8 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class EnclosureManagerTest extends KernelTestCase
 {
-    protected $enclosureManager;
-
     protected $itemManager;
 
     protected $feedManager;
@@ -18,8 +16,6 @@ class EnclosureManagerTest extends KernelTestCase
     protected function setUp()
     {
         self::bootKernel();
-
-        $this->enclosureManager = static::$kernel->getContainer()->get('readerself_core_manager_enclosure');
 
         $this->itemManager = static::$kernel->getContainer()->get('readerself_core_manager_item');
 
@@ -29,31 +25,31 @@ class EnclosureManagerTest extends KernelTestCase
     public function test()
     {
         $feed = $this->feedManager->init();
-        $feed->setTitle('test-unitaire-'.uniqid('', true));
-        $feed->setLink('test-unitaire-'.uniqid('', true));
+        $feed->setTitle('test-'.uniqid('', true));
+        $feed->setLink('test-'.uniqid('', true));
 
         $feed_id = $this->feedManager->persist($feed);
 
         $item = $this->itemManager->init();
         $item->setFeed($feed);
-        $item->setTitle('test-unitaire-'.uniqid('', true));
-        $item->setLink('test-unitaire-'.uniqid('', true));
+        $item->setTitle('test-'.uniqid('', true));
+        $item->setLink('test-'.uniqid('', true));
         $item->setDate(new \Datetime());
 
         $item_id = $this->itemManager->persist($item);
 
-        $enclosure = $this->enclosureManager->init();
+        $enclosure = $this->itemManager->enclosureManager->init();
         $enclosure->setItem($item);
-        $enclosure->setLink('test-unitaire-'.uniqid('', true));
-        $enclosure->setType('test-unitaire-'.uniqid('', true));
+        $enclosure->setLink('test-'.uniqid('', true));
+        $enclosure->setType('test-'.uniqid('', true));
 
-        $enclosure_id = $this->enclosureManager->persist($enclosure);
+        $enclosure_id = $this->itemManager->enclosureManager->persist($enclosure);
 
-        $test = $this->enclosureManager->getOne(['id' => $enclosure_id]);
+        $test = $this->itemManager->enclosureManager->getOne(['id' => $enclosure_id]);
         $this->assertNotNull($test);
         $this->assertInstanceOf(Enclosure::class, $test);
 
-        $this->enclosureManager->remove($enclosure);
+        $this->itemManager->enclosureManager->remove($enclosure);
 
         $test = $this->itemManager->getOne(['id' => $enclosure_id]);
         $this->assertNull($test);

@@ -1,5 +1,5 @@
 <?php
-namespace Axipi\MCoreBundle\Tests\Manager;
+namespace Readerself\CoreBundle\Tests\Manager;
 
 use Readerself\CoreBundle\Entity\Item;
 use Readerself\CoreBundle\Entity\Feed;
@@ -24,15 +24,15 @@ class ItemManagerTest extends KernelTestCase
     public function test()
     {
         $feed = $this->feedManager->init();
-        $feed->setTitle('test-unitaire-'.uniqid('', true));
-        $feed->setLink('test-unitaire-'.uniqid('', true));
+        $feed->setTitle('test-'.uniqid('', true));
+        $feed->setLink('test-'.uniqid('', true));
 
         $feed_id = $this->feedManager->persist($feed);
 
         $item = $this->itemManager->init();
         $item->setFeed($feed);
-        $item->setTitle('test-unitaire-'.uniqid('', true));
-        $item->setLink('test-unitaire-'.uniqid('', true));
+        $item->setTitle('test-'.uniqid('', true));
+        $item->setLink('test-'.uniqid('', true));
         $item->setDate(new \Datetime());
 
         $item_id = $this->itemManager->persist($item);

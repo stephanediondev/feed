@@ -1,5 +1,5 @@
 <?php
-namespace Axipi\MCoreBundle\Tests\Manager;
+namespace Readerself\CoreBundle\Tests\Manager;
 
 use Readerself\CoreBundle\Entity\Action;
 
@@ -19,7 +19,7 @@ class ActionManagerTest extends KernelTestCase
     public function test()
     {
         $action = $this->actionManager->init();
-        $action->setTitle('test-unitaire-'.uniqid('', true));
+        $action->setTitle('test-'.uniqid('', true));
 
         $action_id = $this->actionManager->persist($action);
 

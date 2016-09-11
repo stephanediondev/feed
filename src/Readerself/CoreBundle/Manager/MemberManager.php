@@ -13,12 +13,16 @@ class MemberManager extends AbstractManager
 
     public $pushManager;
 
+    public $folderManager;
+
     public function __construct(
         ConnectionManager $connectionManager,
-        PushManager $pushManager
+        PushManager $pushManager,
+        FolderManager $folderManager
     ) {
         $this->connectionManager = $connectionManager;
         $this->pushManager = $pushManager;
+        $this->folderManager = $folderManager;
     }
 
     public function getOne($paremeters = [])

@@ -1,5 +1,5 @@
 <?php
-namespace Axipi\MCoreBundle\Tests\Manager;
+namespace Readerself\CoreBundle\Tests\Manager;
 
 use Readerself\CoreBundle\Entity\Author;
 
@@ -19,7 +19,7 @@ class AuthorManagerTest extends KernelTestCase
     public function test()
     {
         $author = $this->authorManager->init();
-        $author->setTitle('test-unitaire-'.uniqid('', true));
+        $author->setTitle('test-'.uniqid('', true));
 
         $author_id = $this->authorManager->persist($author);
 

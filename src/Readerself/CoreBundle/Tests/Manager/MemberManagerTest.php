@@ -1,5 +1,5 @@
 <?php
-namespace Axipi\MCoreBundle\Tests\Manager;
+namespace Readerself\CoreBundle\Tests\Manager;
 
 use Readerself\CoreBundle\Entity\Member;
 
@@ -19,8 +19,8 @@ class MemberManagerTest extends KernelTestCase
     public function test()
     {
         $member = $this->memberManager->init();
-        $member->setEmail('test-unitaire-'.uniqid('', true));
-        $member->setPassword('test-unitaire-'.uniqid('', true));
+        $member->setEmail('test-'.uniqid('', true));
+        $member->setPassword('test-'.uniqid('', true));
 
         $member_id = $this->memberManager->persist($member);
 

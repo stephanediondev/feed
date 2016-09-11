@@ -1,5 +1,5 @@
 <?php
-namespace Axipi\MCoreBundle\Tests\Manager;
+namespace Readerself\CoreBundle\Tests\Manager;
 
 use Readerself\CoreBundle\Entity\Category;
 
@@ -19,7 +19,7 @@ class CategoryManagerTest extends KernelTestCase
     public function test()
     {
         $data = $this->categoryManager->init();
-        $data->setTitle('test-unitaire-'.uniqid('', true));
+        $data->setTitle('test-'.uniqid('', true));
 
         $id = $this->categoryManager->persist($data);
 
