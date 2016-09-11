@@ -43,14 +43,71 @@ class ItemController extends AbstractController
      *     headers={
      *         {"name"="X-AUTHORIZE-KEY","required"=true},
      *     },
+     *     parameters={
+     *         {"name"="order", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
+     *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
+     *         {"name"="starred", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with action ""star"""},
+     *         {"name"="shared", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with action ""share"""},
+     *         {"name"="unread", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with no action ""read"""},
+     *         {"name"="priority", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with priority subscription"},
+     *         {"name"="geolocation", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with geolocation"},
+     *         {"name"="feed", "dataType"="integer", "required"=false, "format"="feed ID", "description"="items by feed"},
+     *         {"name"="author", "dataType"="integer", "required"=false, "format"="author ID", "description"="items by author"},
+     *         {"name"="category", "dataType"="integer", "required"=false, "format"="category ID", "description"="items by category"},
+     *         {"name"="folder", "dataType"="integer", "required"=false, "format"="folder ID", "description"="items by folder"},
+     *     },
      * )
      */
     public function indexAction(Request $request)
     {
+        $parameters = [];
+        $parameters['member'] = $this->memberManager->getOne(['id' => 1]);
+
+        if($request->query->get('order')) {
+            $parameters['order'] = (string) $request->query->get('order');
+        }
+
+        if($request->query->get('starred')) {
+            $parameters['starred'] = $request->query->get('starred');
+        }
+
+        if($request->query->get('shared')) {
+            $parameters['shared'] = $request->query->get('shared');
+        }
+
+        if($request->query->get('unread')) {
+            $parameters['unread'] = (bool) $request->query->get('unread');
+        }
+
+        if($request->query->get('priority')) {
+            $parameters['priority'] = (bool) $request->query->get('priority');
+        }
+
+        if($request->query->get('geolocation')) {
+            $parameters['geolocation'] = (bool) $request->query->get('geolocation');
+        }
+
+        if($request->query->get('feed')) {
+            $parameters['feed'] = (int) $request->query->get('feed');
+        }
+
+        if($request->query->get('author')) {
+            $parameters['author'] = (int) $request->query->get('author');
+        }
+
+        if($request->query->get('category')) {
+            $parameters['category'] = (int) $request->query->get('category');
+        }
+
+        if($request->query->get('folder')) {
+            $parameters['folder'] = (int) $request->query->get('folder');
+        }
+
         $data = [];
         $data['items'] = [];
         $index = 0;
-        foreach($this->itemManager->getList(['member' => $this->memberManager->getOne(['id' => 1])]) as $item) {
+        foreach($this->itemManager->getList($parameters) as $item) {
             $categories = [];
             foreach($this->categoryManager->itemCategoryManager->getList(['item' => $item]) as $itemCategory) {
                 $categories[] = $itemCategory->toArray();
@@ -79,9 +136,9 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function readAction(Request $request, ParameterBag $parameterBag)
+    public function readAction(Request $request, ParameterBag $parameterBag, $id)
     {
-        return $this->setAction('read', $request, $parameterBag);
+        return $this->setAction('read', $request, $parameterBag, $id);
     }
 
     /**
@@ -94,9 +151,9 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function starAction(Request $request, ParameterBag $parameterBag)
+    public function starAction(Request $request, ParameterBag $parameterBag, $id)
     {
-        return $this->setAction('star', $request, $parameterBag);
+        return $this->setAction('star', $request, $parameterBag, $id);
     }
 
 
@@ -110,16 +167,17 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function shareAction(Request $request, ParameterBag $parameterBag)
+    public function shareAction(Request $request, ParameterBag $parameterBag, $id)
     {
-        return $this->setAction('share', $request, $parameterBag);
+        return $this->setAction('share', $request, $parameterBag, $id);
     }
 
-    private function setAction($case, Request $request, ParameterBag $parameterBag)
+    private function setAction($case, Request $request, ParameterBag $parameterBag, $id)
     {
         $data = [];
         $parameterBag->set('member', $this->memberManager->getOne(['member' => 1]));
         $parameterBag->set('action', $this->actionManager->getOne(['title' => $case]));
+        $parameterBag->set('item', $this->memberManager->getOne(['id' => $id]));
 
         if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
             'action' => $parameterBag->get('action'),
@@ -149,10 +207,11 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function readabilityAction(Request $request, ParameterBag $parameterBag)
+    public function readabilityAction(Request $request, ParameterBag $parameterBag, $id)
     {
         $data = [];
         $parameterBag->set('action', $this->actionManager->getOne(['title' => 'readability']));
+        $parameterBag->set('item', $this->memberManager->getOne(['id' => $id]));
 
         if($actionItem = $this->actionManager->actionItemManager->getOne([
             'action' => $parameterBag->get('action'),
@@ -171,10 +230,27 @@ class ItemController extends AbstractController
         return new JsonResponse($data);
     }
 
-    public function emailAction(Request $request, ParameterBag $parameterBag)
+    /**
+     * Share item by email.
+     *
+     * @ApiDoc(
+     *     section="Item",
+     *     headers={
+     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *     },
+     *     parameters={
+     *         {"name"="subject", "dataType"="string", "required"=true, "format"="default ""item title""", "description"=""},
+     *         {"name"="recipient", "dataType"="string", "required"=true, "format"="email", "description"=""},
+     *         {"name"="message", "dataType"="string", "required"=false, "format"="", "description"=""},
+     *         {"name"="replyTo", "dataType"="string", "required"=false, "format"="email", "description"=""},
+     *     },
+     * )
+     */
+    public function emailAction(Request $request, ParameterBag $parameterBag, $id)
     {
         $data = [];
         $parameterBag->set('action', $this->actionManager->getOne(['title' => 'email']));
+        $parameterBag->set('item', $this->memberManager->getOne(['id' => $id]));
 
         if($actionItem = $this->actionManager->actionItemManager->getOne([
             'action' => $parameterBag->get('action'),

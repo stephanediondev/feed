@@ -54,7 +54,7 @@ class SubscriptionController extends AbstractController
      *     parameters={
      *         {"name"="feed_id", "dataType"="integer", "required"=true},
      *         {"name"="folder_id", "dataType"="integer", "required"=false},
-     *         {"name"="priority", "dataType"="boolean", "required"=false},
+     *         {"name"="priority", "dataType"="integer", "format"="1 or 0", "required"=false},
      *         {"name"="direction", "dataType"="string", "required"=false},
      *     },
      * )

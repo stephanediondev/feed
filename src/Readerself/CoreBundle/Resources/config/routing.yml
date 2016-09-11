@@ -58,6 +58,14 @@ readerself_api_item_readability:
         id: '\d+'
     methods: GET
 
+readerself_api_item_email:
+    path:  /item/email/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:emailAction"
+    requirements:
+        id: '\d+'
+    methods: POST
+
 #Action
 readerself_api_actions:
     path:  /actions
