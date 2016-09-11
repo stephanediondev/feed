@@ -13,6 +13,16 @@ class PushRepository extends AbstractRepository
         $query->from('ReaderselfCoreBundle:Push', 'psh');
         $query->leftJoin('psh.member', 'mbr');
 
+        if(isset($parameters['id']) == 1) {
+            $query->andWhere('psh.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
+        if(isset($parameters['endpoint']) == 1) {
+            $query->andWhere('psh.endpoint = :endpoint');
+            $query->setParameter(':endpoint', $parameters['endpoint']);
+        }
+
         if(isset($parameters['member']) == 1) {
             $query->andWhere('psh.member = :member');
             $query->setParameter(':member', $parameters['member']);

@@ -12,9 +12,14 @@ class ConnectionRepository extends AbstractRepository
         $query->addSelect('cnt');
         $query->from('ReaderselfCoreBundle:Connection', 'cnt');
 
-        if(isset($parameters['core']) == 1) {
-            $query->andWhere('cnt.core = :core');
-            $query->setParameter(':core', $parameters['core']);
+        if(isset($parameters['id']) == 1) {
+            $query->andWhere('cnt.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
+        if(isset($parameters['type']) == 1) {
+            $query->andWhere('cnt.type = :type');
+            $query->setParameter(':type', $parameters['type']);
         }
 
         if(isset($parameters['token']) == 1) {

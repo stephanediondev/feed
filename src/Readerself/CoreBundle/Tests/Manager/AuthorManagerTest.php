@@ -16,10 +16,11 @@ class AuthorManagerTest extends KernelTestCase
         $this->authorManager = static::$kernel->getContainer()->get('readerself_core_manager_author');
     }
 
-    public function test()
+    public function testId()
     {
+        $title = 'test-'.uniqid('', true);
         $author = $this->authorManager->init();
-        $author->setTitle('test-'.uniqid('', true));
+        $author->setTitle($title);
 
         $author_id = $this->authorManager->persist($author);
 
@@ -30,6 +31,25 @@ class AuthorManagerTest extends KernelTestCase
         $this->authorManager->remove($author);
 
         $test = $this->authorManager->getOne(['id' => $author_id]);
+        $this->assertNull($test);
+    }
+
+    public function testTitle()
+    {
+        $title = 'test-'.uniqid('', true);
+        $author = $this->authorManager->init();
+        $author->setTitle($title);
+
+        $author_id = $this->authorManager->persist($author);
+
+        $test = $this->authorManager->getOne(['title' => $title]);
+        $this->assertNotNull($test);
+        $this->assertInstanceOf(Author::class, $test);
+        $this->assertEquals($title, $test->getTitle());
+
+        $this->authorManager->remove($author);
+
+        $test = $this->authorManager->getOne(['title' => $title]);
         $this->assertNull($test);
     }
 }

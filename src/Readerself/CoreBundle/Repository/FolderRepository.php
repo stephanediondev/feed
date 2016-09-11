@@ -18,6 +18,11 @@ class FolderRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
+        if(isset($parameters['title']) == 1) {
+            $query->andWhere('flr.title = :title');
+            $query->setParameter(':title', $parameters['title']);
+        }
+
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 

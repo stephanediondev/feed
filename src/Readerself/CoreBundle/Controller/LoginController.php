@@ -41,7 +41,7 @@ class LoginController extends AbstractController
                 if($encoder->isPasswordValid($member, $login->getPassword())) {
                     $connection = $this->memberManager->connectionManager->init();
                     $connection->setMember($member);
-                    $connection->setType('core');
+                    $connection->setType('login');
                     $connection->setToken(base64_encode(random_bytes(50)));
                     $connection->setIp($request->getClientIp());
                     $connection->setAgent($request->server->get('HTTP_USER_AGENT'));

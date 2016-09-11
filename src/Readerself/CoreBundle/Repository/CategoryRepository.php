@@ -17,6 +17,11 @@ class CategoryRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
+        if(isset($parameters['title']) == 1) {
+            $query->andWhere('cat.title = :title');
+            $query->setParameter(':title', $parameters['title']);
+        }
+
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 

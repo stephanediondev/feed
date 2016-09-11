@@ -16,10 +16,11 @@ class ActionManagerTest extends KernelTestCase
         $this->actionManager = static::$kernel->getContainer()->get('readerself_core_manager_action');
     }
 
-    public function test()
+    public function testId()
     {
+        $title = 'test-'.uniqid('', true);
         $action = $this->actionManager->init();
-        $action->setTitle('test-'.uniqid('', true));
+        $action->setTitle($title);
 
         $action_id = $this->actionManager->persist($action);
 
@@ -30,6 +31,25 @@ class ActionManagerTest extends KernelTestCase
         $this->actionManager->remove($action);
 
         $test = $this->actionManager->getOne(['id' => $action_id]);
+        $this->assertNull($test);
+    }
+
+    public function testTitle()
+    {
+        $title = 'test-'.uniqid('', true);
+        $action = $this->actionManager->init();
+        $action->setTitle($title);
+
+        $action_id = $this->actionManager->persist($action);
+
+        $test = $this->actionManager->getOne(['title' => $title]);
+        $this->assertNotNull($test);
+        $this->assertInstanceOf(Action::class, $test);
+        $this->assertEquals($title, $test->getTitle());
+
+        $this->actionManager->remove($action);
+
+        $test = $this->actionManager->getOne(['title' => $title]);
         $this->assertNull($test);
     }
 }
