@@ -14,6 +14,9 @@ class PushController extends AbstractController
      *
      * @ApiDoc(
      *     section="Push",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
      *     parameters={
      *         {"name"="endpoint", "dataType"="string", "required"=true},
      *         {"name"="public_key", "dataType"="string", "required"=false},
@@ -43,5 +46,19 @@ class PushController extends AbstractController
         $push_id = $this->memberManager->pushManager->persist($push);
 
         return new JsonResponse($data);
+    }
+
+    /**
+     * Delete a push.
+     *
+     * @ApiDoc(
+     *     section="Push",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function deleteAction(Request $request)
+    {
     }
 }

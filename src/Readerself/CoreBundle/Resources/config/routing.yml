@@ -7,10 +7,18 @@ client:
 
 #Push
 readerself_api_push_create:
-    path:  /push/create
+    path:  /push
     defaults:
         _controller: "readerself_core_controller_push:createAction"
     methods: POST
+
+readerself_api_push_delete:
+    path:  /push/{endpoint}
+    defaults:
+        _controller: "readerself_core_controller_push:deleteAction"
+    requirements:
+        id: '\w+'
+    methods: DELETE
 
 #Login
 readerself_core_logint:
@@ -21,7 +29,7 @@ readerself_core_logint:
 
 #Member
 readerself_core_member_create:
-    path:  /member/create
+    path:  /member
     defaults:
         _controller: "readerself_core_controller_member:createAction"
     methods: POST
