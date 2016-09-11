@@ -61,6 +61,8 @@ class ItemController extends AbstractController
      */
     public function indexAction(Request $request)
     {
+        $data = [];
+
         $parameters = [];
         $parameters['member'] = $this->memberManager->getOne(['id' => 1]);
 
@@ -104,10 +106,22 @@ class ItemController extends AbstractController
             $parameters['folder'] = (int) $request->query->get('folder');
         }
 
-        $data = [];
+        $items = $this->itemManager->getList($parameters);
+
+        $shareLinks = $this->itemManager->shareManager->getList($parameters);
+
+        $data['items_total'] = count($items);
         $data['items'] = [];
         $index = 0;
-        foreach($this->itemManager->getList($parameters) as $item) {
+        foreach($items as $item) {
+            $social = [];
+            foreach($shareLinks as $shareLink) {
+                $link = $shareLink->getLink();
+                $link = str_replace('{title}', urlencode($item->getTitle()), $link);
+                $link = str_replace('{link}', urlencode($item->getLink()), $link);
+                $social[] = ['id' => $shareLink->getId(), 'title' => $shareLink->getTitle(), 'link' => $link];
+            }
+
             $categories = [];
             foreach($this->categoryManager->itemCategoryManager->getList(['item' => $item]) as $itemCategory) {
                 $categories[] = $itemCategory->toArray();
@@ -121,6 +135,7 @@ class ItemController extends AbstractController
             $data['items'][$index] = $item->toArray();
             $data['items'][$index]['categories'] = $categories;
             $data['items'][$index]['enclosures'] = $enclosures;
+            $data['items'][$index]['social'] = $social;
             $index++;
         }
         return new JsonResponse($data);

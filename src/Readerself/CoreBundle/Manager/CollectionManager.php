@@ -131,7 +131,6 @@ class CollectionManager extends AbstractManager
         ];
         $collection_id = $this->insert('collection', $insertCollection);
 
-        $u = 1;
         foreach ($feeds_result as $feed) {
             $feeds++;
 
@@ -229,12 +228,6 @@ class CollectionManager extends AbstractManager
             }
 
             $this->insert('collection_feed', $insertCollectionFeed);
-
-            if($u == 100) {
-                break;
-            } else {
-                $u++;
-            }
         }
 
         $updateCollection = [];
