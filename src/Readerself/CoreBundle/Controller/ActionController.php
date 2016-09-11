@@ -25,7 +25,7 @@ class ActionController extends AbstractController
      * @ApiDoc(
      *     section="Action",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */

@@ -226,5 +226,15 @@ class Connection
     {
         return $this->member;
     }
-}
 
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'type' => $this->getType(),
+            'token' => $this->getToken(),
+        ];
+    }
+}

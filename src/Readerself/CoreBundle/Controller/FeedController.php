@@ -25,7 +25,7 @@ class FeedController extends AbstractController
      * @ApiDoc(
      *     section="Feed",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -49,7 +49,7 @@ class FeedController extends AbstractController
      * @ApiDoc(
      *     section="Feed",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"="true"},
+     *         {"name"="X-CONNECTION-TOKEN","required"="true"},
      *     },
      *     parameters={
      *         {"name"="title", "dataType"="string", "required"=false},
@@ -68,7 +68,7 @@ class FeedController extends AbstractController
      * @ApiDoc(
      *     section="Feed",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -82,7 +82,7 @@ class FeedController extends AbstractController
      * @ApiDoc(
      *     section="Feed",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"="true"},
+     *         {"name"="X-CONNECTION-TOKEN","required"="true"},
      *     },
      *     parameters={
      *         {"name"="title", "dataType"="string", "required"=false},
@@ -101,7 +101,7 @@ class FeedController extends AbstractController
      * @ApiDoc(
      *     section="Feed",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */

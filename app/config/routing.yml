@@ -1,6 +1,6 @@
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
-    prefix: "/api/doc"
+    prefix: "/api/documentation"
 
 ReaderselfCoreBundle:
     resource: "@ReaderselfCoreBundle/Resources/config/routing.yml"

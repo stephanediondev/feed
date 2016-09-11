@@ -5,6 +5,8 @@ use Readerself\CoreBundle\Manager\AbstractManager;
 use Readerself\CoreBundle\Entity\Member;
 use Readerself\CoreBundle\Event\MemberEvent;
 
+use Readerself\CoreBundle\Manager\ConnectionManager;
+
 class MemberManager extends AbstractManager
 {
     public $connectionManager;

@@ -41,7 +41,7 @@ class ItemController extends AbstractController
      * @ApiDoc(
      *     section="Item",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
      *         {"name"="order", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
@@ -62,6 +62,12 @@ class ItemController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
+        if(!$validateToken = $this->validateToken($request)) {
+            $data['error'] = true;
+            return new JsonResponse($data, 403);
+        }
+
+        $data['error'] = false;
 
         $parameters = [];
         $parameters['member'] = $this->memberManager->getOne(['id' => 1]);
@@ -147,7 +153,7 @@ class ItemController extends AbstractController
      * @ApiDoc(
      *     section="Item",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -162,7 +168,7 @@ class ItemController extends AbstractController
      * @ApiDoc(
      *     section="Item",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -178,7 +184,7 @@ class ItemController extends AbstractController
      * @ApiDoc(
      *     section="Item",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -218,7 +224,7 @@ class ItemController extends AbstractController
      * @ApiDoc(
      *     section="Item",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -251,7 +257,7 @@ class ItemController extends AbstractController
      * @ApiDoc(
      *     section="Item",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
      *         {"name"="subject", "dataType"="string", "required"=true, "format"="default ""item title""", "description"=""},

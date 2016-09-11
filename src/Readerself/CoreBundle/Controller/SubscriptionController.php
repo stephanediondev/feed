@@ -25,7 +25,7 @@ class SubscriptionController extends AbstractController
      * @ApiDoc(
      *     section="Subscription",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -49,7 +49,7 @@ class SubscriptionController extends AbstractController
      * @ApiDoc(
      *     section="Subscription",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"="true"},
+     *         {"name"="X-CONNECTION-TOKEN","required"="true"},
      *     },
      *     parameters={
      *         {"name"="feed_id", "dataType"="integer", "required"=true},
@@ -69,7 +69,7 @@ class SubscriptionController extends AbstractController
      * @ApiDoc(
      *     section="Subscription",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -83,7 +83,7 @@ class SubscriptionController extends AbstractController
      * @ApiDoc(
      *     section="Subscription",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"="true"},
+     *         {"name"="X-CONNECTION-TOKEN","required"="true"},
      *     },
      *     parameters={
      *         {"name"="folder_id", "dataType"="string", "required"=false},
@@ -102,7 +102,7 @@ class SubscriptionController extends AbstractController
      * @ApiDoc(
      *     section="Subscription",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */

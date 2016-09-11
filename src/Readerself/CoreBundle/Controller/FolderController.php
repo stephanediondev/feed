@@ -16,7 +16,7 @@ class FolderController extends AbstractController
      * @ApiDoc(
      *     section="Folder",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -30,7 +30,7 @@ class FolderController extends AbstractController
      * @ApiDoc(
      *     section="Folder",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
      *         {"name"="title", "dataType"="string", "required"=true},
@@ -47,7 +47,7 @@ class FolderController extends AbstractController
      * @ApiDoc(
      *     section="Folder",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */
@@ -61,7 +61,7 @@ class FolderController extends AbstractController
      * @ApiDoc(
      *     section="Folder",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"="true"},
+     *         {"name"="X-CONNECTION-TOKEN","required"="true"},
      *     },
      *     parameters={
      *         {"name"="title", "dataType"="string", "required"=true},
@@ -78,7 +78,7 @@ class FolderController extends AbstractController
      * @ApiDoc(
      *     section="Folder",
      *     headers={
-     *         {"name"="X-AUTHORIZE-KEY","required"=true},
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      * )
      */

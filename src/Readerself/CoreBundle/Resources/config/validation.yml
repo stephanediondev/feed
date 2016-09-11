@@ -10,3 +10,10 @@ Readerselef\CoreBundle\Entity\Member:
             - Type: string
             - Length:
                 min: 6
+
+Readerselef\CoreBundle\Entity\Login:
+    properties:
+        email:
+            - NotBlank: ~
+        plainPassword:
+            - NotBlank: ~
