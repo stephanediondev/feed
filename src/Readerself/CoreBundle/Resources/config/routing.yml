@@ -5,12 +5,12 @@ client:
         path: /client
         permanent: true
 
-readerself_core_push:
-    path:  /pushs/{action}/{id}
+#Push
+readerself_api_push_create:
+    path:  /push/create
     defaults:
-        _controller: "readerself_core_controller_push:dispatchAction"
-        action: "index"
-        id: null
+        _controller: "readerself_core_controller_push:createAction"
+    methods: POST
 
 #Login
 readerself_core_logint:

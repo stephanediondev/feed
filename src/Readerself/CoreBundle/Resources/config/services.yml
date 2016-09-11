@@ -34,7 +34,6 @@ services:
         arguments:
             - "@readerself_core_manager_item"
             - "@readerself_core_manager_category"
-            - "@readerself_core_manager_member"
             - "@readerself_core_manager_action"
 
     readerself_core_controller_push:
@@ -42,19 +41,14 @@ services:
         parent: "readerself_core_controller_abstract"
         arguments:
             - "@readerself_core_manager_push"
-            - "@readerself_core_manager_member"
 
     readerself_core_controller_login:
         class: Readerself\CoreBundle\Controller\LoginController
         parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_member"
 
     readerself_core_controller_member:
         class: Readerself\CoreBundle\Controller\MemberController
         parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_member"
 
     readerself_core_controller_folder:
         class: Readerself\CoreBundle\Controller\FolderController
@@ -93,6 +87,11 @@ services:
         calls:
             - [ "setReadability", [ "%readability_parser_enabled%", "%readability_parser_key%" ] ]
 
+    readerself_core_manager_enclosure:
+        class: Readerself\CoreBundle\Manager\EnclosureManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
     readerself_core_manager_share:
         class: Readerself\CoreBundle\Manager\ShareManager
         parent: "readerself_core_manager_abstract"
@@ -100,11 +99,6 @@ services:
 
     readerself_core_manager_author:
         class: Readerself\CoreBundle\Manager\AuthorManager
-        parent: "readerself_core_manager_abstract"
-        public: true
-
-    readerself_core_manager_enclosure:
-        class: Readerself\CoreBundle\Manager\EnclosureManager
         parent: "readerself_core_manager_abstract"
         public: true
 

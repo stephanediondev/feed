@@ -3,14 +3,12 @@ namespace Readerself\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
 use Readerself\CoreBundle\Manager\ItemManager;
 use Readerself\CoreBundle\Manager\CategoryManager;
-use Readerself\CoreBundle\Manager\MemberManager;
 use Readerself\CoreBundle\Manager\ActionManager;
 
 class ItemController extends AbstractController
@@ -19,19 +17,15 @@ class ItemController extends AbstractController
 
     protected $categoryManager;
 
-    protected $memberManager;
-
     protected $actionManager;
 
     public function __construct(
         ItemManager $itemManager,
         CategoryManager $categoryManager,
-        MemberManager $memberManager,
         ActionManager $actionManager
     ) {
         $this->itemManager = $itemManager;
         $this->categoryManager = $categoryManager;
-        $this->memberManager = $memberManager;
         $this->actionManager = $actionManager;
     }
 

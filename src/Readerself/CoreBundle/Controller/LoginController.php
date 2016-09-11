@@ -3,27 +3,15 @@ namespace Readerself\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
-use Readerself\CoreBundle\Manager\MemberManager;
 use Readerself\CoreBundle\Entity\Login;
 use Readerself\CoreBundle\Form\Type\LoginType;
 
 class LoginController extends AbstractController
 {
-    protected $pushManager;
-
-    protected $memberManager;
-
-    public function __construct(
-        MemberManager $memberManager
-    ) {
-        $this->memberManager = $memberManager;
-    }
-
     /**
      * Login.
      *
