@@ -17,6 +17,11 @@ class MemberRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
+        if(isset($parameters['email']) == 1) {
+            $query->andWhere('mbr.email = :email');
+            $query->setParameter(':email', $parameters['email']);
+        }
+
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 

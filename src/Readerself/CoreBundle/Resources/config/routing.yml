@@ -21,7 +21,7 @@ readerself_core_logint:
 
 #Member
 readerself_core_member_create:
-    path:  /members/create
+    path:  /member/create
     defaults:
         _controller: "readerself_core_controller_member:createAction"
     methods: POST

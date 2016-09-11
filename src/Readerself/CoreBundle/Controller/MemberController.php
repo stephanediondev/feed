@@ -38,9 +38,10 @@ class MemberController extends AbstractController
      *     },
      * )
      */
-    public function createAction(Request $request, ParameterBag $parameterBag)
+    public function createAction(Request $request)
     {
         $data = [];
+        $status = 200;
 
         $member = $this->memberManager->init();
         $form = $this->createForm(MemberType::class, $member, ['validation_groups'=>['insert']]);
@@ -50,16 +51,22 @@ class MemberController extends AbstractController
         $data[] = 'a';
 
         if($form->isValid()) {
-            $encoder = $this->get('security.password_encoder');
-            $encoded = $encoder->encodePassword($member, $member->getPlainPassword());
-            $member->setPassword($encoded);
+            $test = $this->memberManager->getOne(['email' => $member->getEmail()]);
 
-            $member_id = $this->memberManager->persist($member);
+            if(!$test) {
+                $encoder = $this->get('security.password_encoder');
+                $encoded = $encoder->encodePassword($member, $member->getPlainPassword());
+                $member->setPassword($encoded);
 
-            $data[] = $form->getData()->getEmail();
-            $data[] = 'b';
+                $member_id = $this->memberManager->persist($member);
+
+                $data[] = $form->getData()->getEmail();
+            } else {
+                $data[] = 'b';
+                $status = 403;
+            }
         }
 
-        return new JsonResponse($data);
+        return new JsonResponse($data, $status);
     }
 }
