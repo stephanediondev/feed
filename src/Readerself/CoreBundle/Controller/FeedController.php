@@ -92,6 +92,11 @@ class FeedController extends AbstractController
      */
     public function updateAction(Request $request, $id)
     {
+        $data = [];
+        $data['id'] = $id;
+        $data['feed'] = $this->feedManager->getOne(['id' => $id])->toArray();
+
+        return new JsonResponse($data);
     }
 
     /**
