@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" type="text/css" href="vendor/material-design-lite/material.min.css">
-<link rel="stylesheet" type="text/css" href="base.css">
+<link rel="stylesheet" type="text/css" href="src/Readerself/CoreBundle/Resources/public/css/base.css">
 <link rel="manifest" href="manifest.json">
 </head>
 
@@ -50,40 +50,18 @@
                 </div>
             </div>
 
-            <script type="text/template" id="template-feeds">
-                {{#each feeds}}
-                    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-{{ id }}">
-                        <div class="mdl-card__title">
-                            <h1 class="mdl-card__title-text">
-                                {{ title }}
-                            </h1>
-                        </div>
-                        <div class="mdl-card__supporting-text">
-                            <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border">
-                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-                            <a id="test-delete" href="#" data-id="{{ id }}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
-                        </div>
-                    </div>
-                {{/each}}
-            </script>
-
-            <script type="text/template" id="template-feed-delete">
-                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-delete-{{ feed.id }}">
-                    <form action="https://localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ feed.id }}" method="DELETE">
-                        <div class="mdl-card__title">
-                            <h1 class="mdl-card__title-text">
-                                a{{ feed.id }}b
-                            </h1>
-                        </div>
-                        <div class="mdl-card__supporting-text">
-                            <p><a href="{{ feed.website }}" target="_blank">{{ feed.website }}</a></p>
-                        </div>
-                        <div class="mdl-card__actions mdl-card--border">
-                            <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Confirm</button>
-                        </div>
-                    </form>
+            <script type="text/template" id="cell-feed">
+                <div class="mdl-card__title">
+                    <h1 class="mdl-card__title-text">
+                        {{ title }}
+                    </h1>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+                    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
                 </div>
             </script>
 
@@ -130,7 +108,9 @@ var base_dir = location.pathname;
 <script type="text/javascript" src="vendor/material-design-lite/material.min.js"></script>
 <script type="text/javascript" src="vendor/store.js/store.min.js"></script>
 <script type="text/javascript" src="vendor/handlebars/handlebars.min.js"></script>
-<script type="text/javascript" src="base.js"></script>
+<script type="text/javascript" src="vendor/underscore/underscore-min.js"></script>
+<script type="text/javascript" src="vendor/backbone/backbone-min.js"></script>
+<script type="text/javascript" src="src/Readerself/CoreBundle/Resources/public/js/base.js"></script>
 
 </body>
 </html>

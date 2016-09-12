@@ -1,0 +1,135 @@
+body {
+    color: #757575;
+}
+a:link, a:visited {
+    color: #757575;
+    text-decoration: none;
+}
+.mdl-layout__header {
+    min-height: auto;
+}
+.mdl-layout__drawer-button {
+    height: auto;
+    line-height: 1;
+    padding: 5px 5px 5px 5px;
+    width: auto;
+}
+.mdl-layout__header-row {
+    height: auto;
+}
+.mdl-layout__header-row .mdl-button {
+    margin: 5px 0px 5px 5px;
+}
+.mdl-layout__header-row a:first-child {
+    margin-left: 0px;
+}
+.mdl-list__item {
+    padding: 8px;
+}
+.mdl-list__item a:link, .mdl-list__item a:visited {
+    display: block;
+    padding: 8px;
+    width: 100%;
+}
+.mdl-list__item a:hover {
+    background-color: #e0e0e0;
+}
+.mdl-grid {
+    width: inherit
+}
+.mdl-card {
+    min-height: auto;
+    overflow: visible;
+}
+.mdl-card__title {
+    color: #757575;
+    padding: 8px;
+}
+.mdl-card__title-text {
+    display: block;
+    font-size: 18px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mdl-card__title-text span {
+    margin-right: 15px;
+}
+.mdl-card__title-text a:link, .mdl-card__title-text a:visited {
+    text-decoration: underline;
+}
+.mdl-card__title-text span:last-child {
+    margin-right: 0px;
+}
+.mdl-card .mdl-card__actions {
+    text-align: right;
+}
+.mdl-button {
+    padding: 0px 8px;
+}
+
+.mdl-tabs__tab i.fa, .mdl-list__item i.fa, .mdl-card__title-text i.fa, .mdl-card__actions i.fa {
+    margin-right: 5px;
+}
+.mdl-card__supporting-text {
+    overflow: visible;
+    padding: 0px 8px;
+}
+.mdl-card__supporting-text img {
+    max-width: 100%
+}
+.mdl-tabs__panel.is-active {
+    display: block;
+}
+.mdl-tabs__tab.is-active {
+    border-bottom: 1px solid #000000;
+}
+p {
+    line-height: 1.4;
+    margin: 8px 0px;
+}
+label, .label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="email"], input[type="password"], textarea {
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,.12);
+    color: inherit;
+    display: block;
+    font-size: inherit;
+    padding: 4px 0;
+    text-align: left;
+    width: 100%;
+}
+textarea {
+    min-height: 250px;
+}
+input[type="text"][required="required"], input[type="email"][required="required"], input[type="password"][required="required"], textarea[required="required"] {
+    border-color: #d50000;
+}
+input:-webkit-autofill {
+    -webkit-box-shadow: 0px 0px 0px 1000px #FFFFFF inset;
+}
+textarea.wysiwyg {
+    height: 450px;
+    min-height: 450px;
+    resize: vertical;
+    width:100%;
+}
+em.default {
+    display: block;
+}
+
+.ui-state-default {
+}
+.ui-state-hover {
+    background-color: #e0e0e0;
+}
+.pagination {
+    clear: both;
+    padding: 8px;
+}
+.pagination .current {
+    font-weight: bold;
+}

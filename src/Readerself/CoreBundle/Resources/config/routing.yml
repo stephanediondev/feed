@@ -13,11 +13,11 @@ readerself_api_push_create:
     methods: POST
 
 readerself_api_push_delete:
-    path:  /push/{endpoint}
+    path:  /push/{id}
     defaults:
         _controller: "readerself_core_controller_push:deleteAction"
     requirements:
-        id: '\w+'
+        id: '\d+'
     methods: DELETE
 
 #Login

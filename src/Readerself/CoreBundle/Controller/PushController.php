@@ -58,7 +58,12 @@ class PushController extends AbstractController
      *     },
      * )
      */
-    public function deleteAction(Request $request)
+    public function deleteAction(Request $request, $id)
     {
+        $data = [];
+
+        $data['id'] = $id;
+
+        return new JsonResponse($data);
     }
 }

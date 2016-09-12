@@ -57,7 +57,7 @@ class FeedController extends AbstractController
      *     },
      * )
      */
-    public function createAction(Request $request, ParameterBag $parameterBag)
+    public function createAction(Request $request)
     {
     }
 
@@ -71,7 +71,7 @@ class FeedController extends AbstractController
      *     },
      * )
      */
-    public function readAction(Request $request, ParameterBag $parameterBag)
+    public function readAction(Request $request, $id)
     {
     }
 
@@ -90,7 +90,7 @@ class FeedController extends AbstractController
      *     },
      * )
      */
-    public function updateAction(Request $request, ParameterBag $parameterBag)
+    public function updateAction(Request $request, $id)
     {
     }
 
@@ -104,7 +104,12 @@ class FeedController extends AbstractController
      *     },
      * )
      */
-    private function deleteAction(Request $request, ParameterBag $parameterBag)
+    public function deleteAction(Request $request, $id)
     {
+        $data = [];
+        $data['id'] = $id;
+        $data['feed'] = $this->feedManager->getOne(['id' => $id])->toArray();
+
+        return new JsonResponse($data);
     }
 }
