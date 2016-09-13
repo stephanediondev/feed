@@ -38,14 +38,14 @@
     </div>
 
     <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="mdl-snackbar mdl-js-snackbar">
+            <div class="mdl-snackbar__text"></div>
+            <button type="button" class="mdl-snackbar__action"></button>
+        </div>
+
         <div class="mdl-grid" id="target-page">
             <p><a href="#login" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Login</a></p>
             <p><a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Load feeds</a></p>
-
-            <div class="mdl-snackbar mdl-js-snackbar">
-                <div class="mdl-snackbar__text"></div>
-                <button type="button" class="mdl-snackbar__action"></button>
-            </div>
         </div>
     </main>
 </div>
@@ -55,6 +55,19 @@
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 Feeds
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="template-folder-title">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Folders
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
@@ -95,13 +108,15 @@
 </script>
 
 <script type="text/template" id="template-folders">
+    {{> titleFolders }}
+
     {{#each entries}}
         {{> cardFolder }}
     {{/each}}
 </script>
 
 <script type="text/template" id="template-folder-cell">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-{{ id }}">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-{{ id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ title }}
@@ -126,7 +141,7 @@
 </script>
 
 <script type="text/template" id="template-feed-cell">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-{{ id }}">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-{{ id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ title }}
@@ -145,8 +160,8 @@
 <script type="text/template" id="template-feed-update">
     {{> titleFeeds }}
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-update-{{ id }}">
-        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ id }}" method="PUT">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-update-{{ id }}">
+        <form action="#feeds" data-path="/feed/{{ id }}" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     a{{ title }}b
@@ -161,11 +176,15 @@
                     <label for="title" class="required">Link</label>
                     <input type="url" id="link" name="link" required="required" value="{{ link }}">
                 </p>
+                <p>
+                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
+                    <i class="material-icons md-24">done</i>
+                </button>
+                </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
                 <a href="#template-feed-delete" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
-                <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Confirm</button>
             </div>
         </form>
     </div>
@@ -174,8 +193,8 @@
 <script type="text/template" id="template-feed-delete">
     {{> titleFeeds }}
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-delete-{{ id }}">
-        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ id }}" method="DELETE">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-delete-{{ id }}">
+        <form action="#feeds" data-path="/feed/{{ id }}" method="DELETE">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     a{{ title }}b
@@ -183,11 +202,15 @@
             </div>
             <div class="mdl-card__supporting-text">
                 <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
+                <p>
+                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
+                    <i class="material-icons md-24">done</i>
+                </button>
+                </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
                 <a href="#template-feed-update" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-                <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Confirm</button>
             </div>
         </form>
     </div>

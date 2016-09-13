@@ -22,6 +22,9 @@ Handlebars.registerPartial('cardItem', source);
 var source = $('#template-feed-title').text();
 Handlebars.registerPartial('titleFeeds', source);
 
+var source = $('#template-folder-title').text();
+Handlebars.registerPartial('titleFolders', source);
+
 function loadRoute(key) {
     $('#target-page').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
 
@@ -102,6 +105,10 @@ $(document).ready(function() {
             dataType: 'json',
             statusCode: {
                 200: function(data_return) {
+                    var snackbarContainer = document.querySelector('.mdl-snackbar');
+                    var data = {message: form.attr('method') + ' ' + data_return.entry.title};
+                    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+
                     if(form.attr('method') == 'DELETE') {
                         store.remove(data_return.entity + '_' + data_return.id);
                     }
@@ -111,10 +118,11 @@ $(document).ready(function() {
                     if(form.attr('method') == 'POST') {
                         store.set(data_return.entity + '_' + data_return.entry.id, data_return.entry);
                     }
+                    loadRoute(form.attr('action'));
                 }
             },
             type: form.attr('method'),
-            url: form.attr('action')
+            url: apiUrl + form.data('path')
         });
     });
 });

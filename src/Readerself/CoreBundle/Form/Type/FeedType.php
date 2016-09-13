@@ -14,6 +14,7 @@ class FeedType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', TextType::class);
+        $builder->add('link', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
