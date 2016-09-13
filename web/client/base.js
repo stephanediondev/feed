@@ -5,12 +5,16 @@ var routes = [];
 routes['#login'] = {template: 'template-login', display: 'now'};
 routes['#404'] = {template: 'template-404', display: 'now'};
 routes['#feeds'] = {template: 'template-feeds', title: 'Feeds', display: 'yopla', store: true, path: '/feeds'};
+routes['#folders'] = {template: 'template-folders', title: 'Folders', display: 'yopla', store: true, path: '/folders'};
 routes['#items/unread'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?unread=1'};
 routes['#items/shared'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?shared=1'};
 routes['#items/starred'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?starred=1'};
 
 var source = $('#template-feed-cell').text();
 Handlebars.registerPartial('cardFeed', source);
+
+var source = $('#template-folder-cell').text();
+Handlebars.registerPartial('cardFolder', source);
 
 var source = $('#template-item-cell').text();
 Handlebars.registerPartial('cardItem', source);
@@ -75,14 +79,17 @@ $(document).ready(function() {
 
     $('#target-page').on('click', '.test-load-template', function(event) {
         event.preventDefault();
+
         var source = $($(this).attr('href')).text();
         var template = Handlebars.compile(source);
-        $('#target-page').html(template({feed: store.get($(this).data('entry'))}));
+        $('#target-page').html(template(store.get($(this).data('entry'))));
     });
 
     $('#target-page').on('submit', 'form', function(event) {
-        var form = $(this);
         event.preventDefault();
+
+        var form = $(this);
+
         $.ajax({
             headers: {
                 'X-CONNECTION-TOKEN': connectionToken

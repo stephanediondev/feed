@@ -19,8 +19,15 @@ class FolderController extends AbstractController
      *     },
      * )
      */
-    public function indexAction(Request $request, ParameterBag $parameterBag)
+    public function indexAction(Request $request)
     {
+        $data = [];
+        $data['entity'] = 'Folder';
+        $data['entries'] = [];
+        foreach($this->memberManager->folderManager->getList() as $feed) {
+            $data['entries'][] = $feed->toArray();
+        }
+        return new JsonResponse($data);
     }
 
     /**

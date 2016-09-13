@@ -92,7 +92,7 @@ label, .label {
     font-weight: bold;
 }
 
-input[type="text"], input[type="email"], input[type="password"], textarea {
+input[type="text"], input[type="email"], input[type="password"], input[type="url"], textarea {
     border: none;
     border-bottom: 1px solid rgba(0,0,0,.12);
     color: inherit;
@@ -105,7 +105,7 @@ input[type="text"], input[type="email"], input[type="password"], textarea {
 textarea {
     min-height: 250px;
 }
-input[type="text"][required="required"], input[type="email"][required="required"], input[type="password"][required="required"], textarea[required="required"] {
+input[type="text"][required="required"], input[type="email"][required="required"], input[type="password"][required="required"], input[type="url"][required="required"], textarea[required="required"] {
     border-color: #d50000;
 }
 input:-webkit-autofill {

@@ -32,6 +32,8 @@
             <li class="mdl-list__item"><a href="#items/shared" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Shared</a></li>
             <li class="mdl-list__item"><a href="#items/starred" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Starred</a></li>
             <li class="mdl-list__item"><a href="#test-404" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Test 404</a></li>
+            <li class="mdl-list__item"><a href="#folders" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Folders</a></li>
+            <li class="mdl-list__item"><a href="#feeds" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Feeds</a></li>
         </ul>
     </div>
 
@@ -92,6 +94,29 @@
     </div>
 </script>
 
+<script type="text/template" id="template-folders">
+    {{#each entries}}
+        {{> cardFolder }}
+    {{/each}}
+</script>
+
+<script type="text/template" id="template-folder-cell">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-{{ id }}">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{ title }}
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#template-feed-update" data-entry="Folder_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+            <a href="#template-feed-delete" data-entry="Folder_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+        </div>
+    </div>
+</script>
+
 <script type="text/template" id="template-feeds">
     {{> titleFeeds }}
 
@@ -120,17 +145,21 @@
 <script type="text/template" id="template-feed-update">
     {{> titleFeeds }}
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-update-{{ feed.id }}">
-        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ feed.id }}" method="PUT">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-update-{{ id }}">
+        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ id }}" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    a{{ feed.title }}b
+                    a{{ title }}b
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="title" class="required">Title</label>
-                    <input type="text" id="title" name="title" required="required" value="{{ feed.title }}">
+                    <input type="text" id="title" name="title" required="required" value="{{ title }}">
+                </p>
+                <p>
+                    <label for="title" class="required">Link</label>
+                    <input type="url" id="link" name="link" required="required" value="{{ link }}">
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
@@ -145,15 +174,15 @@
 <script type="text/template" id="template-feed-delete">
     {{> titleFeeds }}
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-delete-{{ feed.id }}">
-        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ feed.id }}" method="DELETE">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-delete-{{ id }}">
+        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ id }}" method="DELETE">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    a{{ feed.title }}b
+                    a{{ title }}b
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
-                <p><a href="{{ feed.website }}" target="_blank">{{ feed.website }}</a></p>
+                <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
