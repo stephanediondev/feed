@@ -1,4 +1,4 @@
-Readerselef\CoreBundle\Entity\Member:
+Readerself\CoreBundle\Entity\Member:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
     properties:
@@ -11,9 +11,16 @@ Readerselef\CoreBundle\Entity\Member:
             - Length:
                 min: 6
 
-Readerselef\CoreBundle\Entity\Login:
+Readerself\CoreBundle\Entity\Login:
     properties:
         email:
             - NotBlank: ~
         plainPassword:
+            - NotBlank: ~
+
+Readerself\CoreBundle\Entity\Feed:
+    properties:
+        title:
+            - NotBlank: ~
+        link:
             - NotBlank: ~

@@ -93,14 +93,18 @@ class FeedController extends AbstractController
     {
         $data = [];
 
-        $form = $this->createForm(FeedType::class, $this->feedManager->getOne(['id' => $id]), ['validation_groups'=>['update']]);
+        $form = $this->createForm(FeedType::class, $this->feedManager->getOne(['id' => $id]));
 
-        $form->submit($request->request->all());
-
-        $data[] = 'a';
+        $form->submit($request->request->all(), false);
 
         if($form->isValid()) {
             $this->feedManager->persist($form->getData());
+
+        } else {
+            $errors = $form->getErrors(true);
+            foreach($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
         }
 
         $data['entity'] = 'Feed';
