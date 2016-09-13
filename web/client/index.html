@@ -28,7 +28,10 @@
     <div class="mdl-layout__drawer">
         <ul class="mdl-list">
             <li class="mdl-list__item"><a href=""><i class="fa-lg fa fa-home"></i>Home</a></li>
-            <li class="mdl-list__item"><a href="items/unread"><i class="fa-lg fa fa-home"></i>Unread</a></li>
+            <li class="mdl-list__item"><a href="#items/unread" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Unread</a></li>
+            <li class="mdl-list__item"><a href="#items/shared" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Shared</a></li>
+            <li class="mdl-list__item"><a href="#items/starred" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Starred</a></li>
+            <li class="mdl-list__item"><a href="#test-404" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Test 404</a></li>
         </ul>
     </div>
 
@@ -79,11 +82,21 @@
     </div>
 </script>
 
+<script type="text/template" id="template-404">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                404
+            </h1>
+        </div>
+    </div>
+</script>
+
 <script type="text/template" id="template-feeds">
     {{> titleFeeds }}
 
     {{#each entries}}
-        {{> cellFeed }}
+        {{> cardFeed }}
     {{/each}}
 </script>
 
@@ -98,8 +111,8 @@
             <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#" data-template="template-feed-update" data-id="{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-            <a href="#" data-template="template-feed-delete" data-id="{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+            <a href="#template-feed-update" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+            <a href="#template-feed-delete" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
         </div>
     </div>
 </script>
@@ -121,8 +134,8 @@
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#" data-template="template-feeds" data-id="{{ id }}" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
-                <a href="#" data-template="template-feed-delete" data-id="{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+                <a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+                <a href="#template-feed-delete" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
                 <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Confirm</button>
             </div>
         </form>
@@ -143,44 +156,52 @@
                 <p><a href="{{ feed.website }}" target="_blank">{{ feed.website }}</a></p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#" data-template="template-feeds" data-id="{{ id }}" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
-                <a href="#" data-template="template-feed-update" data-id="{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+                <a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+                <a href="#template-feed-update" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
                 <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Confirm</button>
             </div>
         </form>
     </div>
 </script>
 
-<script type="text/template" id="cell-item">
-    <div class="mdl-card__title">
-        <h1 class="mdl-card__title-text">
-            <a href="{{ link }}" target="_blank">{{ title }}</a>
-        </h1>
-    </div>
-    <div class="mdl-card__supporting-text">
-        {{#if categories }}
-            <p>
-            {{#each categories }}
-                <a href="#items/category/{{ id }}">{{ title }}</a>
-            {{/each}}
-            </p>
-        {{/if}}
+<script type="text/template" id="template-items">
+    {{#each entries}}
+        {{> cardItem }}
+    {{/each}}
+</script>
 
-        {{#if enclosures }}
-            {{#each enclosures }}
-                <p>{{ link }}</p>
-            {{/each}}
-        {{/if}}
-
-        {{#if author}}
-            <p><a href="#items/author/{{ author.id }}">{{ author.title }}</a></p>
-        {{/if}}
-
-        {{{ content }}}
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Star</a>
+<script type="text/template" id="template-item-cell">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                <a href="{{ link }}" target="_blank">{{ title }}</a>
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            {{#if categories }}
+                <p>
+                {{#each categories }}
+                    <a href="#items/category/{{ id }}">{{ title }}</a>
+                {{/each}}
+                </p>
+            {{/if}}
+    
+            {{#if enclosures }}
+                {{#each enclosures }}
+                    <p>{{ link }}</p>
+                {{/each}}
+            {{/if}}
+    
+            {{#if author}}
+                <p><a href="#items/author/{{ author.id }}">{{ author.title }}</a></p>
+            {{/if}}
+    
+            {{{ content }}}
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
+            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Star</a>
+        </div>
     </div>
 </script>
 

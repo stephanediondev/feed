@@ -33,7 +33,7 @@ class FeedController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        $data['class'] = 'Feed';
+        $data['entity'] = 'Feed';
         $data['entries'] = [];
         foreach($this->feedManager->getList() as $feed) {
             $data['entries'][] = $feed->toArray();
@@ -103,7 +103,7 @@ class FeedController extends AbstractController
             $this->feedManager->persist($form->getData());
         }
 
-        $data['class'] = 'Feed';
+        $data['entity'] = 'Feed';
         $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
 
         return new JsonResponse($data);
@@ -122,7 +122,7 @@ class FeedController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
-        $data['class'] = 'Feed';
+        $data['entity'] = 'Feed';
         $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
 
         return new JsonResponse($data);

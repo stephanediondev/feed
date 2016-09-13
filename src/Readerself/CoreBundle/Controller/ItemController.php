@@ -110,8 +110,9 @@ class ItemController extends AbstractController
 
         $shareLinks = $this->itemManager->shareManager->getList($parameters);
 
-        $data['items_total'] = count($items);
-        $data['items'] = [];
+        $data['total'] = count($items);
+        $data['entity'] = 'Item';
+        $data['entries'] = [];
         $index = 0;
         foreach($items as $item) {
             $social = [];
@@ -132,10 +133,10 @@ class ItemController extends AbstractController
                 $enclosures[] = $enclosure->toArray();
             }
 
-            $data['items'][$index] = $item->toArray();
-            $data['items'][$index]['categories'] = $categories;
-            $data['items'][$index]['enclosures'] = $enclosures;
-            $data['items'][$index]['social'] = $social;
+            $data['entries'][$index] = $item->toArray();
+            $data['entries'][$index]['categories'] = $categories;
+            $data['entries'][$index]['enclosures'] = $enclosures;
+            $data['entries'][$index]['social'] = $social;
             $index++;
         }
         return new JsonResponse($data);
