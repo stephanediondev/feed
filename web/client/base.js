@@ -23,6 +23,8 @@ var source = $('#template-feed-title').text();
 Handlebars.registerPartial('titleFeeds', source);
 
 function loadRoute(key) {
+    $('#target-page').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
+
     if(key in routes) {
         var route = routes[key];
 
@@ -46,8 +48,8 @@ function loadRoute(key) {
                 statusCode: {
                     200: function(data_return) {
                         console.log(data_return);
-                        if(typeof data_return.entries == 'array' && typeof route.store == 'boolean' && route.store) {
-                            for(i in data_return.entries) {
+                        if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
+                            for(var i in data_return.entries) {
                                 store.set(data_return.entity + '_' + data_return.entries[i].id, data_return.entries[i]);
                             }
                         }

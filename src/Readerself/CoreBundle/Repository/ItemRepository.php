@@ -96,7 +96,7 @@ class ItemRepository extends AbstractRepository
         }
 
         $query->groupBy('itm.id');
-        $query->setMaxResults(20);
+        $query->setMaxResults(100);
 
         $getQuery = $query->getQuery();
 
