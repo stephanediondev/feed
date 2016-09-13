@@ -34,7 +34,8 @@
 
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid" id="target-page">
-            <p><a href="#" data-template="template-feeds" data-id="{{ id }}" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Load feeds</a></p>
+            <p><a href="#login" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Login</a></p>
+            <p><a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Load feeds</a></p>
 
             <div class="mdl-snackbar mdl-js-snackbar">
                 <div class="mdl-snackbar__text"></div>
@@ -57,10 +58,31 @@
     </div>
 </script>
 
+<script type="text/template" id="template-login">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="login">
+        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/login" method="POST">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    Login
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="email" class="required">Email</label>
+                    <input type="email" id="email" name="email" required="true" value="">
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Confirm</button>
+            </div>
+        </form>
+    </div>
+</script>
+
 <script type="text/template" id="template-feeds">
     {{> titleFeeds }}
 
-    {{#each feeds}}
+    {{#each entries}}
         {{> cellFeed }}
     {{/each}}
 </script>
@@ -86,16 +108,16 @@
     {{> titleFeeds }}
 
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-update-{{ feed.id }}">
-        <form action="https://localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ feed.id }}" method="PUT">
+        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ feed.id }}" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    a{{ feed.id }}b
+                    a{{ feed.title }}b
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="title" class="required">Title</label>
-                    <input type="text" id="title" name="title" required="required" value="{{ title }}">
+                    <input type="text" id="title" name="title" required="required" value="{{ feed.title }}">
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
@@ -111,10 +133,10 @@
     {{> titleFeeds }}
 
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="feed-delete-{{ feed.id }}">
-        <form action="https://localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ feed.id }}" method="DELETE">
+        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/feed/{{ feed.id }}" method="DELETE">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    a{{ feed.id }}b
+                    a{{ feed.title }}b
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
@@ -168,6 +190,7 @@ var base_dir = location.pathname;
 <script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="vendor/material-design-lite/material.min.js"></script>
 <script type="text/javascript" src="vendor/store.js/store.min.js"></script>
+<script type="text/javascript" src="vendor/i18next/i18next.min.js"></script>
 <script type="text/javascript" src="vendor/handlebars/handlebars.min.js"></script>
 <script type="text/javascript" src="base.js"></script>
 

@@ -8,6 +8,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Readerself\CoreBundle\Controller\AbstractController;
 use Readerself\CoreBundle\Manager\FeedManager;
 
+use Readerself\CoreBundle\Form\Type\FeedType;
+
 class FeedController extends AbstractController
 {
     protected $feedManager;
@@ -31,13 +33,10 @@ class FeedController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        $data['feeds'] = [];
+        $data['class'] = 'Feed';
+        $data['entries'] = [];
         foreach($this->feedManager->getList() as $feed) {
-            $data['feeds'][] = [
-               'id' => $feed->getId(),
-               'title' => $feed->getTitle(),
-               'website' => $feed->getWebsite(),
-            ];
+            $data['entries'][] = $feed->toArray();
         }
         return new JsonResponse($data);
     }
@@ -93,8 +92,19 @@ class FeedController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
-        $data['id'] = $id;
-        $data['feed'] = $this->feedManager->getOne(['id' => $id])->toArray();
+
+        $form = $this->createForm(FeedType::class, $this->feedManager->getOne(['id' => $id]), ['validation_groups'=>['update']]);
+
+        $form->submit($request->request->all());
+
+        $data[] = 'a';
+
+        if($form->isValid()) {
+            $this->feedManager->persist($form->getData());
+        }
+
+        $data['class'] = 'Feed';
+        $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
 
         return new JsonResponse($data);
     }
@@ -112,8 +122,8 @@ class FeedController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
-        $data['id'] = $id;
-        $data['feed'] = $this->feedManager->getOne(['id' => $id])->toArray();
+        $data['class'] = 'Feed';
+        $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
 
         return new JsonResponse($data);
     }

@@ -5,6 +5,7 @@
         "jquery": "*",
         "material-design-lite": "*",
         "store.js": "*",
+        "i18next": "*",
         "handlebars": "*"
     }
 }
