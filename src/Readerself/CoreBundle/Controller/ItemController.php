@@ -56,15 +56,12 @@ class ItemController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        if(!$validateToken = $this->validateToken($request)) {
-            $data['error'] = true;
+        if(!$member = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
-        $data['error'] = false;
-
         $parameters = [];
-        $parameters['member'] = $this->memberManager->getOne(['id' => 1]);
+        $parameters['member'] = $member;
 
         if($request->query->get('order')) {
             $parameters['order'] = (string) $request->query->get('order');
@@ -152,9 +149,9 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function readAction(Request $request, ParameterBag $parameterBag, $id)
+    public function readAction(Request $request, $id)
     {
-        return $this->setAction('read', $request, $parameterBag, $id);
+        return $this->setAction('read', $request, $id);
     }
 
     /**
@@ -167,9 +164,9 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function starAction(Request $request, ParameterBag $parameterBag, $id)
+    public function starAction(Request $request, $id)
     {
-        return $this->setAction('star', $request, $parameterBag, $id);
+        return $this->setAction('star', $request, $id);
     }
 
 
@@ -183,29 +180,32 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function shareAction(Request $request, ParameterBag $parameterBag, $id)
+    public function shareAction(Request $request, $id)
     {
-        return $this->setAction('share', $request, $parameterBag, $id);
+        return $this->setAction('share', $request, $id);
     }
 
-    private function setAction($case, Request $request, ParameterBag $parameterBag, $id)
+    private function setAction($case, Request $request, $id)
     {
         $data = [];
-        $parameterBag->set('member', $this->memberManager->getOne(['member' => 1]));
-        $parameterBag->set('action', $this->actionManager->getOne(['title' => $case]));
-        $parameterBag->set('item', $this->memberManager->getOne(['id' => $id]));
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $action = $this->actionManager->getOne(['title' => $case]);
+        $item = $this->itemManager->getOne(['id' => $id]);
 
         if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
-            'action' => $parameterBag->get('action'),
-            'item' => $parameterBag->get('item'),
-            'member' => $parameterBag->get('member'),
+            'action' => $action,
+            'item' => $item,
+            'member' => $member,
         ])) {
             $this->actionManager->actionItemMemberManager->remove($actionItemMember);
         } else {
             $actionItemMember = $this->actionManager->actionItemMemberManager->init();
-            $actionItemMember->setAction($parameterBag->get('action'));
-            $actionItemMember->setItem($parameterBag->get('item'));
-            $actionItemMember->setMember($parameterBag->get('member'));
+            $actionItemMember->setAction($action);
+            $actionItemMember->setItem($item);
+            $actionItemMember->setMember($member);
 
             $this->actionManager->actionItemMemberManager->persist($actionItemMember);
         }
@@ -226,8 +226,12 @@ class ItemController extends AbstractController
     public function readabilityAction(Request $request, ParameterBag $parameterBag, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
         $parameterBag->set('action', $this->actionManager->getOne(['title' => 'readability']));
-        $parameterBag->set('item', $this->memberManager->getOne(['id' => $id]));
+        $parameterBag->set('item', $this->itemManager->getOne(['id' => $id]));
 
         if($actionItem = $this->actionManager->actionItemManager->getOne([
             'action' => $parameterBag->get('action'),
@@ -265,6 +269,10 @@ class ItemController extends AbstractController
     public function emailAction(Request $request, ParameterBag $parameterBag, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
         $parameterBag->set('action', $this->actionManager->getOne(['title' => 'email']));
         $parameterBag->set('item', $this->memberManager->getOne(['id' => $id]));
 

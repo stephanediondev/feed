@@ -19,8 +19,8 @@ abstract class AbstractController extends Controller
     }
 
     public function validateToken(Request $request) {
-        if($request->headers->get('X-CONNECTION-TOKEN') && $this->memberManager->connectionManager->getOne(['type' => 'core', 'token' => $request->headers->get('X-CONNECTION-TOKEN')])) {
-            return true;
+        if($request->headers->get('X-CONNECTION-TOKEN') && $connection = $this->memberManager->connectionManager->getOne(['type' => 'login', 'token' => $request->headers->get('X-CONNECTION-TOKEN')])) {
+            return $connection->getMember();
         }
         return false;
     }

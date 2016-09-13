@@ -22,18 +22,17 @@
         <div class="mdl-layout__header-row">
             <div class="mdl-layout-spacer">
             </div>
-            <a class="mdl-button mdl-color--pink mdl-color-text--white" href="posts/12">Post 12</a>
+            <a href="#login" class="load-route mdl-button mdl-color--pink mdl-color-text--white" href="posts/12">Login</a>
         </div>
     </header>
     <div class="mdl-layout__drawer">
         <ul class="mdl-list">
-            <li class="mdl-list__item"><a href=""><i class="fa-lg fa fa-home"></i>Home</a></li>
-            <li class="mdl-list__item"><a href="#items/unread" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Unread</a></li>
-            <li class="mdl-list__item"><a href="#items/shared" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Shared</a></li>
-            <li class="mdl-list__item"><a href="#items/starred" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Starred</a></li>
-            <li class="mdl-list__item"><a href="#test-404" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Test 404</a></li>
-            <li class="mdl-list__item"><a href="#folders" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Folders</a></li>
-            <li class="mdl-list__item"><a href="#feeds" class="test-load-template-global"><i class="fa-lg fa fa-home"></i>Feeds</a></li>
+            <li class="mdl-list__item"><a href="#items/unread" class="load-route"><i class="fa-lg fa fa-home"></i>Unread</a></li>
+            <li class="mdl-list__item"><a href="#items/shared" class="load-route"><i class="fa-lg fa fa-home"></i>Shared</a></li>
+            <li class="mdl-list__item"><a href="#items/starred" class="load-route"><i class="fa-lg fa fa-home"></i>Starred</a></li>
+            <li class="mdl-list__item"><a href="#test-404" class="load-route"><i class="fa-lg fa fa-home"></i>Test 404</a></li>
+            <li class="mdl-list__item"><a href="#folders" class="load-route"><i class="fa-lg fa fa-home"></i>Folders</a></li>
+            <li class="mdl-list__item"><a href="#feeds" class="load-route"><i class="fa-lg fa fa-home"></i>Feeds</a></li>
         </ul>
     </div>
 
@@ -44,41 +43,14 @@
         </div>
 
         <div class="mdl-grid" id="target-page">
-            <p><a href="#login" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Login</a></p>
-            <p><a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Load feeds</a></p>
         </div>
     </main>
 </div>
 
-<script type="text/template" id="template-feed-title">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
-                Feeds
-            </h1>
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
-        </div>
-    </div>
-</script>
-
-<script type="text/template" id="template-folder-title">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
-                Folders
-            </h1>
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
-        </div>
-    </div>
-</script>
-
+<!-- Misc. -->
 <script type="text/template" id="template-login">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="login">
-        <form action="//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api/login" method="POST">
+        <form action="#feeds" data-path="/login" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     Login
@@ -89,9 +61,15 @@
                     <label for="email" class="required">Email</label>
                     <input type="email" id="email" name="email" required="true" value="">
                 </p>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Confirm</button>
+                <p>
+                    <label for="password" class="required">Password</label>
+                    <input type="password" id="password" name="password" required="true" value="">
+                </p>
+                <p>
+                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
+                    <i class="material-icons md-24">done</i>
+                </button>
+                </p>
             </div>
         </form>
     </div>
@@ -107,6 +85,20 @@
     </div>
 </script>
 
+<!-- Folder -->
+<script type="text/template" id="template-folder-title">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Folders
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#template-folder-create" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
+        </div>
+    </div>
+</script>
+
 <script type="text/template" id="template-folders">
     {{> titleFolders }}
 
@@ -115,7 +107,7 @@
     {{/each}}
 </script>
 
-<script type="text/template" id="template-folder-cell">
+<script type="text/template" id="template-folder">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-{{ id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
@@ -126,8 +118,22 @@
             <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#template-feed-update" data-entry="Folder_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-            <a href="#template-feed-delete" data-entry="Folder_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+            <a href="#template-feed-update" data-entry="Folder_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+            <a href="#template-feed-delete" data-entry="Folder_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+        </div>
+    </div>
+</script>
+
+<!-- Feed -->
+<script type="text/template" id="template-feed-title">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Feeds
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#template-feed-create" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
         </div>
     </div>
 </script>
@@ -140,7 +146,7 @@
     {{/each}}
 </script>
 
-<script type="text/template" id="template-feed-cell">
+<script type="text/template" id="template-feed">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-{{ id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
@@ -151,9 +157,45 @@
             <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#template-feed-update" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-            <a href="#template-feed-delete" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+            <a href="#template-feed-update" data-entry="Feed_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+            <a href="#template-feed-delete" data-entry="Feed_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
         </div>
+    </div>
+</script>
+
+<script type="text/template" id="template-feed-create">
+    {{> titleFeeds }}
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-update-{{ id }}">
+        <form action="#feeds" data-path="/feed" method="POST">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    Add
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="title" class="required">Title</label>
+                    <input type="text" id="title" name="title" required="required" value="">
+                </p>
+                <p>
+                    <label for="title" class="required">Link</label>
+                    <input type="url" id="link" name="link" required="required" value="">
+                </p>
+                <p>
+                    <label for="website" class="required">Website</label>
+                    <input type="url" id="website" name="website" required="required" value="">
+                </p>
+                <p>
+                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
+                    <i class="material-icons md-24">done</i>
+                </button>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+            </div>
+        </form>
     </div>
 </script>
 
@@ -164,7 +206,7 @@
         <form action="#feeds" data-path="/feed/{{ id }}" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    a{{ title }}b
+                    {{ title }}
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
@@ -177,14 +219,18 @@
                     <input type="url" id="link" name="link" required="required" value="{{ link }}">
                 </p>
                 <p>
+                    <label for="website" class="required">Website</label>
+                    <input type="url" id="website" name="website" required="required" value="{{ website }}">
+                </p>
+                <p>
                 <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
                     <i class="material-icons md-24">done</i>
                 </button>
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
-                <a href="#template-feed-delete" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+                <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+                <a href="#template-feed-delete" data-entry="Feed_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
             </div>
         </form>
     </div>
@@ -209,20 +255,21 @@
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#feeds" class="test-load-template-global mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
-                <a href="#template-feed-update" data-entry="Feed_{{ id }}" class="test-load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+                <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+                <a href="#template-feed-update" data-entry="Feed_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
             </div>
         </form>
     </div>
 </script>
 
+<!-- Item -->
 <script type="text/template" id="template-items">
     {{#each entries}}
         {{> cardItem }}
     {{/each}}
 </script>
 
-<script type="text/template" id="template-item-cell">
+<script type="text/template" id="template-item">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
@@ -230,29 +277,36 @@
             </h1>
         </div>
         <div class="mdl-card__supporting-text">
+            <p>
+                Feed: <a href="#items/feed/{{ feed.id }}" class="load-route">{{ feed.title }}</a>
+            </p>
+
             {{#if categories }}
                 <p>
                 {{#each categories }}
-                    <a href="#items/category/{{ id }}">{{ title }}</a>
+                    <a href="#items/category/{{ id }}" class="load-route">{{ title }}</a>
                 {{/each}}
                 </p>
             {{/if}}
-    
+
             {{#if enclosures }}
                 {{#each enclosures }}
                     <p>{{ link }}</p>
                 {{/each}}
             {{/if}}
-    
+
             {{#if author}}
-                <p><a href="#items/author/{{ author.id }}">{{ author.title }}</a></p>
+                <p>
+                    Author: <a href="#items/author/{{ author.id }}" class="load-route">{{ author.title }}</a>
+                </p>
             {{/if}}
-    
+
             {{{ content }}}
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
-            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Star</a>
+            <a href="/item/read/{{ id }}" class="load-action mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
+            <a href="/item/star/{{ id }}" class="load-action mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Star</a>
+            <a href="/item/share/{{ id }}" class="load-action mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Share</a>
         </div>
     </div>
 </script>

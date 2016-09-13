@@ -22,6 +22,10 @@ class FolderController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
         $data['entity'] = 'Folder';
         $data['entries'] = [];
         foreach($this->memberManager->folderManager->getList() as $feed) {
@@ -45,6 +49,10 @@ class FolderController extends AbstractController
      */
     public function createAction(Request $request, ParameterBag $parameterBag)
     {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
     }
 
     /**
@@ -59,6 +67,10 @@ class FolderController extends AbstractController
      */
     public function readAction(Request $request, ParameterBag $parameterBag)
     {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
     }
 
     /**
@@ -76,6 +88,10 @@ class FolderController extends AbstractController
      */
     public function updateAction(Request $request, ParameterBag $parameterBag)
     {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
     }
 
     /**
@@ -90,5 +106,9 @@ class FolderController extends AbstractController
      */
     private function deleteAction(Request $request, ParameterBag $parameterBag)
     {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
     }
 }

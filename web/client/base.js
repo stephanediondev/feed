@@ -1,5 +1,6 @@
 var apiUrl = '//localhost/projects/readerself-symfony/readerself-symfony/web/app_dev.php/api';
-var connectionToken = 'McWGdJO39hX+wsqLxFv/oTt6YoK+14oNOo4r4DocqjVO4t4pWX933Z85vwVTVsgZKww=';
+var connectionToken = store.get('Connection_login_token');
+var snackbarContainer = document.querySelector('.mdl-snackbar');
 
 var routes = [];
 routes['#login'] = {template: 'template-login', display: 'now'};
@@ -9,14 +10,17 @@ routes['#folders'] = {template: 'template-folders', title: 'Folders', display: '
 routes['#items/unread'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?unread=1'};
 routes['#items/shared'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?shared=1'};
 routes['#items/starred'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?starred=1'};
+routes['#items/feed/{id}'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?feed={id}'};
+routes['#items/author/{id}'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?author={id}'};
+routes['#items/category/{id}'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?category={id}'};
 
-var source = $('#template-feed-cell').text();
+var source = $('#template-feed').text();
 Handlebars.registerPartial('cardFeed', source);
 
-var source = $('#template-folder-cell').text();
+var source = $('#template-folder').text();
 Handlebars.registerPartial('cardFolder', source);
 
-var source = $('#template-item-cell').text();
+var source = $('#template-item').text();
 Handlebars.registerPartial('cardItem', source);
 
 var source = $('#template-feed-title').text();
@@ -26,18 +30,30 @@ var source = $('#template-folder-title').text();
 Handlebars.registerPartial('titleFolders', source);
 
 function loadRoute(key) {
-    $('#target-page').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
+    $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
+
+    var parts = key.split('/');
+    for(var i in parts) {
+        var id = parts[i];
+        if($.isNumeric(id)) {
+            var route_new = routes[key.replace(id, '{id}')];
+            route_new.path = route_new.path.replace('{id}', id);
+            routes[key] = route_new;
+            break;
+        }
+    }
 
     if(key in routes) {
         var route = routes[key];
 
         window.location.hash = key;
         window.document.title = route.title;//TODO: get first h1 in card
+        history.pushState({}, key, key);
 
         if(route.display == 'now') {
             var source = $('#' + route.template).text();
             var template = Handlebars.compile(source);
-            $('#target-page').html(template());
+            $('main > .mdl-grid').html(template());
         } else {
             $.ajax({
                 headers: {
@@ -49,6 +65,9 @@ function loadRoute(key) {
                 },
                 dataType: 'json',
                 statusCode: {
+                    403: function() {
+                        loadRoute('#login');
+                    },
                     200: function(data_return) {
                         console.log(data_return);
                         if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
@@ -59,7 +78,7 @@ function loadRoute(key) {
 
                         var source = $('#' + route.template).text();
                         var template = Handlebars.compile(source);
-                        $('#target-page').html(template(data_return));
+                        $('main > .mdl-grid').html(template(data_return));
                     }
                 },
                 type: 'GET',
@@ -71,6 +90,37 @@ function loadRoute(key) {
     }
 }
 
+function loadTemplate(obj) {
+    var source = $(obj.attr('href')).text();
+    var template = Handlebars.compile(source);
+    $('main > .mdl-grid').html(template(store.get(obj.data('entry'))));
+}
+
+function loadAction(obj) {
+    $.ajax({
+        headers: {
+            'X-CONNECTION-TOKEN': connectionToken
+        },
+        async: true,
+        cache: false,
+        data: {
+        },
+        dataType: 'json',
+        statusCode: {
+            403: function() {
+                loadRoute('#login');
+            },
+            200: function() {
+            }
+        },
+        type: 'GET',
+        url: apiUrl + obj.attr('href')
+    });
+}
+
+function setSnackbar(message) {
+    snackbarContainer.MaterialSnackbar.showSnackbar({message: message});
+}
 $(document).ready(function() {
     if(window.location.hash) {
         loadRoute(window.location.hash);
@@ -78,19 +128,21 @@ $(document).ready(function() {
         loadRoute('#feeds');
     }
 
-    $(document).on('click', '.test-load-template-global', function(event) {
+    $(document).on('click', '.load-route', function() {
         loadRoute($(this).attr('href'));
     });
 
-    $('#target-page').on('click', '.test-load-template', function(event) {
+    $('main > .mdl-grid').on('click', '.load-template', function(event) {
         event.preventDefault();
-
-        var source = $($(this).attr('href')).text();
-        var template = Handlebars.compile(source);
-        $('#target-page').html(template(store.get($(this).data('entry'))));
+        loadTemplate($(this));
     });
 
-    $('#target-page').on('submit', 'form', function(event) {
+    $('main > .mdl-grid').on('click', '.load-action', function(event) {
+        event.preventDefault();
+        loadAction($(this));
+    });
+
+    $('main > .mdl-grid').on('submit', 'form', function(event) {
         event.preventDefault();
 
         var form = $(this);
@@ -105,9 +157,9 @@ $(document).ready(function() {
             dataType: 'json',
             statusCode: {
                 200: function(data_return) {
-                    var snackbarContainer = document.querySelector('.mdl-snackbar');
-                    var data = {message: form.attr('method') + ' ' + data_return.entry.title};
-                    snackbarContainer.MaterialSnackbar.showSnackbar(data);
+                    if(data_return.entry.title) {
+                        setSnackbar(form.attr('method') + ' ' + data_return.entry.title);
+                    }
 
                     if(form.attr('method') == 'DELETE') {
                         store.remove(data_return.entity + '_' + data_return.id);
@@ -116,7 +168,13 @@ $(document).ready(function() {
                         store.set(data_return.entity + '_' + data_return.entry.id, data_return.entry);
                     }
                     if(form.attr('method') == 'POST') {
-                        store.set(data_return.entity + '_' + data_return.entry.id, data_return.entry);
+                        if(form.data('path') == '/login') {
+                            connectionToken = data_return.entry.token;
+                            store.set('Connection_login_token', connectionToken);
+                            setSnackbar(form.attr('method') + ' ' + data_return.entry.type);
+                        } else {
+                            store.set(data_return.entity + '_' + data_return.entry.id, data_return.entry);
+                        }
                     }
                     loadRoute(form.attr('action'));
                 }

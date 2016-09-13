@@ -33,6 +33,10 @@ class FeedController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
         $data['entity'] = 'Feed';
         $data['entries'] = [];
         foreach($this->feedManager->getList() as $feed) {
@@ -58,6 +62,29 @@ class FeedController extends AbstractController
      */
     public function createAction(Request $request)
     {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $form = $this->createForm(FeedType::class, $this->feedManager->init());
+
+        $form->submit($request->request->all(), false);
+
+        if($form->isValid()) {
+            $id = $this->feedManager->persist($form->getData());
+
+            $data['entity'] = 'Feed';
+            $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
+
+        } else {
+            $errors = $form->getErrors(true);
+            foreach($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
+        }
+
+        return new JsonResponse($data);
     }
 
     /**
@@ -72,6 +99,10 @@ class FeedController extends AbstractController
      */
     public function readAction(Request $request, $id)
     {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
     }
 
     /**
@@ -92,6 +123,9 @@ class FeedController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
 
         $form = $this->createForm(FeedType::class, $this->feedManager->getOne(['id' => $id]));
 
@@ -100,15 +134,15 @@ class FeedController extends AbstractController
         if($form->isValid()) {
             $this->feedManager->persist($form->getData());
 
+            $data['entity'] = 'Feed';
+            $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
+
         } else {
             $errors = $form->getErrors(true);
             foreach($errors as $error) {
                 $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
             }
         }
-
-        $data['entity'] = 'Feed';
-        $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
 
         return new JsonResponse($data);
     }
@@ -126,6 +160,10 @@ class FeedController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
         $data['entity'] = 'Feed';
         $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
 

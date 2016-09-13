@@ -15,7 +15,7 @@ Readerself\CoreBundle\Entity\Login:
     properties:
         email:
             - NotBlank: ~
-        plainPassword:
+        password:
             - NotBlank: ~
 
 Readerself\CoreBundle\Entity\Feed:
