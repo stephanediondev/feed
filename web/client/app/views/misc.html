@@ -1,12 +1,7 @@
 <!-- Misc. -->
 <script type="text/template" id="view-login">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="login">
-        <form action="#feeds" data-path="/login" method="POST">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
-                    Login
-                </h1>
-            </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+        <form action="#items/unread" data-path="/login" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="email" class="required">Email</label>
@@ -17,28 +12,22 @@
                     <input type="password" id="password" name="password" required="true" value="">
                 </p>
                 <p>
-                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
-                    <i class="material-icons md-24">done</i>
-                </button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Login</button>
                 </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#forgotpassword" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Forgot password?</a>
             </div>
         </form>
     </div>
 </script>
 
 <script type="text/template" id="view-logout">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="login">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
         <form action="#login" data-path="/logout" method="POST">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
-                    Logout
-                </h1>
-            </div>
             <div class="mdl-card__supporting-text">
                 <p>
-                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
-                    <i class="material-icons md-24">done</i>
-                </button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Logout</button>
                 </p>
             </div>
         </form>

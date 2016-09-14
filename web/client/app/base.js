@@ -22,28 +22,10 @@ function loadFile(url) {
         url: url
     });
 }
+
 for(var i in files) {
     loadFile(files[i]);
 }
-
-var source = $('#view-feed').text();
-Handlebars.registerPartial('cardFeed', source);
-
-var source = $('#view-folder').text();
-Handlebars.registerPartial('cardFolder', source);
-
-var source = $('#view-item').text();
-Handlebars.registerPartial('cardItem', source);
-
-var source = $('#view-feed-title').text();
-Handlebars.registerPartial('titleFeeds', source);
-
-var source = $('#view-folder-title').text();
-Handlebars.registerPartial('titleFolders', source);
-
-/*window.addEventListener('popstate', function(event) {
-    console.log(event);
-});*/
 
 function loadRoute(key) {
     var replaceId = false;
@@ -72,8 +54,8 @@ function loadRoute(key) {
             componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
 
             if(key != '#404' && key != '#500') {
-                window.location.hash = key;
-                history.pushState({}, key, key);
+                //window.location.hash = key;
+                history.pushState({key: key}, null, key);
             }
 
             if(route.title) {
@@ -141,11 +123,16 @@ function loadRoute(key) {
 function setSnackbar(message) {
     snackbarContainer.MaterialSnackbar.showSnackbar({message: message});
 }
+
 $(document).ready(function() {
+    window.addEventListener('onpopstate', function(event) {
+        console.log(location.pathname);
+    });
+
     if(window.location.hash) {
         loadRoute(window.location.hash);
     } else {
-        loadRoute('#feeds');
+        loadRoute('#items/unread');
     }
 
     $(document).on('click', '.load-route', function(event) {

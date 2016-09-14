@@ -1,5 +1,5 @@
 <!-- Folder -->
-<script type="text/template" id="view-folder-title">
+<script type="text/template" id="view-folders">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
@@ -7,44 +7,32 @@
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#folder/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
+            <a href="#folder/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</a>
         </div>
     </div>
-</script>
-
-<script type="text/template" id="view-folders">
-    {{> titleFolders }}
 
     {{#each entries as |entry index|}}
-        {{> cardFolder }}
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    <a href="#folder/read/{{ entry.id }}" class="load-route">{{ entry.title }}</a>
+                </h1>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#items/folder/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Items</a>
+                <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+                <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+            </div>
+        </div>
     {{/each}}
 </script>
 
-<script type="text/template" id="view-folder">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
-                {{ title }}
-            </h1>
-        </div>
-        <div class="mdl-card__supporting-text">
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a href="#items/folder/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Items</a>
-            <a href="#folder/update/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-            <a href="#folder/delete/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
-        </div>
-    </div>
-</script>
-
 <script type="text/template" id="view-folder-create">
-    {{> titleFolders }}
-
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#folders" data-path="/folder" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    Add
+                    Folders
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
@@ -53,9 +41,7 @@
                     <input type="text" id="title" name="title" required="required" value="">
                 </p>
                 <p>
-                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
-                    <i class="material-icons md-24">done</i>
-                </button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Create</button>
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
@@ -66,7 +52,16 @@
 </script>
 
 <script type="text/template" id="view-folder-read">
-    {{> titleFolders }}
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Folders
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#folders" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+        </div>
+    </div>
 
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <div class="mdl-card__title">
@@ -77,7 +72,6 @@
         <div class="mdl-card__supporting-text">
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#folders" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
             <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
             <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
         </div>
@@ -85,7 +79,16 @@
 </script>
 
 <script type="text/template" id="view-folder-update">
-    {{> titleFolders }}
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Folders
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#folder/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+        </div>
+    </div>
 
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#folder/read/{{ entry.id }}" data-path="/folder/{{ entry.id }}" method="PUT">
@@ -100,13 +103,10 @@
                     <input type="text" id="title" name="title" required="required" value="{{ entry.title }}">
                 </p>
                 <p>
-                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
-                    <i class="material-icons md-24">done</i>
-                </button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Update</button>
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#folder/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
                 <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
             </div>
         </form>
@@ -114,7 +114,16 @@
 </script>
 
 <script type="text/template" id="view-folder-delete">
-    {{> titleFolders }}
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Folders
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#folder/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+        </div>
+    </div>
 
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#folders" data-path="/folder/{{ entry.id }}" method="DELETE">
@@ -125,13 +134,10 @@
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
-                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
-                    <i class="material-icons md-24">done</i>
-                </button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Delete</button>
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#folder/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
                 <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
             </div>
         </form>
