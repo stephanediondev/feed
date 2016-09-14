@@ -3,16 +3,23 @@ var connectionToken = store.get('Connection_login_token');
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
 var routes = [];
-routes['#login'] = {template: 'template-login', display: 'now'};
-routes['#404'] = {template: 'template-404', display: 'now'};
-routes['#feeds'] = {template: 'template-feeds', title: 'Feeds', display: 'yopla', store: true, path: '/feeds'};
-routes['#folders'] = {template: 'template-folders', title: 'Folders', display: 'yopla', store: true, path: '/folders'};
-routes['#items/unread'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?unread=1'};
-routes['#items/shared'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?shared=1'};
-routes['#items/starred'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?starred=1'};
-routes['#items/feed/{id}'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?feed={id}'};
-routes['#items/author/{id}'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?author={id}'};
-routes['#items/category/{id}'] = {template: 'template-items', display: 'yopla', store: false, path: '/items?category={id}'};
+routes['#login'] = {template: 'template-login', path: false};
+routes['#404'] = {template: 'template-404', path: false};
+
+routes['#feeds'] = {template: 'template-feeds', path: '/feeds', title: 'Feeds', store: true};
+routes['#feed/create'] = {template: 'template-feed-create', path: false};
+routes['#feed/read/{id}'] = {template: 'template-feed-read', path: '/feed/{id}', store: false};
+routes['#feed/update/{id}'] = {template: 'template-feed-update', path: '/feed/{id}', store: false};
+routes['#feed/delete/{id}'] = {template: 'template-feed-delete', path: '/feed/{id}', store: false};
+
+routes['#folders'] = {template: 'template-folders', path: '/folders', title: 'Folders', store: true};
+
+routes['#items/unread'] = {template: 'template-items', path: '/items?unread=1', store: false};
+routes['#items/shared'] = {template: 'template-items', path: '/items?shared=1', store: false};
+routes['#items/starred'] = {template: 'template-items', path: '/items?starred=1', store: false};
+routes['#items/feed/{id}'] = {template: 'template-items', path: '/items?feed={id}', store: false};
+routes['#items/author/{id}'] = {template: 'template-items', path: '/items?author={id}', store: false};
+routes['#items/category/{id}'] = {template: 'template-items', path: '/items?category={id}', store: false};
 
 var source = $('#template-feed').text();
 Handlebars.registerPartial('cardFeed', source);
@@ -57,10 +64,12 @@ function loadRoute(key) {
         }
 
         window.location.hash = key;
-        window.document.title = route.title;//TODO: get first h1 in card
+        if(route.title) {
+            window.document.title = route.title;//TODO: get first h1 in card
+        }
         //history.pushState({}, key, key);
 
-        if(route.display == 'now') {
+        if(!route.path) {
             var source = $('#' + route.template).text();
             var template = Handlebars.compile(source);
             $('main > .mdl-grid').html(template());
@@ -99,12 +108,6 @@ function loadRoute(key) {
     }
 }
 
-function loadTemplate(obj) {
-    var source = $(obj.attr('href')).text();
-    var template = Handlebars.compile(source);
-    $('main > .mdl-grid').html(template(store.get(obj.data('entry'))));
-}
-
 function loadAction(obj) {
     $.ajax({
         headers: {
@@ -139,11 +142,6 @@ $(document).ready(function() {
 
     $(document).on('click', '.load-route', function() {
         loadRoute($(this).attr('href'));
-    });
-
-    $('main > .mdl-grid').on('click', '.load-template', function(event) {
-        event.preventDefault();
-        loadTemplate($(this));
     });
 
     $('main > .mdl-grid').on('click', '.load-action', function(event) {

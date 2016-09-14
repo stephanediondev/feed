@@ -37,7 +37,7 @@ class FeedRepository extends AbstractRepository
 
         $query->addOrderBy('fed.title');
         $query->groupBy('fed.id');
-        $query->setMaxResults(2);
+        $query->setMaxResults(50);
 
         $getQuery = $query->getQuery();
 

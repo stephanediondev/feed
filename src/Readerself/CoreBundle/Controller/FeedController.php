@@ -103,6 +103,11 @@ class FeedController extends AbstractController
         if(!$member = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
+
+        $data['entity'] = 'Feed';
+        $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
+
+        return new JsonResponse($data);
     }
 
     /**

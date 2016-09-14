@@ -94,7 +94,7 @@
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#template-folder-create" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
+            <a href="#folder/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
         </div>
     </div>
 </script>
@@ -111,15 +111,15 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-{{ id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{ title }}
+                {{ entry.title }}
             </h1>
         </div>
         <div class="mdl-card__supporting-text">
-            <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
+            <p><a href="{{ website }}" target="_blank">{{ entry.website }}</a></p>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#template-feed-update" data-entry="Folder_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-            <a href="#template-feed-delete" data-entry="Folder_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+            <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+            <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
         </div>
     </div>
 </script>
@@ -133,7 +133,7 @@
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#template-feed-create" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
+            <a href="#feed/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</a>
         </div>
     </div>
 </script>
@@ -150,15 +150,15 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-{{ id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{ title }}
+                <a href="#feed/read/{{ id }}" class="load-route">{{ title }}</a>
             </h1>
         </div>
         <div class="mdl-card__supporting-text">
             <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#template-feed-update" data-entry="Feed_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-            <a href="#template-feed-delete" data-entry="Feed_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+            <a href="#feed/update/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+            <a href="#feed/delete/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
         </div>
     </div>
 </script>
@@ -199,28 +199,47 @@
     </div>
 </script>
 
+<script type="text/template" id="template-feed-read">
+    {{> titleFeeds }}
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-update-{{ id }}">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{ entry.title }}
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+            <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+            <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+        </div>
+    </div>
+</script>
+
 <script type="text/template" id="template-feed-update">
     {{> titleFeeds }}
 
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-update-{{ id }}">
-        <form action="#feeds" data-path="/feed/{{ id }}" method="PUT">
+        <form action="#feed/read/{{ entry.id }}" data-path="/feed/{{ entry.id }}" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    {{ title }}
+                    {{ entry.title }}
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="title" class="required">Title</label>
-                    <input type="text" id="title" name="title" required="required" value="{{ title }}">
+                    <input type="text" id="title" name="title" required="required" value="{{ entry.title }}">
                 </p>
                 <p>
                     <label for="title" class="required">Link</label>
-                    <input type="url" id="link" name="link" required="required" value="{{ link }}">
+                    <input type="url" id="link" name="link" required="required" value="{{ entry.link }}">
                 </p>
                 <p>
                     <label for="website" class="required">Website</label>
-                    <input type="url" id="website" name="website" required="required" value="{{ website }}">
+                    <input type="url" id="website" name="website" required="required" value="{{ entry.website }}">
                 </p>
                 <p>
                 <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
@@ -229,8 +248,8 @@
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
-                <a href="#template-feed-delete" data-entry="Feed_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+                <a href="#feed/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+                <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
             </div>
         </form>
     </div>
@@ -240,14 +259,14 @@
     {{> titleFeeds }}
 
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-delete-{{ id }}">
-        <form action="#feeds" data-path="/feed/{{ id }}" method="DELETE">
+        <form action="#feeds" data-path="/feed/{{ entry.id }}" method="DELETE">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    a{{ title }}b
+                    {{ entry.title }}
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
-                <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
+                <p><a href="{{ entry.website }}" target="_blank">{{ entry.website }}</a></p>
                 <p>
                 <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
                     <i class="material-icons md-24">done</i>
@@ -255,8 +274,8 @@
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
-                <a href="#template-feed-update" data-entry="Feed_{{ id }}" class="load-template mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+                <a href="#feed/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+                <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
             </div>
         </form>
     </div>
