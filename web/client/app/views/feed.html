@@ -3,7 +3,7 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                Feeds
+                Feeds ({{ entries_total }})
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
@@ -96,7 +96,13 @@
             {{#if entry.description }}
             <p>
                 <span class="label">Description</span>
-                <a href="{{ entry.description }}" target="_blank">{{ entry.description }}</a>
+                {{ entry.description }}
+            </p>
+            {{/if}}
+            {{#if entry.language }}
+            <p>
+                <span class="label">Language</span>
+                {{ entry.language }}
             </p>
             {{/if}}
         </div>
@@ -181,7 +187,13 @@
                 {{#if entry.description }}
                 <p>
                     <span class="label">Description</span>
-                    <a href="{{ entry.description }}" target="_blank">{{ entry.description }}</a>
+                    {{ entry.description }}
+                </p>
+                {{/if}}
+                {{#if entry.language }}
+                <p>
+                    <span class="label">Language</span>
+                    {{ entry.language }}
                 </p>
                 {{/if}}
                 <p>

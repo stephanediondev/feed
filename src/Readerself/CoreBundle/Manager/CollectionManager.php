@@ -111,7 +111,7 @@ class CollectionManager extends AbstractManager
         }
         exit(0);*/
 
-        $sql = 'SELECT id, link FROM feed LIMIT 200,150';
+        $sql = 'SELECT id, link FROM feed LIMIT 0,150';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -213,6 +213,10 @@ class CollectionManager extends AbstractManager
                         }
                         $updateFeed['description'] = $sp_feed->get_description();
 
+                        if($language = $sp_feed->get_language()) {
+                            $updateFeed['language'] = substr($language, 0, 2);
+                        }
+
                         $updateFeed['next_collection'] = $this->setNextCollection($feed);
 
                         $updateFeed['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
@@ -297,7 +301,7 @@ class CollectionManager extends AbstractManager
             $insertItem['link'] = $link;
 
             if($content = $sp_item->get_content()) {
-                if(class_exists('Tidy')) {
+                /*if(class_exists('Tidy')) {
                     try {
                         $options = [
                             'output-xhtml' => true,
@@ -335,7 +339,7 @@ class CollectionManager extends AbstractManager
                         }
                     } catch (Exception $e) {
                     }
-                }
+                }*/
 
                 $insertItem['content']  = $content;
             } else {

@@ -50,6 +50,12 @@ Readerself\CoreBundle\Entity\Feed:
             length: 65535
             options:
                 fixed: false
+        language:
+            type: string
+            nullable: true
+            length: 2
+            options:
+                fixed: true
         direction:
             type: string
             nullable: true

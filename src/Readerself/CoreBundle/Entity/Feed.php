@@ -40,6 +40,11 @@ class Feed
     /**
      * @var string
      */
+    private $language;
+
+    /**
+     * @var string
+     */
     private $direction;
 
     /**
@@ -194,6 +199,30 @@ class Feed
     }
 
     /**
+     * Set language
+     *
+     * @param string $language
+     *
+     * @return Feed
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * Get language
+     *
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
      * Set direction
      *
      * @param string $direction
@@ -309,6 +338,7 @@ class Feed
             'website' => $this->getWebsite(),
             'hostname' => $this->getHostname(),
             'description' => $this->getDescription(),
+            'language' => $this->getLanguage(),
         ];
     }
 }

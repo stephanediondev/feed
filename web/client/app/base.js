@@ -1,6 +1,5 @@
 var apiUrl = '//' + window.location.hostname + window.location.pathname;
 apiUrl = apiUrl.replace('client/', 'api');
-console.log(apiUrl);
 var connectionToken = store.get('Connection_login_token');
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
