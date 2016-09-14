@@ -26,11 +26,14 @@ class FolderController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $data['entity'] = 'Folder';
+        $folders = $this->memberManager->folderManager->getList();
+
         $data['entries'] = [];
-        foreach($this->memberManager->folderManager->getList() as $feed) {
-            $data['entries'][] = $feed->toArray();
+        foreach($folders as $folder) {
+            $data['entries'][] = $folder->toArray();
         }
+        $data['entries_entity'] = 'Folder';
+        $data['entries_total'] = count($folders);
         return new JsonResponse($data);
     }
 
@@ -72,8 +75,8 @@ class FolderController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $data['entity'] = 'Folder';
         $data['entry'] = $this->memberManager->folderManager->getOne(['id' => $id])->toArray();
+        $data['entry_entity'] = 'Folder';
 
         return new JsonResponse($data);
     }

@@ -71,12 +71,12 @@ function loadRoute(key) {
                     200: function(data_return) {
                         if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
                             for(var i in data_return.entries) {
-                                store.set(data_return.entity_entries + '_' + data_return.entries[i].id, data_return.entries[i]);
+                                store.set(data_return.entries_entity + '_' + data_return.entries[i].id, data_return.entries[i]);
                             }
                         }
 
-                        if(typeof data_return.entry == 'object' && typeof data_return.entity == 'string') {
-                            window.document.title = data_return.entry.title + ' (' + data_return.entity + ')';
+                        if(typeof data_return.entry == 'object' && typeof data_return.entry_entity == 'string') {
+                            window.document.title = data_return.entry.title + ' (' + data_return.entry_entity + ')';
                         }
 
                         var source = $('#' + route.template).text();
@@ -114,8 +114,8 @@ function loadAction(obj) {
         dataType: 'json',
         statusCode: {
             200: function() {
-                if(data_return.entity == 'Item' && data_return.action == 'read') {
-                    store.remove(data_return.entity + '_' + data_return.entry.id);//TODO
+                if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
+                    store.remove(data_return.entry_entity + '_' + data_return.entry.id);//TODO
                 }
             },
             403: function() {
@@ -172,10 +172,10 @@ $(document).ready(function() {
                     }
 
                     if(form.attr('method') == 'DELETE') {
-                        store.remove(data_return.entity + '_' + data_return.entry.id);
+                        store.remove(data_return.entry_entity + '_' + data_return.entry.id);
                     }
                     if(form.attr('method') == 'PUT') {
-                        store.set(data_return.entity + '_' + data_return.entry.id, data_return.entry);
+                        store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
                     }
                     if(form.attr('method') == 'POST') {
                         if(form.data('path') == '/login') {
@@ -183,7 +183,7 @@ $(document).ready(function() {
                             store.set('Connection_login_token', connectionToken);
                             setSnackbar(form.attr('method') + ' ' + data_return.entry.type);
                         } else {
-                            store.set(data_return.entity + '_' + data_return.entry.id, data_return.entry);
+                            store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
                         }
                     }
                     loadRoute(form.attr('action'));

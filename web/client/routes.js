@@ -3,6 +3,7 @@ routes['#login'] = {template: 'template-login', path: false, title: 'Login'};
 routes['#logout'] = {template: 'template-logout', path: false};
 routes['#404'] = {template: 'template-404', path: false, history: false, title: 'Error 404'};
 routes['#500'] = {template: 'template-500', path: false, history: false, title: 'Error 500'};
+routes['#configuration'] = {template: 'template-configuration', path: false, title: 'Configuration'};
 
 routes['#feeds'] = {template: 'template-feeds', path: '/feeds', title: 'Feeds', store: true};
 routes['#feed/create'] = {template: 'template-feed-create', path: false};

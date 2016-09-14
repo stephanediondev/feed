@@ -111,7 +111,7 @@ class CollectionManager extends AbstractManager
         }
         exit(0);*/
 
-        $sql = 'SELECT id, link FROM feed LIMIT 0,150';
+        $sql = 'SELECT id, link FROM feed LIMIT 100,150';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -298,25 +298,42 @@ class CollectionManager extends AbstractManager
 
             if($content = $sp_item->get_content()) {
                 if(class_exists('Tidy')) {
-                    $options = array('output-xhtml' => true, 'clean' => true, 'wrap-php' => true, 'doctype' => 'omit', 'show-body-only' => true, 'drop-proprietary-attributes' => true);
-                    $tidy = new \tidy();
-                    $tidy->parseString($content, $options, 'utf8');
-                    $tidy->cleanRepair();
-                    $content = $tidy;
-
-                    if(class_exists('DOMDocument')) {
-                        $dom = new \DOMDocument;
-                        $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-                        $xpath = new \DOMXPath($dom);
+                    try {
+                        $options = [
+                            'output-xhtml' => true,
+                            'clean' => true,
+                            'wrap-php' => true,
+                            'doctype' => 'omit',
+                            'show-body-only' => true,
+                            'drop-proprietary-attributes' => true,
+                        ];
+                        $tidy = new \tidy();
+                        $tidy->parseString($content, $options, 'utf8');
+                        $tidy->cleanRepair();
+                        $content = $tidy;
     
-                        $disallowedAttributes = array('id', 'class', 'style', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex');
-                        foreach($disallowedAttributes as $attribute) {
-                            $nodes = $xpath->query('//*[@'.$attribute.']');
-                            foreach($nodes as $node) {
-                                $node->removeAttribute($attribute);
+                        if(class_exists('DOMDocument')) {
+                            try {
+                                libxml_use_internal_errors(true);
+
+                                $dom = new \DOMDocument;
+                                $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                                $xpath = new \DOMXPath($dom);
+    
+                                $disallowedAttributes = ['id', 'class', 'style', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];
+                                foreach($disallowedAttributes as $attribute) {
+                                    $nodes = $xpath->query('//*[@'.$attribute.']');
+                                    foreach($nodes as $node) {
+                                        $node->removeAttribute($attribute);
+                                    }
+                                }
+                                $content = $dom->saveHTML();
+
+                                libxml_clear_errors();
+                            } catch (Exception $e) {
                             }
                         }
-                        $content = $dom->saveHTML();
+                    } catch (Exception $e) {
                     }
                 }
 
@@ -536,6 +553,7 @@ class CollectionManager extends AbstractManager
                     if(substr($link, -2) == '?#') {
                         $link = substr($link, 0, -2);
                     }
+
                     if(!in_array($link, $links)) {
                         $insertEnclosure = [
                             'item_id' => $item_id,

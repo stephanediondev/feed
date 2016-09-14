@@ -89,43 +89,41 @@ class ItemController extends AbstractController
 
         if($request->query->get('feed')) {
             $parameters['feed'] = (int) $request->query->get('feed');
-            $data['entity'] = 'Feed';
             $data['entry'] = $this->get('readerself_core_manager_feed')->getOne(['id' => (int) $request->query->get('feed')])->toArray();
+            $data['entry_entity'] = 'Feed';
         }
 
         if($request->query->get('author')) {
             $parameters['author'] = (int) $request->query->get('author');
-            $data['entity'] = 'Author';
             $data['entry'] = $this->get('readerself_core_manager_author')->getOne(['id' => (int) $request->query->get('author')])->toArray();
+            $data['entry_entity'] = 'Author';
         }
 
         if($request->query->get('category')) {
             $parameters['category'] = (int) $request->query->get('category');
-            $data['entity'] = 'Category';
             $data['entry'] = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])->toArray();
+            $data['entry_entity'] = 'Category';
         }
 
         if($request->query->get('folder')) {
             $parameters['folder'] = (int) $request->query->get('folder');
-            $data['entity'] = 'Folder';
             $data['entry'] = $this->get('readerself_core_manager_folder')->getOne(['id' => (int) $request->query->get('folder')])->toArray();
+            $data['entry_entity'] = 'Folder';
         }
 
         $items = $this->itemManager->getList($parameters);
 
-        $shareLinks = $this->itemManager->shareManager->getList($parameters);
+        $shareEntries = $this->itemManager->shareManager->getList();
 
-        $data['total'] = count($items);
-        $data['entity_entries'] = 'Item';
         $data['entries'] = [];
         $index = 0;
         foreach($items as $item) {
             $social = [];
-            foreach($shareLinks as $shareLink) {
-                $link = $shareLink->getLink();
+            foreach($shareEntries as $shareEntry) {
+                $link = $shareEntry->getLink();
                 $link = str_replace('{title}', urlencode($item->getTitle()), $link);
                 $link = str_replace('{link}', urlencode($item->getLink()), $link);
-                $social[] = ['id' => $shareLink->getId(), 'title' => $shareLink->getTitle(), 'link' => $link];
+                $social[] = ['id' => $shareEntry->getId(), 'title' => $shareEntry->getTitle(), 'link' => $link];
             }
 
             $categories = [];
@@ -144,6 +142,8 @@ class ItemController extends AbstractController
             $data['entries'][$index]['social'] = $social;
             $index++;
         }
+        $data['entries_entity'] = 'Item';
+        $data['entries_total'] = count($items);
         return new JsonResponse($data);
     }
 
