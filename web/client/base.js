@@ -29,26 +29,36 @@ Handlebars.registerPartial('titleFeeds', source);
 var source = $('#template-folder-title').text();
 Handlebars.registerPartial('titleFolders', source);
 
-function loadRoute(key) {
-    $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
+/*window.addEventListener('popstate', function(event) {
+    console.log(event);
+});*/
 
+function loadRoute(key) {
+    $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
+    componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
+
+    var replaceId = false;
     var parts = key.split('/');
     for(var i in parts) {
-        var id = parts[i];
-        if($.isNumeric(id)) {
-            var route_new = routes[key.replace(id, '{id}')];
-            route_new.path = route_new.path.replace('{id}', id);
-            routes[key] = route_new;
+        if($.isNumeric(parts[i])) {
+            key = key.replace(parts[i], '{id}');
+            replaceId = parts[i];
             break;
         }
     }
 
-    if(key in routes) {
+    if(key in routes || replaceId) {
         var route = routes[key];
+
+        var url = apiUrl + route.path;
+        if(replaceId) {
+            url = url.replace('{id}', replaceId);
+            key = key.replace('{id}', replaceId);
+        }
 
         window.location.hash = key;
         window.document.title = route.title;//TODO: get first h1 in card
-        history.pushState({}, key, key);
+        //history.pushState({}, key, key);
 
         if(route.display == 'now') {
             var source = $('#' + route.template).text();
@@ -69,7 +79,6 @@ function loadRoute(key) {
                         loadRoute('#login');
                     },
                     200: function(data_return) {
-                        console.log(data_return);
                         if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
                             for(var i in data_return.entries) {
                                 store.set(data_return.entity + '_' + data_return.entries[i].id, data_return.entries[i]);
@@ -82,7 +91,7 @@ function loadRoute(key) {
                     }
                 },
                 type: 'GET',
-                url: apiUrl + route.path
+                url: url
             });
         }
     } else {
