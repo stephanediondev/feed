@@ -22,9 +22,6 @@ Handlebars.registerPartial('titleFolders', source);
 });*/
 
 function loadRoute(key) {
-    $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
-    componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
-
     var replaceId = false;
     var parts = key.split('/');
     for(var i in parts) {
@@ -44,19 +41,24 @@ function loadRoute(key) {
             key = key.replace('{id}', replaceId);
         }
 
-        if(!route.hash) {
+        if(!route.template) {
         } else {
+            $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
+            componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
+
             window.location.hash = key;
+            history.pushState({}, key, key);
         }
+
         if(route.title) {
             window.document.title = route.title;//TODO: get first h1 in card
         }
-        history.pushState({}, key, key);
 
         if(!route.path) {
             var source = $('#' + route.template).text();
             var template = Handlebars.compile(source);
             $('main > .mdl-grid').html(template());
+
         } else {
             $.ajax({
                 headers: {
@@ -75,13 +77,20 @@ function loadRoute(key) {
                             }
                         }
 
-                        if(typeof data_return.entry == 'object' && typeof data_return.entry_entity == 'string') {
-                            window.document.title = data_return.entry.title + ' (' + data_return.entry_entity + ')';
-                        }
+                        if(route.template) {
+                            if(typeof data_return.entry == 'object' && typeof data_return.entry_entity == 'string') {
+                                window.document.title = data_return.entry.title + ' (' + data_return.entry_entity + ')';
+                            }
 
-                        var source = $('#' + route.template).text();
-                        var template = Handlebars.compile(source);
-                        $('main > .mdl-grid').html(template(data_return));
+                            var source = $('#' + route.template).text();
+                            var template = Handlebars.compile(source);
+                            $('main > .mdl-grid').html(template(data_return));
+                        } else {
+                            setSnackbar('TODO');
+                            /*if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
+                                store.remove(data_return.entry_entity + '_' + data_return.entry.id);//TODO
+                            }*/
+                        }
                     },
                     403: function() {
                         loadRoute('#login');
@@ -102,37 +111,6 @@ function loadRoute(key) {
     }
 }
 
-function loadAction(obj) {
-    $.ajax({
-        headers: {
-            'X-CONNECTION-TOKEN': connectionToken
-        },
-        async: true,
-        cache: false,
-        data: {
-        },
-        dataType: 'json',
-        statusCode: {
-            200: function() {
-                if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
-                    store.remove(data_return.entry_entity + '_' + data_return.entry.id);//TODO
-                }
-            },
-            403: function() {
-                loadRoute('#login');
-            },
-            404: function() {
-                loadRoute('#404');
-            },
-            500: function() {
-                loadRoute('#500');
-            }
-        },
-        type: 'GET',
-        url: apiUrl + obj.attr('href')
-    });
-}
-
 function setSnackbar(message) {
     snackbarContainer.MaterialSnackbar.showSnackbar({message: message});
 }
@@ -143,13 +121,9 @@ $(document).ready(function() {
         loadRoute('#feeds');
     }
 
-    $(document).on('click', '.load-route', function() {
-        loadRoute($(this).attr('href'));
-    });
-
-    $('main > .mdl-grid').on('click', '.load-action', function(event) {
+    $(document).on('click', '.load-route', function(event) {
         event.preventDefault();
-        loadAction($(this));
+        loadRoute($(this).attr('href'));
     });
 
     $('main > .mdl-grid').on('submit', 'form', function(event) {
