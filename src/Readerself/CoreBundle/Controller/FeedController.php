@@ -172,8 +172,12 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
+        $feed = $this->feedManager->getOne(['id' => $id]);
+
+        $data['entry'] = $feed;
         $data['entry_entity'] = 'Feed';
+
+        $this->feedManager->remove($feed);
 
         return new JsonResponse($data);
     }

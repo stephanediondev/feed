@@ -7,6 +7,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
+use Readerself\CoreBundle\Form\Type\FolderType;
+
 class FolderController extends AbstractController
 {
     /**
@@ -56,6 +58,34 @@ class FolderController extends AbstractController
         if(!$member = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
+
+        $status = 200;
+
+        $folder = $this->memberManager->folderManager->init();
+        $form = $this->createForm(FolderType::class, $folder);
+
+        $form->submit($request->request->all());
+
+        if($form->isValid()) {
+            $test = $this->memberManager->folderManager->getOne(['title' => $folder->getTitle()]);
+
+            if(!$test) {
+                $folder->setMember($member);
+                $folder_id = $this->memberManager->folderManager->persist($folder);
+
+                $data['entry'] = $this->memberManager->folderManager->getOne(['id' => $folder_id])->toArray();
+                $data['entry_entity'] = 'Folder';
+            } else {
+                $status = 403;
+            }
+        } else {
+            $errors = $form->getErrors(true);
+            foreach($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
+        }
+
+        return new JsonResponse($data, $status);
     }
 
     /**
@@ -68,7 +98,7 @@ class FolderController extends AbstractController
      *     },
      * )
      */
-    public function readAction(Request $request, ParameterBag $parameterBag)
+    public function readAction(Request $request, $id)
     {
         $data = [];
         if(!$member = $this->validateToken($request)) {
@@ -94,12 +124,31 @@ class FolderController extends AbstractController
      *     },
      * )
      */
-    public function updateAction(Request $request, ParameterBag $parameterBag)
+    public function updateAction(Request $request, $id)
     {
         $data = [];
         if(!$member = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
+
+        $form = $this->createForm(FolderType::class, $this->memberManager->folderManager->getOne(['id' => $id]));
+
+        $form->submit($request->request->all(), false);
+
+        if($form->isValid()) {
+            $this->memberManager->folderManager->persist($form->getData());
+
+            $data['entry'] = $this->memberManager->folderManager->getOne(['id' => $id])->toArray();
+            $data['entry_entity'] = 'Folder';
+
+        } else {
+            $errors = $form->getErrors(true);
+            foreach($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
+        }
+
+        return new JsonResponse($data);
     }
 
     /**
@@ -112,11 +161,20 @@ class FolderController extends AbstractController
      *     },
      * )
      */
-    private function deleteAction(Request $request, ParameterBag $parameterBag)
+    public function deleteAction(Request $request, $id)
     {
         $data = [];
         if(!$member = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
+
+        $folder = $this->memberManager->folderManager->getOne(['id' => $id]);
+
+        $data['entry'] = $folder;
+        $data['entry_entity'] = 'Folder';
+
+        $this->memberManager->folderManager->remove($folder);
+
+        return new JsonResponse($data);
     }
 }

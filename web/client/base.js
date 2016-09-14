@@ -2,19 +2,43 @@ var apiUrl = '//localhost/projects/readerself-symfony/readerself-symfony/web/app
 var connectionToken = store.get('Connection_login_token');
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
-var source = $('#template-feed').text();
+var files = [
+    'app/views/misc.html',
+    'app/views/folder.html',
+    'app/views/feed.html',
+    'app/views/item.html',
+];
+function loadFile(url) {
+    $.ajax({
+        async: false,
+        cache: true,
+        dataType: 'json',
+        statusCode: {
+            200: function(data_return) {
+                $('body').append(data_return.responseText);
+            }
+        },
+        type: 'GET',
+        url: url
+    });
+}
+for(var i in files) {
+    loadFile(files[i]);
+}
+
+var source = $('#view-feed').text();
 Handlebars.registerPartial('cardFeed', source);
 
-var source = $('#template-folder').text();
+var source = $('#view-folder').text();
 Handlebars.registerPartial('cardFolder', source);
 
-var source = $('#template-item').text();
+var source = $('#view-item').text();
 Handlebars.registerPartial('cardItem', source);
 
-var source = $('#template-feed-title').text();
+var source = $('#view-feed-title').text();
 Handlebars.registerPartial('titleFeeds', source);
 
-var source = $('#template-folder-title').text();
+var source = $('#view-folder-title').text();
 Handlebars.registerPartial('titleFolders', source);
 
 /*window.addEventListener('popstate', function(event) {
@@ -35,39 +59,40 @@ function loadRoute(key) {
     if(key in routes || replaceId) {
         var route = routes[key];
 
-        var url = apiUrl + route.path;
-        if(replaceId) {
-            url = url.replace('{id}', replaceId);
-            key = key.replace('{id}', replaceId);
+        if(route.query) {
+            var url = apiUrl + route.query;
+            if(replaceId) {
+                url = url.replace('{id}', replaceId);
+                key = key.replace('{id}', replaceId);
+            }
         }
 
-        if(!route.template) {
-        } else {
+        if(route.view) {
             $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
             componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
 
-            window.location.hash = key;
-            history.pushState({}, key, key);
+            if(key != '#404' && key != '#500') {
+                window.location.hash = key;
+                history.pushState({}, key, key);
+            }
+
+            if(route.title) {
+                window.document.title = route.title;//TODO: get first h1 in card
+            }
         }
 
-        if(route.title) {
-            window.document.title = route.title;//TODO: get first h1 in card
-        }
-
-        if(!route.path) {
-            var source = $('#' + route.template).text();
+        if(!route.query && route.view) {
+            var source = $('#' + route.view).text();
             var template = Handlebars.compile(source);
             $('main > .mdl-grid').html(template());
 
-        } else {
+        } else if(route.query) {
             $.ajax({
                 headers: {
                     'X-CONNECTION-TOKEN': connectionToken
                 },
                 async: true,
                 cache: false,
-                data: {
-                },
                 dataType: 'json',
                 statusCode: {
                     200: function(data_return) {
@@ -77,12 +102,12 @@ function loadRoute(key) {
                             }
                         }
 
-                        if(route.template) {
+                        if(route.view) {
                             if(typeof data_return.entry == 'object' && typeof data_return.entry_entity == 'string') {
                                 window.document.title = data_return.entry.title + ' (' + data_return.entry_entity + ')';
                             }
 
-                            var source = $('#' + route.template).text();
+                            var source = $('#' + route.view).text();
                             var template = Handlebars.compile(source);
                             $('main > .mdl-grid').html(template(data_return));
                         } else {
@@ -105,6 +130,8 @@ function loadRoute(key) {
                 type: 'GET',
                 url: url
             });
+        } else {
+            loadRoute('#404');
         }
     } else {
         loadRoute('#404');

@@ -1,36 +1,36 @@
 var routes = [];
-routes['#login'] = {template: 'template-login', path: false, title: 'Login'};
-routes['#logout'] = {template: 'template-logout', path: false};
-routes['#404'] = {template: 'template-404', path: false, history: false, title: 'Error 404'};
-routes['#500'] = {template: 'template-500', path: false, history: false, title: 'Error 500'};
-routes['#configuration'] = {template: 'template-configuration', path: false, title: 'Configuration'};
+routes['#login'] = {view: 'view-login', query: false, title: 'Login'};
+routes['#logout'] = {view: 'view-logout', query: false};
+routes['#404'] = {view: 'view-404', query: false, title: 'Error 404'};
+routes['#500'] = {view: 'view-500', query: false, title: 'Error 500'};
+routes['#configuration'] = {view: 'view-configuration', query: false, title: 'Configuration'};
 
-routes['#feeds'] = {template: 'template-feeds', path: '/feeds', title: 'Feeds', store: true};
-routes['#feed/create'] = {template: 'template-feed-create', path: false};
-routes['#feed/read/{id}'] = {template: 'template-feed-read', path: '/feed/{id}', store: false};
-routes['#feed/update/{id}'] = {template: 'template-feed-update', path: '/feed/{id}', store: false};
-routes['#feed/delete/{id}'] = {template: 'template-feed-delete', path: '/feed/{id}', store: false};
+routes['#feeds'] = {view: 'view-feeds', query: '/feeds', title: 'Feeds', store: true};
+routes['#feed/create'] = {view: 'view-feed-create', query: false};
+routes['#feed/read/{id}'] = {view: 'view-feed-read', query: '/feed/{id}', store: false};
+routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}', store: false};
+routes['#feed/delete/{id}'] = {view: 'view-feed-delete', query: '/feed/{id}', store: false};
 
-routes['#subscriptions'] = {template: 'template-subscriptions', path: '/subscriptions', title: 'Feeds', store: true};
-routes['#subscription/create'] = {template: 'template-subscription-create', path: false};
-routes['#subscription/read/{id}'] = {template: 'template-subscription-read', path: '/subscription/{id}', store: false};
-routes['#subscription/update/{id}'] = {template: 'template-subscription-update', path: '/subscription/{id}', store: false};
-routes['#subscription/delete/{id}'] = {template: 'template-subscription-delete', path: '/subscription/{id}', store: false};
+routes['#subscriptions'] = {view: 'view-subscriptions', query: '/subscriptions', title: 'Subscriptions', store: true};
+routes['#subscription/create'] = {view: 'view-subscription-create', query: false};
+routes['#subscription/read/{id}'] = {view: 'view-subscription-read', query: '/subscription/{id}', store: false};
+routes['#subscription/update/{id}'] = {view: 'view-subscription-update', query: '/subscription/{id}', store: false};
+routes['#subscription/delete/{id}'] = {view: 'view-subscription-delete', query: '/subscription/{id}', store: false};
 
-routes['#folders'] = {template: 'template-folders', path: '/folders', title: 'Folders', store: true};
-routes['#folder/create'] = {template: 'template-folder-create', path: false};
-routes['#folder/read/{id}'] = {template: 'template-folder-read', path: '/folder/{id}', store: false};
-routes['#folder/update/{id}'] = {template: 'template-folder-update', path: '/folder/{id}', store: false};
-routes['#folder/delete/{id}'] = {template: 'template-folder-delete', path: '/folder/{id}', store: false};
+routes['#folders'] = {view: 'view-folders', query: '/folders', title: 'Folders', store: true};
+routes['#folder/create'] = {view: 'view-folder-create', query: false};
+routes['#folder/read/{id}'] = {view: 'view-folder-read', query: '/folder/{id}', store: false};
+routes['#folder/update/{id}'] = {view: 'view-folder-update', query: '/folder/{id}', store: false};
+routes['#folder/delete/{id}'] = {view: 'view-folder-delete', query: '/folder/{id}', store: false};
 
-routes['#item/read/{id}'] = {template: false, path: '/item/read/{id}', store: false};
-routes['#item/star/{id}'] = {template: false, path: '/item/star/{id}', store: false};
-routes['#item/share/{id}'] = {template: false, path: '/item/share/{id}', store: false};
+routes['#item/read/{id}'] = {view: false, query: '/item/read/{id}', store: false};
+routes['#item/star/{id}'] = {view: false, query: '/item/star/{id}', store: false};
+routes['#item/share/{id}'] = {view: false, query: '/item/share/{id}', store: false};
 
-routes['#items/unread'] = {template: 'template-items', path: '/items?unread=1', title: 'Unread', store: true};
-routes['#items/shared'] = {template: 'template-items', path: '/items?shared=1', title: 'Shared', store: false};
-routes['#items/starred'] = {template: 'template-items', path: '/items?starred=1', title: 'Starred', store: false};
-routes['#items/feed/{id}'] = {template: 'template-items', path: '/items?feed={id}', store: false};
-routes['#items/folder/{id}'] = {template: 'template-items', path: '/items?folder={id}', store: false};
-routes['#items/author/{id}'] = {template: 'template-items', path: '/items?author={id}', store: false};
-routes['#items/category/{id}'] = {template: 'template-items', path: '/items?category={id}', store: false};
+routes['#items/unread'] = {view: 'view-items', query: '/items?unread=1', title: 'Items unread', store: true};
+routes['#items/shared'] = {view: 'view-items', query: '/items?shared=1', title: 'Items shared', store: false};
+routes['#items/starred'] = {view: 'view-items', query: '/items?starred=1', title: 'Items starred', store: false};
+routes['#items/feed/{id}'] = {view: 'view-items', query: '/items?feed={id}', store: false};
+routes['#items/folder/{id}'] = {view: 'view-items', query: '/items?folder={id}', store: false};
+routes['#items/author/{id}'] = {view: 'view-items', query: '/items?author={id}', store: false};
+routes['#items/category/{id}'] = {view: 'view-items', query: '/items?category={id}', store: false};

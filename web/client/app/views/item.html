@@ -1,0 +1,48 @@
+<!-- Item -->
+<script type="text/template" id="view-items">
+    {{#each entries}}
+        {{> cardItem }}
+    {{/each}}
+</script>
+
+<script type="text/template" id="view-item">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                <a href="{{ link }}" target="_blank">{{ title }}</a>
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <p>
+                Feed: <a href="#items/feed/{{ feed.id }}" class="load-route">{{ feed.title }}</a>
+            </p>
+
+            {{#if categories }}
+                <p>Categories:
+                {{#each categories }}
+                    <a href="#items/category/{{ id }}" class="load-route">{{ title }}</a>
+                {{/each}}
+                </p>
+            {{/if}}
+
+            {{#if enclosures }}
+                {{#each enclosures }}
+                    <p>{{ link }}</p>
+                {{/each}}
+            {{/if}}
+
+            {{#if author}}
+                <p>
+                    Author: <a href="#items/author/{{ author.id }}" class="load-route">{{ author.title }}</a>
+                </p>
+            {{/if}}
+
+            {{{ content }}}
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#item/read/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
+            <a href="#item/star/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Star</a>
+            <a href="#item/share/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Share</a>
+        </div>
+    </div>
+</script>

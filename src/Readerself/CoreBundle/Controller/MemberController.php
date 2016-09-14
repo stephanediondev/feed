@@ -28,6 +28,10 @@ class MemberController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
         $status = 200;
 
         $member = $this->memberManager->init();
