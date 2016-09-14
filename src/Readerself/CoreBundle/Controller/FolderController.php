@@ -71,6 +71,11 @@ class FolderController extends AbstractController
         if(!$member = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
+
+        $data['entity'] = 'Folder';
+        $data['entry'] = $this->memberManager->folderManager->getOne(['id' => $id])->toArray();
+
+        return new JsonResponse($data);
     }
 
     /**

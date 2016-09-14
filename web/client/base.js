@@ -4,7 +4,9 @@ var snackbarContainer = document.querySelector('.mdl-snackbar');
 
 var routes = [];
 routes['#login'] = {template: 'template-login', path: false};
+routes['#logout'] = {template: 'template-logout', path: false};
 routes['#404'] = {template: 'template-404', path: false};
+routes['#500'] = {template: 'template-500', path: false};
 
 routes['#feeds'] = {template: 'template-feeds', path: '/feeds', title: 'Feeds', store: true};
 routes['#feed/create'] = {template: 'template-feed-create', path: false};
@@ -13,6 +15,10 @@ routes['#feed/update/{id}'] = {template: 'template-feed-update', path: '/feed/{i
 routes['#feed/delete/{id}'] = {template: 'template-feed-delete', path: '/feed/{id}', store: false};
 
 routes['#folders'] = {template: 'template-folders', path: '/folders', title: 'Folders', store: true};
+routes['#folder/create'] = {template: 'template-folder-create', path: false};
+routes['#folder/read/{id}'] = {template: 'template-folder-read', path: '/folder/{id}', store: false};
+routes['#folder/update/{id}'] = {template: 'template-folder-update', path: '/folder/{id}', store: false};
+routes['#folder/delete/{id}'] = {template: 'template-folder-delete', path: '/folder/{id}', store: false};
 
 routes['#items/unread'] = {template: 'template-items', path: '/items?unread=1', store: false};
 routes['#items/shared'] = {template: 'template-items', path: '/items?shared=1', store: false};
@@ -84,9 +90,6 @@ function loadRoute(key) {
                 },
                 dataType: 'json',
                 statusCode: {
-                    403: function() {
-                        loadRoute('#login');
-                    },
                     200: function(data_return) {
                         if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
                             for(var i in data_return.entries) {
@@ -97,6 +100,15 @@ function loadRoute(key) {
                         var source = $('#' + route.template).text();
                         var template = Handlebars.compile(source);
                         $('main > .mdl-grid').html(template(data_return));
+                    },
+                    403: function() {
+                        loadRoute('#login');
+                    },
+                    404: function() {
+                        loadRoute('#404');
+                    },
+                    500: function() {
+                        loadRoute('#500');
                     }
                 },
                 type: 'GET',
@@ -119,10 +131,16 @@ function loadAction(obj) {
         },
         dataType: 'json',
         statusCode: {
+            200: function() {
+            },
             403: function() {
                 loadRoute('#login');
             },
-            200: function() {
+            404: function() {
+                loadRoute('#404');
+            },
+            500: function() {
+                loadRoute('#500');
             }
         },
         type: 'GET',
@@ -184,6 +202,15 @@ $(document).ready(function() {
                         }
                     }
                     loadRoute(form.attr('action'));
+                },
+                403: function() {
+                    loadRoute('#login');
+                },
+                404: function() {
+                    loadRoute('#404');
+                },
+                500: function() {
+                    loadRoute('#500');
                 }
             },
             type: form.attr('method'),

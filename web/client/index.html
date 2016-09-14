@@ -22,7 +22,8 @@
         <div class="mdl-layout__header-row">
             <div class="mdl-layout-spacer">
             </div>
-            <a href="#login" class="load-route mdl-button mdl-color--pink mdl-color-text--white" href="posts/12">Login</a>
+            <a href="#login" class="load-route mdl-button mdl-color--pink mdl-color-text--white">Login</a>
+            <a href="#logout" class="load-route mdl-button mdl-color--pink mdl-color-text--white">Logout</a>
         </div>
     </header>
     <div class="mdl-layout__drawer">
@@ -30,7 +31,6 @@
             <li class="mdl-list__item"><a href="#items/unread" class="load-route"><i class="fa-lg fa fa-home"></i>Unread</a></li>
             <li class="mdl-list__item"><a href="#items/shared" class="load-route"><i class="fa-lg fa fa-home"></i>Shared</a></li>
             <li class="mdl-list__item"><a href="#items/starred" class="load-route"><i class="fa-lg fa fa-home"></i>Starred</a></li>
-            <li class="mdl-list__item"><a href="#test-404" class="load-route"><i class="fa-lg fa fa-home"></i>Test 404</a></li>
             <li class="mdl-list__item"><a href="#folders" class="load-route"><i class="fa-lg fa fa-home"></i>Folders</a></li>
             <li class="mdl-list__item"><a href="#feeds" class="load-route"><i class="fa-lg fa fa-home"></i>Feeds</a></li>
         </ul>
@@ -75,11 +75,40 @@
     </div>
 </script>
 
+<script type="text/template" id="template-logout">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="login">
+        <form action="#login" data-path="/logout" method="POST">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    Logout
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
+                    <i class="material-icons md-24">done</i>
+                </button>
+                </p>
+            </div>
+        </form>
+    </div>
+</script>
+
 <script type="text/template" id="template-404">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 404
+            </h1>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="template-500">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                500
             </h1>
         </div>
     </div>
@@ -102,22 +131,40 @@
 <script type="text/template" id="template-folders">
     {{> titleFolders }}
 
-    {{#each entries}}
+    {{#each entries as |entry index|}}
         {{> cardFolder }}
     {{/each}}
 </script>
 
 <script type="text/template" id="template-folder">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-{{ id }}">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{ title }}
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#folder/update/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+            <a href="#folder/delete/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="template-folder-read">
+    {{> titleFolders }}
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ entry.title }}
             </h1>
         </div>
         <div class="mdl-card__supporting-text">
-            <p><a href="{{ website }}" target="_blank">{{ entry.website }}</a></p>
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#folders" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
             <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
             <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
         </div>
@@ -147,7 +194,7 @@
 </script>
 
 <script type="text/template" id="template-feed">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-{{ id }}">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 <a href="#feed/read/{{ id }}" class="load-route">{{ title }}</a>
@@ -166,7 +213,7 @@
 <script type="text/template" id="template-feed-create">
     {{> titleFeeds }}
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-update-{{ id }}">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#feeds" data-path="/feed" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
@@ -202,7 +249,7 @@
 <script type="text/template" id="template-feed-read">
     {{> titleFeeds }}
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-update-{{ id }}">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ entry.title }}
@@ -221,7 +268,7 @@
 <script type="text/template" id="template-feed-update">
     {{> titleFeeds }}
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-update-{{ id }}">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#feed/read/{{ entry.id }}" data-path="/feed/{{ entry.id }}" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
@@ -258,7 +305,7 @@
 <script type="text/template" id="template-feed-delete">
     {{> titleFeeds }}
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-delete-{{ id }}">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#feeds" data-path="/feed/{{ entry.id }}" method="DELETE">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
