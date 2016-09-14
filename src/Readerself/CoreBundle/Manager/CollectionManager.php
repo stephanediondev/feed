@@ -111,7 +111,7 @@ class CollectionManager extends AbstractManager
         }
         exit(0);*/
 
-        $sql = 'SELECT id, link FROM feed LIMIT 100,150';
+        $sql = 'SELECT id, link FROM feed LIMIT 200,150';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
