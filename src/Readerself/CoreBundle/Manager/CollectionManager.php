@@ -111,7 +111,7 @@ class CollectionManager extends AbstractManager
         }
         exit(0);*/
 
-        $sql = 'SELECT id, link FROM feed LIMIT 200,400';
+        $sql = 'SELECT id, link FROM feed LIMIT 0,150';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
@@ -296,8 +296,31 @@ class CollectionManager extends AbstractManager
 
             $insertItem['link'] = $link;
 
-            if($sp_item->get_content()) {
-                $insertItem['content']  = $sp_item->get_content();
+            if($content = $sp_item->get_content()) {
+                if(class_exists('Tidy')) {
+                    $options = array('output-xhtml' => true, 'clean' => true, 'wrap-php' => true, 'doctype' => 'omit', 'show-body-only' => true, 'drop-proprietary-attributes' => true);
+                    $tidy = new \tidy();
+                    $tidy->parseString($content, $options, 'utf8');
+                    $tidy->cleanRepair();
+                    $content = $tidy;
+
+                    if(class_exists('DOMDocument')) {
+                        $dom = new \DOMDocument;
+                        $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                        $xpath = new \DOMXPath($dom);
+    
+                        $disallowedAttributes = array('id', 'class', 'style', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex');
+                        foreach($disallowedAttributes as $attribute) {
+                            $nodes = $xpath->query('//*[@'.$attribute.']');
+                            foreach($nodes as $node) {
+                                $node->removeAttribute($attribute);
+                            }
+                        }
+                        $content = $dom->saveHTML();
+                    }
+                }
+
+                $insertItem['content']  = $content;
             } else {
                 $insertItem['content'] = '-';
             }

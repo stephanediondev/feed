@@ -16,7 +16,7 @@ routes['#folder/read/{id}'] = {template: 'template-folder-read', path: '/folder/
 routes['#folder/update/{id}'] = {template: 'template-folder-update', path: '/folder/{id}', store: false};
 routes['#folder/delete/{id}'] = {template: 'template-folder-delete', path: '/folder/{id}', store: false};
 
-routes['#items/unread'] = {template: 'template-items', path: '/items?unread=1', title: 'Unread', store: false};
+routes['#items/unread'] = {template: 'template-items', path: '/items?unread=1', title: 'Unread', store: true};
 routes['#items/shared'] = {template: 'template-items', path: '/items?shared=1', title: 'Shared', store: false};
 routes['#items/starred'] = {template: 'template-items', path: '/items?starred=1', title: 'Starred', store: false};
 routes['#items/feed/{id}'] = {template: 'template-items', path: '/items?feed={id}', store: false};

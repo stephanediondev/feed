@@ -114,6 +114,9 @@ function loadAction(obj) {
         dataType: 'json',
         statusCode: {
             200: function() {
+                if(data_return.entity == 'Item' && data_return.action == 'read') {
+                    store.remove(data_return.entity + '_' + data_return.entry.id);//TODO
+                }
             },
             403: function() {
                 loadRoute('#login');
@@ -169,7 +172,7 @@ $(document).ready(function() {
                     }
 
                     if(form.attr('method') == 'DELETE') {
-                        store.remove(data_return.entity + '_' + data_return.id);
+                        store.remove(data_return.entity + '_' + data_return.entry.id);
                     }
                     if(form.attr('method') == 'PUT') {
                         store.set(data_return.entity + '_' + data_return.entry.id, data_return.entry);
