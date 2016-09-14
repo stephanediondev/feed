@@ -146,9 +146,38 @@
         <div class="mdl-card__supporting-text">
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#items/folder/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Items</a>
             <a href="#folder/update/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
             <a href="#folder/delete/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
         </div>
+    </div>
+</script>
+
+<script type="text/template" id="template-folder-create">
+    {{> titleFolders }}
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <form action="#folders" data-path="/folder" method="POST">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    Add
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="title" class="required">Title</label>
+                    <input type="text" id="title" name="title" required="required" value="">
+                </p>
+                <p>
+                <button type="submit" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--pink mdl-color-text--white">
+                    <i class="material-icons md-24">done</i>
+                </button>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#folders" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+            </div>
+        </form>
     </div>
 </script>
 
@@ -204,6 +233,7 @@
             <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#items/feed/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Items</a>
             <a href="#feed/update/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
             <a href="#feed/delete/{{ id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
         </div>
@@ -348,7 +378,7 @@
             </p>
 
             {{#if categories }}
-                <p>
+                <p>Categories:
                 {{#each categories }}
                     <a href="#items/category/{{ id }}" class="load-route">{{ title }}</a>
                 {{/each}}
@@ -385,6 +415,7 @@ var base_dir = location.pathname;
 <script type="text/javascript" src="vendor/store.js/store.min.js"></script>
 <script type="text/javascript" src="vendor/i18next/i18next.min.js"></script>
 <script type="text/javascript" src="vendor/handlebars/handlebars.min.js"></script>
+<script type="text/javascript" src="routes.js"></script>
 <script type="text/javascript" src="base.js"></script>
 
 </body>

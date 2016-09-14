@@ -37,7 +37,7 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $data['entity'] = 'Feed';
+        $data['entity_entries'] = 'Feed';
         $data['entries'] = [];
         foreach($this->feedManager->getList() as $feed) {
             $data['entries'][] = $feed->toArray();

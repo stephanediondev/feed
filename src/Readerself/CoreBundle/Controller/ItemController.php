@@ -89,18 +89,26 @@ class ItemController extends AbstractController
 
         if($request->query->get('feed')) {
             $parameters['feed'] = (int) $request->query->get('feed');
+            $data['entity'] = 'Feed';
+            $data['entry'] = $this->get('readerself_core_manager_feed')->getOne(['id' => (int) $request->query->get('feed')])->toArray();
         }
 
         if($request->query->get('author')) {
             $parameters['author'] = (int) $request->query->get('author');
+            $data['entity'] = 'Author';
+            $data['entry'] = $this->get('readerself_core_manager_author')->getOne(['id' => (int) $request->query->get('author')])->toArray();
         }
 
         if($request->query->get('category')) {
             $parameters['category'] = (int) $request->query->get('category');
+            $data['entity'] = 'Category';
+            $data['entry'] = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])->toArray();
         }
 
         if($request->query->get('folder')) {
             $parameters['folder'] = (int) $request->query->get('folder');
+            $data['entity'] = 'Folder';
+            $data['entry'] = $this->get('readerself_core_manager_folder')->getOne(['id' => (int) $request->query->get('folder')])->toArray();
         }
 
         $items = $this->itemManager->getList($parameters);
@@ -108,7 +116,7 @@ class ItemController extends AbstractController
         $shareLinks = $this->itemManager->shareManager->getList($parameters);
 
         $data['total'] = count($items);
-        $data['entity'] = 'Item';
+        $data['entity_entries'] = 'Item';
         $data['entries'] = [];
         $index = 0;
         foreach($items as $item) {

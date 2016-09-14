@@ -47,7 +47,7 @@ class FolderController extends AbstractController
      *     },
      * )
      */
-    public function createAction(Request $request, ParameterBag $parameterBag)
+    public function createAction(Request $request)
     {
         $data = [];
         if(!$member = $this->validateToken($request)) {

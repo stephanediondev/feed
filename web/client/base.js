@@ -2,31 +2,6 @@ var apiUrl = '//localhost/projects/readerself-symfony/readerself-symfony/web/app
 var connectionToken = store.get('Connection_login_token');
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
-var routes = [];
-routes['#login'] = {template: 'template-login', path: false};
-routes['#logout'] = {template: 'template-logout', path: false};
-routes['#404'] = {template: 'template-404', path: false};
-routes['#500'] = {template: 'template-500', path: false};
-
-routes['#feeds'] = {template: 'template-feeds', path: '/feeds', title: 'Feeds', store: true};
-routes['#feed/create'] = {template: 'template-feed-create', path: false};
-routes['#feed/read/{id}'] = {template: 'template-feed-read', path: '/feed/{id}', store: false};
-routes['#feed/update/{id}'] = {template: 'template-feed-update', path: '/feed/{id}', store: false};
-routes['#feed/delete/{id}'] = {template: 'template-feed-delete', path: '/feed/{id}', store: false};
-
-routes['#folders'] = {template: 'template-folders', path: '/folders', title: 'Folders', store: true};
-routes['#folder/create'] = {template: 'template-folder-create', path: false};
-routes['#folder/read/{id}'] = {template: 'template-folder-read', path: '/folder/{id}', store: false};
-routes['#folder/update/{id}'] = {template: 'template-folder-update', path: '/folder/{id}', store: false};
-routes['#folder/delete/{id}'] = {template: 'template-folder-delete', path: '/folder/{id}', store: false};
-
-routes['#items/unread'] = {template: 'template-items', path: '/items?unread=1', store: false};
-routes['#items/shared'] = {template: 'template-items', path: '/items?shared=1', store: false};
-routes['#items/starred'] = {template: 'template-items', path: '/items?starred=1', store: false};
-routes['#items/feed/{id}'] = {template: 'template-items', path: '/items?feed={id}', store: false};
-routes['#items/author/{id}'] = {template: 'template-items', path: '/items?author={id}', store: false};
-routes['#items/category/{id}'] = {template: 'template-items', path: '/items?category={id}', store: false};
-
 var source = $('#template-feed').text();
 Handlebars.registerPartial('cardFeed', source);
 
@@ -69,11 +44,14 @@ function loadRoute(key) {
             key = key.replace('{id}', replaceId);
         }
 
-        window.location.hash = key;
+        if(!route.hash) {
+        } else {
+            window.location.hash = key;
+        }
         if(route.title) {
             window.document.title = route.title;//TODO: get first h1 in card
         }
-        //history.pushState({}, key, key);
+        history.pushState({}, key, key);
 
         if(!route.path) {
             var source = $('#' + route.template).text();
@@ -93,8 +71,12 @@ function loadRoute(key) {
                     200: function(data_return) {
                         if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
                             for(var i in data_return.entries) {
-                                store.set(data_return.entity + '_' + data_return.entries[i].id, data_return.entries[i]);
+                                store.set(data_return.entity_entries + '_' + data_return.entries[i].id, data_return.entries[i]);
                             }
+                        }
+
+                        if(typeof data_return.entry == 'object' && typeof data_return.entity == 'string') {
+                            window.document.title = data_return.entry.title + ' (' + data_return.entity + ')';
                         }
 
                         var source = $('#' + route.template).text();
