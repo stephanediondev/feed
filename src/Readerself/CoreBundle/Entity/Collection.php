@@ -196,4 +196,15 @@ class Collection
     {
         return $this->dateModified;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'date_created' => $this->getDateCreated(),
+        ];
+    }
 }

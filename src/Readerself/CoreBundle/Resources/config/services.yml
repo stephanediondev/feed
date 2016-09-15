@@ -72,10 +72,17 @@ services:
         calls:
             - [ "setFacebook", [ "%facebook_enabled%", "%facebook_id%", "%facebook_secret%" ] ]
 
+    readerself_core_manager_collection_feed:
+        class: Readerself\CoreBundle\Manager\CollectionFeedManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
     readerself_core_manager_feed:
         class: Readerself\CoreBundle\Manager\FeedManager
         parent: "readerself_core_manager_abstract"
         public: true
+        arguments:
+            - "@readerself_core_manager_collection_feed"
 
     readerself_core_manager_item:
         class: Readerself\CoreBundle\Manager\ItemManager

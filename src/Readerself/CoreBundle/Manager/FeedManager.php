@@ -7,6 +7,14 @@ use Readerself\CoreBundle\Event\FeedEvent;
 
 class FeedManager extends AbstractManager
 {
+    public $collectionFeedManager;
+
+    public function __construct(
+        CollectionFeedManager $collectionFeedManager
+    ) {
+        $this->collectionFeedManager = $collectionFeedManager;
+    }
+
     public function getOne($paremeters = [])
     {
         return $this->em->getRepository('ReaderselfCoreBundle:Feed')->getOne($paremeters);

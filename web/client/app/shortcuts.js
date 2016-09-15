@@ -130,7 +130,7 @@ $(document).bind('keydown', function(event) {
                 //modal_show($('#items_read').attr('href'));
             //a
             } else {
-                window.location.href = base_url + 'subscriptions/create';
+                loadRoute('#subscription/create');
             }
 
         //nothing when meta + k

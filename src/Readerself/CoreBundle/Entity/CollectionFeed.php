@@ -138,5 +138,17 @@ class CollectionFeed
     {
         return $this->feed;
     }
-}
 
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'collection' => $this->getCollection()->toArray(),
+            'error' => $this->getError(),
+            'date_created' => $this->getDateCreated(),
+        ];
+    }
+}

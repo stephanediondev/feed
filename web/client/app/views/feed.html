@@ -47,7 +47,7 @@
 </script>
 
 <script type="text/template" id="view-feed-create">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#feeds" data-query="/feed" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
@@ -90,7 +90,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ entry.title }}
@@ -124,6 +124,30 @@
             <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
         </div>
     </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{trans 'errors'}}
+            </h1>
+        </div>
+    </div>
+
+    {{#each entry.errors as |error error_index|}}
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    {{ error.date_created.date }}
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <span class="label">{{trans 'error'}}</span>
+                    {{ error.error }}</a>
+                </p>
+            </div>
+        </div>
+    {{/each}}
 </script>
 
 <script type="text/template" id="view-feed-update">
@@ -138,7 +162,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#feed/read/{{ entry.id }}" data-query="/feed/{{ entry.id }}" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
@@ -181,7 +205,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#feeds" data-query="/feed/{{ entry.id }}" method="DELETE">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
