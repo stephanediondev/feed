@@ -34,10 +34,9 @@ class ItemRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('itm', 'fed', 'aut');
+        $query->addSelect('itm.id');
         $query->from('ReaderselfCoreBundle:Item', 'itm');
         $query->leftJoin('itm.feed', 'fed');
-        $query->leftJoin('itm.author', 'aut');
 
         if(isset($parameters['feed']) == 1) {
             $query->andWhere('fed.id = :feed');
@@ -45,6 +44,7 @@ class ItemRepository extends AbstractRepository
         }
 
         if(isset($parameters['author']) == 1) {
+            $query->leftJoin('itm.author', 'aut');
             $query->andWhere('aut.id = :author');
             $query->setParameter(':author', $parameters['author']);
         }
@@ -94,14 +94,8 @@ class ItemRepository extends AbstractRepository
         }
 
         $query->groupBy('itm.id');
-        $query->setMaxResults(20);
 
         $getQuery = $query->getQuery();
-
-        /*$cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.item.');
-        $getQuery->setResultCacheDriver($cacheDriver);
-        $getQuery->setResultCacheLifetime(86400);*/
 
         return $getQuery->getResult();
     }

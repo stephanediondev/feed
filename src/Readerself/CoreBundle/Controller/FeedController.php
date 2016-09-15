@@ -28,6 +28,11 @@ class FeedController extends AbstractController
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
+     *     parameters={
+     *         {"name"="order", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
+     *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="items per page"},
+     *     },
      * )
      */
     public function indexAction(Request $request)
@@ -37,14 +42,32 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $feeds = $this->feedManager->getList();
+        $paginator= $this->get('knp_paginator');
+        $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
+        $pagination = $paginator->paginate(
+            $this->feedManager->getList(),
+            $page = $request->query->getInt('page', 1),
+            $request->query->getInt('perPage', 100)
+        );
 
         $data['entries'] = [];
-        foreach($feeds as $feed) {
+        foreach($pagination as $result) {
+            $feed = $this->feedManager->getOne(['id' => $result['id']]);
+
             $data['entries'][] = $feed->toArray();
         }
         $data['entries_entity'] = 'Feed';
-        $data['entries_total'] = count($feeds);
+        $data['entries_total'] = $pagination->getTotalItemCount();
+        $data['entries_pages'] = $pages = $pagination->getPageCount();
+        $data['entries_page_current'] = $page;
+        $pagePrevious = $page - 1;
+        if($pagePrevious >= 1) {
+            $data['entries_page_previous'] = $pagePrevious;
+        }
+        $pageNext = $page + 1;
+        if($pageNext <= $pages) {
+            $data['entries_page_next'] = $pageNext;
+        }
         return new JsonResponse($data);
     }
 

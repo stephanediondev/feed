@@ -111,13 +111,21 @@ class ItemController extends AbstractController
             $data['entry_entity'] = 'Folder';
         }
 
-        $items = $this->itemManager->getList($parameters);
+        $paginator= $this->get('knp_paginator');
+        $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
+        $pagination = $paginator->paginate(
+            $this->itemManager->getList($parameters),
+            $page = $request->query->getInt('page', 1),
+            $request->query->getInt('perPage', 20)
+        );
 
         $shareEntries = $this->itemManager->shareManager->getList();
 
         $data['entries'] = [];
         $index = 0;
-        foreach($items as $item) {
+        foreach($pagination as $result) {
+            $item = $this->itemManager->getOne(['id' => $result['id']]);
+
             $actions = [];
             foreach($this->actionManager->actionItemMemberManager->getList(['member' => $member, 'item' => $item]) as $action) {
                 $actions[] = $action->toArray();
@@ -149,7 +157,17 @@ class ItemController extends AbstractController
             $index++;
         }
         $data['entries_entity'] = 'Item';
-        $data['entries_total'] = count($items);
+        $data['entries_total'] = $pagination->getTotalItemCount();
+        $data['entries_pages'] = $pages = $pagination->getPageCount();
+        $data['entries_page_current'] = $page;
+        $pagePrevious = $page - 1;
+        if($pagePrevious >= 1) {
+            $data['entries_page_previous'] = $pagePrevious;
+        }
+        $pageNext = $page + 1;
+        if($pageNext <= $pages) {
+            $data['entries_page_next'] = $pageNext;
+        }
         return new JsonResponse($data);
     }
 

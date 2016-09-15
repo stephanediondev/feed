@@ -53,7 +53,11 @@ for(var i in files) {
     }
 }
 
-function loadRoute(key) {
+function loadRoute(key, page) {
+    if(typeof page === 'undefined') {
+        page = false;
+    }
+
     var replaceId = false;
 
     var parts = key.split('/');
@@ -71,6 +75,13 @@ function loadRoute(key) {
 
         if(route.query) {
             url = apiUrl + route.query;
+            if(page) {
+                if(url.indexOf('?') != -1) {
+                    url = url + '&page=' + page;
+                } else {
+                    url = url + '?page=' + page;
+                }
+            }
             if(replaceId) {
                 url = url.replace('{id}', replaceId);
                 key = key.replace('{id}', replaceId);
@@ -108,6 +119,8 @@ function loadRoute(key) {
                 dataType: 'json',
                 statusCode: {
                     200: function(data_return) {
+                        data_return.current_key = key;
+
                         if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
                             for(var i in data_return.entries) {
                                 if(data_return.entries.hasOwnProperty(i)) {
@@ -169,7 +182,7 @@ $(document).ready(function() {
 
     $(document).on('click', '.load-route', function(event) {
         event.preventDefault();
-        loadRoute($(this).attr('href'));
+        loadRoute($(this).attr('href'), $(this).data('page'));
     });
 
     $('main > .mdl-grid').on('submit', 'form', function(event) {

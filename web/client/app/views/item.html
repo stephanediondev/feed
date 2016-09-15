@@ -84,4 +84,16 @@
             </div>
         </div>
     {{/each}}
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__actions mdl-card--border">
+            {{#if entries_page_previous }}
+            <a href="{{ current_key }}" data-page="{{ entries_page_previous }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Previous page</a>
+            {{/if}}
+
+            {{#if entries_page_next }}
+            <a href="{{ current_key }}" data-page="{{ entries_page_next }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Next page</a>
+            {{/if}}
+        </div>
+    </div>
 </script>

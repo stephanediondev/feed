@@ -15,6 +15,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Minishlink\Bundle\WebPushBundle\MinishlinkWebPushBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
 
