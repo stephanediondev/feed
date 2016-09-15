@@ -1,22 +1,22 @@
 <!-- Misc. -->
 <script type="text/template" id="view-login">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#items/unread" data-path="/login" method="POST">
+        <form action="#items/unread" data-query="/login" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
-                    <label for="email" class="required">Email</label>
+                    <label for="email" class="required">{{trans 'email'}}</label>
                     <input type="email" id="email" name="email" required="true" value="">
                 </p>
                 <p>
-                    <label for="password" class="required">Password</label>
+                    <label for="password" class="required">{{trans 'password'}}</label>
                     <input type="password" id="password" name="password" required="true" value="">
                 </p>
                 <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Login</button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'login'}}</button>
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#forgotpassword" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Forgot password?</a>
+                <a href="#forgotpassword" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'forgotpassword'}}</a>
             </div>
         </form>
     </div>
@@ -24,7 +24,7 @@
 
 <script type="text/template" id="view-logout">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#login" data-path="/logout" method="POST">
+        <form action="#login" data-query="/logout" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
                     <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Logout</button>

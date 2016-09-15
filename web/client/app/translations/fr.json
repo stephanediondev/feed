@@ -1,0 +1,24 @@
+{
+    "login": "Connexion",
+    "forgotpassword": "Oubli mot de passe ?",
+
+    "create": "Ajouter",
+    "update": "Modifier",
+    "delete": "Supprimer",
+    "back": "Retour",
+
+    "email": "Email",
+    "password": "Mot de passe",
+    "title": "Titre",
+    "link": "Lien",
+    "website": "Site web",
+    "description": "Description",
+    "language": "Langue",
+
+    "subscriptions": "Abonnements",
+    "items": "Items",
+    "folders": "Dossiers",
+    "folder": "Dossier",
+    "feeds": "Fils",
+    "feed": "Fil"
+}

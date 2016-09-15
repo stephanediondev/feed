@@ -3,11 +3,11 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                Folders ({{ entries_total }})
+                {{trans 'folders'}} ({{ entries_total }})
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#folder/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Create</a>
+            <a href="#folder/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'create'}}</a>
         </div>
     </div>
 
@@ -19,9 +19,9 @@
                 </h1>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#items/folder/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Items</a>
-                <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-                <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+                <a href="#items/folder/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'items'}}</a>
+                <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+                <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
             </div>
         </div>
     {{/each}}
@@ -29,23 +29,23 @@
 
 <script type="text/template" id="view-folder-create">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-        <form action="#folders" data-path="/folder" method="POST">
+        <form action="#folders" data-query="/folder" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    Folders
+                    {{trans 'folders'}}
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
-                    <label for="title" class="required">Title</label>
+                    <label for="title" class="required">{{trans 'title'}}</label>
                     <input type="text" id="title" name="title" required="required" value="">
                 </p>
                 <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Create</button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'create'}}</button>
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#folders" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+                <a href="#folders" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'back'}}</a>
             </div>
         </form>
     </div>
@@ -55,11 +55,11 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                Folders
+                {{trans 'folders'}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#folders" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+            <a href="#folders" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'back'}}</a>
         </div>
     </div>
 
@@ -72,8 +72,8 @@
         <div class="mdl-card__supporting-text">
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
-            <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+            <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+            <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
         </div>
     </div>
 </script>
@@ -82,16 +82,16 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                Folders
+                {{trans 'folders'}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#folder/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+            <a href="#folder/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'back'}}</a>
         </div>
     </div>
 
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-        <form action="#folder/read/{{ entry.id }}" data-path="/folder/{{ entry.id }}" method="PUT">
+        <form action="#folder/read/{{ entry.id }}" data-query="/folder/{{ entry.id }}" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     {{ entry.title }}
@@ -99,15 +99,15 @@
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
-                    <label for="title" class="required">Title</label>
+                    <label for="title" class="required">{{trans 'title'}}</label>
                     <input type="text" id="title" name="title" required="required" value="{{ entry.title }}">
                 </p>
                 <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Update</button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Delete</a>
+                <a href="#folder/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
             </div>
         </form>
     </div>
@@ -117,16 +117,16 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                Folders
+                {{trans 'folders'}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#folder/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Back</a>
+            <a href="#folder/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'back'}}</a>
         </div>
     </div>
 
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-        <form action="#folders" data-path="/folder/{{ entry.id }}" method="DELETE">
+        <form action="#folders" data-query="/folder/{{ entry.id }}" method="DELETE">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     {{ entry.title }}
@@ -134,11 +134,11 @@
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Delete</button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'delete'}}</button>
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Update</a>
+                <a href="#folder/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
             </div>
         </form>
     </div>

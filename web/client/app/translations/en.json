@@ -1,0 +1,24 @@
+{
+    "login": "Login",
+    "forgotpassword": "Forgot password?",
+
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
+    "back": "Back",
+
+    "email": "Email",
+    "password": "Password",
+    "title": "Title",
+    "link": "Link",
+    "website": "Website",
+    "description": "Description",
+    "language": "Language",
+
+    "subscriptions": "Subscriptions",
+    "items": "Items",
+    "folders": "Folders",
+    "folder": "Folder",
+    "feeds": "Feeds",
+    "feed": "Feed"
+}

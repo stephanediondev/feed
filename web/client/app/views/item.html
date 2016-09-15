@@ -49,6 +49,15 @@
                     {{/if}}
                 {{/if}}
 
+
+                {{#if entry.socials }}
+                    <p>
+                    {{#each entry.socials as |social social_index|}}
+                        <a href="{{ social.link }}" target="_blank">{{ social.title }}</a>
+                    {{/each}}
+                    </p>
+                {{/if}}
+
                 {{{ entry.content }}}
             </div>
             <div class="mdl-card__actions mdl-card--border">

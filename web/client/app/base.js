@@ -1,7 +1,30 @@
+var timezone = new Date();
+timezone = -timezone.getTimezoneOffset() / 60;
+
+var language = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
+if(language) {
+    language = language.substr(0, 2);
+}
+
 var apiUrl = '//' + window.location.hostname + window.location.pathname;
 apiUrl = apiUrl.replace('client/', 'api');
 var connectionToken = store.get('Connection_login_token');
 var snackbarContainer = document.querySelector('.mdl-snackbar');
+
+var languages = ['en', 'fr'];
+if($.inArray(language, languages)) {
+    languageFinal = language;
+} else {
+    languageFinal = 'en';
+}
+
+$.getJSON('app/translations/' + languageFinal + '.json', function(data) {
+    $.i18n.load(data);
+    Handlebars.registerHelper('trans', function(key) {
+        var result = $.i18n._(key);
+        return new Handlebars.SafeString(result);
+    });
+});
 
 var files = [
     'app/views/misc.html',
@@ -25,11 +48,14 @@ function loadFile(url) {
 }
 
 for(var i in files) {
-    loadFile(files[i]);
+    if(files.hasOwnProperty(i)) {
+        loadFile(files[i]);
+    }
 }
 
 function loadRoute(key) {
     var replaceId = false;
+
     var parts = key.split('/');
     for(var i in parts) {
         if($.isNumeric(parts[i])) {
@@ -41,9 +67,10 @@ function loadRoute(key) {
 
     if(key in routes || replaceId) {
         var route = routes[key];
+        var url = false;
 
         if(route.query) {
-            var url = apiUrl + route.query;
+            url = apiUrl + route.query;
             if(replaceId) {
                 url = url.replace('{id}', replaceId);
                 key = key.replace('{id}', replaceId);
@@ -72,7 +99,9 @@ function loadRoute(key) {
         } else if(route.query) {
             $.ajax({
                 headers: {
-                    'X-CONNECTION-TOKEN': connectionToken
+                    'X-CONNECTION-TOKEN': connectionToken,
+                    'X-MEMBER-TIMEZONE': timezone,
+                    'X-MEMBER-LANGUAGE': language
                 },
                 async: true,
                 cache: false,
@@ -81,7 +110,9 @@ function loadRoute(key) {
                     200: function(data_return) {
                         if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
                             for(var i in data_return.entries) {
-                                store.set(data_return.entries_entity + '_' + data_return.entries[i].id, data_return.entries[i]);
+                                if(data_return.entries.hasOwnProperty(i)) {
+                                    store.set(data_return.entries_entity + '_' + data_return.entries[i].id, data_return.entries[i]);
+                                }
                             }
                         }
 
@@ -126,7 +157,7 @@ function setSnackbar(message) {
 }
 
 $(document).ready(function() {
-    window.addEventListener('onpopstate', function(event) {
+    window.addEventListener('onpopstate', function() {
         console.log(location.pathname);
     });
 
@@ -148,7 +179,9 @@ $(document).ready(function() {
 
         $.ajax({
             headers: {
-                'X-CONNECTION-TOKEN': connectionToken
+                'X-CONNECTION-TOKEN': connectionToken,
+                'X-MEMBER-TIMEZONE': timezone,
+                'X-MEMBER-LANGUAGE': language
             },
             async: true,
             cache: false,
@@ -167,7 +200,7 @@ $(document).ready(function() {
                         store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
                     }
                     if(form.attr('method') == 'POST') {
-                        if(form.data('path') == '/login') {
+                        if(form.data('query') == '/login') {
                             connectionToken = data_return.entry.token;
                             store.set('Connection_login_token', connectionToken);
                             setSnackbar(form.attr('method') + ' ' + data_return.entry.type);
@@ -188,7 +221,7 @@ $(document).ready(function() {
                 }
             },
             type: form.attr('method'),
-            url: apiUrl + form.data('path')
+            url: apiUrl + form.data('query')
         });
     });
 });

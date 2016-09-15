@@ -118,12 +118,12 @@ class ItemController extends AbstractController
         $data['entries'] = [];
         $index = 0;
         foreach($items as $item) {
-            $social = [];
+            $socials = [];
             foreach($shareEntries as $shareEntry) {
                 $link = $shareEntry->getLink();
                 $link = str_replace('{title}', urlencode($item->getTitle()), $link);
                 $link = str_replace('{link}', urlencode($item->getLink()), $link);
-                $social[] = ['id' => $shareEntry->getId(), 'title' => $shareEntry->getTitle(), 'link' => $link];
+                $socials[] = ['id' => $shareEntry->getId(), 'title' => $shareEntry->getTitle(), 'link' => $link];
             }
 
             $categories = [];
@@ -139,7 +139,7 @@ class ItemController extends AbstractController
             $data['entries'][$index] = $item->toArray();
             $data['entries'][$index]['categories'] = $categories;
             $data['entries'][$index]['enclosures'] = $enclosures;
-            $data['entries'][$index]['social'] = $social;
+            $data['entries'][$index]['socials'] = $socials;
             $index++;
         }
         $data['entries_entity'] = 'Item';
