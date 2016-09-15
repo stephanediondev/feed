@@ -133,7 +133,7 @@ services:
         parent: "readerself_core_manager_abstract"
         public: true
         arguments:
-            - "%android_gcm_api_key%"
+            - "%google_cloud_messaging_key%"
 
     readerself_core_manager_folder:
         class: Readerself\CoreBundle\Manager\FolderManager

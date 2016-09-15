@@ -12,7 +12,11 @@ parameters:
 
     secret: ThisTokenIsNotSoSecretChangeIt
 
-    android_gcm_api_key: false
+    google_cloud_messaging_enabled: false
+    google_cloud_messaging_key: false
+
+    google_static_maps_enabled: false
+    google_static_maps_key: false
 
     elasticsearch_enabled: false
     elasticsearch_index: readerself
