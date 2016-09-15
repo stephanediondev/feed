@@ -301,7 +301,7 @@ class CollectionManager extends AbstractManager
             $insertItem['link'] = $link;
 
             if($content = $sp_item->get_content()) {
-                /*if(class_exists('Tidy')) {
+                if(class_exists('Tidy')) {
                     try {
                         $options = [
                             'output-xhtml' => true,
@@ -315,15 +315,17 @@ class CollectionManager extends AbstractManager
                         $tidy->parseString($content, $options, 'utf8');
                         $tidy->cleanRepair();
                         $content = $tidy;
-    
+
                         if(class_exists('DOMDocument')) {
                             try {
                                 libxml_use_internal_errors(true);
 
+                                $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
+
                                 $dom = new \DOMDocument;
-                                $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                                $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
                                 $xpath = new \DOMXPath($dom);
-    
+
                                 $disallowedAttributes = ['id', 'class', 'style', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];
                                 foreach($disallowedAttributes as $attribute) {
                                     $nodes = $xpath->query('//*[@'.$attribute.']');
@@ -331,7 +333,7 @@ class CollectionManager extends AbstractManager
                                         $node->removeAttribute($attribute);
                                     }
                                 }
-                                $content = $dom->saveHTML();
+                                $content = html_entity_decode($dom->saveHTML(), ENT_HTML5);
 
                                 libxml_clear_errors();
                             } catch (Exception $e) {
@@ -339,7 +341,7 @@ class CollectionManager extends AbstractManager
                         }
                     } catch (Exception $e) {
                     }
-                }*/
+                }
 
                 $insertItem['content']  = $content;
             } else {

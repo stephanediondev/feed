@@ -30,6 +30,8 @@ routes['#item/share/{id}'] = {view: false, query: '/item/share/{id}', store: fal
 routes['#items/unread'] = {view: 'view-items', query: '/items?unread=1', title: 'Items unread', store: true};
 routes['#items/shared'] = {view: 'view-items', query: '/items?shared=1', title: 'Items shared', store: false};
 routes['#items/starred'] = {view: 'view-items', query: '/items?starred=1', title: 'Items starred', store: false};
+routes['#items/priority'] = {view: 'view-items', query: '/items?priority=1', title: 'items with priority subscription', store: true};
+routes['#items/geolocation'] = {view: 'view-items', query: '/items?geolocation=1', title: 'items with geolocation', store: true};
 routes['#items/feed/{id}'] = {view: 'view-items', query: '/items?feed={id}', store: false};
 routes['#items/folder/{id}'] = {view: 'view-items', query: '/items?folder={id}', store: false};
 routes['#items/author/{id}'] = {view: 'view-items', query: '/items?author={id}', store: false};

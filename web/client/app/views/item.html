@@ -19,7 +19,7 @@
                 <p>
                     Feed: <a href="#items/feed/{{ entry.feed.id }}" class="load-route">{{ entry.feed.title }}</a>
                 </p>
-    
+
                 {{#if entry.categories }}
                     <p>Categories:
                     {{#each entry.categories as |category category_index|}}
@@ -27,19 +27,28 @@
                     {{/each}}
                     </p>
                 {{/if}}
-    
+
                 {{#if entry.enclosures }}
                     {{#each entry.enclosures as |enclosure enclosure_index|}}
                         <p>{{ enclosure.link }}</p>
                     {{/each}}
                 {{/if}}
-    
+
                 {{#if entry.author }}
                     <p>
                         Author: <a href="#items/author/{{ entry.author.id }}" class="load-route">{{ entry.author.title }}</a>
                     </p>
                 {{/if}}
-    
+
+                {{#if entry.latitude }}
+                    {{#if entry.longitude }}
+                        <div class="item-geolocation">
+                            <p><a target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><i class="material-icons md-18">place</i>{{ entry.latitude }},{{ entry.longitude }}</a></p>
+                            <p><a target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyC2Yj-jJHl3HPa1P9bGllAH_l436GdhcN4&center={{ entry.latitude }},{{ entry.longitude }}&markers=color:red|{{ entry.latitude }},{{ entry.longitude }}&zoom=12&size=540x200&sensor=false" alt=""></a></p>
+                        </div>
+                    {{/if}}
+                {{/if}}
+
                 {{{ entry.content }}}
             </div>
             <div class="mdl-card__actions mdl-card--border">
