@@ -1,6 +1,7 @@
 var routes = [];
 routes['#login'] = {view: 'view-login', query: false, title: 'Login'};
 routes['#logout'] = {view: 'view-logout', query: false};
+routes['#401'] = {view: 'view-401', query: false, title: 'Error 401'};
 routes['#404'] = {view: 'view-404', query: false, title: 'Error 404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'Error 500'};
 routes['#configuration'] = {view: 'view-configuration', query: false, title: 'Configuration'};

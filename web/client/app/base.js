@@ -81,7 +81,7 @@ function loadRoute(key) {
             $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
             componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
 
-            if(key != '#404' && key != '#500') {
+            if(key != '#401' && key != '#404' && key != '#500') {
                 //window.location.hash = key;
                 history.pushState({key: key}, null, key);
             }
@@ -209,6 +209,9 @@ $(document).ready(function() {
                         }
                     }
                     loadRoute(form.attr('action'));
+                },
+                401: function() {
+                    loadRoute('#401');
                 },
                 403: function() {
                     loadRoute('#login');

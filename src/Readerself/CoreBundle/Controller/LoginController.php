@@ -27,6 +27,8 @@ class LoginController extends AbstractController
     {
         $data = [];
 
+        $status = 401;
+
         $login = new Login();
         $form = $this->createForm(LoginType::class, $login);
 
@@ -50,10 +52,12 @@ class LoginController extends AbstractController
                     $data['entry_entity'] = 'Connection';
 
                     $connection_id = $this->memberManager->connectionManager->persist($connection);
+
+                    $status = 200;
                 }
             }
         }
 
-        return new JsonResponse($data);
+        return new JsonResponse($data, $status);
     }
 }
