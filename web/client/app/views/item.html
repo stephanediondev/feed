@@ -1,9 +1,19 @@
 <!-- Item -->
 <script type="text/template" id="view-items">
+    {{#if entry }}
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    {{ entry.title }} ({{trans entry_entity}})
+                </h1>
+            </div>
+        </div>
+    {{/if}}
+
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                Items ({{ entries_total }})
+                {{trans 'items'}} ({{ entries_total }})
             </h1>
         </div>
     </div>
@@ -49,11 +59,18 @@
                     {{/if}}
                 {{/if}}
 
-
                 {{#if entry.socials }}
-                    <p>
+                    <p>Socials:
                     {{#each entry.socials as |social social_index|}}
                         <a href="{{ social.link }}" target="_blank">{{ social.title }}</a>
+                    {{/each}}
+                    </p>
+                {{/if}}
+
+                {{#if entry.actions }}
+                    <p>Actions:
+                    {{#each entry.actions as |action action_index|}}
+                        {{ action.title }}</a>
                     {{/each}}
                     </p>
                 {{/if}}

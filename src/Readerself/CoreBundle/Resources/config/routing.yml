@@ -21,7 +21,7 @@ readerself_api_push_delete:
     methods: DELETE
 
 #Login
-readerself_core_logint:
+readerself_core_login:
     path:  /login
     defaults:
         _controller: "readerself_core_controller_login:createAction"

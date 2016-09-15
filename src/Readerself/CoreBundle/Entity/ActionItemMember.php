@@ -138,5 +138,12 @@ class ActionItemMember
     {
         return $this->action;
     }
-}
 
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->getAction()->toArray();
+    }
+}

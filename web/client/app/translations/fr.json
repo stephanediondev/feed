@@ -15,10 +15,13 @@
     "description": "Description",
     "language": "Langue",
 
+    "Author": "Auteur",
+    "Category": "Catégorie",
+    "Folder": "Dossier",
+    "Feed": "Fil",
+
     "subscriptions": "Abonnements",
     "items": "Items",
     "folders": "Dossiers",
-    "folder": "Dossier",
-    "feeds": "Fils",
-    "feed": "Fil"
+    "feeds": "Fils"
 }

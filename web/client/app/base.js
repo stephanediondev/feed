@@ -7,7 +7,7 @@ if(language) {
 }
 
 var apiUrl = '//' + window.location.hostname + window.location.pathname;
-apiUrl = apiUrl.replace('client/', 'api');
+apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
 var connectionToken = store.get('Connection_login_token');
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 

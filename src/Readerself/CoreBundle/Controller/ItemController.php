@@ -118,6 +118,11 @@ class ItemController extends AbstractController
         $data['entries'] = [];
         $index = 0;
         foreach($items as $item) {
+            $actions = [];
+            foreach($this->actionManager->actionItemMemberManager->getList(['member' => $member, 'item' => $item]) as $action) {
+                $actions[] = $action->toArray();
+            }
+
             $socials = [];
             foreach($shareEntries as $shareEntry) {
                 $link = $shareEntry->getLink();
@@ -137,6 +142,7 @@ class ItemController extends AbstractController
             }
 
             $data['entries'][$index] = $item->toArray();
+            $data['entries'][$index]['actions'] = $actions;
             $data['entries'][$index]['categories'] = $categories;
             $data['entries'][$index]['enclosures'] = $enclosures;
             $data['entries'][$index]['socials'] = $socials;

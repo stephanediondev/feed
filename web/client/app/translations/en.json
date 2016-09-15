@@ -15,10 +15,13 @@
     "description": "Description",
     "language": "Language",
 
+    "Author": "Author",
+    "Category": "Category",
+    "Folder": "Folder",
+    "Feed": "Feed",
+
     "subscriptions": "Subscriptions",
     "items": "Items",
     "folders": "Folders",
-    "folder": "Folder",
-    "feeds": "Feeds",
-    "feed": "Feed"
+    "feeds": "Feeds"
 }

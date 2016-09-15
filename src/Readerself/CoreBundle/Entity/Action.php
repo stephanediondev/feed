@@ -80,5 +80,15 @@ class Action
     {
         return $this->dateCreated;
     }
-}
 
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+        ];
+    }
+}
