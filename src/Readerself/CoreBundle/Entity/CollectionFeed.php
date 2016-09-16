@@ -146,9 +146,8 @@ class CollectionFeed
     {
         return [
             'id' => $this->getId(),
-            'collection' => $this->getCollection()->toArray(),
             'error' => $this->getError(),
-            'date_created' => $this->getDateCreated(),
+            'date_created' => $this->getDateCreated()->format('Y-m-d H:i:s'),
         ];
     }
 }

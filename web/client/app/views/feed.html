@@ -128,23 +128,25 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{trans 'errors'}}
+                {{trans 'collections'}}
             </h1>
         </div>
     </div>
 
-    {{#each entry.errors as |error error_index|}}
+    {{#each entry.collections as |collection collection_index|}}
         <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    {{ error.date_created.date }}
+                    {{ collection.date_created }}
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
-                <p>
-                    <span class="label">{{trans 'error'}}</span>
-                    {{ error.error }}</a>
-                </p>
+                {{#if collection.error }}
+                    <p>
+                        <span class="label">{{trans 'error'}}</span>
+                        {{ collection.error }}</a>
+                    </p>
+                {{/if}}
             </div>
         </div>
     {{/each}}

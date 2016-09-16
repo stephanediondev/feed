@@ -132,13 +132,13 @@ class FeedController extends AbstractController
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
-        $errors = [];
-        foreach($this->feedManager->collectionFeedManager->getList(['feed' => $feed, 'error_notnull' => true]) as $error) {
-            $errors[] = $error->toArray();
+        $collections = [];
+        foreach($this->feedManager->collectionFeedManager->getList(['feed' => $feed]) as $collection) {
+            $collections[] = $collection->toArray();
         }
 
         $data['entry'] = $feed->toArray();
-        $data['entry']['errors'] = $errors;
+        $data['entry']['collections'] = $collections;
         $data['entry_entity'] = 'Feed';
 
         return new JsonResponse($data);

@@ -372,7 +372,7 @@ class Item
             'author' => $author,
             'title' => $this->getTitle(),
             'link' => $this->getLink(),
-            'date' => $this->getDate(),
+            'date' => $this->getDate()->format('Y-m-d H:i:s'),
             'content' => $this->getContent(),
             'content_full' => $this->getContentFull(),
             'latitude' => $this->getLatitude(),
