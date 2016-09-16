@@ -62,11 +62,6 @@ class Feed
      */
     private $dateModified;
 
-    /**
-     * @var ArrayCollection
-     */
-    private $subscriptions;
-
 
     /**
      * Get id
@@ -316,14 +311,6 @@ class Feed
     public function getDateModified()
     {
         return $this->dateModified;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getSubscriptions()
-    {
-        return $this->subscriptions;
     }
 
     /**

@@ -42,10 +42,26 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        $parameters = [];
+
+        if($request->query->get('errors')) {
+            $parameters['errors'] = true;
+        }
+
+        if($request->query->get('subscribed')) {
+            $parameters['subscribed'] = true;
+            $parameters['member'] = $member;
+        }
+
+        if($request->query->get('not_subscribed')) {
+            $parameters['not_subscribed'] = true;
+            $parameters['member'] = $member;
+        }
+
         $paginator= $this->get('knp_paginator');
         $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
         $pagination = $paginator->paginate(
-            $this->feedManager->getList(['member' => $member]),
+            $this->feedManager->getList($parameters),
             $page = $request->query->getInt('page', 1),
             $request->query->getInt('perPage', 100)
         );
@@ -215,6 +231,46 @@ class FeedController extends AbstractController
         $data['entry_entity'] = 'Feed';
 
         $this->feedManager->remove($feed);
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * Set "share" action / Remove "share" action.
+     *
+     * @ApiDoc(
+     *     section="Feed",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function subscribeAction(Request $request, $id)
+    {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $feed = $this->feedManager->getOne(['id' => $id]);
+
+        if($subscription = $this->feedManager->subscriptionManager->getOne([
+            'feed' => $feed,
+            'member' => $member,
+        ])) {
+            $this->feedManager->subscriptionManager->remove($subscription);
+            $data['action'] = 'unsubscribe';
+        } else {
+            $subscription = $this->feedManager->subscriptionManager->init();
+            $subscription->setFeed($feed);
+            $subscription->setMember($member);
+
+            $this->feedManager->subscriptionManager->persist($subscription);
+            $data['action'] = 'subscribe';
+        }
+
+        $data['entry'] = $feed->toArray();
+        $data['entry_entity'] = 'Feed';
 
         return new JsonResponse($data);
     }

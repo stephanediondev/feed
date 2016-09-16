@@ -131,6 +131,14 @@ readerself_api_feed_delete:
         id: '\d+'
     methods: DELETE
 
+readerself_api_feed_subscribe:
+    path:  /feed/subscribe/{id}
+    defaults:
+        _controller: "readerself_core_controller_feed:subscribeAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
 #Subscription
 readerself_api_subscriptions:
     path:  /subscriptions

@@ -139,10 +139,12 @@ function loadRoute(key, page) {
                             $('main > .mdl-grid').html(template(data_return));
                             componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
-                            setSnackbar('TODO');
-                            /*if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
-                                store.remove(data_return.entry_entity + '_' + data_return.entry.id);//TODO
-                            }*/
+                            if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
+                                setSnackbar(data_return.action + ' ' + data_return.entry.title);
+                            }
+                            if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
+                                store.remove(data_return.entry_entity + '_' + data_return.entry.id);
+                            }
                         }
                     },
                     403: function() {
@@ -167,7 +169,7 @@ function loadRoute(key, page) {
 }
 
 function setSnackbar(message) {
-    snackbarContainer.MaterialSnackbar.showSnackbar({message: message});
+    snackbarContainer.MaterialSnackbar.showSnackbar({message: message, timeout: 1000});
 }
 
 $(document).ready(function() {

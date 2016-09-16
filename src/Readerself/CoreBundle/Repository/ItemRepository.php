@@ -55,30 +55,26 @@ class ItemRepository extends AbstractRepository
         }
 
         if(isset($parameters['member']) == 1) {
-            $query->leftJoin('fed.subscriptions', 'sub');
-            $query->andWhere('sub.member = :member');
-            $query->setParameter(':member', $parameters['member']);
-
             if(isset($parameters['folder']) == 1) {
-                $query->leftJoin('sub.folder', 'flr');
-                $query->andWhere('flr.id = :folder');
+                $query->andWhere('fed.id IN (SELECT IDENTITY(folder.feed) FROM ReaderselfCoreBundle:Subscription AS folder WHERE folder.member = :member AND folder.folder = :folder)');
+                $query->setParameter(':member', $parameters['member']);
                 $query->setParameter(':folder', $parameters['folder']);
             }
 
             if(isset($parameters['unread']) == 1 && $parameters['unread']) {
+                $query->andWhere('fed.id IN (SELECT IDENTITY(sub.feed) FROM ReaderselfCoreBundle:Subscription AS sub WHERE sub.member = :member)');
                 $query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action = 1)');
+                $query->setParameter(':member', $parameters['member']);
             }
 
             if(isset($parameters['starred']) == 1 && $parameters['starred']) {
                 $query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM ReaderselfCoreBundle:ActionItemMember AS starred WHERE starred.member = :member AND starred.action = 2)');
-            }
-
-            if(isset($parameters['shared']) == 1 && $parameters['shared']) {
-                $query->andWhere('itm.id IN (SELECT IDENTITY(shared.item) FROM ReaderselfCoreBundle:ActionItemMember AS shared WHERE shared.member = :member AND shared.action = 3)');
+                $query->setParameter(':member', $parameters['member']);
             }
 
             if(isset($parameters['priority']) == 1 && $parameters['priority']) {
-                $query->andWhere('sub.priority = 1');
+                $query->andWhere('fed.id IN (SELECT IDENTITY(sub.feed) FROM ReaderselfCoreBundle:Subscription AS sub WHERE sub.member = :member AND sub.priority = 1)');
+                $query->setParameter(':member', $parameters['member']);
             }
         }
 

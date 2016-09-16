@@ -7,6 +7,9 @@
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'errors'}}</a>
+            <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribed'}}</a>
+            <a href="#feeds/not_subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'not_subscribed'}}</a>
             <a href="#feed/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'create'}}</a>
             <a href="#feed/export" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'export'}}</a>
         </div>
@@ -24,9 +27,9 @@
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 {{#if entry.subscription }}
-                    <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unsubscribe'}}</a>
+                    <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unsubscribe'}}</a>
                 {{else}}
-                    <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>
+                    <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>
                 {{/if}}
                 <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
                 <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>

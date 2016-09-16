@@ -71,10 +71,6 @@ class ItemController extends AbstractController
             $parameters['starred'] = $request->query->get('starred');
         }
 
-        if($request->query->get('shared')) {
-            $parameters['shared'] = $request->query->get('shared');
-        }
-
         if($request->query->get('unread')) {
             $parameters['unread'] = (bool) $request->query->get('unread');
         }
@@ -233,6 +229,7 @@ class ItemController extends AbstractController
             'member' => $member,
         ])) {
             $this->actionManager->actionItemMemberManager->remove($actionItemMember);
+            $data['action'] = 'un'.$case;
         } else {
             $actionItemMember = $this->actionManager->actionItemMemberManager->init();
             $actionItemMember->setAction($action);
@@ -240,7 +237,11 @@ class ItemController extends AbstractController
             $actionItemMember->setMember($member);
 
             $this->actionManager->actionItemMemberManager->persist($actionItemMember);
+            $data['action'] = $case;
         }
+
+        $data['entry'] = $item->toArray();
+        $data['entry_entity'] = 'Item';
 
         return new JsonResponse($data);
     }
