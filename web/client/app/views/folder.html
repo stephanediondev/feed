@@ -17,6 +17,9 @@
                 <h1 class="mdl-card__title-text">
                     <a href="#folder/read/{{ entry.id }}" class="load-route">{{ entry.title }}</a>
                 </h1>
+                <div class="mdl-card__subtitle-text">
+                    <a href="#items/folder/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">link</i>{{trans 'items'}}</a>
+                </div>
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#items/folder/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'items'}}</a>
@@ -68,6 +71,9 @@
             <h1 class="mdl-card__title-text">
                 {{ entry.title }}
             </h1>
+            <div class="mdl-card__subtitle-text">
+                <a href="#items/folder/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">link</i>{{trans 'items'}}</a>
+            </div>
         </div>
         <div class="mdl-card__supporting-text">
         </div>

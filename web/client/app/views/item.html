@@ -36,12 +36,6 @@
                 </div>
             </div>
             <div class="mdl-card__supporting-text">
-                {{#if entry.enclosures }}
-                    {{#each entry.enclosures as |enclosure enclosure_index|}}
-                        <p>{{ enclosure.link }}</p>
-                    {{/each}}
-                {{/if}}
-
                 {{#if entry.latitude }}
                     {{#if entry.longitude }}
                         <div class="item-geolocation">
@@ -60,6 +54,12 @@
                 {{/if}}
 
                 {{{ entry.content }}}
+
+                {{#if entry.enclosures }}
+                    {{#each entry.enclosures as |enclosure enclosure_index|}}
+                        <p><img src="{{ enclosure.link }}" alt=""></p>
+                    {{/each}}
+                {{/if}}
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>

@@ -1,9 +1,5 @@
-body {
-    color: #757575;
-}
 a:link, a:visited {
     color: #757575;
-    text-decoration: none;
 }
 .mdl-layout__header {
     min-height: auto;
@@ -20,22 +16,21 @@ a:link, a:visited {
 .mdl-layout__header-row .mdl-button {
     margin: 5px 0px 5px 5px;
 }
-.mdl-layout__header-row a:first-child {
-    margin-left: 0px;
-}
 .mdl-list__item {
     padding: 8px;
 }
 .mdl-list__item a:link, .mdl-list__item a:visited {
+    cursor: pointer;
     display: block;
     padding: 8px;
+    text-decoration: none;
     width: 100%;
 }
 .mdl-list__item a:hover {
     background-color: #e0e0e0;
 }
 .mdl-grid {
-    width: inherit
+    width: inherit;
 }
 .mdl-card {
     min-height: auto;
@@ -46,20 +41,12 @@ a:link, a:visited {
     display: block;
     padding: 8px;
 }
-.mdl-card__title-text {
+.mdl-card__title .mdl-card__title-text {
     display: block;
-    font-size: 18px;
+    font-size: 16px;
+    margin-bottom: 4px;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-.mdl-card__title-text span {
-    margin-right: 15px;
-}
-.mdl-card__title-text a:link, .mdl-card__title-text a:visited {
-    text-decoration: underline;
-}
-.mdl-card__title-text span:last-child {
-    margin-right: 0px;
 }
 .mdl-card .mdl-card__actions {
     text-align: right;
@@ -74,7 +61,8 @@ a:link, a:visited {
 .mdl-card .mdl-navigation__link {
     float: left;
     font-weight: inherit;
-    margin: 0px 4px 4px 0px;
+    line-height: 1;
+    margin: 4px 4px 4px 0px;
     white-space: nowrap;
 }
 .favicon, a.favicon:link, a.favicon:visited {
@@ -117,16 +105,12 @@ img, iframe, video {
     max-width: 100%;
 }
 
-p {
-    line-height: 1.4;
-    margin: 8px 0px;
-}
 label, .label {
     display: block;
     font-weight: bold;
 }
 
-input[type="text"], input[type="email"], input[type="password"], textarea {
+input[type="text"], input[type="email"], input[type="password"], input[type="url"], textarea {
     border: none;
     border-bottom: 1px solid rgba(0,0,0,.12);
     color: inherit;
@@ -139,22 +123,61 @@ input[type="text"], input[type="email"], input[type="password"], textarea {
 textarea {
     min-height: 250px;
 }
-input[type="text"][required="required"], input[type="email"][required="required"], input[type="password"][required="required"], textarea[required="required"] {
+input[type="text"][required="required"], input[type="email"][required="required"], input[type="password"][required="required"], input[type="url"][required="required"], textarea[required="required"] {
     border-color: #d50000;
 }
 input:-webkit-autofill {
     -webkit-box-shadow: 0px 0px 0px 1000px #FFFFFF inset;
 }
 
-.mdl-card__supporting-text h1{font-size:17px;line-height:1;margin:15px 0px;}
-.mdl-card__supporting-text h2{font-size:16px;line-height:1;margin:10px 0px;}
-.mdl-card__supporting-text h3{font-size:15px;line-height:1;margin:10px 0px;}
-.mdl-card__supporting-text h4{font-size:14px;line-height:1;margin:10px 0px;}
-.mdl-card__supporting-text h5{font-size:13px;line-height:1;margin:10px 0px;}
-.mdl-card__supporting-text h6{font-size:12px;line-height:1;margin:10px 0px;}
-.mdl-card__supporting-text p{clear:both;line-height:1.5;margin:5px 0px;}
-.mdl-card__supporting-text em{font-style:italic;}
-.mdl-card__supporting-text strong{font-weight:bold;}
-.mdl-card__supporting-text blockquote{-webkit-margin-start:10px;font-size:inherit;}
-.mdl-card__supporting-text blockquote:before{content:none;}
-.mdl-card__supporting-text blockquote:after{content:none;}
+.mdl-card__supporting-text h1 {
+    font-size: 17px;
+    line-height: 1;
+    margin: 15px 0px;
+}
+.mdl-card__supporting-text h2 {
+    font-size: 16px;
+    line-height: 1;
+    margin: 10px 0px;
+}
+.mdl-card__supporting-text h3 {
+    font-size: 15px;
+    line-height: 1;
+    margin: 10px 0px;
+}
+.mdl-card__supporting-text h4 {
+    font-size: 14px;
+    line-height: 1;
+    margin: 10px 0px;
+}
+.mdl-card__supporting-text h5 {
+    font-size: 13px;
+    line-height: 1;
+    margin: 10px 0px;
+}
+.mdl-card__supporting-text h6 {
+    font-size: 12px;
+    line-height: 1;
+    margin: 10px 0px;
+}
+.mdl-card__supporting-text p {
+    clear: both;
+    line-height: 1.5;
+    margin: 5px 0px;
+}
+.mdl-card__supporting-text em {
+    font-style: italic;
+}
+.mdl-card__supporting-text strong {
+    font-weight: bold;
+}
+.mdl-card__supporting-text blockquote {
+    -webkit-margin-start: 10px;
+    font-size: inherit;
+}
+.mdl-card__supporting-text blockquote:before {
+    content: none;
+}
+.mdl-card__supporting-text blockquote:after {
+    content: none;
+}
