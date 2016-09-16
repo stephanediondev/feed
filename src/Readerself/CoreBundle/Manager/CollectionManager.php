@@ -326,7 +326,7 @@ class CollectionManager extends AbstractManager
                                 $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
                                 $xpath = new \DOMXPath($dom);
 
-                                $disallowedAttributes = ['id', 'class', 'style', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];
+                                $disallowedAttributes = ['id', 'class', 'style', 'width', 'height', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];
                                 foreach($disallowedAttributes as $attribute) {
                                     $nodes = $xpath->query('//*[@'.$attribute.']');
                                     foreach($nodes as $node) {
