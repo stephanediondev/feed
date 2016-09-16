@@ -66,12 +66,11 @@
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
                 <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Star</a>
-                <a href="#item/share/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Share</a>
                 {{#if entry.socials }}
                     <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="social_{{ entry.id }}">
-                        Social
+                        Share
                     </button>
-                    <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-left" for="social_{{ entry.id }}">
+                    <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right" for="social_{{ entry.id }}">
                         {{#each entry.socials as |social social_index|}}
                             <li class="mdl-menu__item"><a target="_blank" href="{{ social.link }}">{{ social.title }}</a></li>
                         {{/each}}

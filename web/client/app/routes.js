@@ -1,6 +1,7 @@
 var routes = [];
 routes['#login'] = {view: 'view-login', query: false, title: 'Login'};
 routes['#logout'] = {view: 'view-logout', query: false};
+routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'Profile'};
 routes['#401'] = {view: 'view-401', query: false, title: 'Error 401'};
 routes['#404'] = {view: 'view-404', query: false, title: 'Error 404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'Error 500'};
@@ -26,7 +27,6 @@ routes['#folder/delete/{id}'] = {view: 'view-folder-delete', query: '/folder/{id
 
 routes['#item/read/{id}'] = {view: false, query: '/item/read/{id}', store: false};
 routes['#item/star/{id}'] = {view: false, query: '/item/star/{id}', store: false};
-routes['#item/share/{id}'] = {view: false, query: '/item/share/{id}', store: false};
 
 routes['#items/unread'] = {view: 'view-items', query: '/items?unread=1', title: 'Items unread', store: true};
 routes['#items/shared'] = {view: 'view-items', query: '/items?shared=1', title: 'Items shared', store: false};

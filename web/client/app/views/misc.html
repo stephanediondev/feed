@@ -34,6 +34,34 @@
     </div>
 </script>
 
+<script type="text/template" id="view-profile">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+        <form action="#items/unread" data-query="/login" method="POST">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    Profile
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="email" class="required">{{trans 'email'}}</label>
+                    <input type="email" id="email" name="email" required="true" value="">
+                </p>
+                <p>
+                    <label for="password" class="required">{{trans 'password'}}</label>
+                    <input type="password" id="password" name="password" required="true" value="">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'UPDATE'}}</button>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#forgotpassword" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'forgotpassword'}}</a>
+            </div>
+        </form>
+    </div>
+</script>
+
 <script type="text/template" id="view-401">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
         <div class="mdl-card__supporting-text">

@@ -32,6 +32,11 @@ class FeedType extends AbstractType
             ],
         ]);
 
+        $builder->add('language', TextType::class, [
+            'constraints' => [
+            ],
+        ]);
+
         $builder->add('description', TextareaType::class, [
             'constraints' => [
             ],

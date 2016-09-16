@@ -27,6 +27,12 @@ readerself_core_login:
         _controller: "readerself_core_controller_login:createAction"
     methods: POST
 
+readerself_core_profile:
+    path:  /profiel
+    defaults:
+        _controller: "readerself_core_controller_profile:createAction"
+    methods: POST
+
 #Member
 readerself_core_member_create:
     path:  /member

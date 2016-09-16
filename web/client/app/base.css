@@ -42,17 +42,15 @@ a:link, a:visited {
     padding: 8px;
 }
 .mdl-card__title .mdl-card__title-text {
-    display: block;
     font-size: 16px;
     margin-bottom: 4px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 .mdl-card .mdl-card__actions {
     text-align: right;
 }
 .mdl-button {
     padding: 0px 8px;
+    min-width: auto;
 }
 .mdl-card__supporting-text {
     overflow: visible;
@@ -64,6 +62,15 @@ a:link, a:visited {
     line-height: 1;
     margin: 4px 4px 4px 0px;
     white-space: nowrap;
+}
+
+.mdl-menu__item {
+    height: 16px;
+    line-height: 16px;
+    padding: 8px 4px;
+}
+.mdl-menu__item a:link, .mdl-menu__item a:visited {
+    text-decoration: none;
 }
 .favicon, a.favicon:link, a.favicon:visited {
     background-position: center left;

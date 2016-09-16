@@ -137,6 +137,7 @@ function loadRoute(key, page) {
                             var source = $('#' + route.view).text();
                             var template = Handlebars.compile(source);
                             $('main > .mdl-grid').html(template(data_return));
+                            componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
                             setSnackbar('TODO');
                             /*if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
@@ -183,6 +184,13 @@ $(document).ready(function() {
     $(document).on('click', '.load-route', function(event) {
         event.preventDefault();
         loadRoute($(this).attr('href'), $(this).data('page'));
+    });
+
+    $(document).on('click', '.action-refresh', function(event) {
+        event.preventDefault();
+        if(window.location.hash) {
+            loadRoute(window.location.hash);
+        }
     });
 
     $('main > .mdl-grid').on('submit', 'form', function(event) {
