@@ -45,16 +45,22 @@ class FeedController extends AbstractController
         $paginator= $this->get('knp_paginator');
         $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
         $pagination = $paginator->paginate(
-            $this->feedManager->getList(),
+            $this->feedManager->getList(['member' => $member]),
             $page = $request->query->getInt('page', 1),
             $request->query->getInt('perPage', 100)
         );
 
         $data['entries'] = [];
+        $index = 0;
         foreach($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
+            $subscription = $this->feedManager->subscriptionManager->getOne(['member' => $member, 'feed' => $feed]);
 
-            $data['entries'][] = $feed->toArray();
+            $data['entries'][$index] = $feed->toArray();
+            if($subscription) {
+                $data['entries'][$index]['subscription'] = $subscription->toArray();
+            }
+            $index++;
         }
         $data['entries_entity'] = 'Feed';
         $data['entries_total'] = $pagination->getTotalItemCount();

@@ -9,10 +9,14 @@ class FeedManager extends AbstractManager
 {
     public $collectionFeedManager;
 
+    public $subscriptionManager;
+
     public function __construct(
-        CollectionFeedManager $collectionFeedManager
+        CollectionFeedManager $collectionFeedManager,
+        SubscriptionManager $subscriptionManager
     ) {
         $this->collectionFeedManager = $collectionFeedManager;
+        $this->subscriptionManager = $subscriptionManager;
     }
 
     public function getOne($paremeters = [])

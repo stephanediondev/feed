@@ -83,6 +83,7 @@ services:
         public: true
         arguments:
             - "@readerself_core_manager_collection_feed"
+            - "@readerself_core_manager_subscription"
 
     readerself_core_manager_item:
         class: Readerself\CoreBundle\Manager\ItemManager

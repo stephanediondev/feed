@@ -20,6 +20,16 @@ class SubscriptionRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
+        if(isset($parameters['member']) == 1) {
+            $query->andWhere('sub.member = :member');
+            $query->setParameter(':member', $parameters['member']);
+        }
+
+        if(isset($parameters['feed']) == 1) {
+            $query->andWhere('sub.feed = :feed');
+            $query->setParameter(':feed', $parameters['feed']);
+        }
+
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 
