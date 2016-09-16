@@ -49,7 +49,6 @@ class ItemController extends AbstractController
      *         {"name"="feed", "dataType"="integer", "required"=false, "format"="feed ID", "description"="items by feed"},
      *         {"name"="author", "dataType"="integer", "required"=false, "format"="author ID", "description"="items by author"},
      *         {"name"="category", "dataType"="integer", "required"=false, "format"="category ID", "description"="items by category"},
-     *         {"name"="folder", "dataType"="integer", "required"=false, "format"="folder ID", "description"="items by folder"},
      *     },
      * )
      */
@@ -75,10 +74,6 @@ class ItemController extends AbstractController
             $parameters['unread'] = (bool) $request->query->get('unread');
         }
 
-        if($request->query->get('priority')) {
-            $parameters['priority'] = (bool) $request->query->get('priority');
-        }
-
         if($request->query->get('geolocation')) {
             $parameters['geolocation'] = (bool) $request->query->get('geolocation');
         }
@@ -99,12 +94,6 @@ class ItemController extends AbstractController
             $parameters['category'] = (int) $request->query->get('category');
             $data['entry'] = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])->toArray();
             $data['entry_entity'] = 'Category';
-        }
-
-        if($request->query->get('folder')) {
-            $parameters['folder'] = (int) $request->query->get('folder');
-            $data['entry'] = $this->get('readerself_core_manager_folder')->getOne(['id' => (int) $request->query->get('folder')])->toArray();
-            $data['entry_entity'] = 'Folder';
         }
 
         $paginator= $this->get('knp_paginator');

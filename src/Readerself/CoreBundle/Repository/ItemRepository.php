@@ -55,12 +55,6 @@ class ItemRepository extends AbstractRepository
         }
 
         if(isset($parameters['member']) == 1) {
-            if(isset($parameters['folder']) == 1) {
-                $query->andWhere('fed.id IN (SELECT IDENTITY(folder.feed) FROM ReaderselfCoreBundle:Subscription AS folder WHERE folder.member = :member AND folder.folder = :folder)');
-                $query->setParameter(':member', $parameters['member']);
-                $query->setParameter(':folder', $parameters['folder']);
-            }
-
             if(isset($parameters['unread']) == 1 && $parameters['unread']) {
                 $query->andWhere('fed.id IN (SELECT IDENTITY(sub.feed) FROM ReaderselfCoreBundle:Subscription AS sub WHERE sub.member = :member)');
                 $query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action = 1)');
@@ -69,11 +63,6 @@ class ItemRepository extends AbstractRepository
 
             if(isset($parameters['starred']) == 1 && $parameters['starred']) {
                 $query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM ReaderselfCoreBundle:ActionItemMember AS starred WHERE starred.member = :member AND starred.action = 2)');
-                $query->setParameter(':member', $parameters['member']);
-            }
-
-            if(isset($parameters['priority']) == 1 && $parameters['priority']) {
-                $query->andWhere('fed.id IN (SELECT IDENTITY(sub.feed) FROM ReaderselfCoreBundle:Subscription AS sub WHERE sub.member = :member AND sub.priority = 1)');
                 $query->setParameter(':member', $parameters['member']);
             }
         }

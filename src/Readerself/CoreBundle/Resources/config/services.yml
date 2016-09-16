@@ -50,10 +50,6 @@ services:
         class: Readerself\CoreBundle\Controller\MemberController
         parent: "readerself_core_controller_abstract"
 
-    readerself_core_controller_folder:
-        class: Readerself\CoreBundle\Controller\FolderController
-        parent: "readerself_core_controller_abstract"
-
     #Manager
     readerself_core_manager_abstract:
         class: Readerself\CoreBundle\Manager\AbstractManager
@@ -129,7 +125,6 @@ services:
         arguments:
             - "@readerself_core_manager_connection"
             - "@readerself_core_manager_push"
-            - "@readerself_core_manager_folder"
 
     readerself_core_manager_connection:
         class: Readerself\CoreBundle\Manager\ConnectionManager
@@ -142,11 +137,6 @@ services:
         public: true
         arguments:
             - "%google_cloud_messaging_key%"
-
-    readerself_core_manager_folder:
-        class: Readerself\CoreBundle\Manager\FolderManager
-        parent: "readerself_core_manager_abstract"
-        public: true
 
     readerself_core_manager_subscription:
         class: Readerself\CoreBundle\Manager\SubscriptionManager

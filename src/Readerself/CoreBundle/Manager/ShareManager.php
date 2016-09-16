@@ -19,7 +19,7 @@ class ShareManager extends AbstractManager
 
     public function init()
     {
-        return new Folder();
+        return new Share();
     }
 
     public function persist($data)

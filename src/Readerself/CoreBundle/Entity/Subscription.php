@@ -13,24 +13,9 @@ class Subscription
     private $id;
 
     /**
-     * @var boolean
-     */
-    private $priority = '0';
-
-    /**
-     * @var string
-     */
-    private $direction;
-
-    /**
      * @var \DateTime
      */
     private $dateCreated;
-
-    /**
-     * @var \Readerself\CoreBundle\Entity\Folder
-     */
-    private $folder;
 
     /**
      * @var \Readerself\CoreBundle\Entity\Feed
@@ -51,54 +36,6 @@ class Subscription
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set priority
-     *
-     * @param boolean $priority
-     *
-     * @return Subscription
-     */
-    public function setPriority($priority)
-    {
-        $this->priority = $priority;
-
-        return $this;
-    }
-
-    /**
-     * Get priority
-     *
-     * @return boolean
-     */
-    public function getPriority()
-    {
-        return $this->priority;
-    }
-
-    /**
-     * Set direction
-     *
-     * @param string $direction
-     *
-     * @return Subscription
-     */
-    public function setDirection($direction)
-    {
-        $this->direction = $direction;
-
-        return $this;
-    }
-
-    /**
-     * Get direction
-     *
-     * @return string
-     */
-    public function getDirection()
-    {
-        return $this->direction;
     }
 
     /**
@@ -123,30 +60,6 @@ class Subscription
     public function getDateCreated()
     {
         return $this->dateCreated;
-    }
-
-    /**
-     * Set folder
-     *
-     * @param \Readerself\CoreBundle\Entity\Folder $folder
-     *
-     * @return Subscription
-     */
-    public function setFolder(\Readerself\CoreBundle\Entity\Folder $folder = null)
-    {
-        $this->folder = $folder;
-
-        return $this;
-    }
-
-    /**
-     * Get folder
-     *
-     * @return \Readerself\CoreBundle\Entity\Folder
-     */
-    public function getFolder()
-    {
-        return $this->folder;
     }
 
     /**

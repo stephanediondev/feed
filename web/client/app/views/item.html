@@ -25,12 +25,12 @@
                     <a class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{ entry.title }}</a>
                 </h1>
                 <div class="mdl-card__subtitle-text">
-                    <span class="mdl-navigation__link"><i class="material-icons md-16">access_time</i>{{ entry.date }}</span>
-                    <a href="#items/feed/{{ entry.feed.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">rss_feed</i>{{ entry.feed.title }}</a>
-                    {{#if entry.author }}<a href="#items/author/{{ entry.author.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">person</i>{{ entry.author.title }}</a>{{/if}}
+                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i>{{ entry.date }}</span>
+                    <a href="#items/feed/{{ entry.feed.id }}" class="load-route mdl-navigation__link"><i class="material-icons">rss_feed</i>{{ entry.feed.title }}</a>
+                    {{#if entry.author }}<a href="#items/author/{{ entry.author.id }}" class="load-route mdl-navigation__link"><i class="material-icons">person</i>{{ entry.author.title }}</a>{{/if}}
                     {{#if entry.categories }}
                         {{#each entry.categories as |category category_index|}}
-                            <a href="#items/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">label</i>{{ category.title }}</a>
+                            <a href="#items/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons">label</i>{{ category.title }}</a>
                         {{/each}}
                     {{/if}}
                     {{#if entry.latitude }}

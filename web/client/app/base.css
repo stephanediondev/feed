@@ -33,7 +33,7 @@ a:link, a:visited {
     width: inherit;
 }
 .mdl-card {
-    min-height: auto;
+    min-height: inherit;
     overflow: visible;
 }
 .mdl-card__title {
@@ -85,27 +85,10 @@ h1 .favicon, h1.favicon, h1 a.favicon:link, h1 a.favicon:visited {
 
 .material-icons {
     font-feature-settings: 'liga';
+    font-size: 16px;
     margin-right: 2px;
     text-rendering: optimizeLegibility;
     vertical-align: middle;
-}
-.material-icons.md-16 {
-    font-size: 16px;
-}
-.material-icons.md-18 {
-    font-size: 18px;
-}
-.material-icons.md-20 {
-    font-size: 20px;
-}
-.material-icons.md-24 {
-    font-size: 24px;
-}
-.material-icons.md-30 {
-    font-size: 30px;
-}
-.material-icons.md-48 {
-    font-size: 48px;
 }
 
 img, iframe, video {

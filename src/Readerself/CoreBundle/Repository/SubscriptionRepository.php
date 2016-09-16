@@ -9,11 +9,10 @@ class SubscriptionRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('sub', 'mbr', 'fed', 'flr');
+        $query->addSelect('sub', 'mbr', 'fed');
         $query->from('ReaderselfCoreBundle:Subscription', 'sub');
         $query->leftJoin('sub.member', 'mbr');
         $query->leftJoin('sub.feed', 'fed');
-        $query->leftJoin('sub.folder', 'flr');
 
         if(isset($parameters['id']) == 1) {
             $query->andWhere('sub.id = :id');
@@ -45,11 +44,10 @@ class SubscriptionRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('sub', 'mbr', 'fed', 'flr');
+        $query->addSelect('sub', 'mbr', 'fed');
         $query->from('ReaderselfCoreBundle:Subscription', 'sub');
         $query->leftJoin('sub.member', 'mbr');
         $query->leftJoin('sub.feed', 'fed');
-        $query->leftJoin('sub.folder', 'flr');
 
         if(isset($parameters['member']) == 1) {
             $query->andWhere('sub.member = :member');
@@ -59,11 +57,6 @@ class SubscriptionRepository extends AbstractRepository
         if(isset($parameters['feed']) == 1) {
             $query->andWhere('sub.feed = :feed');
             $query->setParameter(':feed', $parameters['feed']);
-        }
-
-        if(isset($parameters['folder']) == 1) {
-            $query->andWhere('sub.folder = :folder');
-            $query->setParameter(':folder', $parameters['folder']);
         }
 
         $query->addOrderBy('fed.title', 'ASC');

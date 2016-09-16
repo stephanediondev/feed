@@ -9,9 +9,6 @@ Readerself\CoreBundle\Entity\Subscription:
         feed_id:
             columns:
                 - feed_id
-        folder_id:
-            columns:
-                - folder_id
     uniqueConstraints:
         member_id_feed_id:
             columns:
@@ -27,33 +24,11 @@ Readerself\CoreBundle\Entity\Subscription:
             generator:
                 strategy: IDENTITY
     fields:
-        priority:
-            type: boolean
-            nullable: false
-            options:
-                default: '0'
-        direction:
-            type: string
-            nullable: true
-            length: 3
-            options:
-                fixed: true
         dateCreated:
             type: datetime
             nullable: false
             column: date_created
     manyToOne:
-        folder:
-            targetEntity: Folder
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                folder_id:
-                    referencedColumnName: id
-                    onDelete: "set null"
-            orphanRemoval: false
         feed:
             targetEntity: Feed
             cascade: {  }

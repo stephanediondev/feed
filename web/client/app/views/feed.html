@@ -7,9 +7,6 @@
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'errors'}}</a>
-            <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribed'}}</a>
-            <a href="#feeds/not_subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'not_subscribed'}}</a>
             <a href="#feed/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'create'}}</a>
             <a href="#feed/export" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'export'}}</a>
         </div>
@@ -22,7 +19,7 @@
                     <a href="#feed/read/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>{{ entry.title }}</a>
                 </h1>
                 <div class="mdl-card__subtitle-text">
-                    <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">link</i>{{trans 'items'}}</a>
+                    <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'items'}}</a>
                 </div>
             </div>
             <div class="mdl-card__actions mdl-card--border">
@@ -104,7 +101,7 @@
                 {{ entry.title }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">link</i>{{trans 'items'}}</a>
+                <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'items'}}</a>
             </div>
         </div>
         <div class="mdl-card__supporting-text">
@@ -130,35 +127,32 @@
             {{/if}}
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            {{#if entry.subscription }}
+                <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unsubscribe'}}</a>
+            {{else}}
+                <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>
+            {{/if}}
             <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
             <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
-                {{trans 'collections'}}
-            </h1>
-        </div>
-    </div>
-
     {{#each entry.collections as |collection collection_index|}}
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
-                    {{ collection.date_created }}
-                </h1>
+        {{#if collection.error }}
+            <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+                <div class="mdl-card__title">
+                    <h1 class="mdl-card__title-text">
+                        {{ collection.date_created }}
+                    </h1>
+                </div>
+                <div class="mdl-card__supporting-text">
+                        <p>
+                            <span class="label">{{trans 'error'}}</span>
+                            {{ collection.error }}</a>
+                        </p>
+                </div>
             </div>
-            <div class="mdl-card__supporting-text">
-                {{#if collection.error }}
-                    <p>
-                        <span class="label">{{trans 'error'}}</span>
-                        {{ collection.error }}</a>
-                    </p>
-                {{/if}}
-            </div>
-        </div>
+        {{/if}}
     {{/each}}
 </script>
 
