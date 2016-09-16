@@ -22,32 +22,23 @@
         <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    <a href="{{ entry.link }}" target="_blank">{{ entry.title }}</a>
+                    <a class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{ entry.title }}</a>
                 </h1>
+                <div class="mdl-card__subtitle-text">
+                    <a href="#items/feed/{{ entry.feed.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">rss_feed</i>{{ entry.feed.title }}</a>
+                    {{#if entry.author }}<a href="#items/author/{{ entry.author.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">person</i>{{ entry.author.title }}</a>{{/if}}
+                    {{#if entry.categories }}
+                        {{#each entry.categories as |category category_index|}}
+                            <a href="#items/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">label</i>{{ category.title }}</a>
+                        {{/each}}
+                    {{/if}}
+                </div>
             </div>
             <div class="mdl-card__supporting-text">
-                <p>
-                    Feed: <a href="#items/feed/{{ entry.feed.id }}" class="load-route">{{ entry.feed.title }}</a>
-                </p>
-
-                {{#if entry.categories }}
-                    <p>Categories:
-                    {{#each entry.categories as |category category_index|}}
-                        <a href="#items/category/{{ category.id }}" class="load-route">{{ category.title }}</a>
-                    {{/each}}
-                    </p>
-                {{/if}}
-
                 {{#if entry.enclosures }}
                     {{#each entry.enclosures as |enclosure enclosure_index|}}
                         <p>{{ enclosure.link }}</p>
                     {{/each}}
-                {{/if}}
-
-                {{#if entry.author }}
-                    <p>
-                        Author: <a href="#items/author/{{ entry.author.id }}" class="load-route">{{ entry.author.title }}</a>
-                    </p>
                 {{/if}}
 
                 {{#if entry.latitude }}
@@ -57,14 +48,6 @@
                             <p><a target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyBToUXooSauIjBaU1Nt9WpmZk_Qpd-vOe0&center={{ entry.latitude }},{{ entry.longitude }}&markers=color:red|{{ entry.latitude }},{{ entry.longitude }}&zoom=12&size=540x200&sensor=false" alt=""></a></p>
                         </div>
                     {{/if}}
-                {{/if}}
-
-                {{#if entry.socials }}
-                    <p>Socials:
-                    {{#each entry.socials as |social social_index|}}
-                        <a href="{{ social.link }}" target="_blank">{{ social.title }}</a>
-                    {{/each}}
-                    </p>
                 {{/if}}
 
                 {{#if entry.actions }}
@@ -81,6 +64,16 @@
                 <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
                 <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Star</a>
                 <a href="#item/share/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Share</a>
+                {{#if entry.socials }}
+                    <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="social_{{ entry.id }}">
+                        Social
+                    </button>
+                    <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-left" for="social_{{ entry.id }}">
+                        {{#each entry.socials as |social social_index|}}
+                            <li class="mdl-menu__item"><a target="_blank" href="{{ social.link }}">{{ social.title }}</a></li>
+                        {{/each}}
+                    </ul>
+                {{/if}}
             </div>
         </div>
     {{/each}}
