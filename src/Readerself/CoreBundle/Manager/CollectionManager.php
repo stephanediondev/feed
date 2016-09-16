@@ -341,6 +341,9 @@ class CollectionManager extends AbstractManager
                         }
                     } catch (Exception $e) {
                     }
+                } else {
+                    $content = str_replace('<div', '<p', $content);
+                    $content = str_replace('</div>', '</p>', $content);
                 }
 
                 $insertItem['content']  = $content;
