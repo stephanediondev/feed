@@ -33,18 +33,14 @@
                             <a href="#items/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons md-16">label</i>{{ category.title }}</a>
                         {{/each}}
                     {{/if}}
+                    {{#if entry.latitude }}
+                        {{#if entry.longitude }}
+                            <a class="mdl-navigation__link" target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><i class="material-icons md-18">place</i>{{ entry.latitude }},{{ entry.longitude }}</a>
+                        {{/if}}
+                    {{/if}}
                 </div>
             </div>
             <div class="mdl-card__supporting-text">
-                {{#if entry.latitude }}
-                    {{#if entry.longitude }}
-                        <div class="item-geolocation">
-                            <p><a target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><i class="material-icons md-18">place</i>{{ entry.latitude }},{{ entry.longitude }}</a></p>
-                            <p><a target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyBToUXooSauIjBaU1Nt9WpmZk_Qpd-vOe0&center={{ entry.latitude }},{{ entry.longitude }}&markers=color:red|{{ entry.latitude }},{{ entry.longitude }}&zoom=12&size=540x200&sensor=false" alt=""></a></p>
-                        </div>
-                    {{/if}}
-                {{/if}}
-
                 {{#if entry.actions }}
                     <p>Actions:
                     {{#each entry.actions as |action action_index|}}
@@ -54,6 +50,12 @@
                 {{/if}}
 
                 {{{ entry.content }}}
+
+                {{#if entry.latitude }}
+                    {{#if entry.longitude }}
+                        <p><a target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyBToUXooSauIjBaU1Nt9WpmZk_Qpd-vOe0&center={{ entry.latitude }},{{ entry.longitude }}&markers=color:red|{{ entry.latitude }},{{ entry.longitude }}&zoom=12&size=540x200&sensor=false" alt=""></a></p>
+                    {{/if}}
+                {{/if}}
 
                 {{#if entry.enclosures }}
                     {{#each entry.enclosures as |enclosure enclosure_index|}}
