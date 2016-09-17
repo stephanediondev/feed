@@ -111,8 +111,9 @@ class CollectionManager extends AbstractManager
         }
         exit(0);*/
 
-        $sql = 'SELECT id, link FROM feed LIMIT 0,150';
+        $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date LIMIT 0,150';
         $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('date', (new \Datetime())->format('Y-m-d H:i:s'));
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
 

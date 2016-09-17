@@ -1,13 +1,20 @@
 var timezone = new Date();
 timezone = -timezone.getTimezoneOffset() / 60;
+var lastHistory = false;
 
 var language = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
 if(language) {
     language = language.substr(0, 2);
 }
 
-var apiUrl = '//' + window.location.hostname + window.location.pathname;
-apiUrl = apiUrl.replace('client/', 'api');
+if(window.location.port) {
+    var apiUrl = '//' + window.location.hostname + ':' + window.location.port + window.location.pathname;
+} else {
+    var apiUrl = '//' + window.location.hostname + window.location.pathname;
+}
+apiUrl = apiUrl.replace('index.html', '');
+apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
+
 var connectionToken = store.get('Connection_login_token');
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
@@ -92,8 +99,10 @@ function loadRoute(key, page) {
             componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
 
             if(key != '#401' && key != '#404' && key != '#500') {
-                //window.location.hash = key;
-                history.pushState({key: key}, null, key);
+                if(key != window.location.hash) {
+                    history.pushState({key: key}, null, key);
+                    lastHistory = window.location.hash;
+                }
             }
 
             if(route.title) {
@@ -172,8 +181,10 @@ function setSnackbar(message) {
 }
 
 $(document).ready(function() {
-    window.addEventListener('onpopstate', function() {
-        console.log(location.pathname);
+    window.addEventListener('popstate', function() {
+        if(lastHistory != window.location.hash) {
+            loadRoute(window.location.hash);
+        }
     });
 
     if(window.location.hash) {

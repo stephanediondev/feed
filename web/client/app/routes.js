@@ -8,9 +8,9 @@ routes['#500'] = {view: 'view-500', query: false, title: 'Error 500'};
 routes['#configuration'] = {view: 'view-configuration', query: false, title: 'Configuration'};
 
 routes['#feeds'] = {view: 'view-feeds', query: '/feeds', title: 'Feeds', store: true};
-routes['#feeds/errors'] = {view: 'view-feeds', query: '/feeds?errors=1', title: 'Feeds', store: true};
-routes['#feeds/subscribed'] = {view: 'view-feeds', query: '/feeds?subscribed=1', title: 'Feeds', store: true};
-routes['#feeds/not_subscribed'] = {view: 'view-feeds', query: '/feeds?not_subscribed=1', title: 'Feeds', store: true};
+routes['#feeds/errors'] = {view: 'view-feeds', query: '/feeds?errors=1', title: 'Error feeds', store: true};
+routes['#feeds/subscribed'] = {view: 'view-feeds', query: '/feeds?subscribed=1', title: 'Subscribed feeds', store: true};
+routes['#feeds/not_subscribed'] = {view: 'view-feeds', query: '/feeds?not_subscribed=1', title: 'Unsubscribed feeds', store: true};
 routes['#feed/create'] = {view: 'view-feed-create', query: false};
 routes['#feed/read/{id}'] = {view: 'view-feed-read', query: '/feed/{id}', store: false};
 routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}', store: false};
