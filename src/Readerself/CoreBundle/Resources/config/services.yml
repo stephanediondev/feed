@@ -58,6 +58,11 @@ services:
             - [ "setEntityManager", [ "@doctrine.orm.entity_manager" ] ]
             - [ "setEventDispatcher", [ "@event_dispatcher" ] ]
 
+    readerself_core_manager_migration:
+        class: Readerself\CoreBundle\Manager\MigrationManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
     readerself_core_manager_collection:
         class: Readerself\CoreBundle\Manager\CollectionManager
         parent: "readerself_core_manager_abstract"

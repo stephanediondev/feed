@@ -49,7 +49,7 @@ class LoginController extends AbstractController
                     $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
 
                     $data['entry'] = $connection->toArray();
-                    $data['entry_entity'] = 'Connection';
+                    $data['entry_entity'] = 'connection';
 
                     $connection_id = $this->memberManager->connectionManager->persist($connection);
 

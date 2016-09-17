@@ -141,7 +141,7 @@ function loadRoute(key, page) {
 
                         if(route.view) {
                             if(typeof data_return.entry == 'object' && typeof data_return.entry_entity == 'string') {
-                                window.document.title = data_return.entry.title + ' (' + data_return.entry_entity + ')';
+                                window.document.title = data_return.entry.title + ' (' + $.i18n._(data_return.entry_entity) + ')';
                             }
 
                             if(!page || page == 1) {

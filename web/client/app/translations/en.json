@@ -6,6 +6,7 @@
     "update": "Update",
     "delete": "Delete",
     "back": "Back",
+    "more": "More",
 
     "email": "Email",
     "password": "Password",
@@ -15,13 +16,15 @@
     "description": "Description",
     "language": "Language",
 
-    "Author": "Author",
-    "Category": "Category",
-    "Folder": "Folder",
-    "Feed": "Feed",
+    "author": "Author",
+    "category": "Category",
+    "feed": "Feed",
 
     "subscriptions": "Subscriptions",
     "items": "Items",
     "folders": "Folders",
-    "feeds": "Feeds"
+    "feeds": "Feeds",
+
+    "all_items": "All items",
+    "unread_items": "Unread items"
 }

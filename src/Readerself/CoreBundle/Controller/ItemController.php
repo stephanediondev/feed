@@ -81,19 +81,19 @@ class ItemController extends AbstractController
         if($request->query->get('feed')) {
             $parameters['feed'] = (int) $request->query->get('feed');
             $data['entry'] = $this->get('readerself_core_manager_feed')->getOne(['id' => (int) $request->query->get('feed')])->toArray();
-            $data['entry_entity'] = 'Feed';
+            $data['entry_entity'] = 'feed';
         }
 
         if($request->query->get('author')) {
             $parameters['author'] = (int) $request->query->get('author');
             $data['entry'] = $this->get('readerself_core_manager_author')->getOne(['id' => (int) $request->query->get('author')])->toArray();
-            $data['entry_entity'] = 'Author';
+            $data['entry_entity'] = 'author';
         }
 
         if($request->query->get('category')) {
             $parameters['category'] = (int) $request->query->get('category');
             $data['entry'] = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])->toArray();
-            $data['entry_entity'] = 'Category';
+            $data['entry_entity'] = 'category';
         }
 
         $paginator= $this->get('knp_paginator');
@@ -141,7 +141,7 @@ class ItemController extends AbstractController
             $data['entries'][$index]['socials'] = $socials;
             $index++;
         }
-        $data['entries_entity'] = 'Item';
+        $data['entries_entity'] = 'item';
         $data['entries_total'] = $pagination->getTotalItemCount();
         $data['entries_pages'] = $pages = $pagination->getPageCount();
         $data['entries_page_current'] = $page;
@@ -230,7 +230,7 @@ class ItemController extends AbstractController
         }
 
         $data['entry'] = $item->toArray();
-        $data['entry_entity'] = 'Item';
+        $data['entry_entity'] = 'item';
 
         return new JsonResponse($data);
     }

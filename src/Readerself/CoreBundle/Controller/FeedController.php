@@ -78,7 +78,7 @@ class FeedController extends AbstractController
             }
             $index++;
         }
-        $data['entries_entity'] = 'Feed';
+        $data['entries_entity'] = 'feed';
         $data['entries_total'] = $pagination->getTotalItemCount();
         $data['entries_pages'] = $pages = $pagination->getPageCount();
         $data['entries_page_current'] = $page;
@@ -123,7 +123,7 @@ class FeedController extends AbstractController
             $id = $this->feedManager->persist($form->getData());
 
             $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
-            $data['entry_entity'] = 'Feed';
+            $data['entry_entity'] = 'feed';
 
         } else {
             $errors = $form->getErrors(true);
@@ -165,7 +165,7 @@ class FeedController extends AbstractController
         if($subscription) {
             $data['entry']['subscription'] = $subscription->toArray();
         }
-        $data['entry_entity'] = 'Feed';
+        $data['entry_entity'] = 'feed';
 
         return new JsonResponse($data);
     }
@@ -200,7 +200,7 @@ class FeedController extends AbstractController
             $this->feedManager->persist($form->getData());
 
             $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
-            $data['entry_entity'] = 'Feed';
+            $data['entry_entity'] = 'feed';
 
         } else {
             $errors = $form->getErrors(true);
@@ -232,7 +232,7 @@ class FeedController extends AbstractController
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         $data['entry'] = $feed;
-        $data['entry_entity'] = 'Feed';
+        $data['entry_entity'] = 'feed';
 
         $this->feedManager->remove($feed);
 
@@ -274,7 +274,7 @@ class FeedController extends AbstractController
         }
 
         $data['entry'] = $feed->toArray();
-        $data['entry_entity'] = 'Feed';
+        $data['entry_entity'] = 'feed';
 
         return new JsonResponse($data);
     }
