@@ -1,4 +1,18 @@
 <!-- Misc. -->
+<script type="text/template" id="view-aside">
+    <ul class="mdl-list">
+        <li class="mdl-list__item"><a href="#items/all" class="load-route">{{trans 'all_items'}}</a></li>
+        <li class="mdl-list__item"><a href="#items/unread" class="load-route">{{trans 'unread_items'}}</a></li>
+        <li class="mdl-list__item"><a href="#items/starred" class="load-route">{{trans 'starred_items'}}</a></li>
+        <li class="mdl-list__item"><a href="#feeds" class="load-route">{{trans 'all_feeds'}}</a></li>
+        <li class="mdl-list__item"><a href="#feeds/subscribed" class="load-route">{{trans 'subscribed_feeds'}}</a></li>
+        <li class="mdl-list__item"><a href="#feeds/not_subscribed" class="load-route">{{trans 'unsubscribed_feeds'}}</a></li>
+        <li class="mdl-list__item"><a href="#feeds/errors" class="load-route">{{trans 'feeds_errors'}}</a></li>
+        <li class="mdl-list__item"><a href="#profile" class="load-route">{{trans 'profile'}}</a>
+        <li class="mdl-list__item"><a href="#logout" class="load-route">{{trans 'logout'}}</a>
+    </ul>
+</script>
+
 <script type="text/template" id="view-login">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
         <form action="#items/unread" data-query="/login" method="POST">

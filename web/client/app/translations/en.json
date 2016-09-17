@@ -1,6 +1,12 @@
 {
+    "error_401": "Error 401",
+    "error_404": "Error 404",
+    "error_500": "Error 500",
+
     "login": "Login",
+    "logout": "Logout",
     "forgotpassword": "Forgot password?",
+    "profile": "Profile",
 
     "create": "Create",
     "update": "Update",
@@ -20,11 +26,12 @@
     "category": "Category",
     "feed": "Feed",
 
-    "subscriptions": "Subscriptions",
-    "items": "Items",
-    "folders": "Folders",
-    "feeds": "Feeds",
+    "all_feeds": "All feeds",
+    "subscribed_feeds": "Subscribed feeds",
+    "unsubscribed_feeds": "Unsubscribed feeds",
+    "feeds_errors": "Feeds with errors",
 
     "all_items": "All items",
-    "unread_items": "Unread items"
+    "unread_items": "Unread items",
+    "starred_items": "Starred items"
 }

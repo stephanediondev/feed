@@ -108,7 +108,7 @@ function loadRoute(key, page) {
             }
 
             if(route.title) {
-                window.document.title = route.title;//TODO: get first h1 in card
+                window.document.title = $.i18n._(route.title);//TODO: get first h1 in card
             }
         }
 
@@ -203,6 +203,11 @@ function setSnackbar(message) {
 }
 
 $(document).ready(function() {
+    var source = $('#view-aside').text();
+    var template = Handlebars.compile(source);
+    $('.mdl-layout__drawer').html(template());
+
+
     window.addEventListener('popstate', function() {
         if(lastHistory != window.location.hash) {
             loadRoute(window.location.hash);

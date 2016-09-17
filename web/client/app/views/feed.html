@@ -21,6 +21,7 @@
             </h1>
             <div class="mdl-card__subtitle-text">
                 <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'all_items'}}</a>
+                {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">

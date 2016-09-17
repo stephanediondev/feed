@@ -1,11 +1,18 @@
 {
+    "error_401": "Error 401",
+    "error_404": "Error 404",
+    "error_500": "Error 500",
+
     "login": "Connexion",
+    "logout": "Déconnexion",
     "forgotpassword": "Oubli mot de passe ?",
+    "profile": "Profil",
 
     "create": "Ajouter",
     "update": "Modifier",
     "delete": "Supprimer",
     "back": "Retour",
+    "more": "Plus",
 
     "email": "Email",
     "password": "Mot de passe",
@@ -19,7 +26,12 @@
     "category": "Catégorie",
     "feed": "Fil",
 
-    "subscriptions": "Abonnements",
-    "items": "Items",
-    "feeds": "Fils"
+    "all_feeds": "Tous les flux",
+    "subscribed_feeds": "Flux souscrits",
+    "unsubscribed_feeds": "Flux non souscrits",
+    "feeds_errors": "Flux avec erreurs",
+
+    "all_items": "Tous les items",
+    "unread_items": "Items non lus",
+    "starred_items": "Items favoris"
 }
