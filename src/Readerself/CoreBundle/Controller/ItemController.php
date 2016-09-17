@@ -42,9 +42,7 @@ class ItemController extends AbstractController
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
      *         {"name"="starred", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with action ""star"""},
-     *         {"name"="shared", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with action ""share"""},
      *         {"name"="unread", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with no action ""read"""},
-     *         {"name"="priority", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with priority subscription"},
      *         {"name"="geolocation", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with geolocation"},
      *         {"name"="feed", "dataType"="integer", "required"=false, "format"="feed ID", "description"="items by feed"},
      *         {"name"="author", "dataType"="integer", "required"=false, "format"="author ID", "description"="items by author"},
@@ -186,22 +184,6 @@ class ItemController extends AbstractController
         return $this->setAction('star', $request, $id);
     }
 
-
-    /**
-     * Set "share" action / Remove "share" action.
-     *
-     * @ApiDoc(
-     *     section="Item",
-     *     headers={
-     *         {"name"="X-CONNECTION-TOKEN","required"=true},
-     *     },
-     * )
-     */
-    public function shareAction(Request $request, $id)
-    {
-        return $this->setAction('share', $request, $id);
-    }
-
     private function setAction($case, Request $request, $id)
     {
         $data = [];
@@ -273,7 +255,7 @@ class ItemController extends AbstractController
     }
 
     /**
-     * Share item by email.
+     * Send item by email.
      *
      * @ApiDoc(
      *     section="Item",

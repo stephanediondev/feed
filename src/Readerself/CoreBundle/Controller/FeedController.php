@@ -240,7 +240,7 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Set "share" action / Remove "share" action.
+     * Subscribe to feed / Unsubscribe from feed.
      *
      * @ApiDoc(
      *     section="Feed",
