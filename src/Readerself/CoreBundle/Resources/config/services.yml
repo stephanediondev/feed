@@ -36,6 +36,13 @@ services:
             - "@readerself_core_manager_category"
             - "@readerself_core_manager_action"
 
+    readerself_core_controller_category:
+        class: Readerself\CoreBundle\Controller\CategoryController
+        parent: "readerself_core_controller_abstract"
+        arguments:
+            - "@readerself_core_manager_category"
+            - "@readerself_core_manager_action"
+
     readerself_core_controller_push:
         class: Readerself\CoreBundle\Controller\PushController
         parent: "readerself_core_controller_abstract"
@@ -67,6 +74,18 @@ services:
             - "@readerself_core_manager_push"
         calls:
             - [ "setFacebook", [ "%facebook_enabled%", "%facebook_id%", "%facebook_secret%" ] ]
+
+    readerself_core_manager_migration:
+        class: Readerself\CoreBundle\Manager\MigrationManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_elasticsearch:
+        class: Readerself\CoreBundle\Manager\ElasticsearchManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+        calls:
+            - [ "setElasticsearch", [ "%elasticsearch_enabled%", "%elasticsearch_index%", "%elasticsearch_url%" ] ]
 
     readerself_core_manager_collection_feed:
         class: Readerself\CoreBundle\Manager\CollectionFeedManager

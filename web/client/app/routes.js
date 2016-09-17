@@ -18,6 +18,9 @@ routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}', st
 routes['#feed/delete/{id}'] = {view: 'view-feed-delete', query: '/feed/{id}', store: false};
 routes['#feed/subscribe/{id}'] = {view: false, query: '/feed/subscribe/{id}', store: false};
 
+routes['#category/read/{id}'] = {view: 'view-category-read', query: '/category/{id}', store: false};
+routes['#category/exclude/{id}'] = {view: false, query: '/category/exclude/{id}', store: false};
+
 routes['#items/all'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items', title: 'all_items', store: false};
 routes['#items/unread'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?unread=1', title: 'unread_items', store: false};
 routes['#items/starred'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?starred=1', title: 'starred_items', store: false};

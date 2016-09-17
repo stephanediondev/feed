@@ -49,6 +49,11 @@ class ItemCategoryRepository extends AbstractRepository
             $query->setParameter(':category', $parameters['category']);
         }
 
+        if(isset($parameters['member']) == 1) {
+            $query->andWhere('cat.id NOT IN (SELECT IDENTITY(exclude.category) FROM ReaderselfCoreBundle:ActionCategoryMember AS exclude WHERE exclude.member = :member AND exclude.action = 5)');
+            $query->setParameter(':member', $parameters['member']);
+        }
+
         $query->groupBy('itm_cat.id');
 
         $getQuery = $query->getQuery();

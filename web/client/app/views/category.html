@@ -1,0 +1,24 @@
+<!-- Feed -->
+<script type="text/template" id="view-category-read">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{trans 'all_categories'}}
+            </h1>
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{ entry.title }}
+            </h1>
+            <div class="mdl-card__subtitle-text">
+                <a href="#items/category/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'all_items'}}</a>
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#category/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'exclude'}}</a>
+        </div>
+    </div>
+</script>

@@ -125,7 +125,7 @@ class ItemController extends AbstractController
             }
 
             $categories = [];
-            foreach($this->categoryManager->itemCategoryManager->getList(['item' => $item]) as $itemCategory) {
+            foreach($this->categoryManager->itemCategoryManager->getList(['member' => $member, 'item' => $item]) as $itemCategory) {
                 $categories[] = $itemCategory->toArray();
             }
 

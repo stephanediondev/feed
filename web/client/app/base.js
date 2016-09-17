@@ -25,6 +25,9 @@ if($.inArray(language, languages)) {
     languageFinal = 'en';
 }
 
+$.get('vendor/jquery-timeago/locales/jquery.timeago.' + languageFinal + '.js', function() {
+});
+
 $.getJSON('app/translations/' + languageFinal + '.json', function(data) {
     $.i18n.load(data);
     Handlebars.registerHelper('trans', function(key) {
@@ -35,8 +38,9 @@ $.getJSON('app/translations/' + languageFinal + '.json', function(data) {
 
 var files = [
     'app/views/misc.html',
-    'app/views/feed.html',
     'app/views/item.html',
+    'app/views/feed.html',
+    'app/views/category.html',
 ];
 function loadFile(url) {
     $.ajax({
@@ -96,6 +100,7 @@ function loadRoute(key, page) {
 
         if(route.view) {
             if(!page || page == 1) {
+                scrollTo('#top');
                 $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
                 componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
             }
@@ -216,7 +221,8 @@ function setPositions() {
 }
 
 function scrollTo(anchor) {
-    $('.mdl-layout__content').scrollTo(anchor);
+    //$('.mdl-layout__content').scrollTo(anchor);
+    $(anchor).ScrollTo();
 }
 
 $(document).ready(function() {

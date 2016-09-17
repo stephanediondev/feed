@@ -7,18 +7,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CollectionCommand extends ContainerAwareCommand
+class ElasticsearchCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('readerself:collection')
-            ->setDescription('Start a new collection')
+            ->setName('readerself:elasticsearch')
+            ->setDescription('Elastic Search indexation')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('readerself_core_manager_collection')->start();
+        $this->getContainer()->get('readerself_core_manager_elasticsearch')->start();
     }
 }
