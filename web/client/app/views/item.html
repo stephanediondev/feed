@@ -17,78 +17,66 @@
             </h1>
         </div>
     </div>
+</script>
 
-    {{#each entries as |entry entry_index|}}
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
-                    <a class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{ entry.title }}</a>
-                </h1>
-                <div class="mdl-card__subtitle-text">
-                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i>{{ entry.date }}</span>
-                    <a href="#items/feed/{{ entry.feed.id }}" class="load-route mdl-navigation__link"><i class="material-icons">rss_feed</i>{{ entry.feed.title }}</a>
-                    {{#if entry.author }}<a href="#items/author/{{ entry.author.id }}" class="load-route mdl-navigation__link"><i class="material-icons">person</i>{{ entry.author.title }}</a>{{/if}}
-                    {{#if entry.categories }}
-                        {{#each entry.categories as |category category_index|}}
-                            <a href="#items/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons">label</i>{{ category.title }}</a>
-                        {{/each}}
-                    {{/if}}
-                    {{#if entry.latitude }}
-                        {{#if entry.longitude }}
-                            <a class="mdl-navigation__link" target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><i class="material-icons md-18">place</i>{{ entry.latitude }},{{ entry.longitude }}</a>
-                        {{/if}}
-                    {{/if}}
-                </div>
-            </div>
-            <div class="mdl-card__supporting-text">
-                {{#if entry.actions }}
-                    <p>Actions:
-                    {{#each entry.actions as |action action_index|}}
-                        {{ action.title }}</a>
+<script type="text/template" id="view-items-unit">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                <a class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{ entry.title }}</a>
+            </h1>
+            <div class="mdl-card__subtitle-text">
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i>{{ entry.date }}</span>
+                <a href="#items/feed/{{ entry.feed.id }}" class="load-route mdl-navigation__link"><i class="material-icons">rss_feed</i>{{ entry.feed.title }}</a>
+                {{#if entry.author }}<a href="#items/author/{{ entry.author.id }}" class="load-route mdl-navigation__link"><i class="material-icons">person</i>{{ entry.author.title }}</a>{{/if}}
+                {{#if entry.categories }}
+                    {{#each entry.categories as |category category_index|}}
+                        <a href="#items/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons">label</i>{{ category.title }}</a>
                     {{/each}}
-                    </p>
                 {{/if}}
-
-                {{{ entry.content }}}
-
                 {{#if entry.latitude }}
                     {{#if entry.longitude }}
-                        <p><a target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyBToUXooSauIjBaU1Nt9WpmZk_Qpd-vOe0&center={{ entry.latitude }},{{ entry.longitude }}&markers=color:red|{{ entry.latitude }},{{ entry.longitude }}&zoom=12&size=540x200&sensor=false" alt=""></a></p>
+                        <a class="mdl-navigation__link" target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><i class="material-icons md-18">place</i>{{ entry.latitude }},{{ entry.longitude }}</a>
                     {{/if}}
-                {{/if}}
-
-                {{#if entry.enclosures }}
-                    {{#each entry.enclosures as |enclosure enclosure_index|}}
-                        <p><img src="{{ enclosure.link }}" alt=""></p>
-                    {{/each}}
-                {{/if}}
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
-                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Star</a>
-                {{#if entry.socials }}
-                    <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="social_{{ entry.id }}">
-                        Share
-                    </button>
-                    <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right" for="social_{{ entry.id }}">
-                        {{#each entry.socials as |social social_index|}}
-                            <li class="mdl-menu__item"><a target="_blank" href="{{ social.link }}">{{ social.title }}</a></li>
-                        {{/each}}
-                    </ul>
                 {{/if}}
             </div>
         </div>
-    {{/each}}
-
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-        <div class="mdl-card__actions mdl-card--border">
-            {{#if entries_page_previous }}
-            <a href="{{ current_key }}" data-page="{{ entries_page_previous }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Previous page</a>
+        <div class="mdl-card__supporting-text">
+            {{#if entry.actions }}
+                <p>Actions:
+                {{#each entry.actions as |action action_index|}}
+                    {{ action.title }}</a>
+                {{/each}}
+                </p>
             {{/if}}
 
-            {{#if entries_page_next }}
-            <a href="{{ current_key }}" data-page="{{ entries_page_next }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Next page</a>
+            {{{ entry.content }}}
+
+            {{#if entry.latitude }}
+                {{#if entry.longitude }}
+                    <p><a target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyBToUXooSauIjBaU1Nt9WpmZk_Qpd-vOe0&center={{ entry.latitude }},{{ entry.longitude }}&markers=color:red|{{ entry.latitude }},{{ entry.longitude }}&zoom=12&size=540x200&sensor=false" alt=""></a></p>
+                {{/if}}
+            {{/if}}
+
+            {{#if entry.enclosures }}
+                {{#each entry.enclosures as |enclosure enclosure_index|}}
+                    <p><img src="{{ enclosure.link }}" alt=""></p>
+                {{/each}}
+            {{/if}}
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read</a>
+            <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Star</a>
+            {{#if entry.socials }}
+                <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="social_{{ entry.id }}">
+                    Share
+                </button>
+                <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right" for="social_{{ entry.id }}">
+                    {{#each entry.socials as |social social_index|}}
+                        <li class="mdl-menu__item"><a target="_blank" href="{{ social.link }}">{{ social.title }}</a></li>
+                    {{/each}}
+                </ul>
             {{/if}}
         </div>
     </div>
-</script>
+</div>

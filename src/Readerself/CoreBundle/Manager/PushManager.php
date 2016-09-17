@@ -64,8 +64,10 @@ class PushManager extends AbstractManager
         $this->removeCache();
     }
 
-    public function send($push, $payload)
+    public function send($push_id, $payload)
     {
+        $push = $this->getOne(['id' => $push_id]);
+
         $apiKeys = array(
             'GCM' => $this->gcm,
         );

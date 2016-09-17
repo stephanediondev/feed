@@ -95,8 +95,10 @@ function loadRoute(key, page) {
         }
 
         if(route.view) {
-            $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
-            componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
+            if(!page || page == 1) {
+                $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
+                componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
+            }
 
             if(key != '#401' && key != '#404' && key != '#500') {
                 if(key != window.location.hash) {
@@ -130,7 +132,7 @@ function loadRoute(key, page) {
                         data_return.current_key = key;
 
                         if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
-                            for(var i in data_return.entries) {
+                            for(i in data_return.entries) {
                                 if(data_return.entries.hasOwnProperty(i)) {
                                     store.set(data_return.entries_entity + '_' + data_return.entries[i].id, data_return.entries[i]);
                                 }
@@ -142,9 +144,29 @@ function loadRoute(key, page) {
                                 window.document.title = data_return.entry.title + ' (' + data_return.entry_entity + ')';
                             }
 
-                            var source = $('#' + route.view).text();
-                            var template = Handlebars.compile(source);
-                            $('main > .mdl-grid').html(template(data_return));
+                            if(!page || page == 1) {
+                                var source = $('#' + route.view).text();
+                                var template = Handlebars.compile(source);
+                                $('main > .mdl-grid').html(template(data_return));
+                            }
+
+                            if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.view_unit == 'string') {
+                                var source_unit = $('#' + route.view_unit).text();
+                                var template_unit = Handlebars.compile(source_unit);
+
+                                for(i in data_return.entries) {
+                                    if(data_return.entries.hasOwnProperty(i)) {
+                                        $('main > .mdl-grid').append(template_unit({entry: data_return.entries[i]}));
+                                    }
+                                }
+
+                                if(data_return.entries_page_next) {
+                                    var source_more = $('#view-more').text();
+                                    var template_more = Handlebars.compile(source_more);
+                                    $('main > .mdl-grid').append(template_more(data_return));
+                                }
+                            }
+
                             componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
                             if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
@@ -203,6 +225,11 @@ $(document).ready(function() {
         if(window.location.hash) {
             loadRoute(window.location.hash);
         }
+    });
+
+    $(document).on('click', '.more', function(event) {
+        event.preventDefault();
+        $(this).parent().parent().remove();
     });
 
     $('main > .mdl-grid').on('submit', 'form', function(event) {
