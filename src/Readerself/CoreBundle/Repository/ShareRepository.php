@@ -20,6 +20,11 @@ class ShareRepository extends AbstractRepository
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 
+        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+        $cacheDriver->setNamespace('readerself.share.');
+        $getQuery->setResultCacheDriver($cacheDriver);
+        $getQuery->setResultCacheLifetime(86400);
+
         return $getQuery->getOneOrNullResult();
     }
 

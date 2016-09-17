@@ -23,7 +23,7 @@ class ItemCategoryRepository extends AbstractRepository
         $getQuery->setMaxResults(1);
 
         $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.item.');
+        $cacheDriver->setNamespace('readerself.item_category.');
         $getQuery->setResultCacheDriver($cacheDriver);
         $getQuery->setResultCacheLifetime(86400);
 

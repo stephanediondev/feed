@@ -13,7 +13,11 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{trans 'items'}} ({{ entries_total }})
+                {{#if current_title }}
+                    {{trans current_title}} ({{ entries_total }})
+                {{else}}
+                    {{trans 'all_items'}} ({{ entries_total }})
+                {{/if}}
             </h1>
         </div>
     </div>
@@ -26,7 +30,7 @@
                 <a class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{ entry.title }}</a>
             </h1>
             <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i>{{ entry.date }}</span>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date }}"></span></span>
                 <a href="#items/feed/{{ entry.feed.id }}" class="load-route mdl-navigation__link"><i class="material-icons">rss_feed</i>{{ entry.feed.title }}</a>
                 {{#if entry.author }}<a href="#items/author/{{ entry.author.id }}" class="load-route mdl-navigation__link"><i class="material-icons">person</i>{{ entry.author.title }}</a>{{/if}}
                 {{#if entry.categories }}

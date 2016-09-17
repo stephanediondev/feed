@@ -6,6 +6,7 @@
         "material-design-lite": "*",
         "store.js": "*",
         "jquery-i18n": "*",
+        "jquery-timeago": "*",
         "handlebars": "*"
     }
 }

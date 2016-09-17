@@ -56,11 +56,6 @@ class PushRepository extends AbstractRepository
 
         $getQuery = $query->getQuery();
 
-        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.push.');
-        $getQuery->setResultCacheDriver($cacheDriver);
-        $getQuery->setResultCacheLifetime(86400);
-
         return $getQuery->getResult();
     }
 }

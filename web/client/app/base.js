@@ -131,6 +131,10 @@ function loadRoute(key, page) {
                     200: function(data_return) {
                         data_return.current_key = key;
 
+                        if(route.title) {
+                            data_return.current_title = route.title;
+                        }
+
                         if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
                             for(i in data_return.entries) {
                                 if(data_return.entries.hasOwnProperty(i)) {
@@ -167,6 +171,7 @@ function loadRoute(key, page) {
                                 }
                             }
 
+                            $('.timeago').timeago();
                             componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
                             if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
@@ -202,11 +207,28 @@ function setSnackbar(message) {
     snackbarContainer.MaterialSnackbar.showSnackbar({message: message, timeout: 1000});
 }
 
+function setPositions() {
+    _window_height = $(window).height();
+    _offset = $('.mdl-layout__content').offset();
+    _height = _window_height - _offset.top;
+    $('.mdl-layout__content').css({ 'height': _height});
+    $('.mdl-grid').css({ 'padding-bottom': _height});
+}
+
+function scrollTo(anchor) {
+    $('.mdl-layout__content').scrollTo(anchor);
+}
+
 $(document).ready(function() {
     var source = $('#view-aside').text();
     var template = Handlebars.compile(source);
     $('.mdl-layout__drawer').html(template());
 
+    setPositions();
+
+    $(window).bind('resize', function() {
+        setPositions();
+    });
 
     window.addEventListener('popstate', function() {
         if(lastHistory != window.location.hash) {
