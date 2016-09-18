@@ -5,7 +5,7 @@
 * php-curl
 * php-iconv
 * php-mbstring
-* php-tidy (recommended)
+* php-tidy (recommended, to cleanup and repair html from feeds)
 
 #####Database
 * MySQL 5.5.3 or greater (utf8mb4 character set)

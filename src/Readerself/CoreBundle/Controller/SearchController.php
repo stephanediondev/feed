@@ -114,7 +114,7 @@ class SearchController extends AbstractController
             if($type == 'feed') {
                 $body['query'] = array(
                     'query_string' => array(
-                        'fields' => ['title', 'description'],
+                        'fields' => ['title', 'description', 'website'],
                         'query' => $request->query->get('q'),
                     ),
                 );

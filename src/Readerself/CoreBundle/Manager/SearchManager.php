@@ -53,6 +53,8 @@ class SearchManager extends AbstractManager
                 $body = array(
                     'title' => $result['title'],
                     'description' => $result['description'],
+                    'website' => $result['website'],
+                    'language' => $result['language'],
                 );
                 $this->query($action, $path, $body);
 
