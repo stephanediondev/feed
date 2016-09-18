@@ -40,6 +40,30 @@ class SearchManager extends AbstractManager
         if($this->getEnabled()) {
             $this->init();
 
+            $sql = 'SELECT fed.* FROM feed AS fed';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll();
+
+            foreach($results as $result) {
+                $action = 'PUT';
+
+                $path = '/'.$this->getIndex().'/feed/'.$result['id'];
+
+                $body = array(
+                    'title' => $result['title'],
+                    'description' => $result['description'],
+                );
+                $this->query($action, $path, $body);
+
+                /*$insertActionItem = [
+                    'item_id' => $result['id'],
+                    'action_id' => 11,
+                    'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                ];
+                $this->insert('action_item', $insertActionItem);*/
+            }
+
             $sql = 'SELECT itm.*, auh.title AS author_title, fed.title AS feed_title, fed.language AS feed_language
             FROM item AS itm
             LEFT JOIN author AS auh ON auh.id = itm.author_id
@@ -139,6 +163,24 @@ class SearchManager extends AbstractManager
 
             $path = '/'.$this->getIndex().'/_open';
             $result = $this->query('POST', $path);
+
+            $path = '/'.$this->getIndex().'/_mapping/feed';
+            $body = array(
+                'feed' => array(
+                    'properties' => array( 
+                        'title' => array( 
+                            'type' => 'string',
+                            'fields' => array(
+                                'sort' => array( 
+                                    'type' => 'string',
+                                    'analyzer' => 'case_insensitive_sort',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            );
+            $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'/_mapping/item';
             $body = array(

@@ -7,8 +7,11 @@ routes['#404'] = {view: 'view-404', query: false, title: 'error_404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};
 routes['#configuration'] = {view: 'view-configuration', query: false, title: 'configuration'};
 
-routes['#search'] = {view: 'view-search', query: false, title: 'search'};
-routes['#search/result'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/search', title: 'search'};
+routes['#search/items'] = {view: 'view-search-items', query: false, title: 'search'};
+routes['#search/items/result'] = {view: 'view-search-items', view_unit: 'view-items-unit', query: '/search/items', title: 'search'};
+
+routes['#search/feeds'] = {view: 'view-search-feeds', query: false, title: 'search'};
+routes['#search/feeds/result'] = {view: 'view-search-feeds', view_unit: 'view-feeds-unit', query: '/search/feeds', title: 'search'};
 
 routes['#feeds'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds', title: 'all_feeds', store: false};
 routes['#feeds/errors'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?errors=1', title: 'feeds_errors', store: false};

@@ -17,13 +17,18 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                <a href="#feed/read/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>{{ entry.title }}</a>
+                <a href="#feed/read/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
             </h1>
             <div class="mdl-card__subtitle-text">
                 <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'all_items'}}</a>
                 {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
             </div>
         </div>
+        {{#if entry.description }}
+        <div class="mdl-card__supporting-text">
+            {{{ entry.description }}}
+        </div>
+        {{/if}}
         <div class="mdl-card__actions mdl-card--border">
             {{#if entry.subscription }}
                 <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unsubscribe'}}</a>

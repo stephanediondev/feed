@@ -5,10 +5,18 @@ client:
         path: /client
         permanent: true
 
-readerself_api_search:
-    path:  /search
+readerself_api_search_items:
+    path:  /search/items
     defaults:
         _controller: "readerself_core_controller_search:itemsAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_search_feeds:
+    path:  /search/feeds
+    defaults:
+        _controller: "readerself_core_controller_search:feedsAction"
     requirements:
         id: '\d+'
     methods: GET

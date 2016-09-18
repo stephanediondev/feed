@@ -281,8 +281,11 @@ $(document).ready(function() {
 
         var form = $(this);
 
-        if(form.attr('id') == 'form-search') {
-            loadRoute('#search/result', 1, form.find('input[name="q"]').val());
+        if(form.attr('id') == 'form-search-feeds') {
+            loadRoute('#search/feeds/result', 1, form.find('input[name="q"]').val());
+
+        } else if(form.attr('id') == 'form-search-items') {
+            loadRoute('#search/items/result', 1, form.find('input[name="q"]').val());
 
         } else {
             $.ajax({

@@ -4,11 +4,15 @@
         <li class="mdl-list__item"><a href="#items/all" class="load-route">{{trans 'all_items'}}</a></li>
         <li class="mdl-list__item"><a href="#items/unread" class="load-route">{{trans 'unread_items'}}</a></li>
         <li class="mdl-list__item"><a href="#items/starred" class="load-route">{{trans 'starred_items'}}</a></li>
+
         <li class="mdl-list__item"><a href="#feeds" class="load-route">{{trans 'all_feeds'}}</a></li>
         <li class="mdl-list__item"><a href="#feeds/subscribed" class="load-route">{{trans 'subscribed_feeds'}}</a></li>
         <li class="mdl-list__item"><a href="#feeds/not_subscribed" class="load-route">{{trans 'unsubscribed_feeds'}}</a></li>
         <li class="mdl-list__item"><a href="#feeds/errors" class="load-route">{{trans 'feeds_errors'}}</a></li>
-        <li class="mdl-list__item"><a href="#search" class="load-route">{{trans 'search'}}</a></li>
+
+        <li class="mdl-list__item"><a href="#search/feeds" class="load-route">{{trans 'search_feeds'}}</a></li>
+        <li class="mdl-list__item"><a href="#search/items" class="load-route">{{trans 'search_items'}}</a></li>
+
         <li class="mdl-list__item"><a href="#profile" class="load-route">{{trans 'profile'}}</a>
         <li class="mdl-list__item"><a href="#logout" class="load-route">{{trans 'logout'}}</a>
     </ul>
@@ -114,12 +118,41 @@
     {{/if}}
 </script>
 
-<script type="text/template" id="view-search">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="" method="GET" id="form-search">
+<script type="text/template" id="view-search-feeds">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <form action="" method="GET" id="form-search-feeds">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
+                {{#if entries_total }}
+                    {{trans 'search'}} ({{ entries_total }})
+                {{else}}
                     {{trans 'search'}}
+                {{/if}}
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="q" class="required">{{trans 'q'}}</label>
+                    <input type="text" id="q" name="q" required="true" value="">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'search'}}</button>
+                </p>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script type="text/template" id="view-search-items">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <form action="" method="GET" id="form-search-items">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                {{#if entries_total }}
+                    {{trans 'search'}} ({{ entries_total }})
+                {{else}}
+                    {{trans 'search'}}
+                {{/if}}
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
