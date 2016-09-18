@@ -158,7 +158,7 @@ class FeedController extends AbstractController
         }
 
         $feed = $this->feedManager->getOne(['id' => $id]);
-        $subscription = $this->feedManager->subscriptionManager->getOne(['member' => $member, 'feed' => $feed]);
+        $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
 
         $collections = [];
         foreach($this->feedManager->collectionFeedManager->getList(['feed' => $feed]) as $collection) {
@@ -166,10 +166,10 @@ class FeedController extends AbstractController
         }
 
         $data['entry'] = $feed->toArray();
-        $data['entry']['collections'] = $collections;
-        if($subscription) {
-            $data['entry']['subscription'] = $subscription->toArray();
+        foreach($actions as $action) {
+            $data['entry'][$action->getAction()->getTitle()] = true;
         }
+        $data['entry']['collections'] = $collections;
         $data['entry_entity'] = 'feed';
 
         return new JsonResponse($data);
