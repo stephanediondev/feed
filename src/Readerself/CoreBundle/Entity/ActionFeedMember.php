@@ -3,9 +3,9 @@
 namespace Readerself\CoreBundle\Entity;
 
 /**
- * Subscription
+ * ActionFeedMember
  */
-class Subscription
+class ActionFeedMember
 {
     /**
      * @var integer
@@ -27,6 +27,11 @@ class Subscription
      */
     private $member;
 
+    /**
+     * @var \Readerself\CoreBundle\Entity\Action
+     */
+    private $action;
+
 
     /**
      * Get id
@@ -43,7 +48,7 @@ class Subscription
      *
      * @param \DateTime $dateCreated
      *
-     * @return Subscription
+     * @return ActionFeedMember
      */
     public function setDateCreated($dateCreated)
     {
@@ -67,7 +72,7 @@ class Subscription
      *
      * @param \Readerself\CoreBundle\Entity\Feed $feed
      *
-     * @return Subscription
+     * @return ActionFeedMember
      */
     public function setFeed(\Readerself\CoreBundle\Entity\Feed $feed = null)
     {
@@ -91,7 +96,7 @@ class Subscription
      *
      * @param \Readerself\CoreBundle\Entity\Member $member
      *
-     * @return Subscription
+     * @return ActionFeedMember
      */
     public function setMember(\Readerself\CoreBundle\Entity\Member $member = null)
     {
@@ -111,12 +116,34 @@ class Subscription
     }
 
     /**
+     * Set action
+     *
+     * @param \Readerself\CoreBundle\Entity\Action $action
+     *
+     * @return ActionFeedMember
+     */
+    public function setAction(\Readerself\CoreBundle\Entity\Action $action = null)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return \Readerself\CoreBundle\Entity\Action
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
     {
-        return [
-            'id' => $this->getId(),
-        ];
+        return $this->getAction()->toArray();
     }
 }

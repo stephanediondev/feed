@@ -224,10 +224,7 @@ class SearchController extends AbstractController
                     if($type == 'item') {
                         $item = $this->itemManager->getOne(['id' => $hit['_id']]);
 
-                        $actions = [];
-                        foreach($this->actionManager->actionItemMemberManager->getList(['member' => $member, 'item' => $item]) as $action) {
-                            $actions[] = $action->toArray();
-                        }
+                        $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $member, 'item' => $item]);
 
                         $socials = [];
                         foreach($shareEntries as $shareEntry) {
@@ -243,7 +240,9 @@ class SearchController extends AbstractController
                         }
 
                         $data['entries'][$index] = $item->toArray();
-                        $data['entries'][$index]['actions'] = $actions;
+                        foreach($actions as $action) {
+                            $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                        }
                         $data['entries'][$index]['categories'] = $categories;
                         $data['entries'][$index]['enclosures'] = [];
                         $data['entries'][$index]['socials'] = $socials;

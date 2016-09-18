@@ -7,6 +7,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 use Readerself\CoreBundle\Manager\FeedManager;
+use Readerself\CoreBundle\Manager\ActionManager;
 
 use Readerself\CoreBundle\Form\Type\FeedType;
 
@@ -14,10 +15,14 @@ class FeedController extends AbstractController
 {
     protected $feedManager;
 
+    protected $actionManager;
+
     public function __construct(
-        FeedManager $feedManager
+        FeedManager $feedManager,
+        ActionManager $actionManager
     ) {
         $this->feedManager = $feedManager;
+        $this->actionManager = $actionManager;
     }
 
     /**
@@ -70,11 +75,11 @@ class FeedController extends AbstractController
         $index = 0;
         foreach($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
-            $subscription = $this->feedManager->subscriptionManager->getOne(['member' => $member, 'feed' => $feed]);
+            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
 
             $data['entries'][$index] = $feed->toArray();
-            if($subscription) {
-                $data['entries'][$index]['subscription'] = $subscription->toArray();
+            foreach($actions as $action) {
+                $data['entries'][$index][$action->getAction()->getTitle()] = true;
             }
             $index++;
         }
@@ -251,26 +256,34 @@ class FeedController extends AbstractController
      */
     public function subscribeAction(Request $request, $id)
     {
+        return $this->setAction('subscribe', $request, $id);
+    }
+
+    private function setAction($case, Request $request, $id)
+    {
         $data = [];
         if(!$member = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
+        $action = $this->actionManager->getOne(['title' => $case]);
         $feed = $this->feedManager->getOne(['id' => $id]);
 
-        if($subscription = $this->feedManager->subscriptionManager->getOne([
+        if($actionFeedMember = $this->actionManager->actionFeedMemberManager->getOne([
+            'action' => $action,
             'feed' => $feed,
             'member' => $member,
         ])) {
-            $this->feedManager->subscriptionManager->remove($subscription);
-            $data['action'] = 'unsubscribe';
+            $this->actionManager->actionFeedMemberManager->remove($actionFeedMember);
+            $data['action'] = 'un'.$case;
         } else {
-            $subscription = $this->feedManager->subscriptionManager->init();
-            $subscription->setFeed($feed);
-            $subscription->setMember($member);
+            $actionFeedMember = $this->actionManager->actionFeedMemberManager->init();
+            $actionFeedMember->setAction($action);
+            $actionFeedMember->setFeed($feed);
+            $actionFeedMember->setMember($member);
 
-            $this->feedManager->subscriptionManager->persist($subscription);
-            $data['action'] = 'subscribe';
+            $this->actionManager->actionFeedMemberManager->persist($actionFeedMember);
+            $data['action'] = $case;
         }
 
         $data['entry'] = $feed->toArray();

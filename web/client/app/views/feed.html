@@ -30,7 +30,7 @@
         </div>
         {{/if}}
         <div class="mdl-card__actions mdl-card--border">
-            {{#if entry.subscription }}
+            {{#if entry.subscribe }}
                 <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unsubscribe'}}</a>
             {{else}}
                 <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>
@@ -121,7 +121,7 @@
             {{/if}}
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            {{#if entry.subscription }}
+            {{#if entry.subscribe }}
                 <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unsubscribe'}}</a>
             {{else}}
                 <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>

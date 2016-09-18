@@ -11,15 +11,19 @@ class ActionManager extends AbstractManager
 
     public $actionItemMemberManager;
 
+    public $actionFeedMemberManager;
+
     public $actionCategoryMemberManager;
 
     public function __construct(
         ActionItemManager $actionItemManager,
         ActionItemMemberManager $actionItemMemberManager,
+        ActionFeedMemberManager $actionFeedMemberManager,
         ActionCategoryMemberManager $actionCategoryMemberManager
     ) {
         $this->actionItemManager = $actionItemManager;
         $this->actionItemMemberManager = $actionItemMemberManager;
+        $this->actionFeedMemberManager = $actionFeedMemberManager;
         $this->actionCategoryMemberManager = $actionCategoryMemberManager;
     }
 

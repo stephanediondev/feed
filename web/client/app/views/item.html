@@ -69,8 +69,16 @@
             {{/if}}
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'read'}}</a>
-            <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'star'}}</a>
+            {{#if entry.read }}
+                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unread'}}</a>
+            {{else}}
+                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'read'}}</a>
+            {{/if}}
+            {{#if entry.star }}
+                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unstar'}}</a>
+            {{else}}
+                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'star'}}</a>
+            {{/if}}
             {{#if entry.socials }}
                 <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="social_{{ entry.id }}">{{trans 'share'}}</button>
                 <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right" for="social_{{ entry.id }}">

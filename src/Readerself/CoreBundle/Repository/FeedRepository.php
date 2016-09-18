@@ -42,12 +42,12 @@ class FeedRepository extends AbstractRepository
         }
 
         if(isset($parameters['subscribed']) == 1 && $parameters['subscribed']) {
-            $query->andWhere('fed.id IN (SELECT IDENTITY(subscribed.feed) FROM ReaderselfCoreBundle:Subscription AS subscribed WHERE subscribed.member = :member)');
+            $query->andWhere('fed.id IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
             $query->setParameter(':member', $parameters['member']);
         }
 
         if(isset($parameters['not_subscribed']) == 1 && $parameters['not_subscribed']) {
-            $query->andWhere('fed.id NOT IN (SELECT IDENTITY(not_subscribed.feed) FROM ReaderselfCoreBundle:Subscription AS not_subscribed WHERE not_subscribed.member = :member)');
+            $query->andWhere('fed.id NOT IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
             $query->setParameter(':member', $parameters['member']);
         }
 

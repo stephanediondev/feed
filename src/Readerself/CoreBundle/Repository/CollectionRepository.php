@@ -39,7 +39,7 @@ class CollectionRepository extends AbstractRepository
 
         if(isset($parameters['member']) == 1) {
             $query->leftJoin('fed.subscriptions', 'sub');
-            $query->andWhere('sub.member = :action');
+            $query->andWhere('sub.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 

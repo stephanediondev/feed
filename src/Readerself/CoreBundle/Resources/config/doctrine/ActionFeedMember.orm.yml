@@ -1,19 +1,23 @@
-Readerself\CoreBundle\Entity\Subscription:
-    repositoryClass: Readerself\CoreBundle\Repository\SubscriptionRepository
+Readerself\CoreBundle\Entity\ActionFeedMember:
+    repositoryClass: Readerself\CoreBundle\Repository\ActionFeedMemberRepository
     type: entity
-    table: subscription
+    table: action_feed_member
     indexes:
-        member_id:
-            columns:
-                - member_id
         feed_id:
             columns:
                 - feed_id
-    uniqueConstraints:
-        member_id_feed_id:
+        member_id:
             columns:
                 - member_id
+        action_id:
+            columns:
+                - action_id
+    uniqueConstraints:
+        action_id_feed_id_member_id:
+            columns:
+                - action_id
                 - feed_id
+                - member_id
     id:
         id:
             type: integer
@@ -49,6 +53,18 @@ Readerself\CoreBundle\Entity\Subscription:
             inversedBy: null
             joinColumns:
                 member_id:
+                    nullable: false
+                    referencedColumnName: id
+                    onDelete: "cascade"
+            orphanRemoval: false
+        action:
+            targetEntity: Action
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                action_id:
                     nullable: false
                     referencedColumnName: id
                     onDelete: "cascade"

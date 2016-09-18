@@ -21,12 +21,7 @@ services:
         parent: "readerself_core_controller_abstract"
         arguments:
             - "@readerself_core_manager_feed"
-
-    readerself_core_controller_subscription:
-        class: Readerself\CoreBundle\Controller\SubscriptionController
-        parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_feed"
+            - "@readerself_core_manager_action"
 
     readerself_core_controller_item:
         class: Readerself\CoreBundle\Controller\ItemController
@@ -107,7 +102,6 @@ services:
         public: true
         arguments:
             - "@readerself_core_manager_collection_feed"
-            - "@readerself_core_manager_subscription"
 
     readerself_core_manager_item:
         class: Readerself\CoreBundle\Manager\ItemManager
@@ -166,11 +160,6 @@ services:
         arguments:
             - "%google_cloud_messaging_key%"
 
-    readerself_core_manager_subscription:
-        class: Readerself\CoreBundle\Manager\SubscriptionManager
-        parent: "readerself_core_manager_abstract"
-        public: true
-
     readerself_core_manager_action:
         class: Readerself\CoreBundle\Manager\ActionManager
         parent: "readerself_core_manager_abstract"
@@ -178,6 +167,7 @@ services:
         arguments:
             - "@readerself_core_manager_action_item"
             - "@readerself_core_manager_action_item_member"
+            - "@readerself_core_manager_action_feed_member"
             - "@readerself_core_manager_action_category_member"
 
     readerself_core_manager_action_item:
@@ -187,6 +177,11 @@ services:
 
     readerself_core_manager_action_item_member:
         class: Readerself\CoreBundle\Manager\ActionItemMemberManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_action_feed_member:
+        class: Readerself\CoreBundle\Manager\ActionFeedMemberManager
         parent: "readerself_core_manager_abstract"
         public: true
 

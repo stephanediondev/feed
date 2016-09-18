@@ -56,7 +56,7 @@ class ItemRepository extends AbstractRepository
 
         if(isset($parameters['member']) == 1) {
             if(isset($parameters['unread']) == 1 && $parameters['unread']) {
-                $query->andWhere('fed.id IN (SELECT IDENTITY(sub.feed) FROM ReaderselfCoreBundle:Subscription AS sub WHERE sub.member = :member)');
+                $query->andWhere('fed.id IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
                 $query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action = 1)');
                 $query->setParameter(':member', $parameters['member']);
             }
