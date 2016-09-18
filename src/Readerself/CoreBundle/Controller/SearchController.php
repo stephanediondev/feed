@@ -192,11 +192,11 @@ class SearchController extends AbstractController
                 foreach($result['hits']['hits'] as $hit) {
                     if($type == 'feed') {
                         $feed = $this->get('readerself_core_manager_feed')->getOne(['id' => $hit['_id']]);
-                        $subscription = $this->get('readerself_core_manager_feed')->subscriptionManager->getOne(['member' => $member, 'feed' => $feed]);
+                        $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
 
                         $data['entries'][$index] = $feed->toArray();
-                        if($subscription) {
-                            $data['entries'][$index]['subscription'] = $subscription->toArray();
+                        foreach($actions as $action) {
+                            $data['entries'][$index][$action->getAction()->getTitle()] = true;
                         }
 
                         if(isset($hit['highlight']['title']) == 1) {
