@@ -7,6 +7,9 @@ routes['#404'] = {view: 'view-404', query: false, title: 'error_404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};
 routes['#configuration'] = {view: 'view-configuration', query: false, title: 'configuration'};
 
+routes['#search'] = {view: 'view-search', query: false, title: 'search'};
+routes['#search/result'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/search', title: 'search'};
+
 routes['#feeds'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds', title: 'all_feeds', store: false};
 routes['#feeds/errors'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?errors=1', title: 'feeds_errors', store: false};
 routes['#feeds/subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?subscribed=1', title: 'subscribed_feeds', store: false};

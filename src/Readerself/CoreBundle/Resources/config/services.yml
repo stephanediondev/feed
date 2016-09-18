@@ -36,6 +36,15 @@ services:
             - "@readerself_core_manager_category"
             - "@readerself_core_manager_action"
 
+    readerself_core_controller_search:
+        class: Readerself\CoreBundle\Controller\SearchController
+        parent: "readerself_core_controller_abstract"
+        arguments:
+            - "@readerself_core_manager_item"
+            - "@readerself_core_manager_category"
+            - "@readerself_core_manager_action"
+            - "@readerself_core_manager_search"
+
     readerself_core_controller_category:
         class: Readerself\CoreBundle\Controller\CategoryController
         parent: "readerself_core_controller_abstract"
@@ -80,8 +89,8 @@ services:
         parent: "readerself_core_manager_abstract"
         public: true
 
-    readerself_core_manager_elasticsearch:
-        class: Readerself\CoreBundle\Manager\ElasticsearchManager
+    readerself_core_manager_search:
+        class: Readerself\CoreBundle\Manager\SearchManager
         parent: "readerself_core_manager_abstract"
         public: true
         calls:

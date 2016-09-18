@@ -63,9 +63,13 @@ for(var i in files) {
     }
 }
 
-function loadRoute(key, page) {
+function loadRoute(key, page, q) {
     if(typeof page === 'undefined') {
         page = false;
+    }
+
+    if(typeof q === 'undefined') {
+        q = false;
     }
 
     var replaceId = false;
@@ -90,6 +94,13 @@ function loadRoute(key, page) {
                     url = url + '&page=' + page;
                 } else {
                     url = url + '?page=' + page;
+                }
+            }
+            if(q) {
+                if(url.indexOf('?') != -1) {
+                    url = url + '&q=' + q;
+                } else {
+                    url = url + '?q=' + q;
                 }
             }
             if(replaceId) {
@@ -270,54 +281,59 @@ $(document).ready(function() {
 
         var form = $(this);
 
-        $.ajax({
-            headers: {
-                'X-CONNECTION-TOKEN': connectionToken,
-                'X-MEMBER-TIMEZONE': timezone,
-                'X-MEMBER-LANGUAGE': language
-            },
-            async: true,
-            cache: false,
-            data: form.serialize(),
-            dataType: 'json',
-            statusCode: {
-                200: function(data_return) {
-                    if(data_return.entry.title) {
-                        setSnackbar(form.attr('method') + ' ' + data_return.entry.title);
-                    }
+        if(form.attr('id') == 'form-search') {
+            loadRoute('#search/result', 1, form.find('input[name="q"]').val());
 
-                    if(form.attr('method') == 'DELETE') {
-                        store.remove(data_return.entry_entity + '_' + data_return.entry.id);
-                    }
-                    if(form.attr('method') == 'PUT') {
-                        store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
-                    }
-                    if(form.attr('method') == 'POST') {
-                        if(form.data('query') == '/login') {
-                            connectionToken = data_return.entry.token;
-                            store.set('Connection_login_token', connectionToken);
-                            setSnackbar(form.attr('method') + ' ' + data_return.entry.type);
-                        } else {
+        } else {
+            $.ajax({
+                headers: {
+                    'X-CONNECTION-TOKEN': connectionToken,
+                    'X-MEMBER-TIMEZONE': timezone,
+                    'X-MEMBER-LANGUAGE': language
+                },
+                async: true,
+                cache: false,
+                data: form.serialize(),
+                dataType: 'json',
+                statusCode: {
+                    200: function(data_return) {
+                        if(data_return.entry.title) {
+                            setSnackbar(form.attr('method') + ' ' + data_return.entry.title);
+                        }
+
+                        if(form.attr('method') == 'DELETE') {
+                            store.remove(data_return.entry_entity + '_' + data_return.entry.id);
+                        }
+                        if(form.attr('method') == 'PUT') {
                             store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
                         }
+                        if(form.attr('method') == 'POST') {
+                            if(form.data('query') == '/login') {
+                                connectionToken = data_return.entry.token;
+                                store.set('Connection_login_token', connectionToken);
+                                setSnackbar(form.attr('method') + ' ' + data_return.entry.type);
+                            } else {
+                                store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
+                            }
+                        }
+                        loadRoute(form.attr('action'));
+                    },
+                    401: function() {
+                        loadRoute('#401');
+                    },
+                    403: function() {
+                        loadRoute('#login');
+                    },
+                    404: function() {
+                        loadRoute('#404');
+                    },
+                    500: function() {
+                        loadRoute('#500');
                     }
-                    loadRoute(form.attr('action'));
                 },
-                401: function() {
-                    loadRoute('#401');
-                },
-                403: function() {
-                    loadRoute('#login');
-                },
-                404: function() {
-                    loadRoute('#404');
-                },
-                500: function() {
-                    loadRoute('#500');
-                }
-            },
-            type: form.attr('method'),
-            url: apiUrl + form.data('query')
-        });
+                type: form.attr('method'),
+                url: apiUrl + form.data('query')
+            });
+        }
     });
 });

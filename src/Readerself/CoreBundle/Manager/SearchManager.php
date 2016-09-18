@@ -5,24 +5,39 @@ use Readerself\CoreBundle\Manager\AbstractManager;
 
 use PDO;
 
-class ElasticsearchManager extends AbstractManager
+class SearchManager extends AbstractManager
 {
-    protected $elasticsearchEnabled;
+    protected $enabled;
 
-    protected $elasticsearchIndex;
+    protected $index;
 
-    protected $elasticsearchUrl;
+    protected $url;
 
     public function setElasticsearch($enabled, $index, $url)
     {
-        $this->elasticsearchEnabled = $enabled;
-        $this->elasticsearchIndex = $index;
-        $this->elasticsearchUrl = $url;
+        $this->enabled = $enabled;
+        $this->index = $index;
+        $this->url = $url;
+    }
+
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
     }
 
     public function start()
     {
-        if($this->elasticsearchEnabled) {
+        if($this->getEnabled()) {
             $this->init();
 
             $sql = 'SELECT itm.*, auh.title AS author_title, fed.title AS feed_title, fed.language AS feed_language
@@ -38,7 +53,7 @@ class ElasticsearchManager extends AbstractManager
             foreach($results as $result) {
                 $action = 'PUT';
 
-                $path = '/'.$this->elasticsearchIndex.'/item/'.$result['id'];
+                $path = '/'.$this->getIndex().'/item/'.$result['id'];
 
                 $body = array(
                     'feed' => array(
@@ -68,10 +83,10 @@ class ElasticsearchManager extends AbstractManager
         }
     }
 
-    private function query($action, $path, $body = false)
+    public function query($action, $path, $body = false)
     {
-        if($this->elasticsearchEnabled) {
-            $path = $this->elasticsearchUrl.$path;
+        if($this->getEnabled()) {
+            $path = $this->getUrl().$path;
 
             $ci = curl_init();
             curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
@@ -90,19 +105,19 @@ class ElasticsearchManager extends AbstractManager
 
     private function init()
     {
-        if($this->elasticsearchEnabled) {
-            $path = '/'.$this->elasticsearchIndex;
+        if($this->getEnabled()) {
+            $path = '/'.$this->getIndex();
             $result = $this->query('HEAD', $path);
 
             if($result == 404) {
-                $path = '/'.$this->elasticsearchIndex;
+                $path = '/'.$this->getIndex();
                 $result = $this->query('PUT', $path);
             }
 
-            $path = '/'.$this->elasticsearchIndex.'/_close';
+            $path = '/'.$this->getIndex().'/_close';
             $result = $this->query('POST', $path);
 
-            $path = '/'.$this->elasticsearchIndex.'/_settings';
+            $path = '/'.$this->getIndex().'/_settings';
             $body = array(
                 'settings' => array(
                     'index' => array(
@@ -122,10 +137,10 @@ class ElasticsearchManager extends AbstractManager
             );
             $result = $this->query('PUT', $path, $body);
 
-            $path = '/'.$this->elasticsearchIndex.'/_open';
+            $path = '/'.$this->getIndex().'/_open';
             $result = $this->query('POST', $path);
 
-            $path = '/'.$this->elasticsearchIndex.'/_mapping/item';
+            $path = '/'.$this->getIndex().'/_mapping/item';
             $body = array(
                 'item' => array(
                     'properties' => array( 

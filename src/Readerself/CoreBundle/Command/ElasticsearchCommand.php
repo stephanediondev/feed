@@ -19,6 +19,6 @@ class ElasticsearchCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('readerself_core_manager_elasticsearch')->start();
+        $this->getContainer()->get('readerself_core_manager_search')->start();
     }
 }

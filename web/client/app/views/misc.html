@@ -8,6 +8,7 @@
         <li class="mdl-list__item"><a href="#feeds/subscribed" class="load-route">{{trans 'subscribed_feeds'}}</a></li>
         <li class="mdl-list__item"><a href="#feeds/not_subscribed" class="load-route">{{trans 'unsubscribed_feeds'}}</a></li>
         <li class="mdl-list__item"><a href="#feeds/errors" class="load-route">{{trans 'feeds_errors'}}</a></li>
+        <li class="mdl-list__item"><a href="#search" class="load-route">{{trans 'search'}}</a></li>
         <li class="mdl-list__item"><a href="#profile" class="load-route">{{trans 'profile'}}</a>
         <li class="mdl-list__item"><a href="#logout" class="load-route">{{trans 'logout'}}</a>
     </ul>
@@ -41,7 +42,7 @@
         <form action="#login" data-query="/logout" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">Logout</button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'logout'}}</button>
                 </p>
             </div>
         </form>
@@ -53,7 +54,7 @@
         <form action="#items/unread" data-query="/login" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    Profile
+                    {{trans 'profile'}}
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
@@ -66,11 +67,8 @@
                     <input type="password" id="password" name="password" required="true" value="">
                 </p>
                 <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'UPDATE'}}</button>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
                 </p>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <a href="#forgotpassword" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'forgotpassword'}}</a>
             </div>
         </form>
     </div>
@@ -114,4 +112,25 @@
             </div>
         </div>
     {{/if}}
+</script>
+
+<script type="text/template" id="view-search">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+        <form action="" method="GET" id="form-search">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    {{trans 'search'}}
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="q" class="required">{{trans 'q'}}</label>
+                    <input type="text" id="q" name="q" required="true" value="">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'search'}}</button>
+                </p>
+            </div>
+        </form>
+    </div>
 </script>
