@@ -22,6 +22,10 @@
     "description": "Description",
     "language": "Language",
 
+    "search": "Search",
+    "search_feeds": "Search feeds",
+    "search_items": "Search items",
+
     "author": "Author",
     "category": "Category",
     "feed": "Feed",

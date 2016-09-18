@@ -22,6 +22,10 @@
     "description": "Description",
     "language": "Langue",
 
+    "search": "Recherche",
+    "search_feeds": "Recherche de flux",
+    "search_items": "Recherche d'items",
+
     "author": "Auteur",
     "category": "Catégorie",
     "feed": "Fil",

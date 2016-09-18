@@ -10,8 +10,7 @@
         <li class="mdl-list__item"><a href="#feeds/not_subscribed" class="load-route">{{trans 'unsubscribed_feeds'}}</a></li>
         <li class="mdl-list__item"><a href="#feeds/errors" class="load-route">{{trans 'feeds_errors'}}</a></li>
 
-        <li class="mdl-list__item"><a href="#search/feeds" class="load-route">{{trans 'search_feeds'}}</a></li>
-        <li class="mdl-list__item"><a href="#search/items" class="load-route">{{trans 'search_items'}}</a></li>
+        <li class="mdl-list__item"><a href="#search" class="load-route">{{trans 'search'}}</a></li>
 
         <li class="mdl-list__item"><a href="#profile" class="load-route">{{trans 'profile'}}</a>
         <li class="mdl-list__item"><a href="#logout" class="load-route">{{trans 'logout'}}</a>
@@ -118,15 +117,29 @@
     {{/if}}
 </script>
 
+<script type="text/template" id="view-search">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{trans 'search'}}
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#search/feeds" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_feeds'}}</a>
+            <a href="#search/items" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_items'}}</a>
+        </div>
+    </div>
+</script>
+
 <script type="text/template" id="view-search-feeds">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <form action="" method="GET" id="form-search-feeds">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                 {{#if entries_total }}
-                    {{trans 'search'}} ({{ entries_total }})
+                    {{trans 'search_feeds'}} ({{ entries_total }})
                 {{else}}
-                    {{trans 'search'}}
+                    {{trans 'search_feeds'}}
                 {{/if}}
                 </h1>
             </div>
@@ -149,9 +162,9 @@
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                 {{#if entries_total }}
-                    {{trans 'search'}} ({{ entries_total }})
+                    {{trans 'search_items'}} ({{ entries_total }})
                 {{else}}
-                    {{trans 'search'}}
+                    {{trans 'search_items'}}
                 {{/if}}
                 </h1>
             </div>
