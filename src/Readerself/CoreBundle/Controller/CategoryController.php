@@ -41,8 +41,12 @@ class CategoryController extends AbstractController
         }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
+        $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $member, 'category' => $category]);
 
         $data['entry'] = $category->toArray();
+        foreach($actions as $action) {
+            $data['entry'][$action->getAction()->getTitle()] = true;
+        }
         $data['entry_entity'] = 'category';
 
         return new JsonResponse($data);
@@ -75,6 +79,7 @@ class CategoryController extends AbstractController
         ])) {
             $this->actionManager->actionCategoryMemberManager->remove($actionCategoryMember);
             $data['action'] = 'include';
+            $data['action_reverse'] = 'exclude';
         } else {
             $actionCategoryMember = $this->actionManager->actionCategoryMemberManager->init();
             $actionCategoryMember->setAction($action);
@@ -83,6 +88,7 @@ class CategoryController extends AbstractController
 
             $this->actionManager->actionCategoryMemberManager->persist($actionCategoryMember);
             $data['action'] = 'exclude';
+            $data['action_reverse'] = 'include';
         }
 
         $data['entry'] = $category->toArray();

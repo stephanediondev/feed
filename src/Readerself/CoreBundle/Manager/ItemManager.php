@@ -9,18 +9,14 @@ class ItemManager extends AbstractManager
 {
     public $enclosureManager;
 
-    public $shareManager;
-
     protected $readabilityEnabled;
 
     protected $readabilityKey;
 
     public function __construct(
-        EnclosureManager $enclosureManager,
-        ShareManager $shareManager
+        EnclosureManager $enclosureManager
     ) {
         $this->enclosureManager = $enclosureManager;
-        $this->shareManager = $shareManager;
     }
 
     public function getOne($paremeters = [])

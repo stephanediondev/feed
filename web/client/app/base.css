@@ -36,6 +36,9 @@ a:link, a:visited {
     min-height: inherit;
     overflow: visible;
 }
+.mdl-card[direction="rtl"] {
+    text-align: right;
+}
 .mdl-card__title {
     color: #757575;
     display: block;
@@ -44,6 +47,10 @@ a:link, a:visited {
 .mdl-card__title .mdl-card__title-text {
     font-size: 16px;
     margin-bottom: 4px;
+}
+.mdl-card[direction="rtl"] .mdl-card__title .mdl-card__title-text {
+    display: block;
+    text-align: right;
 }
 .mdl-card .mdl-card__actions {
     text-align: right;
@@ -55,6 +62,7 @@ a:link, a:visited {
 .mdl-card__supporting-text {
     overflow: visible;
     padding: 0px 8px 8px 8px;
+    width: auto;
 }
 .mdl-card .mdl-navigation__link {
     float: left;
@@ -63,7 +71,10 @@ a:link, a:visited {
     margin: 4px 4px 4px 0px;
     white-space: nowrap;
 }
-
+.mdl-card[direction="rtl"] .mdl-navigation__link {
+    float: right;
+    margin: 4px 0px 4px 4px;
+}
 .mdl-menu__item {
     height: 16px;
     line-height: 16px;

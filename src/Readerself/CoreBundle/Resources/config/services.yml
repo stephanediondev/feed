@@ -109,17 +109,11 @@ services:
         public: true
         arguments:
             - "@readerself_core_manager_enclosure"
-            - "@readerself_core_manager_share"
         calls:
             - [ "setReadability", [ "%readability_parser_enabled%", "%readability_parser_key%" ] ]
 
     readerself_core_manager_enclosure:
         class: Readerself\CoreBundle\Manager\EnclosureManager
-        parent: "readerself_core_manager_abstract"
-        public: true
-
-    readerself_core_manager_share:
-        class: Readerself\CoreBundle\Manager\ShareManager
         parent: "readerself_core_manager_abstract"
         public: true
 

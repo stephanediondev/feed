@@ -1,0 +1,105 @@
+<!-- Member -->
+<script type="text/template" id="view-login">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+        <form action="#items/unread" data-query="/login" method="POST">
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="email" class="required">{{trans 'email'}}</label>
+                    <input type="email" id="email" name="email" required="true" value="">
+                </p>
+                <p>
+                    <label for="password" class="required">{{trans 'password'}}</label>
+                    <input type="password" id="password" name="password" required="true" value="">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'login'}}</button>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#forgotpassword" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'forgotpassword'}}</a>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script type="text/template" id="view-logout">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+        <form action="#login" data-query="/logout" method="POST">
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'logout'}}</button>
+                </p>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script type="text/template" id="view-profile">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{ entry.email }}
+            </h1>
+            <div class="mdl-card__subtitle-text">
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+            </div>
+        </div>
+        <div class="mdl-card__supporting-text">
+            {{#if entry.nickname }}
+            <p>
+                <span class="label">{{trans 'nickname'}}</span>
+                {{ entry.nickname }}
+            </p>
+            {{/if}}
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+            <a href="#profile/delete" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
+        </div>
+    </div>
+
+    {{#each entry.connections as |connection connection_index|}}
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    {{ connection.type }}
+                </h1>
+                <div class="mdl-card__subtitle-text">
+                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ connection.date_created }}"></span></span>
+                    <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{ connection.ip }}</span>
+                </div>
+            </div>
+            <div class="mdl-card__supporting-text">
+                {{ connection.agent }}
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#connection/delete" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
+            </div>
+        </div>
+    {{/each}}
+</script>
+
+<script type="text/template" id="view-profile-update">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+        <form action="#items/unread" data-query="/login" method="POST">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    {{trans 'profile'}}
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="email" class="required">{{trans 'email'}}</label>
+                    <input type="email" id="email" name="email" required="true" value="">
+                </p>
+                <p>
+                    <label for="password" class="required">{{trans 'password'}}</label>
+                    <input type="password" id="password" name="password" required="true" value="">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
+                </p>
+            </div>
+        </form>
+    </div>
+</script>

@@ -326,6 +326,7 @@ class Feed
             'hostname' => $this->getHostname(),
             'description' => $this->getDescription(),
             'language' => $this->getLanguage(),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : $this->getDateCreated(),
         ];
     }
 }

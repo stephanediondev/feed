@@ -37,25 +37,17 @@ class ConnectionRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('itm', 'fed', 'aut');
-        $query->from('ReaderselfCoreBundle:Connection', 'itm');
-        $query->leftJoin('itm.feed', 'fed');
-        $query->leftJoin('itm.author', 'aut');
-
-        if(isset($parameters['feed']) == 1) {
-            $query->andWhere('itm.feed = :feed');
-            $query->setParameter(':feed', $parameters['feed']);
-        }
+        $query->addSelect('cnt', 'mbr');
+        $query->from('ReaderselfCoreBundle:Connection', 'cnt');
+        $query->leftJoin('cnt.member', 'mbr');
 
         if(isset($parameters['member']) == 1) {
-            $query->leftJoin('fed.subscriptions', 'sub');
-            $query->andWhere('sub.member = :action');
+            $query->andWhere('cnt.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 
-        $query->addOrderBy('itm.date', 'DESC');
-        $query->groupBy('itm.id');
-        $query->setMaxResults(20);
+        $query->addOrderBy('cnt.id', 'DESC');
+        $query->groupBy('cnt.id');
 
         $getQuery = $query->getQuery();
 

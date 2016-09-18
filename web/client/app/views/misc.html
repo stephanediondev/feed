@@ -17,66 +17,6 @@
     </ul>
 </script>
 
-<script type="text/template" id="view-login">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#items/unread" data-query="/login" method="POST">
-            <div class="mdl-card__supporting-text">
-                <p>
-                    <label for="email" class="required">{{trans 'email'}}</label>
-                    <input type="email" id="email" name="email" required="true" value="">
-                </p>
-                <p>
-                    <label for="password" class="required">{{trans 'password'}}</label>
-                    <input type="password" id="password" name="password" required="true" value="">
-                </p>
-                <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'login'}}</button>
-                </p>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <a href="#forgotpassword" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'forgotpassword'}}</a>
-            </div>
-        </form>
-    </div>
-</script>
-
-<script type="text/template" id="view-logout">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#login" data-query="/logout" method="POST">
-            <div class="mdl-card__supporting-text">
-                <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'logout'}}</button>
-                </p>
-            </div>
-        </form>
-    </div>
-</script>
-
-<script type="text/template" id="view-profile">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#items/unread" data-query="/login" method="POST">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
-                    {{trans 'profile'}}
-                </h1>
-            </div>
-            <div class="mdl-card__supporting-text">
-                <p>
-                    <label for="email" class="required">{{trans 'email'}}</label>
-                    <input type="email" id="email" name="email" required="true" value="">
-                </p>
-                <p>
-                    <label for="password" class="required">{{trans 'password'}}</label>
-                    <input type="password" id="password" name="password" required="true" value="">
-                </p>
-                <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
-                </p>
-            </div>
-        </form>
-    </div>
-</script>
-
 <script type="text/template" id="view-401">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
         <div class="mdl-card__supporting-text">
@@ -111,7 +51,7 @@
     {{#if entries_page_next }}
         <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
             <div class="mdl-card__actions mdl-card--border">
-                <a href="{{ current_key }}" data-page="{{ entries_page_next }}" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'more'}}</a>
+                <a href="{{ current_key }}" data-page="{{ entries_page_next }}" data-q="{{ current_q }}" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'more'}}</a>
             </div>
         </div>
     {{/if}}
@@ -146,7 +86,7 @@
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="q" class="required">{{trans 'q'}}</label>
-                    <input type="text" id="q" name="q" required="true" value="">
+                    <input type="text" id="q" name="q" required="true" value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'search'}}</button>
@@ -171,7 +111,7 @@
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="q" class="required">{{trans 'q'}}</label>
-                    <input type="text" id="q" name="q" required="true" value="">
+                    <input type="text" id="q" name="q" required="true" value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'search'}}</button>

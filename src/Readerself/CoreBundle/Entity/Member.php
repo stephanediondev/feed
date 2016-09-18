@@ -289,4 +289,15 @@ class Member implements AdvancedUserInterface, \Serializable
     {
         return true;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'email' => $this->getEmail(),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : $this->getDateCreated(),
+        ];
+    }
 }

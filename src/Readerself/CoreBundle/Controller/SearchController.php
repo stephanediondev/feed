@@ -89,6 +89,8 @@ class SearchController extends AbstractController
         $sortDirection = ['asc', 'desc'];
 
         if($request->query->get('q')) {
+            $page = $request->query->getInt('page', 1);
+
             if(!array_key_exists($request->query->get('sort_field'), $sortFields)) {
                 $sortField = '_score';
             } else {
@@ -101,7 +103,7 @@ class SearchController extends AbstractController
             }
 
             $size = 20;
-            $from = $request->query->get('from', 0);
+            $from = ($size * $page) - 20;
             $path = '/'.$this->searchManager->getIndex().'/_search?size='.intval($size).'&type='.$type.'&from='.intval($from);
 
             $body = array();
@@ -184,87 +186,51 @@ class SearchController extends AbstractController
             $data['entries'] = [];
 
             if(isset($result->error) == 0) {
-                if($type == 'item') {
-                    $shareEntries = $this->itemManager->shareManager->getList();
-                }
-
                 $index = 0;
                 foreach($result['hits']['hits'] as $hit) {
                     if($type == 'feed') {
                         $feed = $this->get('readerself_core_manager_feed')->getOne(['id' => $hit['_id']]);
-                        $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
+                        if($feed) {
+                            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
 
-                        $data['entries'][$index] = $feed->toArray();
-                        foreach($actions as $action) {
-                            $data['entries'][$index][$action->getAction()->getTitle()] = true;
-                        }
+                            $data['entries'][$index] = $feed->toArray();
+                            $data['entries'][$index]['score'] = $hit['_score'];
+                            foreach($actions as $action) {
+                                $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                            }
 
-                        if(isset($hit['highlight']['title']) == 1) {
-                            $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
-                        }
-                        if(isset($hit['highlight']['description']) == 1) {
-                            try {
-                                $options = [
-                                    'output-xhtml' => true,
-                                    'clean' => true,
-                                    'wrap-php' => true,
-                                    'doctype' => 'omit',
-                                    'show-body-only' => true,
-                                    'drop-proprietary-attributes' => true,
-                                ];
-                                $tidy = new \tidy();
-                                $tidy->parseString($hit['highlight']['description'][0], $options, 'utf8');
-                                $tidy->cleanRepair();
-                                $data['entries'][$index]['description'] = $tidy->value;
-                            } catch (Exception $e) {
+                            if(isset($hit['highlight']['title']) == 1) {
+                                $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
+                            }
+                            if(isset($hit['highlight']['description']) == 1) {
+                                $data['entries'][$index]['description'] = $this->cleanContent($hit['highlight']['description'][0]);
                             }
                         }
                     }
 
                     if($type == 'item') {
                         $item = $this->itemManager->getOne(['id' => $hit['_id']]);
+                        if($item) {
+                            $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $member, 'item' => $item]);
 
-                        $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $member, 'item' => $item]);
+                            $categories = [];
+                            foreach($this->categoryManager->itemCategoryManager->getList(['member' => $member, 'item' => $item]) as $itemCategory) {
+                                $categories[] = $itemCategory->toArray();
+                            }
 
-                        $socials = [];
-                        foreach($shareEntries as $shareEntry) {
-                            $link = $shareEntry->getLink();
-                            $link = str_replace('{title}', urlencode($item->getTitle()), $link);
-                            $link = str_replace('{link}', urlencode($item->getLink()), $link);
-                            $socials[] = ['id' => $shareEntry->getId(), 'title' => $shareEntry->getTitle(), 'link' => $link];
-                        }
+                            $data['entries'][$index] = $item->toArray();
+                            $data['entries'][$index]['score'] = $hit['_score'];
+                            foreach($actions as $action) {
+                                $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                            }
+                            $data['entries'][$index]['categories'] = $categories;
+                            $data['entries'][$index]['enclosures'] = [];
 
-                        $categories = [];
-                        foreach($this->categoryManager->itemCategoryManager->getList(['member' => $member, 'item' => $item]) as $itemCategory) {
-                            $categories[] = $itemCategory->toArray();
-                        }
-
-                        $data['entries'][$index] = $item->toArray();
-                        foreach($actions as $action) {
-                            $data['entries'][$index][$action->getAction()->getTitle()] = true;
-                        }
-                        $data['entries'][$index]['categories'] = $categories;
-                        $data['entries'][$index]['enclosures'] = [];
-                        $data['entries'][$index]['socials'] = $socials;
-
-                        if(isset($hit['highlight']['title']) == 1) {
-                            $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
-                        }
-                        if(isset($hit['highlight']['content']) == 1) {
-                            try {
-                                $options = [
-                                    'output-xhtml' => true,
-                                    'clean' => true,
-                                    'wrap-php' => true,
-                                    'doctype' => 'omit',
-                                    'show-body-only' => true,
-                                    'drop-proprietary-attributes' => true,
-                                ];
-                                $tidy = new \tidy();
-                                $tidy->parseString($hit['highlight']['content'][0], $options, 'utf8');
-                                $tidy->cleanRepair();
-                                $data['entries'][$index]['content'] = $tidy->value;
-                            } catch (Exception $e) {
+                            if(isset($hit['highlight']['title']) == 1) {
+                                $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
+                            }
+                            if(isset($hit['highlight']['content']) == 1) {
+                                $data['entries'][$index]['content'] = $this->cleanContent($hit['highlight']['content'][0]);
                             }
                         }
                     }
@@ -274,7 +240,16 @@ class SearchController extends AbstractController
 
                 $data['entries_entity'] = $type;
                 $data['entries_total'] = $result['hits']['total'];
-                //$data['entries_pages'] = $pages = $pagination->getPageCount();
+                $data['entries_pages'] = $pages = ceil($result['hits']['total']/20);
+                $data['entries_page_current'] = $page;
+                $pagePrevious = $page - 1;
+                if($pagePrevious >= 1) {
+                    $data['entries_page_previous'] = $pagePrevious;
+                }
+                $pageNext = $page + 1;
+                if($pageNext <= $pages) {
+                    $data['entries_page_next'] = $pageNext;
+                }
 
                 $pagination = [];
                 if($result['hits']['total'] > $size) {
@@ -291,5 +266,26 @@ class SearchController extends AbstractController
         }
 
         return new JsonResponse($data);
+    }
+
+    private function cleanContent($content) {
+        if(class_exists('Tidy')) {
+            try {
+                $options = [
+                    'output-xhtml' => true,
+                    'clean' => true,
+                    'wrap-php' => true,
+                    'doctype' => 'omit',
+                    'show-body-only' => true,
+                    'drop-proprietary-attributes' => true,
+                ];
+                $tidy = new \tidy();
+                $tidy->parseString($content, $options, 'utf8');
+                $tidy->cleanRepair();
+                $content = $tidy->value;
+            } catch (Exception $e) {
+            }
+        }
+        return $content;
     }
 }

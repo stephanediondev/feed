@@ -15,10 +15,15 @@
             </h1>
             <div class="mdl-card__subtitle-text">
                 <a href="#items/category/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'all_items'}}</a>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#category/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'exclude'}}</a>
+            {{#if entry.exclude }}
+                <a href="#category/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'include'}}</a>
+            {{else}}
+                <a href="#category/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'exclude'}}</a>
+            {{/if}}
         </div>
     </div>
 </script>

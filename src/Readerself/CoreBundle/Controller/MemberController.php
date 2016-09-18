@@ -60,4 +60,33 @@ class MemberController extends AbstractController
 
         return new JsonResponse($data, $status);
     }
+
+    /**
+     * Retrieve a feed.
+     *
+     * @ApiDoc(
+     *     section="Feed",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function readAction(Request $request)
+    {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $connections = [];
+        foreach($this->memberManager->connectionManager->getList(['member' => $member]) as $connection) {
+            $connections[] = $connection->toArray();
+        }
+
+        $data['entry'] = $member->toArray();
+        $data['entry']['connections'] = $connections;
+        $data['entry_entity'] = 'member';
+
+        return new JsonResponse($data);
+    }
 }

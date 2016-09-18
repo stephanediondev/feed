@@ -21,8 +21,10 @@
                 <a href="#feed/read/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
             </h1>
             <div class="mdl-card__subtitle-text">
+                {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{ entry.score }}</span>{{/if}}
                 <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'all_items'}}</a>
                 {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
             </div>
         </div>
         {{#if entry.description }}
@@ -97,6 +99,8 @@
             </h1>
             <div class="mdl-card__subtitle-text">
                 <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'all_items'}}</a>
+                {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__supporting-text">
@@ -141,10 +145,10 @@
                     </h1>
                 </div>
                 <div class="mdl-card__supporting-text">
-                        <p>
-                            <span class="label">{{trans 'error'}}</span>
-                            {{ collection.error }}</a>
-                        </p>
+                    <p>
+                        <span class="label">{{trans 'error'}}</span>
+                        {{ collection.error }}</a>
+                    </p>
                 </div>
             </div>
         {{/if}}

@@ -276,6 +276,7 @@ class FeedController extends AbstractController
         ])) {
             $this->actionManager->actionFeedMemberManager->remove($actionFeedMember);
             $data['action'] = 'un'.$case;
+            $data['action_reverse'] = $case;
         } else {
             $actionFeedMember = $this->actionManager->actionFeedMemberManager->init();
             $actionFeedMember->setAction($action);
@@ -284,6 +285,7 @@ class FeedController extends AbstractController
 
             $this->actionManager->actionFeedMemberManager->persist($actionFeedMember);
             $data['action'] = $case;
+            $data['action_reverse'] = 'un'.$case;
         }
 
         $data['entry'] = $feed->toArray();

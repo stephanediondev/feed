@@ -51,9 +51,21 @@ readerself_core_profile:
 
 #Member
 readerself_core_member_create:
-    path:  /member
+    path:  /register
     defaults:
         _controller: "readerself_core_controller_member:createAction"
+    methods: POST
+
+readerself_core_member_read:
+    path:  /profile
+    defaults:
+        _controller: "readerself_core_controller_member:readAction"
+    methods: GET
+
+readerself_core_member_update:
+    path:  /profile
+    defaults:
+        _controller: "readerself_core_controller_member:updateAction"
     methods: POST
 
 #Item
@@ -75,14 +87,6 @@ readerself_api_item_star:
     path:  /item/star/{id}
     defaults:
         _controller: "readerself_core_controller_item:starAction"
-    requirements:
-        id: '\d+'
-    methods: GET
-
-readerself_api_item_share:
-    path:  /item/share/{id}
-    defaults:
-        _controller: "readerself_core_controller_item:shareAction"
     requirements:
         id: '\d+'
     methods: GET

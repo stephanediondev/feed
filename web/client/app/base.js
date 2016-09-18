@@ -38,6 +38,7 @@ $.getJSON('app/translations/' + languageFinal + '.json', function(data) {
 
 var files = [
     'app/views/misc.html',
+    'app/views/member.html',
     'app/views/item.html',
     'app/views/feed.html',
     'app/views/category.html',
@@ -63,13 +64,21 @@ for(var i in files) {
     }
 }
 
-function loadRoute(key, page, q) {
-    if(typeof page === 'undefined') {
-        page = false;
+function loadRoute(key, parameters) {
+    if(typeof parameters === 'undefined') {
+        parameters = {};
     }
 
-    if(typeof q === 'undefined') {
-        q = false;
+    if(typeof parameters.page === 'undefined') {
+        parameters.page = false;
+    }
+
+    if(typeof parameters.q === 'undefined') {
+        parameters.q = false;
+    }
+
+    if(typeof parameters.link === 'undefined') {
+        parameters.link = false;
     }
 
     var replaceId = false;
@@ -89,18 +98,18 @@ function loadRoute(key, page, q) {
 
         if(route.query) {
             url = apiUrl + route.query;
-            if(page) {
+            if(parameters.page) {
                 if(url.indexOf('?') != -1) {
-                    url = url + '&page=' + page;
+                    url = url + '&page=' + parameters.page;
                 } else {
-                    url = url + '?page=' + page;
+                    url = url + '?page=' + parameters.page;
                 }
             }
-            if(q) {
+            if(parameters.q) {
                 if(url.indexOf('?') != -1) {
-                    url = url + '&q=' + q;
+                    url = url + '&q=' + parameters.q;
                 } else {
-                    url = url + '?q=' + q;
+                    url = url + '?q=' + parameters.q;
                 }
             }
             if(replaceId) {
@@ -110,7 +119,7 @@ function loadRoute(key, page, q) {
         }
 
         if(route.view) {
-            if(!page || page == 1) {
+            if(!parameters.page || parameters.page == 1) {
                 scrollTo('#top');
                 $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
                 componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
@@ -136,9 +145,7 @@ function loadRoute(key, page, q) {
         } else if(route.query) {
             $.ajax({
                 headers: {
-                    'X-CONNECTION-TOKEN': connectionToken,
-                    'X-MEMBER-TIMEZONE': timezone,
-                    'X-MEMBER-LANGUAGE': language
+                    'X-CONNECTION-TOKEN': connectionToken
                 },
                 async: true,
                 cache: false,
@@ -146,6 +153,7 @@ function loadRoute(key, page, q) {
                 statusCode: {
                     200: function(data_return) {
                         data_return.current_key = key;
+                        data_return.current_q = parameters.q;
 
                         if(route.title) {
                             data_return.current_title = route.title;
@@ -161,10 +169,12 @@ function loadRoute(key, page, q) {
 
                         if(route.view) {
                             if(typeof data_return.entry == 'object' && typeof data_return.entry_entity == 'string') {
-                                window.document.title = data_return.entry.title + ' (' + $.i18n._(data_return.entry_entity) + ')';
+                                if(typeof data_return.entry.title == 'string') {
+                                    window.document.title = data_return.entry.title + ' (' + $.i18n._(data_return.entry_entity) + ')';
+                                }
                             }
 
-                            if(!page || page == 1) {
+                            if(!parameters.page || parameters.page == 1) {
                                 var source = $('#' + route.view).text();
                                 var template = Handlebars.compile(source);
                                 $('main > .mdl-grid').html(template(data_return));
@@ -190,6 +200,9 @@ function loadRoute(key, page, q) {
                             $('.timeago').timeago();
                             componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
+                            if(parameters.link) {
+                                parameters.link.text(data_return.action_reverse);
+                            }
                             if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
                                 setSnackbar(data_return.action + ' ' + data_return.entry.title);
                             }
@@ -261,7 +274,7 @@ $(document).ready(function() {
 
     $(document).on('click', '.load-route', function(event) {
         event.preventDefault();
-        loadRoute($(this).attr('href'), $(this).data('page'));
+        loadRoute($(this).attr('href'), {page: $(this).data('page'), q: $(this).data('q'), link: $(this)});
     });
 
     $(document).on('click', '.action-refresh', function(event) {
@@ -282,17 +295,15 @@ $(document).ready(function() {
         var form = $(this);
 
         if(form.attr('id') == 'form-search-feeds') {
-            loadRoute('#search/feeds/result', 1, form.find('input[name="q"]').val());
+            loadRoute('#search/feeds/result', {page: 1, q: form.find('input[name="q"]').val()});
 
         } else if(form.attr('id') == 'form-search-items') {
-            loadRoute('#search/items/result', 1, form.find('input[name="q"]').val());
+            loadRoute('#search/items/result', {page: 1, q:form.find('input[name="q"]').val()});
 
         } else {
             $.ajax({
                 headers: {
-                    'X-CONNECTION-TOKEN': connectionToken,
-                    'X-MEMBER-TIMEZONE': timezone,
-                    'X-MEMBER-LANGUAGE': language
+                    'X-CONNECTION-TOKEN': connectionToken
                 },
                 async: true,
                 cache: false,

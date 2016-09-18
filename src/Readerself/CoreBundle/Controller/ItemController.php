@@ -102,22 +102,12 @@ class ItemController extends AbstractController
             $request->query->getInt('perPage', 20)
         );
 
-        $shareEntries = $this->itemManager->shareManager->getList();
-
         $data['entries'] = [];
         $index = 0;
         foreach($pagination as $result) {
             $item = $this->itemManager->getOne(['id' => $result['id']]);
 
             $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $member, 'item' => $item]);
-
-            $socials = [];
-            foreach($shareEntries as $shareEntry) {
-                $link = $shareEntry->getLink();
-                $link = str_replace('{title}', urlencode($item->getTitle()), $link);
-                $link = str_replace('{link}', urlencode($item->getLink()), $link);
-                $socials[] = ['id' => $shareEntry->getId(), 'title' => $shareEntry->getTitle(), 'link' => $link];
-            }
 
             $categories = [];
             foreach($this->categoryManager->itemCategoryManager->getList(['member' => $member, 'item' => $item]) as $itemCategory) {
@@ -135,7 +125,6 @@ class ItemController extends AbstractController
             }
             $data['entries'][$index]['categories'] = $categories;
             $data['entries'][$index]['enclosures'] = $enclosures;
-            $data['entries'][$index]['socials'] = $socials;
             $index++;
         }
         $data['entries_entity'] = 'item';
@@ -200,6 +189,7 @@ class ItemController extends AbstractController
         ])) {
             $this->actionManager->actionItemMemberManager->remove($actionItemMember);
             $data['action'] = 'un'.$case;
+            $data['action_reverse'] = $case;
         } else {
             $actionItemMember = $this->actionManager->actionItemMemberManager->init();
             $actionItemMember->setAction($action);
@@ -208,6 +198,7 @@ class ItemController extends AbstractController
 
             $this->actionManager->actionItemMemberManager->persist($actionItemMember);
             $data['action'] = $case;
+            $data['action_reverse'] = 'un'.$case;
         }
 
         $data['entry'] = $item->toArray();
