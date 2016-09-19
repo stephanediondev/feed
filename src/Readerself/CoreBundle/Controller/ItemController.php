@@ -94,11 +94,17 @@ class ItemController extends AbstractController
             $data['entry_entity'] = 'category';
         }
 
+        if($request->query->get('unread')) {
+            $page = 1;
+        } else {
+            $page = $request->query->getInt('page', 1);
+        }
+
         $paginator= $this->get('knp_paginator');
         $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
         $pagination = $paginator->paginate(
             $this->itemManager->getList($parameters),
-            $page = $request->query->getInt('page', 1),
+            $page,
             $request->query->getInt('perPage', 20)
         );
 
