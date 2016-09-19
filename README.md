@@ -38,3 +38,11 @@ composer update
 cd web/client
 bower update
 ```
+
+####Client
+http://example.com/client
+- Email: example@example.com
+- Password: example
+
+####Api documentation
+http://example.com/api/documentation
