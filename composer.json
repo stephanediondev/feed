@@ -17,6 +17,7 @@
         }
     },
     "require": {
+        "doctrine/doctrine-fixtures-bundle": "^2.3",
         "knplabs/knp-paginator-bundle": "^2.5",
         "minishlink/web-push-bundle": "*",
         "simplepie/simplepie": "*",

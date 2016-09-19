@@ -20,7 +20,7 @@
 cd /path-to-installation
 composer install
 bin/console doctrine:fixtures:load --append --fixtures="src/Readerself/CoreBundle/DataFixtures"
-cd client
+cd web/client
 bower install
 ```
 
@@ -29,3 +29,10 @@ Add to cron (hourly)
 cd /path-to-installation && bin/console readerself:collection
 cd /path-to-installation && bin/console readerself:elasticsearch
 ```
+
+####Update
+
+cd /path-to-installation
+composer update
+cd web/client
+bower update
