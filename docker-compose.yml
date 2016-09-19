@@ -1,0 +1,36 @@
+version: '2'
+services:
+    nginx:
+        image: nginx
+        ports:
+            - "8080:80"
+        volumes:
+            - ./docker/nginx/nginx.conf:/nginx.conf
+            - ./docker/logs/nginx:/var/log/nginx
+            - .:/var/www/html
+        links:
+            - php:php
+        command: nginx -c /nginx.conf
+    php:
+        build:
+            context: docker/php
+            args:
+                timezone: 'UTC'
+        ports:
+            - "9000:9000"
+        volumes:
+            - .:/var/www/html
+        links:
+             - "mysql:rdbms"
+        env_file:
+            - ./docker/php/env
+            - ./docker/mysql/env
+    mysql:
+        image: mysql/mysql-server:5.5.46
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./docker/data/mysql:/var/lib/mysql
+            - ./docker/logs/mysql:/var/log/mysql
+        env_file:
+            - ./docker/mysql/env

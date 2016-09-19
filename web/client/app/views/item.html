@@ -20,6 +20,17 @@
                 {{/if}}
             </h1>
         </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog" id="dialog-mark_all_as_read">{{trans 'mark_all_as_read'}}</button>
+            <dialog class="mdl-dialog" for="dialog-mark_all_as_read">
+                <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+                    <a href="#" class="mdl-button close">{{trans 'mark_all_as_read_no_limit'}}</a>
+                    <a href="#" class="mdl-button close">{{trans 'mark_all_as_read_one_day'}}</a>
+                    <a href="#" class="mdl-button close">{{trans 'mark_all_as_read_one_week'}}</a>
+                    <a href="#" class="mdl-button close">{{trans 'mark_all_as_read_two_weeks'}}</a>
+                </div>
+            </dialog>
+        </div>
     </div>
 </script>
 
@@ -68,21 +79,24 @@
                 <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read">{{trans 'read'}}</a>
             {{/if}}
             {{#if entry.star }}
-                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unstar'}}</a>
+                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star">{{trans 'unstar'}}</a>
             {{else}}
-                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'star'}}</a>
+                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star">{{trans 'star'}}</a>
             {{/if}}
-            <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="social_{{ entry.id }}">{{trans 'share'}}</button>
-            <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right" for="social_{{ entry.id }}">
-                <li class="mdl-menu__item"><a target="_blank" href="https://www.evernote.com/clip.action?url={{ entry.link }}&amp;title={{ entry.title }}">Evernote (clip)</a></li>
-                <li class="mdl-menu__item"><a target="_blank" href="https://www.facebook.com/sharer.php?u={{ entry.link }}">Facebook</a></li>
-                <li class="mdl-menu__item"><a target="_blank" href="https://plus.google.com/share?url={{ entry.link }}">Google+</a></li>
-                <li class="mdl-menu__item"><a target="_blank" href="https://www.instapaper.com/e2?url={{ entry.link }}&amp;title={{ entry.title }}">Instapaper</a></li>
-                <li class="mdl-menu__item"><a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ entry.link }}">LinkedIn</a></li>
-                <li class="mdl-menu__item"><a target="_blank" href="https://getpocket.com/edit?url={{ entry.link }}&amp;title={{ entry.title }}">Pocket</a></li>
-                <li class="mdl-menu__item"><a target="_blank" href="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&amp;url={{ entry.link }}&amp;title={{ entry.title }}">Tumblr</a></li>
-                <li class="mdl-menu__item"><a target="_blank" href="https://twitter.com/intent/tweet?source=webclient&amp;text={{ entry.title }}+{{ entry.link }}">Twitter</a></li>
-            </ul>
+
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog" id="dialog-share-{{ entry.id }}">{{trans 'share'}}</button>
+            <dialog class="mdl-dialog" for="dialog-share-{{ entry.id }}">
+                <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+                    <a class="mdl-button close" target="_blank" href="https://www.evernote.com/clip.action?url={{ entry.link }}&amp;title={{ entry.title }}">Evernote (clip)</a>
+                    <a class="mdl-button close" target="_blank" href="https://www.facebook.com/sharer.php?u={{ entry.link }}">Facebook</a>
+                    <a class="mdl-button close" target="_blank" href="https://plus.google.com/share?url={{ entry.link }}">Google+</a>
+                    <a class="mdl-button close" target="_blank" href="https://www.instapaper.com/e2?url={{ entry.link }}&amp;title={{ entry.title }}">Instapaper</a>
+                    <a class="mdl-button close" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ entry.link }}">LinkedIn</a>
+                    <a class="mdl-button close" target="_blank" href="https://getpocket.com/edit?url={{ entry.link }}&amp;title={{ entry.title }}">Pocket</a>
+                    <a class="mdl-button close" target="_blank" href="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&amp;url={{ entry.link }}&amp;title={{ entry.title }}">Tumblr</a>
+                    <a class="mdl-button close" target="_blank" href="https://twitter.com/intent/tweet?source=webclient&amp;text={{ entry.title }}+{{ entry.link }}">Twitter</a>
+                </div>
+            </dialog>
         </div>
     </div>
-</div>
+</script>

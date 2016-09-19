@@ -36,9 +36,6 @@ a:link, a:visited {
     min-height: inherit;
     overflow: visible;
 }
-.mdl-card.card-selected {
-    border: 1px solid #FF0000;
-}
 .mdl-card[direction="rtl"] {
     text-align: right;
 }
@@ -61,6 +58,9 @@ a:link, a:visited {
 .mdl-button {
     padding: 0px 8px;
     min-width: auto;
+}
+.mdl-button:focus:not(:active) {
+    background-color: transparent;
 }
 .mdl-card__supporting-text {
     overflow: visible;

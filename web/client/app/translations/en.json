@@ -1,4 +1,9 @@
 {
+    "shortcut_r": "r",
+    "shortcut_g_then_a": "g then a",
+    "shortcut_g_then_u": "g then u",
+    "shortcut_g_then_s": "g then s",
+
     "error_401": "Error 401",
     "error_404": "Error 404",
     "error_500": "Error 500",
@@ -13,6 +18,20 @@
     "delete": "Delete",
     "back": "Back",
     "more": "More",
+
+    "mark_all_as_read": "Mark all as read",
+    "mark_all_as_read_no_limit": "No date limit",
+    "mark_all_as_read_one_day": "Older than a day",
+    "mark_all_as_read_one_week": "Older than a week",
+    "mark_all_as_read_two_weeks": "Older than two weeks",
+
+    "read": "Mark as read",
+    "unread": "Mark as unread",
+
+    "star": "Star",
+    "unstar": "Unstar",
+
+    "share": "Share",
 
     "email": "Email",
     "password": "Password",

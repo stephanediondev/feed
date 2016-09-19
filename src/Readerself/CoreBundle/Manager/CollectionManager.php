@@ -102,7 +102,11 @@ class CollectionManager extends AbstractManager
             $accessToken = $fbApp->getAccessToken();
         }
 
-        $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date';
+        /*$sql = 'DELETE FROM item WHERE feed_id = 47';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();*/
+
+        $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date';//id = 47
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue('date', (new \Datetime())->format('Y-m-d H:i:s'));
         $stmt->execute();
@@ -179,6 +183,13 @@ class CollectionManager extends AbstractManager
             } else {
                 try {
                     $sp_feed = clone $this->simplepie;
+                    $stripTagsNew = [];
+                    foreach($sp_feed->sanitize->strip_htmltags as $tag) {
+                        if($tag != 'iframe') {
+                            $stripTagsNew[] = $tag;
+                        }
+                    }
+                    $sp_feed->sanitize->strip_htmltags = $stripTagsNew;
                     $sp_feed->set_feed_url($this->toAscii($feed['link']));
                     $sp_feed->enable_cache(false);
                     $sp_feed->set_timeout(5);
@@ -329,14 +340,37 @@ class CollectionManager extends AbstractManager
 
                                 $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
 
-                                $dom = new \DOMDocument;
+                                $dom = new \DOMDocument();
                                 $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
+
                                 $xpath = new \DOMXPath($dom);
+
+                                $tags = $dom->getElementsByTagName('iframe');
+                                $u = 0;
+                                foreach($tags as $tag) {
+                                    $src = $tags->item($u)->getAttribute('src');
+                                    //keep iframes from youtube, vimeo and dailymotion (to improve)
+                                    if(stristr($src, 'youtube.com') || stristr($src, 'vimeo.com') || stristr($src, 'dailymotion.com')) {
+                                    } else {
+                                        $tags->item($u)->parentNode->removeChild($tags->item($u));
+                                    }
+                                    /*$iframes[] = array(
+                                        'src'=>$tags->item($u)->getAttribute('src'),
+                                        'width'=>$tags->item($u)->getAttribute('width'),
+                                        'height'=>$tags->item($u)->getAttribute('height'),
+                                    );*/
+                                    $u++;
+                                }
 
                                 $disallowedAttributes = ['id', 'class', 'style', 'width', 'height', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];
                                 foreach($disallowedAttributes as $attribute) {
                                     $nodes = $xpath->query('//*[@'.$attribute.']');
                                     foreach($nodes as $node) {
+                                        //don't remove width and height if iframe
+                                        if(($attribute == 'width' || $attribute == 'height') && $node->tagName == 'iframe') {
+                                            continue;
+                                        }
+
                                         $node->removeAttribute($attribute);
                                     }
                                 }

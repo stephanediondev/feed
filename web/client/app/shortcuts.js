@@ -21,6 +21,10 @@ $(document).bind('keydown', function(event) {
         if(g_key && keycode == 65) {
             loadRoute('#items/all');
 
+        //g then u
+        } else if(g_key && keycode == 85) {
+            loadRoute('#items/unread');
+
         //g then s
         } else if(g_key && keycode == 83) {
             loadRoute('#items/starred');
@@ -41,20 +45,20 @@ $(document).bind('keydown', function(event) {
 
         //v
         } else if(keycode == 86) {
-            var href = $('.mdl-grid .item-selected').find('h1').find('a').attr('href');
-            var name = $('.mdl-grid .item-selected').attr('id');
+            var href = $('.mdl-grid .card-selected').find('h1').find('a').attr('href');
+            var name = $('.mdl-grid .card-selected').attr('id');
             window.open(href, 'window_' + name);
 
         //m
         } else if(keycode == 77) {
-            if($('.mdl-grid .item-selected').length > 0) {
-                item_read($('.mdl-grid .item-selected').find('.history'));
+            if($('.mdl-grid .card-selected').length > 0) {
+                $('.mdl-grid .card-selected').find('.action-read').trigger('click');
             }
 
         //s
         } else if(keycode == 83) {
-            if($('.mdl-grid .item-selected').length > 0) {
-                item_star($('.mdl-grid .item-selected').find('.star'));
+            if($('.mdl-grid .card-selected').length > 0) {
+                $('.mdl-grid .card-selected').find('.action-star').trigger('click');
             }
 
         //o or enter
@@ -71,7 +75,9 @@ $(document).bind('keydown', function(event) {
         } else if(keycode == 65) {
             //shift + a
             if(event.shiftKey) {
-                //modal_show($('#items_read').attr('href'));
+                if($('#dialog-mark_all_as_read').length > 0) {
+                    $('#dialog-mark_all_as_read').trigger('click');
+                }
             //a
             } else {
                 loadRoute('#feed/create');

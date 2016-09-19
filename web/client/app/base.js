@@ -13,7 +13,7 @@ if(window.location.port) {
     var apiUrl = '//' + window.location.hostname + window.location.pathname;
 }
 apiUrl = apiUrl.replace('index.html', '');
-apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
+apiUrl = apiUrl.replace('client/', 'api');
 
 var connectionToken = store.get('Connection_login_token');
 var snackbarContainer = document.querySelector('.mdl-snackbar');
@@ -201,7 +201,7 @@ function loadRoute(key, parameters) {
                             componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
                             if(parameters.link) {
-                                parameters.link.text(data_return.action_reverse);
+                                parameters.link.text($.i18n._(data_return.action_reverse));
                                 parameters.link.addClass(data_return.action);
                             }
                             if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
@@ -318,6 +318,32 @@ $(document).ready(function() {
     $(document).on('click', '.load-route', function(event) {
         event.preventDefault();
         loadRoute($(this).attr('href'), {page: $(this).data('page'), q: $(this).data('q'), link: $(this)});
+    });
+
+    $(document).on('click', '.dialog', function(event) {
+        event.preventDefault();
+
+        id = $(this).attr('id');
+
+        if($('body > dialog[for="' + id + '"]').length === 0) {
+            html = $('dialog[for="' + id + '"]')[0].outerHTML;
+            $('dialog[for="' + id + '"]').remove();
+            $('body').append(html);
+        }
+
+        var dialog = document.querySelector('dialog[for="' + id + '"]');
+
+        if(!dialog.showModal) {
+            dialogPolyfill.registerDialog(dialog);
+        }
+        dialog.showModal();
+    });
+
+    $(document).on('click', 'dialog .close', function() {
+        id = $(this).parent().parent().attr('for');
+
+        var dialog = document.querySelector('dialog[for="' + id + '"]');
+        dialog.close();
     });
 
     $(document).on('click', '.action-refresh', function(event) {

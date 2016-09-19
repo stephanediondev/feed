@@ -183,3 +183,11 @@ services:
         class: Readerself\CoreBundle\Manager\ActionCategoryMemberManager
         parent: "readerself_core_manager_abstract"
         public: true
+
+    #Manager
+    readerself_core_eventlistener_search:
+        class: Readerself\CoreBundle\EventListener\SearchListener
+        arguments:
+            - "@readerself_core_manager_search"
+        tags:
+            - { name: "kernel.event_listener", event: "Feed.before_remove", method: "persist" }
