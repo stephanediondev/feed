@@ -24,7 +24,7 @@
 </script>
 
 <script type="text/template" id="view-items-unit">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col item" id="item-{{ entry.id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 <a class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
@@ -47,14 +47,6 @@
             </div>
         </div>
         <div class="mdl-card__supporting-text">
-            {{#if entry.actions }}
-                <p>Actions:
-                {{#each entry.actions as |action action_index|}}
-                    {{ action.title }}</a>
-                {{/each}}
-                </p>
-            {{/if}}
-
             {{{ entry.content }}}
 
             {{#if entry.latitude }}
@@ -71,9 +63,9 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             {{#if entry.read }}
-                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unread'}}</a>
+                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read">{{trans 'unread'}}</a>
             {{else}}
-                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'read'}}</a>
+                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read">{{trans 'read'}}</a>
             {{/if}}
             {{#if entry.star }}
                 <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unstar'}}</a>

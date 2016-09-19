@@ -49,7 +49,7 @@
 
 <script type="text/template" id="view-more">
     {{#if entries_page_next }}
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col more" id="page-{{ entries_page_next }}">
             <div class="mdl-card__actions mdl-card--border">
                 <a href="{{ current_key }}" data-page="{{ entries_page_next }}" data-q="{{ current_q }}" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'more'}}</a>
             </div>

@@ -202,6 +202,7 @@ function loadRoute(key, parameters) {
                         } else {
                             if(parameters.link) {
                                 parameters.link.text(data_return.action_reverse);
+                                parameters.link.addClass(data_return.action);
                             }
                             if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
                                 setSnackbar(data_return.action + ' ' + data_return.entry.title);
@@ -233,7 +234,7 @@ function loadRoute(key, parameters) {
 }
 
 function setSnackbar(message) {
-    snackbarContainer.MaterialSnackbar.showSnackbar({message: message, timeout: 1000});
+    //snackbarContainer.MaterialSnackbar.showSnackbar({message: message, timeout: 1000});
 }
 
 function setPositions() {
@@ -241,7 +242,7 @@ function setPositions() {
     _offset = $('.mdl-layout__content').offset();
     _height = _window_height - _offset.top;
     $('.mdl-layout__content').css({ 'height': _height});
-    $('.mdl-grid').css({ 'padding-bottom': _height});
+    $('main > .mdl-grid').css({ 'padding-bottom': _height});
 }
 
 function scrollTo(anchor) {
@@ -349,5 +350,53 @@ $(document).ready(function() {
                 url: apiUrl + form.data('query')
             });
         }
+    });
+
+    $('.mdl-layout__content').bind('scroll', function() {
+        $('main > .mdl-grid').find('.mdl-card').each(function() {
+            if($(this).attr('id')) {
+                var id_loop = $(this).attr('id');
+                var ref = $('#' + id_loop);
+
+                $('main > .mdl-grid .card-selected').removeClass('card-selected');
+                ref.addClass('card-selected');
+
+                /*if($(this).hasClass('item')) {
+                    var last = $('main > .mdl-grid').find('.item:last').attr('id');
+                    if(last == itm_id) {
+                        add_items( $('.mdl-navigation').find('li.active').find('a.mdl-navigation__link').attr('href') );
+                    }
+                }*/
+
+                var offset = $(this).offset();
+                if(offset.top + ref.height() - 60 < 0) {
+                    if($(this).hasClass('more')) {
+                        liknActionMore = ref.find('.more');
+
+                        if(liknActionMore.hasClass('progress')) {
+                        } else {
+                            liknActionMore.addClass('progress');
+                            liknActionMore.trigger('click');
+                            //loadRoute(liknActionMore.attr('href'));
+                        }
+                    }
+
+                    if($(this).hasClass('item')) {// && items_display == 'expand'
+                        liknActionRead = ref.find('.action-read');
+
+                        if(liknActionRead.hasClass('read')) {
+                        } else if(liknActionRead.hasClass('unread')) {
+                        } else if(liknActionRead.hasClass('progress')) {
+                        } else {
+                            liknActionRead.addClass('progress');
+                            loadRoute(liknActionRead.attr('href'), {link: liknActionRead});
+                        }
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
     });
 });
