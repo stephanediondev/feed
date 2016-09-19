@@ -75,6 +75,12 @@ readerself_api_items:
         _controller: "readerself_core_controller_item:indexAction"
     methods: GET
 
+readerself_api_items_markallasread:
+    path:  /items/markallasread
+    defaults:
+        _controller: "readerself_core_controller_item:markallasreadAction"
+    methods: GET
+
 readerself_api_item_read:
     path:  /item/read/{id}
     defaults:

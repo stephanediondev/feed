@@ -205,6 +205,7 @@ class SearchController extends AbstractController
                             if(isset($hit['highlight']['description']) == 1) {
                                 $data['entries'][$index]['description'] = $this->cleanContent($hit['highlight']['description'][0]);
                             }
+                            $index++;
                         }
                     }
 
@@ -232,10 +233,9 @@ class SearchController extends AbstractController
                             if(isset($hit['highlight']['content']) == 1) {
                                 $data['entries'][$index]['content'] = $this->cleanContent($hit['highlight']['content'][0]);
                             }
+                            $index++;
                         }
                     }
-
-                    $index++;
                 }
 
                 $data['entries_entity'] = $type;

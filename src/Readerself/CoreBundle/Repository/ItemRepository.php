@@ -55,15 +55,30 @@ class ItemRepository extends AbstractRepository
         }
 
         if(isset($parameters['member']) == 1) {
-            if(isset($parameters['unread']) == 1 && $parameters['unread']) {
+            $memberSet = false;
+
+            if(isset($parameters['feed']) == 0 && isset($parameters['author']) == 0 && isset($parameters['category']) == 0) {
                 $query->andWhere('fed.id IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
-                $query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action = 1)');
-                $query->setParameter(':member', $parameters['member']);
+                if(!$memberSet) {
+                    $query->setParameter(':member', $parameters['member']);
+                    $memberSet = true;
+                }
+            }
+
+            if(isset($parameters['unread']) == 1 && $parameters['unread']) {
+                $query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
+                if(!$memberSet) {
+                    $query->setParameter(':member', $parameters['member']);
+                    $memberSet = true;
+                }
             }
 
             if(isset($parameters['starred']) == 1 && $parameters['starred']) {
                 $query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM ReaderselfCoreBundle:ActionItemMember AS starred WHERE starred.member = :member AND starred.action = 2)');
-                $query->setParameter(':member', $parameters['member']);
+                if(!$memberSet) {
+                    $query->setParameter(':member', $parameters['member']);
+                    $memberSet = true;
+                }
             }
         }
 

@@ -36,5 +36,12 @@ routes['#items/feed/{id}'] = {view: 'view-items', view_unit: 'view-items-unit', 
 routes['#items/author/{id}'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?author={id}', store: false};
 routes['#items/category/{id}'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?category={id}', store: false};
 
+routes['#items/markallasread/all'] = {view: false, query: '/items/markallasread', store: false};
+routes['#items/markallasread/unread'] = {view: false, query: '/items/markallasread?unread=1', store: false};
+routes['#items/markallasread/starred'] = {view: false, query: '/item/markallasreads?starred=1', store: false};
+routes['#items/markallasread/feed/{id}'] = {view: false, query: '/items/markallasread?feed={id}', store: false};
+routes['#items/markallasread/author/{id}'] = {view: false, query: '/items/markallasread?author={id}', store: false};
+routes['#items/markallasread/category/{id}'] = {view: false, query: '/items/markallasread?category={id}', store: false};
+
 routes['#item/read/{id}'] = {view: false, query: '/item/read/{id}', store: false};
 routes['#item/star/{id}'] = {view: false, query: '/item/star/{id}', store: false};

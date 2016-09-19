@@ -86,11 +86,14 @@
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="q" class="required">{{trans 'q'}}</label>
-                    <input type="text" id="q" name="q" required="true" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <input type="text" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'search'}}</button>
                 </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#search/items" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_items'}}</a>
             </div>
         </form>
     </div>
@@ -111,11 +114,14 @@
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="q" class="required">{{trans 'q'}}</label>
-                    <input type="text" id="q" name="q" required="true" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <input type="text" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'search'}}</button>
                 </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#search/feeds" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_feeds'}}</a>
             </div>
         </form>
     </div>

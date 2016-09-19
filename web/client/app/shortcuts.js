@@ -55,6 +55,12 @@ $(document).bind('keydown', function(event) {
                 $('.mdl-grid .card-selected').find('.action-read').trigger('click');
             }
 
+        //shift + s
+        } else if(event.shiftKey && keycode == 83) {
+            if($('.mdl-grid .card-selected').length > 0) {
+                $('.mdl-grid .card-selected').find('.action-share').trigger('click');
+            }
+
         //s
         } else if(keycode == 83) {
             if($('.mdl-grid .card-selected').length > 0) {

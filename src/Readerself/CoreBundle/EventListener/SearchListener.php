@@ -1,5 +1,5 @@
 <?php
-namespace Readerself\SearchBundle\EventListener;
+namespace Readerself\CoreBundle\EventListener;
 
 use Readerself\CoreBundle\Manager\SearchManager;
 use Readerself\CoreBundle\Event\FeedEvent;
@@ -14,10 +14,14 @@ class SearchListener
         $this->searchManager = $searchManager;
     }
 
+    public function persist(FeedEvent $feedEvent)
+    {
+    }
+
     public function remove(FeedEvent $feedEvent)
     {
         $action = 'DELETE';
-        $path = '/'.$this->getIndex().'/feed/'.$data->getId();
+        $path = '/'.$this->searchManager->getIndex().'/feed/'.$feedEvent->getdata()->getId();
         $this->searchManager->query($action, $path);
     }
 }

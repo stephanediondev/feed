@@ -21,13 +21,23 @@
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog" id="dialog-mark_all_as_read">{{trans 'mark_all_as_read'}}</button>
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog" id="dialog-mark_all_as_read" title="{{trans 'shortcut_shift_a'}}">{{trans 'mark_all_as_read'}}</button>
             <dialog class="mdl-dialog" for="dialog-mark_all_as_read">
+                <div class="mdl-dialog__content">
+                    <p>
+                    {{#if entry }}
+                        {{ entry.title }} ({{trans entry_entity}})<br>
+                    {{/if}}
+                    {{#if current_title }}
+                        {{trans current_title}} ({{ entries_total }})
+                    {{else}}
+                        {{trans 'all_items'}} ({{ entries_total }})
+                    {{/if}}
+                    </p>
+                </div>
                 <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-                    <a href="#" class="mdl-button close">{{trans 'mark_all_as_read_no_limit'}}</a>
-                    <a href="#" class="mdl-button close">{{trans 'mark_all_as_read_one_day'}}</a>
-                    <a href="#" class="mdl-button close">{{trans 'mark_all_as_read_one_week'}}</a>
-                    <a href="#" class="mdl-button close">{{trans 'mark_all_as_read_two_weeks'}}</a>
+                    <a href="{{ current_key_markallasread }}" class="load-route mdl-button close">{{trans 'confirm'}}</a>
+                    <a href="#" class="mdl-button close">{{trans 'cancel'}}</a>
                 </div>
             </dialog>
         </div>
@@ -38,7 +48,7 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col item" id="item-{{ entry.id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                <a class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
+                <a title="{{trans 'shortcut_v'}}" class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
             </h1>
             <div class="mdl-card__subtitle-text">
                 {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{ entry.score }}</span>{{/if}}
@@ -74,17 +84,21 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             {{#if entry.read }}
-                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read">{{trans 'unread'}}</a>
+                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read" title="m">{{trans 'unread'}}</a>
             {{else}}
-                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read">{{trans 'read'}}</a>
+                {{#if entry.read_all }}
+                    <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read" title="m">{{trans 'unread'}}</a>
+                {{else}}
+                    <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read" title="m">{{trans 'read'}}</a>
+                {{/if}}
             {{/if}}
             {{#if entry.star }}
-                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star">{{trans 'unstar'}}</a>
+                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star" title="s">{{trans 'unstar'}}</a>
             {{else}}
-                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star">{{trans 'star'}}</a>
+                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star" title="s">{{trans 'star'}}</a>
             {{/if}}
 
-            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog" id="dialog-share-{{ entry.id }}">{{trans 'share'}}</button>
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog action-share" id="dialog-share-{{ entry.id }}" title="{{trans 'shortcut_shift_m'}}">{{trans 'share'}}</button>
             <dialog class="mdl-dialog" for="dialog-share-{{ entry.id }}">
                 <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
                     <a class="mdl-button close" target="_blank" href="https://www.evernote.com/clip.action?url={{ entry.link }}&amp;title={{ entry.title }}">Evernote (clip)</a>

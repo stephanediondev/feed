@@ -13,7 +13,7 @@ if(window.location.port) {
     var apiUrl = '//' + window.location.hostname + window.location.pathname;
 }
 apiUrl = apiUrl.replace('index.html', '');
-apiUrl = apiUrl.replace('client/', 'api');
+apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
 
 var connectionToken = store.get('Connection_login_token');
 var snackbarContainer = document.querySelector('.mdl-snackbar');
@@ -153,6 +153,7 @@ function loadRoute(key, parameters) {
                 statusCode: {
                     200: function(data_return) {
                         data_return.current_key = key;
+                        data_return.current_key_markallasread = key.replace('#items', '#items/markallasread');
                         data_return.current_q = parameters.q;
 
                         if(route.title) {
@@ -339,7 +340,11 @@ $(document).ready(function() {
         dialog.showModal();
     });
 
-    $(document).on('click', 'dialog .close', function() {
+    $(document).on('click', 'dialog .close', function(event) {
+        if($(this).hasClass('load-route')) {
+        } else {
+            event.preventDefault();
+        }
         id = $(this).parent().parent().attr('for');
 
         var dialog = document.querySelector('dialog[for="' + id + '"]');
@@ -351,6 +356,16 @@ $(document).ready(function() {
         if(window.location.hash) {
             loadRoute(window.location.hash);
         }
+    });
+
+    $(document).on('click', '.action-up', function(event) {
+        event.preventDefault();
+        item_up();
+    });
+
+    $(document).on('click', '.action-down', function(event) {
+        event.preventDefault();
+        item_down();
     });
 
     $(document).on('click', '.more', function(event) {

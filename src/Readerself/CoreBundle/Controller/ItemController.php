@@ -149,6 +149,75 @@ class ItemController extends AbstractController
     }
 
     /**
+     * Mark all items as read.
+     *
+     * @ApiDoc(
+     *     section="Item",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     *     parameters={
+     *         {"name"="starred", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with action ""star"""},
+     *         {"name"="feed", "dataType"="integer", "required"=false, "format"="feed ID", "description"="items by feed"},
+     *         {"name"="author", "dataType"="integer", "required"=false, "format"="author ID", "description"="items by author"},
+     *         {"name"="category", "dataType"="integer", "required"=false, "format"="category ID", "description"="items by category"},
+     *     },
+     * )
+     */
+    public function markallasreadAction(Request $request)
+    {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $parameters = [];
+        $parameters['member'] = $member;
+
+        $parameters['unread'] = (bool) $request->query->get('unread');
+
+        if($request->query->get('starred')) {
+            $parameters['starred'] = $request->query->get('starred');
+        }
+
+        if($request->query->get('feed')) {
+            $parameters['feed'] = (int) $request->query->get('feed');
+        }
+
+        if($request->query->get('author')) {
+            $parameters['author'] = (int) $request->query->get('author');
+        }
+
+        if($request->query->get('category')) {
+            $parameters['category'] = (int) $request->query->get('category');
+        }
+
+        $results = $this->itemManager->getList($parameters);
+
+        $action = $this->actionManager->getOne(['title' => 'read_all']);
+
+        foreach($results as $result) {
+            $item = $this->itemManager->getOne(['id' => $result['id']]);
+
+            if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
+                'action' => $action,
+                'item' => $item,
+                'member' => $member,
+            ])) {
+            } else {
+                $actionItemMember = $this->actionManager->actionItemMemberManager->init();
+                $actionItemMember->setAction($action);
+                $actionItemMember->setItem($item);
+                $actionItemMember->setMember($member);
+    
+                $this->actionManager->actionItemMemberManager->persist($actionItemMember);
+            }
+        }
+
+        return new JsonResponse($data);
+    }
+
+    /**
      * Set "read" action / Remove "read" action.
      *
      * @ApiDoc(
