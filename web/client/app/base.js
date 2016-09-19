@@ -246,8 +246,50 @@ function setPositions() {
 }
 
 function scrollTo(anchor) {
-    //$('.mdl-layout__content').scrollTo(anchor);
-    $(anchor).ScrollTo();
+    $('.mdl-layout__content').scrollTo(anchor);
+}
+
+function item_up() {
+    var itm_id = $('.mdl-grid .card-selected').attr('id');
+    var prev = $('#' + itm_id).prev().attr('id');
+    if(prev) {
+        scrollTo('#' + prev);
+    }
+}
+function item_down() {
+    if($('.mdl-grid .card-selected').length === 0) {
+        itm_id = $('.mdl-grid').find('.item:first').attr('id');
+        next = $('#' + itm_id).attr('id');
+        $('#' + itm_id).addClass('card-selected');
+    } else {
+        itm_id = $('.mdl-grid .card-selected').attr('id');
+        next = $('#' + itm_id).next().attr('id');
+    }
+    if(next) {
+        scrollTo('#' + next);
+
+        if($('#' + next).hasClass('more')) {
+            liknActionMore = $('#' + next).find('.more');
+
+            if(liknActionMore.hasClass('progress')) {
+            } else {
+                liknActionMore.addClass('progress');
+                liknActionMore.trigger('click');
+                //loadRoute(liknActionMore.attr('href'));
+            }
+        }
+
+        if($('#' + next).hasClass('item')) {
+            liknActionRead = $('#' + next).find('.action-read');
+            if(liknActionRead.hasClass('read')) {
+            } else if(liknActionRead.hasClass('unread')) {
+            } else if(liknActionRead.hasClass('progress')) {
+            } else {
+                liknActionRead.addClass('progress');
+                loadRoute(liknActionRead.attr('href'), {link: liknActionRead});
+            }
+        }
+    }
 }
 
 $(document).ready(function() {

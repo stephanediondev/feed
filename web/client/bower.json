@@ -7,7 +7,7 @@
         "store.js": "*",
         "jquery-i18n": "*",
         "jquery-timeago": "*",
-        "jquery-scrollto": "*",
+        "jquery.scrollTo": "*",
         "handlebars": "*"
     }
 }
