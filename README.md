@@ -32,7 +32,9 @@ cd /path-to-installation && bin/console readerself:elasticsearch
 
 ####Update
 
+```text
 cd /path-to-installation
 composer update
 cd web/client
 bower update
+```
