@@ -38,14 +38,14 @@ class SearchController extends AbstractController
      * Search feeds.
      *
      * @ApiDoc(
-     *     section="Search",
+     *     section="_ Feed",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
      *         {"name"="q", "dataType"="string", "required"=true, "description"="query"},
-     *         {"name"="sort_field", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
-     *         {"name"="sort_direction", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="sortField", "dataType"="string", "required"=false, "format"="""score"", ""title"" or ""date"", default ""score""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
      *     },
@@ -60,14 +60,14 @@ class SearchController extends AbstractController
      * Search items.
      *
      * @ApiDoc(
-     *     section="Search",
+     *     section="_ Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
      *         {"name"="q", "dataType"="string", "required"=true, "description"="query"},
-     *         {"name"="sort_field", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
-     *         {"name"="sort_direction", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="sortField", "dataType"="string", "required"=false, "format"="""score"", ""title"" or ""date"", default ""score""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
      *     },
@@ -91,15 +91,15 @@ class SearchController extends AbstractController
         if($request->query->get('q')) {
             $page = $request->query->getInt('page', 1);
 
-            if(!array_key_exists($request->query->get('sort_field'), $sortFields)) {
+            if(!array_key_exists($request->query->get('sortField'), $sortFields)) {
                 $sortField = '_score';
             } else {
-                $sortField = $request->query->get('sort_field');
+                $sortField = $request->query->get('sortField');
             }
-            if(!array_key_exists($request->query->get('sort_direction'), $sortDirection)) {
+            if(!array_key_exists($request->query->get('sortDirection'), $sortDirection)) {
                 $sortDirection = 'desc';
             } else {
-                $sortDirection = $request->query->get('sort_direction');
+                $sortDirection = $request->query->get('sortDirection');
             }
 
             $size = 20;

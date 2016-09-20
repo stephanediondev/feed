@@ -1,7 +1,7 @@
 <!-- Member -->
 <script type="text/template" id="view-login">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#items/unread" data-query="/login" method="POST">
+        <form action="#items/unread" data-query="/connection" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="email" class="required">{{trans 'email'}}</label>
@@ -52,10 +52,12 @@
             </p>
             {{/if}}
         </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
-            <a href="#profile/delete" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
-        </div>
+        {{#unless member.demo }}
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+                <a href="#profile/delete" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
+            </div>
+        {{/unless}}
     </div>
 
     {{#each entry.connections as |connection connection_index|}}

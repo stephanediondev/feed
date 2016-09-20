@@ -29,14 +29,17 @@ class FeedController extends AbstractController
      * Retrieve all feeds.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="_ Feed",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
-     *         {"name"="order", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="items per page"},
+     *         {"name"="subscribed", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="subscribed feeds"},
+     *         {"name"="unsubscribed", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="unsubscribed feeds"},
+     *         {"name"="errors", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="feeds with errors"},
      *     },
      * )
      */
@@ -245,10 +248,10 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Subscribe to feed / Unsubscribe from feed.
+     * Set "subscribe" action / Remove "subscribe" action.
      *
      * @ApiDoc(
-     *     section="Feed",
+     *     section="_ Feed",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },

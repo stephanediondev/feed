@@ -1,0 +1,51 @@
+#extra
+readerself_api_items:
+    path: /items
+    defaults:
+        _controller: "readerself_core_controller_item:indexAction"
+    methods: GET
+
+readerself_api_items_markallasread:
+    path: /items/markallasread
+    defaults:
+        _controller: "readerself_core_controller_item:markallasreadAction"
+    methods: GET
+
+readerself_api_item_read:
+    path: /item/read/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:readAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_item_star:
+    path: /item/star/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:starAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_item_readability:
+    path: /item/readability/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:readabilityAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_item_email:
+    path: /item/email/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:emailAction"
+    requirements:
+        id: '\d+'
+    methods: POST
+
+readerself_api_search_items:
+    path: /items/search
+    defaults:
+        _controller: "readerself_core_controller_search:itemsAction"
+    methods: GET
+

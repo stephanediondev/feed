@@ -49,6 +49,44 @@ class PushController extends AbstractController
     }
 
     /**
+     * Retrieve a push.
+     *
+     * @ApiDoc(
+     *     section="Push",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function readAction(Request $request, $id)
+    {
+        $data = [];
+
+        $data['id'] = $id;
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * Update a push.
+     *
+     * @ApiDoc(
+     *     section="Push",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $data = [];
+
+        $data['id'] = $id;
+
+        return new JsonResponse($data);
+    }
+
+    /**
      * Delete a push.
      *
      * @ApiDoc(

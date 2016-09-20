@@ -14,12 +14,6 @@ services:
         class: Readerself\CoreBundle\Controller\ContentController
         parent: "readerself_core_controller_abstract"
 
-    readerself_core_controller_action:
-        class: Readerself\CoreBundle\Controller\ActionController
-        parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_feed"
-
     readerself_core_controller_feed:
         class: Readerself\CoreBundle\Controller\FeedController
         parent: "readerself_core_controller_abstract"
@@ -51,15 +45,22 @@ services:
             - "@readerself_core_manager_category"
             - "@readerself_core_manager_action"
 
+    readerself_core_controller_author:
+        class: Readerself\CoreBundle\Controller\AuthorController
+        parent: "readerself_core_controller_abstract"
+        arguments:
+            - "@readerself_core_manager_author"
+
     readerself_core_controller_push:
         class: Readerself\CoreBundle\Controller\PushController
         parent: "readerself_core_controller_abstract"
         arguments:
             - "@readerself_core_manager_push"
 
-    readerself_core_controller_login:
-        class: Readerself\CoreBundle\Controller\LoginController
+    readerself_core_controller_connection:
+        class: Readerself\CoreBundle\Controller\ConnectionController
         parent: "readerself_core_controller_abstract"
+
 
     readerself_core_controller_member:
         class: Readerself\CoreBundle\Controller\MemberController

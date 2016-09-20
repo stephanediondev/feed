@@ -1,0 +1,30 @@
+#crud
+readerself_api_push_create:
+    path: /push
+    defaults:
+        _controller: "readerself_core_controller_push:createAction"
+    methods: POST
+
+readerself_api_push_read:
+    path: /push/{id}
+    defaults:
+        _controller: "readerself_core_controller_push:readAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_push_update:
+    path: /push/{id}
+    defaults:
+        _controller: "readerself_core_controller_push:updateAction"
+    requirements:
+        id: '\d+'
+    methods: PUT
+
+readerself_api_push_delete:
+    path: /push/{id}
+    defaults:
+        _controller: "readerself_core_controller_push:deleteAction"
+    requirements:
+        id: '\d+'
+    methods: DELETE

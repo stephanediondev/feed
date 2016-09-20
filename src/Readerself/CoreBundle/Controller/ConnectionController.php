@@ -7,18 +7,16 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
-use Readerself\CoreBundle\Form\Type\MemberType;
+use Readerself\CoreBundle\Entity\Login;
+use Readerself\CoreBundle\Form\Type\LoginType;
 
-class MemberController extends AbstractController
+class ConnectionController extends AbstractController
 {
     /**
-     * Create a member.
+     * Create a connection.
      *
      * @ApiDoc(
-     *     section="Member",
-     *     headers={
-     *         {"name"="X-CONNECTION-TOKEN","required"=true},
-     *     },
+     *     section="Connection",
      *     parameters={
      *         {"name"="email", "dataType"="string", "format"="email", "required"=true},
      *         {"name"="password", "dataType"="string", "format"="", "required"=true},
@@ -28,33 +26,36 @@ class MemberController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
-        }
 
-        $status = 200;
+        $status = 401;
 
-        $member = $this->memberManager->init();
-        $form = $this->createForm(MemberType::class, $member, ['validation_groups'=>['insert']]);
+        $login = new Login();
+        $form = $this->createForm(LoginType::class, $login);
 
         $form->submit($request->request->all());
 
-        $data[] = 'a';
-
         if($form->isValid()) {
-            $test = $this->memberManager->getOne(['email' => $member->getEmail()]);
+            $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
 
-            if(!$test) {
+            if($member) {
                 $encoder = $this->get('security.password_encoder');
-                $encoded = $encoder->encodePassword($member, $member->getPlainPassword());
-                $member->setPassword($encoded);
 
-                $member_id = $this->memberManager->persist($member);
+                if($encoder->isPasswordValid($member, $login->getPassword())) {
+                    $connection = $this->memberManager->connectionManager->init();
+                    $connection->setMember($member);
+                    $connection->setType('login');
+                    $connection->setToken(base64_encode(random_bytes(50)));
+                    $connection->setIp($request->getClientIp());
+                    $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
 
-                $data[] = $form->getData()->getEmail();
-            } else {
-                $data[] = 'b';
-                $status = 403;
+                    $data['entry'] = $connection->toArray();
+                    $data['entry']['member'] = $connection->getMember()->toArray();
+                    $data['entry_entity'] = 'connection';
+
+                    $connection_id = $this->memberManager->connectionManager->persist($connection);
+
+                    $status = 200;
+                }
             }
         }
 
@@ -62,10 +63,10 @@ class MemberController extends AbstractController
     }
 
     /**
-     * Retrieve a member.
+     * Retrieve a connection.
      *
      * @ApiDoc(
-     *     section="Member",
+     *     section="Connection",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -91,10 +92,10 @@ class MemberController extends AbstractController
     }
 
     /**
-     * Update a member.
+     * Update a connection.
      *
      * @ApiDoc(
-     *     section="Member",
+     *     section="Connection",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -103,15 +104,27 @@ class MemberController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $connections = [];
+        foreach($this->memberManager->connectionManager->getList(['member' => $member]) as $connection) {
+            $connections[] = $connection->toArray();
+        }
+
+        $data['entry'] = $member->toArray();
+        $data['entry']['connections'] = $connections;
+        $data['entry_entity'] = 'member';
 
         return new JsonResponse($data);
     }
 
     /**
-     * Delete a member.
+     * Delete a connection.
      *
      * @ApiDoc(
-     *     section="Member",
+     *     section="Connection",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },

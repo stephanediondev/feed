@@ -33,12 +33,12 @@ class ItemController extends AbstractController
      * Retrieve all items.
      *
      * @ApiDoc(
-     *     section="Item",
+     *     section="_ Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
-     *         {"name"="order", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
      *         {"name"="starred", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="items with action ""star"""},
@@ -48,6 +48,14 @@ class ItemController extends AbstractController
      *         {"name"="author", "dataType"="integer", "required"=false, "format"="author ID", "description"="items by author"},
      *         {"name"="category", "dataType"="integer", "required"=false, "format"="category ID", "description"="items by category"},
      *     },
+     *     statusCodes={
+     *         200="Returned when successful",
+     *         403="Returned when the user is not authorized to say hello",
+     *         404={
+     *           "Returned when the user is not found",
+     *           "Returned when something else is not found"
+     *         }
+     *     }
      * )
      */
     public function indexAction(Request $request)
@@ -152,7 +160,7 @@ class ItemController extends AbstractController
      * Mark all items as read.
      *
      * @ApiDoc(
-     *     section="Item",
+     *     section="_ Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -201,7 +209,7 @@ class ItemController extends AbstractController
      * Set "read" action / Remove "read" action.
      *
      * @ApiDoc(
-     *     section="Item",
+     *     section="_ Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -216,7 +224,7 @@ class ItemController extends AbstractController
      * Set "star" action / Remove "star" action.
      *
      * @ApiDoc(
-     *     section="Item",
+     *     section="_ Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -266,7 +274,7 @@ class ItemController extends AbstractController
      * Retrieve content with Readability.
      *
      * @ApiDoc(
-     *     section="Item",
+     *     section="_ Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -303,7 +311,7 @@ class ItemController extends AbstractController
      * Send item by email.
      *
      * @ApiDoc(
-     *     section="Item",
+     *     section="_ Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },

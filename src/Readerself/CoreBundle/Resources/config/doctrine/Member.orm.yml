@@ -37,11 +37,12 @@ Readerself\CoreBundle\Entity\Member:
             length: 255
             options:
                 fixed: false
-        administrator:
-            type: boolean
+        role:
+            type: string
             nullable: false
+            length: 255
             options:
-                default: '0'
+                fixed: false
         dateCreated:
             type: datetime
             nullable: false

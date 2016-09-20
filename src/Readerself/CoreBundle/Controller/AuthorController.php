@@ -6,28 +6,23 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
-use Readerself\CoreBundle\Manager\CategoryManager;
-use Readerself\CoreBundle\Manager\ActionManager;
+use Readerself\CoreBundle\Manager\AuthorManager;
 
-class CategoryController extends AbstractController
+class AuthorController extends AbstractController
 {
     protected $categoryManager;
 
-    protected $actionManager;
-
     public function __construct(
-        CategoryManager $categoryManager,
-        ActionManager $actionManager
+        AuthorManager $categoryManager
     ) {
         $this->categoryManager = $categoryManager;
-        $this->actionManager = $actionManager;
     }
 
     /**
-     * Create a category.
+     * Create an author.
      *
      * @ApiDoc(
-     *     section="Category",
+     *     section="Author",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -47,10 +42,10 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * Retrieve a category.
+     * Retrieve an author.
      *
      * @ApiDoc(
-     *     section="Category",
+     *     section="Author",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -76,10 +71,10 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * Update a category.
+     * Update an author.
      *
      * @ApiDoc(
-     *     section="Category",
+     *     section="Author",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -95,10 +90,10 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * Delete a category.
+     * Delete an author.
      *
      * @ApiDoc(
-     *     section="Category",
+     *     section="Author",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -109,51 +104,6 @@ class CategoryController extends AbstractController
         $data = [];
 
         $data['id'] = $id;
-
-        return new JsonResponse($data);
-    }
-
-    /**
-     * Set "exclude" action / Remove "exclude" action.
-     *
-     * @ApiDoc(
-     *     section="_ Category",
-     *     headers={
-     *         {"name"="X-CONNECTION-TOKEN","required"=true},
-     *     },
-     * )
-     */
-    public function excludeAction(Request $request, $id)
-    {
-        $data = [];
-        if(!$member = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
-        }
-
-        $category = $this->categoryManager->getOne(['id' => $id]);
-        $action = $this->actionManager->getOne(['title' => 'exclude']);
-
-        if($actionCategoryMember = $this->actionManager->actionCategoryMemberManager->getOne([
-            'action' => $action,
-            'category' => $category,
-            'member' => $member,
-        ])) {
-            $this->actionManager->actionCategoryMemberManager->remove($actionCategoryMember);
-            $data['action'] = 'include';
-            $data['action_reverse'] = 'exclude';
-        } else {
-            $actionCategoryMember = $this->actionManager->actionCategoryMemberManager->init();
-            $actionCategoryMember->setAction($action);
-            $actionCategoryMember->setCategory($category);
-            $actionCategoryMember->setMember($member);
-
-            $this->actionManager->actionCategoryMemberManager->persist($actionCategoryMember);
-            $data['action'] = 'exclude';
-            $data['action_reverse'] = 'include';
-        }
-
-        $data['entry'] = $category->toArray();
-        $data['entry_entity'] = 'category';
 
         return new JsonResponse($data);
     }

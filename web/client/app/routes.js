@@ -10,10 +10,10 @@ routes['#configuration'] = {view: 'view-configuration', query: false, title: 'co
 routes['#search'] = {view: 'view-search', query: false, title: 'search'};
 
 routes['#search/items'] = {view: 'view-search-items', query: false, title: 'search_items'};
-routes['#search/items/result'] = {view: 'view-search-items', view_unit: 'view-items-unit', query: '/search/items', title: 'search_items'};
+routes['#search/items/result'] = {view: 'view-search-items', view_unit: 'view-items-unit', query: '/items/search', title: 'search_items'};
 
 routes['#search/feeds'] = {view: 'view-search-feeds', query: false, title: 'search_feeds'};
-routes['#search/feeds/result'] = {view: 'view-search-feeds', view_unit: 'view-feeds-unit', query: '/search/feeds', title: 'search_feeds'};
+routes['#search/feeds/result'] = {view: 'view-search-feeds', view_unit: 'view-feeds-unit', query: '/feeds/search', title: 'search_feeds'};
 
 routes['#feeds'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds', title: 'all_feeds', store: false};
 routes['#feeds/errors'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?errors=1', title: 'feeds_errors', store: false};

@@ -1,3 +1,8 @@
+/composer.lock
+/composer.phar
+/docker/data/
+/docker/logs/
+
 /app/config/parameters.yml
 /build/
 /phpunit.xml

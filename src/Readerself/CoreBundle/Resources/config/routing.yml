@@ -1,172 +1,20 @@
-readerself_api_search_items:
-    path: /search/items
-    defaults:
-        _controller: "readerself_core_controller_search:itemsAction"
-    methods: GET
+ReaderselfCoreBundle_feed:
+    resource: "@ReaderselfCoreBundle/Resources/config/routing/feed.yml"
 
-readerself_api_search_feeds:
-    path: /search/feeds
-    defaults:
-        _controller: "readerself_core_controller_search:feedsAction"
-    methods: GET
+ReaderselfCoreBundle_item:
+    resource: "@ReaderselfCoreBundle/Resources/config/routing/item.yml"
 
-#Push
-readerself_api_push_create:
-    path: /push
-    defaults:
-        _controller: "readerself_core_controller_push:createAction"
-    methods: POST
+ReaderselfCoreBundle_author:
+    resource: "@ReaderselfCoreBundle/Resources/config/routing/author.yml"
 
-readerself_api_push_delete:
-    path: /push/{id}
-    defaults:
-        _controller: "readerself_core_controller_push:deleteAction"
-    requirements:
-        id: '\d+'
-    methods: DELETE
+ReaderselfCoreBundle_category:
+    resource: "@ReaderselfCoreBundle/Resources/config/routing/category.yml"
 
-#Login
-readerself_core_login:
-    path: /login
-    defaults:
-        _controller: "readerself_core_controller_login:createAction"
-    methods: POST
+ReaderselfCoreBundle_member:
+    resource: "@ReaderselfCoreBundle/Resources/config/routing/member.yml"
 
-readerself_core_profile:
-    path: /profiel
-    defaults:
-        _controller: "readerself_core_controller_profile:createAction"
-    methods: POST
+ReaderselfCoreBundle_connection:
+    resource: "@ReaderselfCoreBundle/Resources/config/routing/connection.yml"
 
-#Member
-readerself_core_member_create:
-    path: /register
-    defaults:
-        _controller: "readerself_core_controller_member:createAction"
-    methods: POST
-
-readerself_core_member_read:
-    path: /profile
-    defaults:
-        _controller: "readerself_core_controller_member:readAction"
-    methods: GET
-
-readerself_core_member_update:
-    path: /profile
-    defaults:
-        _controller: "readerself_core_controller_member:updateAction"
-    methods: POST
-
-#Item
-readerself_api_items:
-    path: /items
-    defaults:
-        _controller: "readerself_core_controller_item:indexAction"
-    methods: GET
-
-readerself_api_items_markallasread:
-    path: /items/markallasread
-    defaults:
-        _controller: "readerself_core_controller_item:markallasreadAction"
-    methods: GET
-
-readerself_api_item_read:
-    path: /item/read/{id}
-    defaults:
-        _controller: "readerself_core_controller_item:readAction"
-    requirements:
-        id: '\d+'
-    methods: GET
-
-readerself_api_item_star:
-    path: /item/star/{id}
-    defaults:
-        _controller: "readerself_core_controller_item:starAction"
-    requirements:
-        id: '\d+'
-    methods: GET
-
-readerself_api_item_readability:
-    path: /item/readability/{id}
-    defaults:
-        _controller: "readerself_core_controller_item:readabilityAction"
-    requirements:
-        id: '\d+'
-    methods: GET
-
-readerself_api_item_email:
-    path: /item/email/{id}
-    defaults:
-        _controller: "readerself_core_controller_item:emailAction"
-    requirements:
-        id: '\d+'
-    methods: POST
-
-#Action
-readerself_api_actions:
-    path: /actions
-    defaults:
-        _controller: "readerself_core_controller_action:indexAction"
-    methods: GET
-
-#Category
-readerself_api_category_read:
-    path: /category/{id}
-    defaults:
-        _controller: "readerself_core_controller_category:readAction"
-    requirements:
-        id: '\d+'
-    methods: GET
-
-readerself_api_category_exclude:
-    path: /category/exclude/{id}
-    defaults:
-        _controller: "readerself_core_controller_category:excludeAction"
-    requirements:
-        id: '\d+'
-    methods: GET
-
-#Feed
-readerself_api_feeds:
-    path: /feeds
-    defaults:
-        _controller: "readerself_core_controller_feed:indexAction"
-    methods: GET
-
-readerself_api_feed_create:
-    path: /feed
-    defaults:
-        _controller: "readerself_core_controller_feed:createAction"
-    methods: POST
-
-readerself_api_feed_read:
-    path: /feed/{id}
-    defaults:
-        _controller: "readerself_core_controller_feed:readAction"
-    requirements:
-        id: '\d+'
-    methods: GET
-
-readerself_api_feed_update:
-    path: /feed/{id}
-    defaults:
-        _controller: "readerself_core_controller_feed:updateAction"
-    requirements:
-        id: '\d+'
-    methods: PUT
-
-readerself_api_feed_delete:
-    path: /feed/{id}
-    defaults:
-        _controller: "readerself_core_controller_feed:deleteAction"
-    requirements:
-        id: '\d+'
-    methods: DELETE
-
-readerself_api_feed_subscribe:
-    path: /feed/subscribe/{id}
-    defaults:
-        _controller: "readerself_core_controller_feed:subscribeAction"
-    requirements:
-        id: '\d+'
-    methods: GET
+ReaderselfCoreBundle_push:
+    resource: "@ReaderselfCoreBundle/Resources/config/routing/push.yml"

@@ -16,6 +16,9 @@ apiUrl = apiUrl.replace('index.html', '');
 apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
 
 var connectionToken = store.get('Connection_login_token');
+var member = [];
+member[store.get('Member_role')] = true;
+
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
 var languages = ['en', 'fr'];
@@ -34,6 +37,14 @@ $.getJSON('app/translations/' + languageFinal + '.json', function(data) {
         var result = $.i18n._(key);
         return new Handlebars.SafeString(result);
     });
+});
+
+Handlebars.registerHelper('role', function(key) {
+    if(memberRole == key) {
+        return true;
+    } else {
+        return false;
+    }
 });
 
 var files = [
@@ -152,6 +163,8 @@ function loadRoute(key, parameters) {
                 dataType: 'json',
                 statusCode: {
                     200: function(data_return) {
+                        data_return.member = member;
+
                         data_return.current_key = key;
                         data_return.current_key_markallasread = key.replace('#items', '#items/markallasread');
                         data_return.current_q = parameters.q;
@@ -409,6 +422,10 @@ $(document).ready(function() {
                             if(form.data('query') == '/login') {
                                 connectionToken = data_return.entry.token;
                                 store.set('Connection_login_token', connectionToken);
+
+                                member[data_return.entry.member.role] = true;
+                                store.set('Member_role', data_return.entry.member.role);
+
                                 setSnackbar(form.attr('method') + ' ' + data_return.entry.type);
                             } else {
                                 store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
