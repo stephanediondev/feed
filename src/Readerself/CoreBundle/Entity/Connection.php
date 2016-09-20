@@ -233,6 +233,8 @@ class Connection
     public function toArray()
     {
         return [
+            'id' => $this->getId(),
+            'member' => $this->getMember()->toArray(),
             'type' => $this->getType(),
             'token' => $this->getToken(),
             'agent' => $this->getAgent(),

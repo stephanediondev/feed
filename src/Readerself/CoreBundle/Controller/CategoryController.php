@@ -24,6 +24,71 @@ class CategoryController extends AbstractController
     }
 
     /**
+     * Retrieve all categories.
+     *
+     * @ApiDoc(
+     *     section="_ Feed",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     *     parameters={
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
+     *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="categories per page"},
+     *         {"name"="excluded", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="excluded categories"},
+     *     },
+     * )
+     */
+    public function indexAction(Request $request)
+    {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $parameters = [];
+
+        if($request->query->get('excluded')) {
+            $parameters['excluded'] = true;
+            $parameters['member'] = $member;
+        }
+
+        $paginator= $this->get('knp_paginator');
+        $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
+        $pagination = $paginator->paginate(
+            $this->categoryManager->getList($parameters),
+            $page = $request->query->getInt('page', 1),
+            $request->query->getInt('perPage', 100)
+        );
+
+        $data['entries'] = [];
+        $index = 0;
+        foreach($pagination as $result) {
+            $category = $this->categoryManager->getOne(['id' => $result['id']]);
+            $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $member, 'category' => $category]);
+
+            $data['entries'][$index] = $category->toArray();
+            foreach($actions as $action) {
+                $data['entries'][$index][$action->getAction()->getTitle()] = true;
+            }
+            $index++;
+        }
+        $data['entries_entity'] = 'category';
+        $data['entries_total'] = $pagination->getTotalItemCount();
+        $data['entries_pages'] = $pages = $pagination->getPageCount();
+        $data['entries_page_current'] = $page;
+        $pagePrevious = $page - 1;
+        if($pagePrevious >= 1) {
+            $data['entries_page_previous'] = $pagePrevious;
+        }
+        $pageNext = $page + 1;
+        if($pageNext <= $pages) {
+            $data['entries_page_next'] = $pageNext;
+        }
+        return new JsonResponse($data);
+    }
+
+    /**
      * Create a category.
      *
      * @ApiDoc(
@@ -64,6 +129,11 @@ class CategoryController extends AbstractController
         }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
+
+        if(!$category) {
+            return new JsonResponse($data, 404);
+        }
+
         $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $member, 'category' => $category]);
 
         $data['entry'] = $category->toArray();
@@ -88,8 +158,18 @@ class CategoryController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
 
-        $data['id'] = $id;
+        $category = $this->categoryManager->getOne(['id' => $id]);
+
+        if(!$category) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $category->toArray();
+        $data['entry_entity'] = 'category';
 
         return new JsonResponse($data);
     }
@@ -107,8 +187,18 @@ class CategoryController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
 
-        $data['id'] = $id;
+        $category = $this->categoryManager->getOne(['id' => $id]);
+
+        if(!$category) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $category->toArray();
+        $data['entry_entity'] = 'category';
 
         return new JsonResponse($data);
     }
@@ -131,6 +221,11 @@ class CategoryController extends AbstractController
         }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
+
+        if(!$category) {
+            return new JsonResponse($data, 404);
+        }
+
         $action = $this->actionManager->getOne(['title' => 'exclude']);
 
         if($actionCategoryMember = $this->actionManager->actionCategoryMemberManager->getOne([

@@ -37,18 +37,18 @@ class CategoryRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('cat');
+        $query->addSelect('cat.id');
         $query->from('ReaderselfCoreBundle:Category', 'cat');
+
+        if(isset($parameters['excluded']) == 1 && $parameters['excluded']) {
+            $query->andWhere('cat.id IN (SELECT IDENTITY(excluded.category) FROM ReaderselfCoreBundle:ActionCategoryMember AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
+            $query->setParameter(':member', $parameters['member']);
+        }
 
         $query->addOrderBy('cat.title');
         $query->groupBy('cat.id');
 
         $getQuery = $query->getQuery();
-
-        $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
-        $cacheDriver->setNamespace('readerself.category.');
-        $getQuery->setResultCacheDriver($cacheDriver);
-        $getQuery->setResultCacheLifetime(86400);
 
         return $getQuery->getResult();
     }

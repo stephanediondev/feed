@@ -48,11 +48,10 @@ class ConnectionController extends AbstractController
                     $connection->setIp($request->getClientIp());
                     $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
 
-                    $data['entry'] = $connection->toArray();
-                    $data['entry']['member'] = $connection->getMember()->toArray();
-                    $data['entry_entity'] = 'connection';
+                    $this->memberManager->connectionManager->persist($connection);
 
-                    $connection_id = $this->memberManager->connectionManager->persist($connection);
+                    $data['entry'] = $connection->toArray();
+                    $data['entry_entity'] = 'connection';
 
                     $status = 200;
                 }
@@ -79,14 +78,14 @@ class ConnectionController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $connections = [];
-        foreach($this->memberManager->connectionManager->getList(['member' => $member]) as $connection) {
-            $connections[] = $connection->toArray();
+        $connection = $this->memberManager->connectionManager->getOne(['id' => $id, 'member' => $member]);
+
+        if(!$connection) {
+            return new JsonResponse($data, 404);
         }
 
-        $data['entry'] = $member->toArray();
-        $data['entry']['connections'] = $connections;
-        $data['entry_entity'] = 'member';
+        $data['entry'] = $connection->toArray();
+        $data['entry_entity'] = 'connection';
 
         return new JsonResponse($data);
     }
@@ -108,14 +107,14 @@ class ConnectionController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $connections = [];
-        foreach($this->memberManager->connectionManager->getList(['member' => $member]) as $connection) {
-            $connections[] = $connection->toArray();
+        $connection = $this->memberManager->connectionManager->getOne(['id' => $id, 'member' => $member]);
+
+        if(!$connection) {
+            return new JsonResponse($data, 404);
         }
 
-        $data['entry'] = $member->toArray();
-        $data['entry']['connections'] = $connections;
-        $data['entry_entity'] = 'member';
+        $data['entry'] = $connection->toArray();
+        $data['entry_entity'] = 'connection';
 
         return new JsonResponse($data);
     }
@@ -133,6 +132,20 @@ class ConnectionController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $connection = $this->memberManager->connectionManager->getOne(['id' => $id, 'member' => $member]);
+
+        if(!$connection) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $connection->toArray();
+        $data['entry_entity'] = 'connection';
+
+        $this->memberManager->connectionManager->remove($connection);
 
         return new JsonResponse($data);
     }

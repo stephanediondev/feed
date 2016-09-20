@@ -15,9 +15,7 @@ if(window.location.port) {
 apiUrl = apiUrl.replace('index.html', '');
 apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
 
-var connectionToken = store.get('Connection_login_token');
-var member = [];
-member[store.get('Member_role')] = true;
+var connectionData = explainConnection(store.get('connection'));
 
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
@@ -69,6 +67,23 @@ function loadFile(url) {
     });
 }
 
+function explainConnection(connection) {
+    if(typeof connection == 'undefined') {
+        connection = {id: false, token: false, member: {id: false, administrator: false, member: false, demo: false}};
+    } else {
+        if(connection.member.role == 'administrator') {
+            connection.member.administrator = true;
+        }
+        if(connection.member.role == 'member') {
+            connection.member.member = true;
+        }
+        if(connection.member.role == 'demo') {
+            connection.member.demo = true;
+        }
+    }
+    return connection;
+}
+
 for(var i in files) {
     if(files.hasOwnProperty(i)) {
         loadFile(files[i]);
@@ -90,6 +105,10 @@ function loadRoute(key, parameters) {
 
     if(typeof parameters.link === 'undefined') {
         parameters.link = false;
+    }
+
+    if(key.indexOf('{id}') != -1) {
+        key = key.replace('{id}', connectionData.member.id);
     }
 
     var replaceId = false;
@@ -149,21 +168,24 @@ function loadRoute(key, parameters) {
         }
 
         if(!route.query && route.view) {
+            data_return = {};
+            data_return.connectionData = connectionData;
+
             var source = $('#' + route.view).text();
             var template = Handlebars.compile(source);
-            $('main > .mdl-grid').html(template());
+            $('main > .mdl-grid').html(template(data_return));
 
         } else if(route.query) {
             $.ajax({
                 headers: {
-                    'X-CONNECTION-TOKEN': connectionToken
+                    'X-CONNECTION-TOKEN': connectionData.token
                 },
                 async: true,
                 cache: false,
                 dataType: 'json',
                 statusCode: {
                     200: function(data_return) {
-                        data_return.member = member;
+                        data_return.connectionData = connectionData;
 
                         data_return.current_key = key;
                         data_return.current_key_markallasread = key.replace('#items', '#items/markallasread');
@@ -200,7 +222,7 @@ function loadRoute(key, parameters) {
 
                                 for(i in data_return.entries) {
                                     if(data_return.entries.hasOwnProperty(i)) {
-                                        $('main > .mdl-grid').append(template_unit({entry: data_return.entries[i]}));
+                                        $('main > .mdl-grid').append(template_unit({connectionData: connectionData, entry: data_return.entries[i]}));
                                     }
                                 }
 
@@ -394,13 +416,16 @@ $(document).ready(function() {
         if(form.attr('id') == 'form-search-feeds') {
             loadRoute('#search/feeds/result', {page: 1, q: form.find('input[name="q"]').val()});
 
+        } else if(form.attr('id') == 'form-search-categories') {
+            loadRoute('#search/categories/result', {page: 1, q:form.find('input[name="q"]').val()});
+
         } else if(form.attr('id') == 'form-search-items') {
             loadRoute('#search/items/result', {page: 1, q:form.find('input[name="q"]').val()});
 
         } else {
             $.ajax({
                 headers: {
-                    'X-CONNECTION-TOKEN': connectionToken
+                    'X-CONNECTION-TOKEN': connectionData.token
                 },
                 async: true,
                 cache: false,
@@ -419,12 +444,9 @@ $(document).ready(function() {
                             store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
                         }
                         if(form.attr('method') == 'POST') {
-                            if(form.data('query') == '/login') {
-                                connectionToken = data_return.entry.token;
-                                store.set('Connection_login_token', connectionToken);
-
-                                member[data_return.entry.member.role] = true;
-                                store.set('Member_role', data_return.entry.member.role);
+                            if(form.data('query') == '/connection') {
+                                store.set('connection', data_return.entry);
+                                connectionData = explainConnection(data_return.entry);
 
                                 setSnackbar(form.attr('method') + ' ' + data_return.entry.type);
                             } else {

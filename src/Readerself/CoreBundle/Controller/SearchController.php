@@ -57,6 +57,28 @@ class SearchController extends AbstractController
     }
 
     /**
+     * Search categories.
+     *
+     * @ApiDoc(
+     *     section="_ Category",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     *     parameters={
+     *         {"name"="q", "dataType"="string", "required"=true, "description"="query"},
+     *         {"name"="sortField", "dataType"="string", "required"=false, "format"="""score"", ""title"" or ""date"", default ""score""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
+     *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
+     *     },
+     * )
+     */
+    public function categoriesAction(Request $request)
+    {
+        return $this->getResults($request, 'category');
+    }
+
+    /**
      * Search items.
      *
      * @ApiDoc(
@@ -137,6 +159,26 @@ class SearchController extends AbstractController
                 );
             }
 
+            if($type == 'category') {
+                $body['query'] = array(
+                    'query_string' => array(
+                        'fields' => ['title'],
+                        'query' => $request->query->get('q'),
+                    ),
+                );
+                $body['highlight'] = array(
+                    //'encoder' => 'html',
+                    'pre_tags' => array('<strong>'),
+                    'post_tags' => array('</strong>'),
+                    'fields' => array(
+                        'title' => array(
+                            'fragment_size' => 255,
+                            'number_of_fragments' => 1,
+                        ),
+                    ),
+                );
+            }
+
             if($type == 'item') {
                 $body['query'] = array(
                     'query_string' => array(
@@ -204,6 +246,24 @@ class SearchController extends AbstractController
                             }
                             if(isset($hit['highlight']['description']) == 1) {
                                 $data['entries'][$index]['description'] = $this->cleanContent($hit['highlight']['description'][0]);
+                            }
+                            $index++;
+                        }
+                    }
+
+                    if($type == 'category') {
+                        $category = $this->get('readerself_core_manager_category')->getOne(['id' => $hit['_id']]);
+                        if($category) {
+                            $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $member, 'category' => $category]);
+
+                            $data['entries'][$index] = $category->toArray();
+                            $data['entries'][$index]['score'] = $hit['_score'];
+                            foreach($actions as $action) {
+                                $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                            }
+
+                            if(isset($hit['highlight']['title']) == 1) {
+                                $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
                             }
                             $index++;
                         }

@@ -128,9 +128,9 @@ class FeedController extends AbstractController
         $form->submit($request->request->all(), false);
 
         if($form->isValid()) {
-            $id = $this->feedManager->persist($form->getData());
+            $feed_id = $this->feedManager->persist($form->getData());
 
-            $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
+            $data['entry'] = $this->feedManager->getOne(['id' => $feed_id])->toArray();
             $data['entry_entity'] = 'feed';
 
         } else {
@@ -161,6 +161,11 @@ class FeedController extends AbstractController
         }
 
         $feed = $this->feedManager->getOne(['id' => $id]);
+
+        if(!$feed) {
+            return new JsonResponse($data, 404);
+        }
+
         $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
 
         $collections = [];
@@ -200,7 +205,13 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $form = $this->createForm(FeedType::class, $this->feedManager->getOne(['id' => $id]));
+        $feed = $this->feedManager->getOne(['id' => $id]);
+
+        if(!$feed) {
+            return new JsonResponse($data, 404);
+        }
+
+        $form = $this->createForm(FeedType::class, $feed);
 
         $form->submit($request->request->all(), false);
 
@@ -239,7 +250,11 @@ class FeedController extends AbstractController
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
-        $data['entry'] = $feed;
+        if(!$feed) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $feed->toArray();
         $data['entry_entity'] = 'feed';
 
         $this->feedManager->remove($feed);

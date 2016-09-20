@@ -1,10 +1,47 @@
-<!-- Feed -->
+<script type="text/template" id="view-categories">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{trans current_title}} ({{ entries_total }})
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#search/categories" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="view-categories-unit">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="category-{{ entry.id }}">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                <a href="#category/read/{{ entry.id }}" class="load-route">{{{ entry.title }}}</a>
+            </h1>
+            <div class="mdl-card__subtitle-text">
+                {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{ entry.score }}</span>{{/if}}
+                <a href="#items/category/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'all_items'}}</a>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            {{#if entry.exclude }}
+                <a href="#category/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'include'}}</a>
+            {{else}}
+                <a href="#category/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'exclude'}}</a>
+            {{/if}}
+        </div>
+    </div>
+</script>
+
 <script type="text/template" id="view-category-read">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{trans 'all_categories'}}
             </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#categories" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'back'}}</a>
         </div>
     </div>
 

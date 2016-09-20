@@ -10,9 +10,12 @@
         <li class="mdl-list__item"><a href="#feeds/not_subscribed" class="load-route">{{trans 'unsubscribed_feeds'}}</a></li>
         <li class="mdl-list__item"><a href="#feeds/errors" class="load-route">{{trans 'feeds_errors'}}</a></li>
 
+        <li class="mdl-list__item"><a href="#categories" class="load-route">{{trans 'all_categories'}}</a></li>
+        <li class="mdl-list__item"><a href="#categories/excluded" class="load-route">{{trans 'excluded_categories'}}</a></li>
+
         <li class="mdl-list__item"><a href="#search" class="load-route">{{trans 'search'}}</a></li>
 
-        <li class="mdl-list__item"><a href="#profile" class="load-route">{{trans 'profile'}}</a>
+        <li class="mdl-list__item"><a href="#profile/{id}" class="load-route">{{trans 'profile'}}</a>
         <li class="mdl-list__item"><a href="#logout" class="load-route">{{trans 'logout'}}</a>
     </ul>
 </script>
@@ -67,6 +70,7 @@
         <div class="mdl-card__actions mdl-card--border">
             <a href="#search/feeds" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_feeds'}}</a>
             <a href="#search/items" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_items'}}</a>
+            <a href="#search/categories" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_categories'}}</a>
         </div>
     </div>
 </script>
@@ -93,6 +97,36 @@
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
+                <a href="#search/items" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_items'}}</a>
+                <a href="#search/categories" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_categories'}}</a>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script type="text/template" id="view-search-categories">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <form action="" method="GET" id="form-search-categories">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                {{#if entries_total }}
+                    {{trans 'search_categories'}} ({{ entries_total }})
+                {{else}}
+                    {{trans 'search_categories'}}
+                {{/if}}
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="q" class="required">{{trans 'q'}}</label>
+                    <input type="text" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'search'}}</button>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#search/feeds" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_feeds'}}</a>
                 <a href="#search/items" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_items'}}</a>
             </div>
         </form>
@@ -122,6 +156,7 @@
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#search/feeds" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_feeds'}}</a>
+                <a href="#search/categories" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search_categories'}}</a>
             </div>
         </form>
     </div>

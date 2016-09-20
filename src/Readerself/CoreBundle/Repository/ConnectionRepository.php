@@ -17,6 +17,11 @@ class ConnectionRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
+        if(isset($parameters['member']) == 1) {
+            $query->andWhere('cnt.member = :member');
+            $query->setParameter(':member', $parameters['member']);
+        }
+
         if(isset($parameters['type']) == 1) {
             $query->andWhere('cnt.type = :type');
             $query->setParameter(':type', $parameters['type']);

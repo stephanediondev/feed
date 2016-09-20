@@ -78,6 +78,10 @@ class MemberController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        if($member->getId() != $id) {
+            return new JsonResponse($data, 403);
+        }
+
         $connections = [];
         foreach($this->memberManager->connectionManager->getList(['member' => $member]) as $connection) {
             $connections[] = $connection->toArray();
@@ -103,6 +107,13 @@ class MemberController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        if($member->getId() != $id) {
+            return new JsonResponse($data, 403);
+        }
 
         return new JsonResponse($data);
     }
@@ -120,6 +131,13 @@ class MemberController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        if($member->getId() != $id) {
+            return new JsonResponse($data, 403);
+        }
 
         return new JsonResponse($data);
     }

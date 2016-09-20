@@ -30,10 +30,22 @@ readerself_api_category_delete:
     methods: DELETE
 
 #extra
+readerself_api_categories:
+    path: /categories
+    defaults:
+        _controller: "readerself_core_controller_category:indexAction"
+    methods: GET
+
 readerself_api_category_exclude:
     path: /category/exclude/{id}
     defaults:
         _controller: "readerself_core_controller_category:excludeAction"
     requirements:
         id: '\d+'
+    methods: GET
+
+readerself_api_search_categories:
+    path: /categories/search
+    defaults:
+        _controller: "readerself_core_controller_search:categoriesAction"
     methods: GET

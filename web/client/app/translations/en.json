@@ -41,6 +41,7 @@
     "search": "Search",
     "search_feeds": "Search feeds",
     "search_items": "Search items",
+    "search_categories": "Search categories",
 
     "author": "Author",
     "category": "Category",
@@ -50,6 +51,9 @@
     "subscribed_feeds": "Subscribed feeds",
     "unsubscribed_feeds": "Unsubscribed feeds",
     "feeds_errors": "Feeds with errors",
+
+    "all_categories": "All categories",
+    "excluded_categories": "Excluded categories",
 
     "all_items": "All items",
     "unread_items": "Unread items",

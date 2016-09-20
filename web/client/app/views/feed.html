@@ -1,4 +1,3 @@
-<!-- Feed -->
 <script type="text/template" id="view-feeds">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
@@ -38,7 +37,7 @@
             {{else}}
                 <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>
             {{/if}}
-            {{#if memberAdministrator }}
+            {{#if connectionData.member.administrator }}
                 <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
                 <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
             {{/if}}
@@ -133,7 +132,7 @@
             {{else}}
                 <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>
             {{/if}}
-            {{#if member.administrator }}
+            {{#if connectionData.member.administrator }}
                 <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
                 <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
             {{/if}}

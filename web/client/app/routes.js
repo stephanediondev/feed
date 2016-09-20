@@ -1,13 +1,16 @@
 var routes = [];
 routes['#login'] = {view: 'view-login', query: false, title: 'login'};
 routes['#logout'] = {view: 'view-logout', query: false};
-routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
+routes['#profile/{id}'] = {view: 'view-profile', query: '/member/{id}', title: 'profile'};
 routes['#401'] = {view: 'view-401', query: false, title: 'error_401'};
 routes['#404'] = {view: 'view-404', query: false, title: 'error_404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};
 routes['#configuration'] = {view: 'view-configuration', query: false, title: 'configuration'};
 
 routes['#search'] = {view: 'view-search', query: false, title: 'search'};
+
+routes['#search/categories'] = {view: 'view-search-categories', query: false, title: 'search_categories'};
+routes['#search/categories/result'] = {view: 'view-search-categories', view_unit: 'view-categories-unit', query: '/categories/search', title: 'search_categories'};
 
 routes['#search/items'] = {view: 'view-search-items', query: false, title: 'search_items'};
 routes['#search/items/result'] = {view: 'view-search-items', view_unit: 'view-items-unit', query: '/items/search', title: 'search_items'};
@@ -25,6 +28,9 @@ routes['#feed/read/{id}'] = {view: 'view-feed-read', query: '/feed/{id}', store:
 routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}', store: false};
 routes['#feed/delete/{id}'] = {view: 'view-feed-delete', query: '/feed/{id}', store: false};
 routes['#feed/subscribe/{id}'] = {view: false, query: '/feed/subscribe/{id}', store: false};
+
+routes['#categories'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories', title: 'all_categories', store: false};
+routes['#categories/excluded'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?excluded=1', title: 'excluded_categories', store: false};
 
 routes['#category/read/{id}'] = {view: 'view-category-read', query: '/category/{id}', store: false};
 routes['#category/exclude/{id}'] = {view: false, query: '/category/exclude/{id}', store: false};

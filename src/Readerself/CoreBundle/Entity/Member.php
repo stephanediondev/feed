@@ -295,6 +295,7 @@ class Member implements AdvancedUserInterface, \Serializable
     public function toArray()
     {
         return [
+            'id' => $this->getId(),
             'email' => $this->getEmail(),
             'role' => $this->getRole(),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : $this->getDateCreated(),
