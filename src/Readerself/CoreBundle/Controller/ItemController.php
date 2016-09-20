@@ -192,27 +192,7 @@ class ItemController extends AbstractController
             $parameters['category'] = (int) $request->query->get('category');
         }
 
-        $results = $this->itemManager->getList($parameters);
-
-        $action = $this->actionManager->getOne(['title' => 'read_all']);
-
-        foreach($results as $result) {
-            $item = $this->itemManager->getOne(['id' => $result['id']]);
-
-            if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
-                'action' => $action,
-                'item' => $item,
-                'member' => $member,
-            ])) {
-            } else {
-                $actionItemMember = $this->actionManager->actionItemMemberManager->init();
-                $actionItemMember->setAction($action);
-                $actionItemMember->setItem($item);
-                $actionItemMember->setMember($member);
-    
-                $this->actionManager->actionItemMemberManager->persist($actionItemMember);
-            }
-        }
+        $this->itemManager->readAll($parameters);
 
         return new JsonResponse($data);
     }

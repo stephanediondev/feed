@@ -66,6 +66,30 @@ class ItemManager extends AbstractManager
         $this->removeCache();
     }
 
+    public function readAll($parameters = [])
+    {
+        foreach($this->em->getRepository('ReaderselfCoreBundle:Item')->getList($parameters) as $result) {
+            $sql = 'SELECT id FROM action_item_member WHERE member_id = :member_id AND item_id = :item_id AND action_id = :action_id';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue('member_id', $parameters['member']->getId());
+            $stmt->bindValue('item_id', $result['id']);
+            $stmt->bindValue('action_id', 1);
+            $stmt->execute();
+            $test = $stmt->fetch();
+
+            if($test) {
+            } else {
+                $insertActionItemMember = [
+                    'member_id' => $parameters['member']->getId(),
+                    'item_id' => $result['id'],
+                    'action_id' => 1,
+                    'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                ];
+                $this->insert('action_item_member', $insertActionItemMember);
+            }
+        }
+    }
+
     public function setReadability($enabled, $key)
     {
         $this->readabilityEnabled = $enabled;
