@@ -10,6 +10,10 @@ services:
             - [ "setContainer", [ "@service_container" ] ]
             - [ "setMemberManager", [ "@readerself_core_manager_member" ] ]
 
+    readerself_core_controller_content:
+        class: Readerself\CoreBundle\Controller\ContentController
+        parent: "readerself_core_controller_abstract"
+
     readerself_core_controller_action:
         class: Readerself\CoreBundle\Controller\ActionController
         parent: "readerself_core_controller_abstract"

@@ -1,35 +1,24 @@
-client:
-    path:  /
-    defaults:
-        _controller: FrameworkBundle:Redirect:urlRedirect
-        path: /client
-        permanent: true
-
 readerself_api_search_items:
-    path:  /search/items
+    path: /search/items
     defaults:
         _controller: "readerself_core_controller_search:itemsAction"
-    requirements:
-        id: '\d+'
     methods: GET
 
 readerself_api_search_feeds:
-    path:  /search/feeds
+    path: /search/feeds
     defaults:
         _controller: "readerself_core_controller_search:feedsAction"
-    requirements:
-        id: '\d+'
     methods: GET
 
 #Push
 readerself_api_push_create:
-    path:  /push
+    path: /push
     defaults:
         _controller: "readerself_core_controller_push:createAction"
     methods: POST
 
 readerself_api_push_delete:
-    path:  /push/{id}
+    path: /push/{id}
     defaults:
         _controller: "readerself_core_controller_push:deleteAction"
     requirements:
@@ -38,51 +27,51 @@ readerself_api_push_delete:
 
 #Login
 readerself_core_login:
-    path:  /login
+    path: /login
     defaults:
         _controller: "readerself_core_controller_login:createAction"
     methods: POST
 
 readerself_core_profile:
-    path:  /profiel
+    path: /profiel
     defaults:
         _controller: "readerself_core_controller_profile:createAction"
     methods: POST
 
 #Member
 readerself_core_member_create:
-    path:  /register
+    path: /register
     defaults:
         _controller: "readerself_core_controller_member:createAction"
     methods: POST
 
 readerself_core_member_read:
-    path:  /profile
+    path: /profile
     defaults:
         _controller: "readerself_core_controller_member:readAction"
     methods: GET
 
 readerself_core_member_update:
-    path:  /profile
+    path: /profile
     defaults:
         _controller: "readerself_core_controller_member:updateAction"
     methods: POST
 
 #Item
 readerself_api_items:
-    path:  /items
+    path: /items
     defaults:
         _controller: "readerself_core_controller_item:indexAction"
     methods: GET
 
 readerself_api_items_markallasread:
-    path:  /items/markallasread
+    path: /items/markallasread
     defaults:
         _controller: "readerself_core_controller_item:markallasreadAction"
     methods: GET
 
 readerself_api_item_read:
-    path:  /item/read/{id}
+    path: /item/read/{id}
     defaults:
         _controller: "readerself_core_controller_item:readAction"
     requirements:
@@ -90,7 +79,7 @@ readerself_api_item_read:
     methods: GET
 
 readerself_api_item_star:
-    path:  /item/star/{id}
+    path: /item/star/{id}
     defaults:
         _controller: "readerself_core_controller_item:starAction"
     requirements:
@@ -98,7 +87,7 @@ readerself_api_item_star:
     methods: GET
 
 readerself_api_item_readability:
-    path:  /item/readability/{id}
+    path: /item/readability/{id}
     defaults:
         _controller: "readerself_core_controller_item:readabilityAction"
     requirements:
@@ -106,7 +95,7 @@ readerself_api_item_readability:
     methods: GET
 
 readerself_api_item_email:
-    path:  /item/email/{id}
+    path: /item/email/{id}
     defaults:
         _controller: "readerself_core_controller_item:emailAction"
     requirements:
@@ -115,14 +104,14 @@ readerself_api_item_email:
 
 #Action
 readerself_api_actions:
-    path:  /actions
+    path: /actions
     defaults:
         _controller: "readerself_core_controller_action:indexAction"
     methods: GET
 
 #Category
 readerself_api_category_read:
-    path:  /category/{id}
+    path: /category/{id}
     defaults:
         _controller: "readerself_core_controller_category:readAction"
     requirements:
@@ -130,7 +119,7 @@ readerself_api_category_read:
     methods: GET
 
 readerself_api_category_exclude:
-    path:  /category/exclude/{id}
+    path: /category/exclude/{id}
     defaults:
         _controller: "readerself_core_controller_category:excludeAction"
     requirements:
@@ -139,19 +128,19 @@ readerself_api_category_exclude:
 
 #Feed
 readerself_api_feeds:
-    path:  /feeds
+    path: /feeds
     defaults:
         _controller: "readerself_core_controller_feed:indexAction"
     methods: GET
 
 readerself_api_feed_create:
-    path:  /feed
+    path: /feed
     defaults:
         _controller: "readerself_core_controller_feed:createAction"
     methods: POST
 
 readerself_api_feed_read:
-    path:  /feed/{id}
+    path: /feed/{id}
     defaults:
         _controller: "readerself_core_controller_feed:readAction"
     requirements:
@@ -159,7 +148,7 @@ readerself_api_feed_read:
     methods: GET
 
 readerself_api_feed_update:
-    path:  /feed/{id}
+    path: /feed/{id}
     defaults:
         _controller: "readerself_core_controller_feed:updateAction"
     requirements:
@@ -167,7 +156,7 @@ readerself_api_feed_update:
     methods: PUT
 
 readerself_api_feed_delete:
-    path:  /feed/{id}
+    path: /feed/{id}
     defaults:
         _controller: "readerself_core_controller_feed:deleteAction"
     requirements:
@@ -175,7 +164,7 @@ readerself_api_feed_delete:
     methods: DELETE
 
 readerself_api_feed_subscribe:
-    path:  /feed/subscribe/{id}
+    path: /feed/subscribe/{id}
     defaults:
         _controller: "readerself_core_controller_feed:subscribeAction"
     requirements:

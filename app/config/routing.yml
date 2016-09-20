@@ -2,6 +2,12 @@ NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix: "/api/documentation"
 
+home:
+    path: /
+    defaults:
+        _controller: "readerself_core_controller_content:indexAction"
+    methods: GET
+
 ReaderselfCoreBundle:
     resource: "@ReaderselfCoreBundle/Resources/config/routing.yml"
     prefix: "/api"
