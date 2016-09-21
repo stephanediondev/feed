@@ -46,6 +46,7 @@ class FeedController extends AbstractController
      *         {"name"="subscribed", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="subscribed feeds"},
      *         {"name"="unsubscribed", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="unsubscribed feeds"},
      *         {"name"="errors", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="feeds with errors"},
+     *         {"name"="category", "dataType"="integer", "required"=false, "format"="category ID", "description"="feeds by category"},
      *     },
      * )
      */
@@ -70,6 +71,12 @@ class FeedController extends AbstractController
         if($request->query->get('not_subscribed')) {
             $parameters['not_subscribed'] = true;
             $parameters['member'] = $member;
+        }
+
+        if($request->query->get('category')) {
+            $parameters['category'] = (int) $request->query->get('category');
+            $data['entry'] = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])->toArray();
+            $data['entry_entity'] = 'category';
         }
 
         $paginator= $this->get('knp_paginator');

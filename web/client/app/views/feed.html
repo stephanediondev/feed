@@ -1,8 +1,22 @@
 <script type="text/template" id="view-feeds">
+    {{#if entry }}
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    <a href="#{{ entry_entity }}/read/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a>
+                </h1>
+            </div>
+        </div>
+    {{/if}}
+
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{trans current_title}} ({{ entries_total }})
+                {{#if current_title }}
+                    {{trans current_title}} ({{ entries_total }})
+                {{else}}
+                    {{trans 'all_feeds'}} ({{ entries_total }})
+                {{/if}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
