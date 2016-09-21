@@ -4,9 +4,11 @@
             <h1 class="mdl-card__title-text">
                 {{trans current_title}} ({{ entries_total }})
             </h1>
+            <div class="mdl-card__subtitle-text">
+                <a href="#categories/feed" class="load-route mdl-navigation__link"><i class="material-icons">rss_feed</i>{{trans 'all_feeds'}}</a>
+            </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#categories/feed" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'feeds'}}</a>
             <a href="#search/categories" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
         </div>
     </div>
@@ -19,13 +21,12 @@
                 <a href="#category/read/{{ entry.id }}" class="load-route">{{{ entry.title }}}</a>
             </h1>
             <div class="mdl-card__subtitle-text">
-                {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{ entry.score }}</span>{{/if}}
                 <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                <a href="#items/category/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">view_headline</i>{{trans 'all_items'}}</a>
+                <a href="#feeds/category/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">rss_feed</i>{{trans 'all_feeds'}}</a>
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#items/category/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'items'}}</a>
-            <a href="#feeds/category/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'feeds'}}</a>
             {{#if entry.exclude }}
                 <a href="#category/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'include'}}</a>
             {{else}}
@@ -54,11 +55,11 @@
             </h1>
             <div class="mdl-card__subtitle-text">
                 <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                <a href="#items/category/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">view_headline</i>{{trans 'all_items'}}</a>
+                <a href="#feeds/category/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">rss_feed</i>{{trans 'all_feeds'}}</a>
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#items/category/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'items'}}</a>
-            <a href="#feeds/category/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'feeds'}}</a>
             {{#if entry.exclude }}
                 <a href="#category/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'include'}}</a>
             {{else}}
