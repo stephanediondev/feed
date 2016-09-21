@@ -608,9 +608,9 @@ class CollectionManager extends AbstractManager
                             'item_id' => $item_id,
                             'link' => $link,
                             'type' => $sp_enclosure->get_type(),
-                            'length' => $sp_enclosure->get_length(),
-                            'width' => $sp_enclosure->get_width(),
-                            'height' => $sp_enclosure->get_height(),
+                            'length' => is_numeric($sp_enclosure->get_length()) ? $sp_enclosure->get_length() : null,
+                            'width' => is_numeric($sp_enclosure->get_width()) ? $sp_enclosure->get_width() : null,
+                            'height' => is_numeric($sp_enclosure->get_height()) ? $sp_enclosure->get_height() : null,
                             'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                         ];
                         $this->insert('enclosure', $insertEnclosure);
