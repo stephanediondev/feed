@@ -18,11 +18,9 @@
                     {{trans 'all_feeds'}} ({{ entries_total }})
                 {{/if}}
             </h1>
-            <div class="mdl-card__subtitle-text">
-                <a href="#categories/feed" class="load-route mdl-navigation__link"><i class="material-icons">label</i>{{trans 'all_categories'}}</a>
-            </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#categories/feed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_categories'}}</a>
             <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
             <a href="#feed/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'create'}}</a>
             <a href="#feed/export" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'export'}}</a>
@@ -37,8 +35,6 @@
                 <a href="#feed/read/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
             </h1>
             <div class="mdl-card__subtitle-text">
-                {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{ entry.score }}</span>{{/if}}
-                <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">view_headline</i>{{trans 'all_items'}}</a>
                 {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
                 <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
                 {{#if entry.categories }}
@@ -54,6 +50,7 @@
         </div>
         {{/if}}
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#items/feed/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
             {{#if entry.discover }}
                 <a href="#feed/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'create'}}</a>
             {{else}}
@@ -125,7 +122,6 @@
                 {{ entry.title }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">view_headline</i>{{trans 'all_items'}}</a>
                 {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
                 <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
                 {{#if entry.categories }}
@@ -158,6 +154,7 @@
             {{/if}}
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#items/feed/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
             {{#if entry.subscribe }}
                 <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unsubscribe'}}</a>
             {{else}}
