@@ -1,36 +1,69 @@
 version: '2'
+
 services:
-    nginx:
-        image: nginx
-        ports:
-            - "8080:80"
-        volumes:
-            - ./docker/nginx/nginx.conf:/nginx.conf
-            - ./docker/logs/nginx:/var/log/nginx
-            - .:/var/www/html
-        links:
-            - php:php
+    readerself_nginx:
         command: nginx -c /nginx.conf
-    php:
+        container_name: readerself_nginx
+        image: nginx
+        links:
+            - readerself_php:readerself_php
+        ports:
+            - "80:80"
+        volumes:
+            - ./docker/logs/nginx:/var/log/nginx
+            - ./docker/nginx/nginx.conf:/nginx.conf
+            - .:/var/www/html
+
+    readerself_php:
         build:
-            context: docker/php
-            args:
-                timezone: 'UTC'
+        #    context: docker/php
+            context: ./docker/php
+        container_name: readerself_php
+        environment:
+            - SYMFONY__ENV__DATABASE_DRIVER=pdo_mysql
+            - SYMFONY__ENV__DATABASE_HOST=mysql
+            - SYMFONY__ENV__DATABASE_PORT=3306
+            - SYMFONY__ENV__DATABASE_NAME=readerself
+            - SYMFONY__ENV__DATABASE_USER=readerself
+            - SYMFONY__ENV__DATABASE_PASSWORD=readerself
+        links:
+            - "readerself_mysql:readerself_mysql"
+            - "readerself_elasticsearch:readerself_elasticsearch"
+            - "readerself_redis:readerself_redis"
         ports:
             - "9000:9000"
         volumes:
             - .:/var/www/html
-        links:
-             - "mysql:rdbms"
-        env_file:
-            - ./docker/php/env
-            - ./docker/mysql/env
-    mysql:
-        image: mysql/mysql-server:5.5.46
+
+    readerself_mysql:
+        container_name: readerself_mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=readerself
+            - MYSQL_USER=readerself
+            - MYSQL_PASSWORD=readerself
+            - MYSQL_DATABASE=readerself
+        image: mysql/mysql-server
         ports:
             - "3306:3306"
         volumes:
-            - ./docker/data/mysql:/var/lib/mysql
             - ./docker/logs/mysql:/var/log/mysql
-        env_file:
-            - ./docker/mysql/env
+            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+
+    readerself_elasticsearch:
+        command: elasticsearch
+        container_name: readerself_elasticsearch
+        #environment:
+        #   - ES_CLUSTERNAME=readerself_cluster
+        image: elasticsearch
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        volumes:
+            - ./docker/logs/elasticsearch:/var/log/elasticsearch
+            - ./docker/elasticsearch/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
+
+    readerself_redis:
+        container_name: readerself_redis
+        image: redis
+        ports:
+            - "6379:6379"

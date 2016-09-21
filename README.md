@@ -46,3 +46,10 @@ http://example.com/client
 
 ####Api documentation
 http://example.com/api/documentation
+
+####Docker (TODO)
+```
+cd /path-to-installation
+docker-compose build -p readerself
+docker-compose up -d
+```

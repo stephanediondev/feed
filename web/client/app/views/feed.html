@@ -59,10 +59,6 @@
                 {{else}}
                     <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>
                 {{/if}}
-                {{#if connectionData.member.administrator }}
-                    <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
-                    <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
-                {{/if}}
             {{/if}}
         </div>
     </div>

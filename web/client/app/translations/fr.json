@@ -38,6 +38,10 @@
     "description": "Description",
     "language": "Langue",
 
+    "view_items": "View items",
+    "view_categories": "View categories",
+    "view_feeds": "View feeds",
+
     "search": "Recherche",
     "search_feeds": "Recherche de flux",
     "search_items": "Recherche d'items",

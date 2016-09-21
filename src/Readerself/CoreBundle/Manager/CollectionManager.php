@@ -158,7 +158,7 @@ class CollectionManager extends AbstractManager
 
                     $updateFeed = [];
                     $updateFeed['title'] = $this->cleanTitle($result['name']);
-                    $updateFeed['website'] = $result['link'];
+                    $updateFeed['website'] = $this->cleanWebsite($result['link']);
                     $updateFeed['link'] = $this->cleanLink($result['link']);
                     if(isset($parse_url['host']) == 1) {
                         $updateFeed['hostname'] = $parse_url['host'];
@@ -209,7 +209,7 @@ class CollectionManager extends AbstractManager
 
                         $updateFeed = [];
                         $updateFeed['title'] = $this->cleanTitle($sp_feed->get_title());
-                        $updateFeed['website'] = $sp_feed->get_link();
+                        $updateFeed['website'] = $this->cleanWebsite($sp_feed->get_link());
                         $updateFeed['link'] = $this->cleanLink($sp_feed->subscribe_url());
                         if(isset($parse_url['host']) == 1) {
                             $updateFeed['hostname'] = $parse_url['host'];
@@ -319,7 +319,7 @@ class CollectionManager extends AbstractManager
             $insertItem['link'] = $link;
 
             if($content = $sp_item->get_content()) {
-                if(class_exists('Tidy')) {
+                if(class_exists('Tidy') && $content != '') {
                     try {
                         $options = [
                             'output-xhtml' => true,
@@ -334,7 +334,7 @@ class CollectionManager extends AbstractManager
                         $tidy->cleanRepair();
                         $content = $tidy;
 
-                        if(class_exists('DOMDocument')) {
+                        if(class_exists('DOMDocument') && $content != '') {
                             try {
                                 libxml_use_internal_errors(true);
 
@@ -387,7 +387,11 @@ class CollectionManager extends AbstractManager
                     $content = str_replace('</div>', '</p>', $content);
                 }
 
-                $insertItem['content']  = $content;
+                if($content != '') {
+                    $insertItem['content']  = $content;
+                } else {
+                    $insertItem['content'] = '-';
+                }
             } else {
                 $insertItem['content'] = '-';
             }
@@ -622,6 +626,14 @@ class CollectionManager extends AbstractManager
             }
             unset($links);
         }
+    }
+
+    public function cleanWebsite($website)
+    {
+        $website = str_replace('&amp;', '&', $website);
+        $website = mb_substr($website, 0, 255, 'UTF-8');
+
+        return $website;
     }
 
     public function cleanLink($link)
