@@ -27,7 +27,7 @@ class CategoryController extends AbstractController
      * Retrieve all categories.
      *
      * @ApiDoc(
-     *     section="_ Feed",
+     *     section="_ Category",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -51,6 +51,10 @@ class CategoryController extends AbstractController
         if($request->query->get('excluded')) {
             $parameters['excluded'] = true;
             $parameters['member'] = $member;
+        }
+
+        if($request->query->get('feed')) {
+            $parameters['feed'] = true;
         }
 
         $paginator= $this->get('knp_paginator');

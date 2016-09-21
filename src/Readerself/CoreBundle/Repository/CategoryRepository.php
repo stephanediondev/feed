@@ -45,6 +45,10 @@ class CategoryRepository extends AbstractRepository
             $query->setParameter(':member', $parameters['member']);
         }
 
+        if(isset($parameters['feed']) == 1 && $parameters['feed']) {
+            $query->andWhere('cat.id IN (SELECT IDENTITY(feed.category) FROM ReaderselfCoreBundle:FeedCategory AS feed)');
+        }
+
         $query->addOrderBy('cat.title');
         $query->groupBy('cat.id');
 

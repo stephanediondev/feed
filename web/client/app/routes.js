@@ -34,6 +34,7 @@ routes['#feed/subscribe/{id}'] = {view: false, query: '/feed/subscribe/{id}', st
 
 routes['#categories'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories', title: 'all_categories', store: false};
 routes['#categories/excluded'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?excluded=1', title: 'excluded_categories', store: false};
+routes['#categories/feed'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?feed=1', title: 'Feeds categories', store: false};
 
 routes['#category/read/{id}'] = {view: 'view-category-read', query: '/category/{id}', store: false};
 routes['#category/exclude/{id}'] = {view: false, query: '/category/exclude/{id}', store: false};
