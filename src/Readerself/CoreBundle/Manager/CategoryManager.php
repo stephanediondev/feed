@@ -9,10 +9,14 @@ class CategoryManager extends AbstractManager
 {
     public $itemCategoryManager;
 
+    public $feedCategoryManager;
+
     public function __construct(
-        ItemCategoryManager $itemCategoryManager
+        ItemCategoryManager $itemCategoryManager,
+        FeedCategoryManager $feedCategoryManager
     ) {
         $this->itemCategoryManager = $itemCategoryManager;
+        $this->feedCategoryManager = $feedCategoryManager;
     }
 
     public function getOne($paremeters = [])

@@ -6,6 +6,7 @@
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#feeds/discover/digg" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'discover'}}</a>
             <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
             <a href="#feed/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'create'}}</a>
             <a href="#feed/export" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'export'}}</a>
@@ -24,6 +25,11 @@
                 <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'all_items'}}</a>
                 {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
                 <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                {{#if entry.categories }}
+                    {{#each entry.categories as |category category_index|}}
+                        <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons">label</i>{{ category.title }}</a>
+                    {{/each}}
+                {{/if}}
             </div>
         </div>
         {{#if entry.description }}
@@ -32,14 +38,18 @@
         </div>
         {{/if}}
         <div class="mdl-card__actions mdl-card--border">
-            {{#if entry.subscribe }}
-                <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unsubscribe'}}</a>
+            {{#if entry.discover }}
+                <a href="#feed/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'create'}}</a>
             {{else}}
-                <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>
-            {{/if}}
-            {{#if connectionData.member.administrator }}
-                <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
-                <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
+                {{#if entry.subscribe }}
+                    <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'unsubscribe'}}</a>
+                {{else}}
+                    <a href="#feed/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'subscribe'}}</a>
+                {{/if}}
+                {{#if connectionData.member.administrator }}
+                    <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+                    <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
+                {{/if}}
             {{/if}}
         </div>
     </div>
@@ -102,6 +112,11 @@
                 <a href="#items/feed/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">link</i>{{trans 'all_items'}}</a>
                 {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
                 <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                {{#if entry.categories }}
+                    {{#each entry.categories as |category category_index|}}
+                        <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons">label</i>{{ category.title }}</a>
+                    {{/each}}
+                {{/if}}
             </div>
         </div>
         <div class="mdl-card__supporting-text">

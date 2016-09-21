@@ -18,6 +18,8 @@ routes['#search/items/result'] = {view: 'view-search-items', view_unit: 'view-it
 routes['#search/feeds'] = {view: 'view-search-feeds', query: false, title: 'search_feeds'};
 routes['#search/feeds/result'] = {view: 'view-search-feeds', view_unit: 'view-feeds-unit', query: '/feeds/search', title: 'search_feeds'};
 
+routes['#feeds/discover/digg'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds/discover/digg', title: 'all_feeds', store: false};
+
 routes['#feeds'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds', title: 'all_feeds', store: false};
 routes['#feeds/errors'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?errors=1', title: 'feeds_errors', store: false};
 routes['#feeds/subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?subscribed=1', title: 'subscribed_feeds', store: false};

@@ -19,6 +19,7 @@ services:
         parent: "readerself_core_controller_abstract"
         arguments:
             - "@readerself_core_manager_feed"
+            - "@readerself_core_manager_category"
             - "@readerself_core_manager_action"
 
     readerself_core_controller_item:
@@ -133,9 +134,15 @@ services:
         public: true
         arguments:
             - "@readerself_core_manager_item_category"
+            - "@readerself_core_manager_feed_category"
 
     readerself_core_manager_item_category:
         class: Readerself\CoreBundle\Manager\ItemCategoryManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_feed_category:
+        class: Readerself\CoreBundle\Manager\FeedCategoryManager
         parent: "readerself_core_manager_abstract"
         public: true
 

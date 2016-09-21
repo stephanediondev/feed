@@ -29,19 +29,16 @@ if($.inArray(language, languages)) {
 $.get('vendor/jquery-timeago/locales/jquery.timeago.' + languageFinal + '.js', function() {
 });
 
-$.getJSON('app/translations/' + languageFinal + '.json', function(data) {
-    $.i18n.load(data);
-    Handlebars.registerHelper('trans', function(key) {
-        var result = $.i18n._(key);
-        return new Handlebars.SafeString(result);
-    });
-});
-
-Handlebars.registerHelper('role', function(key) {
-    if(memberRole == key) {
-        return true;
-    } else {
-        return false;
+$.ajax({
+    async: false,
+    dataType: 'json',
+    url: 'app/translations/' + languageFinal + '.json',
+    success: function(data) {
+        $.i18n.load(data);
+        Handlebars.registerHelper('trans', function(key) {
+            var result = $.i18n._(key);
+            return new Handlebars.SafeString(result);
+        });
     }
 });
 
@@ -438,7 +435,11 @@ $(document).ready(function() {
                         }
 
                         if(form.attr('method') == 'DELETE') {
-                            store.remove(data_return.entry_entity + '_' + data_return.entry.id);
+                            if(form.data('query') == '/connection/' + connectionData.id) {
+                                store.remove(data_return.entry_entity);
+                            } else {
+                                store.remove(data_return.entry_entity + '_' + data_return.entry.id);
+                            }
                         }
                         if(form.attr('method') == 'PUT') {
                             store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);

@@ -6,7 +6,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
+
 use Readerself\CoreBundle\Manager\FeedManager;
+use Readerself\CoreBundle\Manager\CategoryManager;
 use Readerself\CoreBundle\Manager\ActionManager;
 
 use Readerself\CoreBundle\Form\Type\FeedType;
@@ -15,13 +17,17 @@ class FeedController extends AbstractController
 {
     protected $feedManager;
 
+    protected $categoryManager;
+
     protected $actionManager;
 
     public function __construct(
         FeedManager $feedManager,
+        CategoryManager $categoryManager,
         ActionManager $actionManager
     ) {
         $this->feedManager = $feedManager;
+        $this->categoryManager = $categoryManager;
         $this->actionManager = $actionManager;
     }
 
@@ -80,10 +86,16 @@ class FeedController extends AbstractController
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
             $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
 
+            $categories = [];
+            foreach($this->categoryManager->feedCategoryManager->getList(['member' => $member, 'feed' => $feed]) as $feedCategory) {
+                $categories[] = $feedCategory->toArray();
+            }
+
             $data['entries'][$index] = $feed->toArray();
             foreach($actions as $action) {
                 $data['entries'][$index][$action->getAction()->getTitle()] = true;
             }
+            $data['entries'][$index]['categories'] = $categories;
             $index++;
         }
         $data['entries_entity'] = 'feed';
@@ -168,6 +180,11 @@ class FeedController extends AbstractController
 
         $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
 
+        $categories = [];
+        foreach($this->categoryManager->feedCategoryManager->getList(['member' => $member, 'feed' => $feed]) as $feedCategory) {
+            $categories[] = $feedCategory->toArray();
+        }
+
         $collections = [];
         foreach($this->feedManager->collectionFeedManager->getList(['feed' => $feed]) as $collection) {
             $collections[] = $collection->toArray();
@@ -177,6 +194,7 @@ class FeedController extends AbstractController
         foreach($actions as $action) {
             $data['entry'][$action->getAction()->getTitle()] = true;
         }
+        $data['entry']['categories'] = $categories;
         $data['entry']['collections'] = $collections;
         $data['entry_entity'] = 'feed';
 
@@ -308,6 +326,52 @@ class FeedController extends AbstractController
 
         $data['entry'] = $feed->toArray();
         $data['entry_entity'] = 'feed';
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * Discover feeds.
+     *
+     * @ApiDoc(
+     *     section="_ Feed",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function discoverAction(Request $request, $type)
+    {
+        $data = [];
+        if(!$member = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $data['entries'] = [];
+
+        if($type == 'digg') {
+            $content = json_decode(file_get_contents('https://digg.com/api/discovery/list.json'), true);
+            $index = 0;
+            foreach($content['data'] as $category => $sub) {
+                foreach($sub['subs'] as $result) {
+                    $result['category'] = $category;
+                    $this->feedManager->directCreate($result);
+
+                    /*$data['entries'][$index] = [];
+                    $data['entries'][$index]['discover'] = true;
+                    $data['entries'][$index]['title'] = $result['title'];
+                    $data['entries'][$index]['link'] = $result['feed_url'];
+                    $data['entries'][$index]['website'] = $result['html_url'];
+                    $data['entries'][$index]['description'] = $result['description'];
+                    if(isset($parse_url['host']) == 1) {
+                        $data['entries'][$index]['hostname'] = $parse_url['host'];
+                    }
+                    $data['entries'][$index]['categories'] = [];
+                    $data['entries'][$index]['categories'][] = ['title' => mb_strtolower($category, 'UTF-8')];*/
+                    $index++;
+                }
+            }
+        }
 
         return new JsonResponse($data);
     }

@@ -1,0 +1,51 @@
+Readerself\CoreBundle\Entity\FeedCategory:
+    repositoryClass: Readerself\CoreBundle\Repository\FeedCategoryRepository
+    type: entity
+    table: feed_category
+    indexes:
+        feed_id:
+            columns:
+                - feed_id
+        category_id:
+            columns:
+                - category_id
+    uniqueConstraints:
+        feed_id_category_id:
+            columns:
+                - feed_id
+                - category_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        category:
+            targetEntity: Category
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                category_id:
+                    nullable: false
+                    referencedColumnName: id
+                    onDelete: "cascade"
+            orphanRemoval: false
+        feed:
+            targetEntity: Feed
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                feed_id:
+                    nullable: false
+                    referencedColumnName: id
+                    onDelete: "cascade"
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

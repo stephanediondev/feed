@@ -49,3 +49,11 @@ readerself_api_search_feeds:
     defaults:
         _controller: "readerself_core_controller_search:feedsAction"
     methods: GET
+
+readerself_api_feeds_discover:
+    path: /feeds/discover/{type}
+    defaults:
+        _controller: "readerself_core_controller_feed:discoverAction"
+    requirements:
+        id: '\w+'
+    methods: GET

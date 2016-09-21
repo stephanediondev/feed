@@ -558,7 +558,6 @@ class CollectionManager extends AbstractManager
                     'category_id' => $this->setCategory($title),
                 ];
                 $this->insert('item_category', $insertItemCategory);
-
             }
             unset($titles);
         }
