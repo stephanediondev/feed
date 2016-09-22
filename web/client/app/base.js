@@ -77,6 +77,8 @@ function explainConnection(connection) {
         if(connection.member.role == 'demo') {
             connection.member.demo = true;
         }
+
+        $('body').removeClass('anonymous');
     }
     return connection;
 }
@@ -104,7 +106,7 @@ function loadRoute(key, parameters) {
         parameters.link = false;
     }
 
-    if(key.indexOf('{id}') != -1) {
+    if(key.indexOf('profile/{id}') != -1) {
         key = key.replace('{id}', connectionData.member.id);
     }
 
@@ -437,6 +439,7 @@ $(document).ready(function() {
                         if(form.attr('method') == 'DELETE') {
                             if(form.data('query') == '/connection/' + connectionData.id) {
                                 store.remove(data_return.entry_entity);
+                                $('body').addClass('anonymous');
                             } else {
                                 store.remove(data_return.entry_entity + '_' + data_return.entry.id);
                             }

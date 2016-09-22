@@ -185,3 +185,7 @@ input:-webkit-autofill {
 .mdl-card__supporting-text blockquote:after {
     content: none;
 }
+
+body.anonymous .connected {
+    display: none;
+}
