@@ -34,7 +34,7 @@ class FeedControllerTest extends AbstractControllerTest
 
         $link = 'test-'.uniqid('', true);
 
-        // test create
+        // test POST
         $this->client->request('POST', '/api/feed', ['link' => $link], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
@@ -45,7 +45,7 @@ class FeedControllerTest extends AbstractControllerTest
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
-        // test read
+        // test GET
         $this->client->request('GET', '/api/feed/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
@@ -76,7 +76,7 @@ class FeedControllerTest extends AbstractControllerTest
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
-        // test delete
+        // test DELETE
         $this->client->request('DELETE', '/api/feed/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 

@@ -82,6 +82,16 @@ class MemberControllerTest extends AbstractControllerTest
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test GET
+        $this->client->request('GET', '/api/profile', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals('member', $content['entry_entity']);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
     public function testLogout403()

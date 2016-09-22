@@ -34,7 +34,7 @@ class AuthorControllerTest extends AbstractControllerTest
 
         $title = 'test-'.uniqid('', true);
 
-        // test create
+        // test POST
         $this->client->request('POST', '/api/author', ['title' => $title], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
@@ -45,7 +45,7 @@ class AuthorControllerTest extends AbstractControllerTest
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
-        // test read
+        // test GET
         $this->client->request('GET', '/api/author/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
@@ -56,7 +56,7 @@ class AuthorControllerTest extends AbstractControllerTest
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
-        // test delete
+        // test DELETE
         $this->client->request('DELETE', '/api/author/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 

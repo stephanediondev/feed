@@ -12,6 +12,6 @@ abstract class AbstractControllerTest extends WebTestCase
     public function __construct() {
         $this->client = static::createClient();
 
-        $this->token = 'ggYzVnCV3+f55TTWwnaKtkzyPhY7YqbGodhzsfiJE8ze+FugfmKN3Pg/VuQtugiLjK0=';
+        $this->token = 'FNb17VlYo0Vobeos7CtSf3arW8CF/TrlyklUABN2PguOIAHXF4E7IRPzO3bT02Kn7w0=';
     }
 }
