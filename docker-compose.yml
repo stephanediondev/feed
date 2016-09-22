@@ -16,7 +16,6 @@ services:
 
     readerself_php:
         build:
-        #    context: docker/php
             context: ./docker/php
         container_name: readerself_php
         environment:
@@ -36,6 +35,7 @@ services:
             - .:/var/www/html
 
     readerself_mysql:
+        #command: mysqld --initialize
         container_name: readerself_mysql
         environment:
             - MYSQL_ROOT_PASSWORD=readerself
@@ -46,22 +46,21 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - ./docker/logs/mysql:/var/log/mysql
+        #    - ./docker/logs/mysql:/var/log/mysql
+        #    - ./docker/data/mysql:/var/lib/mysql
             - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
 
     readerself_elasticsearch:
         build:
-        #    context: docker/elasticsearch
             context: ./docker/elasticsearch
         container_name: readerself_elasticsearch
-        #environment:
-        #   - ES_CLUSTERNAME=readerself_cluster
         ports:
             - "9200:9200"
             - "9300:9300"
         volumes:
-            - ./docker/logs/elasticsearch:/var/log/elasticsearch
-            - ./docker/elasticsearch/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
+        #    - ./docker/logs/elasticsearch:/var/log/elasticsearch
+        #    - ./docker/data/elasticsearch:/usr/share/elasticsearch/data
+            - ./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
 
     readerself_redis:
         container_name: readerself_redis

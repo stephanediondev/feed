@@ -103,7 +103,7 @@ class SearchController extends AbstractController
     private function getResults(Request $request, $type)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 

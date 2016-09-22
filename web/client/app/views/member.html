@@ -1,7 +1,7 @@
 <!-- Member -->
 <script type="text/template" id="view-login">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#items/unread" data-query="/connection" method="POST">
+        <form action="#items/unread" data-query="/login" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="email" class="required">{{trans 'email'}}</label>
@@ -22,20 +22,25 @@
     </div>
 </script>
 
-<script type="text/template" id="view-logout">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#login" data-query="/connection/{{ connectionData.id }}" method="DELETE">
+<script type="text/template" id="view-profile">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+
+        <form action="#profile" data-query="/profile" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'logout'}}</button>
+                    <label for="password" class="required">{{trans 'password'}}</label>
+                    <input type="password" id="password" name="password" value="">
+                </p>
+                <p>
+                    <label for="passwordConfirm" class="required">{{trans 'password_confirm'}}</label>
+                    <input type="password" id="passwordConfirm" name="passwordConfirm" value="">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
                 </p>
             </div>
         </form>
-    </div>
-</script>
 
-<script type="text/template" id="view-profile">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ entry.email }}

@@ -106,10 +106,6 @@ function loadRoute(key, parameters) {
         parameters.link = false;
     }
 
-    if(key.indexOf('profile/{id}') != -1) {
-        key = key.replace('{id}', connectionData.member.id);
-    }
-
     var replaceId = false;
 
     var parts = key.split('/');
@@ -245,6 +241,12 @@ function loadRoute(key, parameters) {
                             if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
                                 store.remove(data_return.entry_entity + '_' + data_return.entry.id);
                             }
+                        }
+
+                        if(route.query == '/logout') {
+                            store.remove('connection');
+                            $('body').addClass('anonymous');
+                            loadRoute('#login');
                         }
                     },
                     403: function() {
@@ -437,18 +439,13 @@ $(document).ready(function() {
                         }
 
                         if(form.attr('method') == 'DELETE') {
-                            if(form.data('query') == '/connection/' + connectionData.id) {
-                                store.remove(data_return.entry_entity);
-                                $('body').addClass('anonymous');
-                            } else {
-                                store.remove(data_return.entry_entity + '_' + data_return.entry.id);
-                            }
+                            store.remove(data_return.entry_entity + '_' + data_return.entry.id);
                         }
                         if(form.attr('method') == 'PUT') {
                             store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
                         }
                         if(form.attr('method') == 'POST') {
-                            if(form.data('query') == '/connection') {
+                            if(form.data('query') == '/login') {
                                 store.set('connection', data_return.entry);
                                 connectionData = explainConnection(data_return.entry);
 

@@ -208,7 +208,7 @@ class CollectionManager extends AbstractManager
                         $parse_url = parse_url($sp_feed->get_link());
 
                         $updateFeed = [];
-                        $updateFeed['title'] = $this->cleanTitle($sp_feed->get_title());
+                        $updateFeed['title'] = $sp_feed->get_title() != '' ? $this->cleanTitle($sp_feed->get_title()) : '-';
                         $updateFeed['website'] = $this->cleanWebsite($sp_feed->get_link());
                         $updateFeed['link'] = $this->cleanLink($sp_feed->subscribe_url());
                         if(isset($parse_url['host']) == 1) {

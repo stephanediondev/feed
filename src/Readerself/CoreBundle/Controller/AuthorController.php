@@ -10,12 +10,12 @@ use Readerself\CoreBundle\Manager\AuthorManager;
 
 class AuthorController extends AbstractController
 {
-    protected $categoryManager;
+    protected $authorManager;
 
     public function __construct(
-        AuthorManager $categoryManager
+        AuthorManager $authorManager
     ) {
-        $this->categoryManager = $categoryManager;
+        $this->authorManager = $authorManager;
     }
 
     /**
@@ -54,18 +54,18 @@ class AuthorController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
-        $category = $this->categoryManager->getOne(['id' => $id]);
-        $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $member, 'category' => $category]);
+        $author = $this->authorManager->getOne(['id' => $id]);
 
-        $data['entry'] = $category->toArray();
-        foreach($actions as $action) {
-            $data['entry'][$action->getAction()->getTitle()] = true;
+        if(!$author) {
+            return new JsonResponse($data, 404);
         }
-        $data['entry_entity'] = 'category';
+
+        $data['entry'] = $author->toArray();
+        $data['entry_entity'] = 'author';
 
         return new JsonResponse($data);
     }
@@ -83,8 +83,18 @@ class AuthorController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
 
-        $data['id'] = $id;
+        $author = $this->authorManager->getOne(['id' => $id]);
+
+        if(!$author) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $author->toArray();
+        $data['entry_entity'] = 'author';
 
         return new JsonResponse($data);
     }
@@ -102,8 +112,20 @@ class AuthorController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
 
-        $data['id'] = $id;
+        $author = $this->authorManager->getOne(['id' => $id]);
+
+        if(!$author) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $author->toArray();
+        $data['entry_entity'] = 'author';
+
+        $this->authorManager->remove($author);
 
         return new JsonResponse($data);
     }

@@ -53,7 +53,7 @@ class FeedController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -138,7 +138,7 @@ class FeedController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -175,7 +175,7 @@ class FeedController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -226,7 +226,7 @@ class FeedController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -269,7 +269,7 @@ class FeedController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -305,7 +305,7 @@ class FeedController extends AbstractController
     private function setAction($case, Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -315,7 +315,7 @@ class FeedController extends AbstractController
         if($actionFeedMember = $this->actionManager->actionFeedMemberManager->getOne([
             'action' => $action,
             'feed' => $feed,
-            'member' => $member,
+            'member' => $memberConnected,
         ])) {
             $this->actionManager->actionFeedMemberManager->remove($actionFeedMember);
             $data['action'] = 'un'.$case;
@@ -324,7 +324,7 @@ class FeedController extends AbstractController
             $actionFeedMember = $this->actionManager->actionFeedMemberManager->init();
             $actionFeedMember->setAction($action);
             $actionFeedMember->setFeed($feed);
-            $actionFeedMember->setMember($member);
+            $actionFeedMember->setMember($memberConnected);
 
             $this->actionManager->actionFeedMemberManager->persist($actionFeedMember);
             $data['action'] = $case;
@@ -350,7 +350,7 @@ class FeedController extends AbstractController
     public function discoverAction(Request $request, $type)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 

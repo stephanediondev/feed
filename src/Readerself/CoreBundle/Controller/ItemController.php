@@ -61,12 +61,12 @@ class ItemController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
         $parameters = [];
-        $parameters['member'] = $member;
+        $parameters['member'] = $memberConnected;
 
         if($request->query->get('order')) {
             $parameters['order'] = (string) $request->query->get('order');
@@ -121,10 +121,10 @@ class ItemController extends AbstractController
         foreach($pagination as $result) {
             $item = $this->itemManager->getOne(['id' => $result['id']]);
 
-            $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $member, 'item' => $item]);
+            $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item]);
 
             $categories = [];
-            foreach($this->categoryManager->itemCategoryManager->getList(['member' => $member, 'item' => $item]) as $itemCategory) {
+            foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item]) as $itemCategory) {
                 $categories[] = $itemCategory->toArray();
             }
 
@@ -175,12 +175,12 @@ class ItemController extends AbstractController
     public function markallasreadAction(Request $request)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
         $parameters = [];
-        $parameters['member'] = $member;
+        $parameters['member'] = $memberConnected;
 
         $parameters['unread'] = (bool) $request->query->get('unread');
 
@@ -238,7 +238,7 @@ class ItemController extends AbstractController
     private function setAction($case, Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -248,7 +248,7 @@ class ItemController extends AbstractController
         if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
             'action' => $action,
             'item' => $item,
-            'member' => $member,
+            'member' => $memberConnected,
         ])) {
             $this->actionManager->actionItemMemberManager->remove($actionItemMember);
             $data['action'] = 'un'.$case;
@@ -257,7 +257,7 @@ class ItemController extends AbstractController
             $actionItemMember = $this->actionManager->actionItemMemberManager->init();
             $actionItemMember->setAction($action);
             $actionItemMember->setItem($item);
-            $actionItemMember->setMember($member);
+            $actionItemMember->setMember($memberConnected);
 
             $this->actionManager->actionItemMemberManager->persist($actionItemMember);
             $data['action'] = $case;
@@ -283,7 +283,7 @@ class ItemController extends AbstractController
     public function readabilityAction(Request $request, ParameterBag $parameterBag, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -326,7 +326,7 @@ class ItemController extends AbstractController
     public function emailAction(Request $request, ParameterBag $parameterBag, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 

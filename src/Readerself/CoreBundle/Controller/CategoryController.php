@@ -42,7 +42,7 @@ class CategoryController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -128,7 +128,7 @@ class CategoryController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -162,7 +162,7 @@ class CategoryController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -191,7 +191,7 @@ class CategoryController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -220,7 +220,7 @@ class CategoryController extends AbstractController
     public function excludeAction(Request $request, $id)
     {
         $data = [];
-        if(!$member = $this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 

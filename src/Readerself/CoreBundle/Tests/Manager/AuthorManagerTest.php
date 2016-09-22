@@ -28,7 +28,7 @@ class AuthorManagerTest extends KernelTestCase
         $this->assertNotNull($test);
         $this->assertInstanceOf(Author::class, $test);
 
-        $this->authorManager->remove($author);
+        $this->authorManager->remove($test);
 
         $test = $this->authorManager->getOne(['id' => $author_id]);
         $this->assertNull($test);
@@ -47,7 +47,7 @@ class AuthorManagerTest extends KernelTestCase
         $this->assertInstanceOf(Author::class, $test);
         $this->assertEquals($title, $test->getTitle());
 
-        $this->authorManager->remove($author);
+        $this->authorManager->remove($test);
 
         $test = $this->authorManager->getOne(['title' => $title]);
         $this->assertNull($test);

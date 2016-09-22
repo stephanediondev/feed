@@ -2,4 +2,7 @@ cluster.name: readerself_cluster
 node.name: docker
 node.master: true
 node.data: true
+path.data: /usr/share/elasticsearch/data
+path.logs: /var/log/elasticsearch
+network.host: 0.0.0.0
 http.port: 9200

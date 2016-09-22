@@ -50,6 +50,6 @@ http://example.com/api/documentation
 ####Docker (TODO)
 ```
 cd /path-to-installation
-docker-compose build
+docker-compose build --no-cache --force-rm
 docker-compose up -d
 ```

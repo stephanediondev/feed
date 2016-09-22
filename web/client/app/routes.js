@@ -1,7 +1,7 @@
 var routes = [];
 routes['#login'] = {view: 'view-login', query: false, title: 'login'};
-routes['#logout'] = {view: 'view-logout', query: false};
-routes['#profile/{id}'] = {view: 'view-profile', query: '/member/{id}', title: 'profile'};
+routes['#logout'] = {view: 'view-logout', query: '/logout'};
+routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
 routes['#401'] = {view: 'view-401', query: false, title: 'error_401'};
 routes['#404'] = {view: 'view-404', query: false, title: 'error_404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};

@@ -28,3 +28,21 @@ readerself_api_member_delete:
     requirements:
         id: '\d+'
     methods: DELETE
+
+readerself_api_member_login:
+    path: /login
+    defaults:
+        _controller: "readerself_core_controller_member:loginAction"
+    methods: POST
+
+readerself_api_member_profile:
+    path: /profile
+    defaults:
+        _controller: "readerself_core_controller_member:profileAction"
+    methods: GET|POST
+
+readerself_api_member_logout:
+    path: /logout
+    defaults:
+        _controller: "readerself_core_controller_member:logoutAction"
+    methods: GET

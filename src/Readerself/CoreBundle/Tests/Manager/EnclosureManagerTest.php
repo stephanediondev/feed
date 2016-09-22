@@ -51,7 +51,7 @@ class EnclosureManagerTest extends KernelTestCase
 
         $this->itemManager->enclosureManager->remove($enclosure);
 
-        $test = $this->itemManager->getOne(['id' => $enclosure_id]);
+        $test = $this->itemManager->enclosureManager->getOne(['id' => $enclosure_id]);
         $this->assertNull($test);
 
         $this->itemManager->remove($item);
