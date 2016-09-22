@@ -40,7 +40,8 @@ class FeedController extends AbstractController
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
-     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="sortField", "dataType"="string", "required"=false, "format"="""title"" or ""date_created"", default ""title""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""ASC"" or ""DESC"", default ""ASC""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="items per page"},
      *         {"name"="subscribed", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="subscribed feeds"},
@@ -77,6 +78,20 @@ class FeedController extends AbstractController
             $parameters['category'] = (int) $request->query->get('category');
             $data['entry'] = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])->toArray();
             $data['entry_entity'] = 'category';
+        }
+
+        $fields = ['title' => 'fed.title', 'date_created' => 'fed.dateCreated'];
+        if($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
+            $parameters['sortField'] = $fields[$request->query->get('sortField')];
+        } else {
+            $parameters['sortField'] = 'fed.title';
+        }
+
+        $directions = ['ASC', 'DESC'];
+        if($request->query->get('sortDirection') && in_array($request->query->get('sortDirection'), $directions)) {
+            $parameters['sortDirection'] = $request->query->get('sortDirection');
+        } else {
+            $parameters['sortDirection'] = 'ASC';
         }
 
         $paginator= $this->get('knp_paginator');

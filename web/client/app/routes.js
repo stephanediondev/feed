@@ -27,6 +27,7 @@ routes['#feeds/errors'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', que
 routes['#feeds/subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?subscribed=1', title: 'subscribed_feeds', store: false};
 routes['#feeds/not_subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?not_subscribed=1', title: 'unsubscribed_feeds', store: false};
 routes['#feeds/category/{id}'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?category={id}', store: false};
+routes['#feeds/recent'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?sortField=date_created&sortDirection=DESC', title: 'recent_feeds', store: false};
 
 routes['#feed/create'] = {view: 'view-feed-create', query: false};
 routes['#feed/read/{id}'] = {view: 'view-feed-read', query: '/feed/{id}', store: false};

@@ -45,7 +45,7 @@ class SearchController extends AbstractController
      *     parameters={
      *         {"name"="q", "dataType"="string", "required"=true, "description"="query"},
      *         {"name"="sortField", "dataType"="string", "required"=false, "format"="""score"", ""title"" or ""date"", default ""score""", "description"=""},
-     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""ASC"" or ""DESC"", default ""DESC""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
      *     },
@@ -67,7 +67,7 @@ class SearchController extends AbstractController
      *     parameters={
      *         {"name"="q", "dataType"="string", "required"=true, "description"="query"},
      *         {"name"="sortField", "dataType"="string", "required"=false, "format"="""score"", ""title"" or ""date"", default ""score""", "description"=""},
-     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""ASC"" or ""DESC"", default ""DESC""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
      *     },
@@ -89,7 +89,7 @@ class SearchController extends AbstractController
      *     parameters={
      *         {"name"="q", "dataType"="string", "required"=true, "description"="query"},
      *         {"name"="sortField", "dataType"="string", "required"=false, "format"="""score"", ""title"" or ""date"", default ""score""", "description"=""},
-     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""ASC"" or ""DESC"", default ""DESC""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
      *     },
@@ -233,7 +233,7 @@ class SearchController extends AbstractController
                     if($type == 'feed') {
                         $feed = $this->get('readerself_core_manager_feed')->getOne(['id' => $hit['_id']]);
                         if($feed) {
-                            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
+                            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed]);
 
                             $data['entries'][$index] = $feed->toArray();
                             $data['entries'][$index]['score'] = $hit['_score'];
@@ -254,7 +254,7 @@ class SearchController extends AbstractController
                     if($type == 'category') {
                         $category = $this->get('readerself_core_manager_category')->getOne(['id' => $hit['_id']]);
                         if($category) {
-                            $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $member, 'category' => $category]);
+                            $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category]);
 
                             $data['entries'][$index] = $category->toArray();
                             $data['entries'][$index]['score'] = $hit['_score'];
@@ -272,10 +272,10 @@ class SearchController extends AbstractController
                     if($type == 'item') {
                         $item = $this->itemManager->getOne(['id' => $hit['_id']]);
                         if($item) {
-                            $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $member, 'item' => $item]);
+                            $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item]);
 
                             $categories = [];
-                            foreach($this->categoryManager->itemCategoryManager->getList(['member' => $member, 'item' => $item]) as $itemCategory) {
+                            foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item]) as $itemCategory) {
                                 $categories[] = $itemCategory->toArray();
                             }
 
