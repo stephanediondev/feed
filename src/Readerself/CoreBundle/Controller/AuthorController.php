@@ -8,6 +8,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Readerself\CoreBundle\Controller\AbstractController;
 use Readerself\CoreBundle\Manager\AuthorManager;
 
+use Readerself\CoreBundle\Form\Type\AuthorType;
+
 class AuthorController extends AbstractController
 {
     protected $authorManager;
@@ -88,9 +90,25 @@ class AuthorController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$validateToken = $this->validateToken($request)) {
-            $data['error'] = true;
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
+        }
+
+        $form = $this->createForm(AuthorType::class, $this->authorManager->init());
+
+        $form->submit($request->request->all(), false);
+
+        if($form->isValid()) {
+            $author_id = $this->authorManager->persist($form->getData());
+
+            $data['entry'] = $this->authorManager->getOne(['id' => $author_id])->toArray();
+            $data['entry_entity'] = 'author';
+
+        } else {
+            $errors = $form->getErrors(true);
+            foreach($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
         }
 
         return new JsonResponse($data);

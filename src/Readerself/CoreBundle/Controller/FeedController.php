@@ -185,10 +185,10 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
+        $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed]);
 
         $categories = [];
-        foreach($this->categoryManager->feedCategoryManager->getList(['member' => $member, 'feed' => $feed]) as $feedCategory) {
+        foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed]) as $feedCategory) {
             $categories[] = $feedCategory->toArray();
         }
 

@@ -31,6 +31,41 @@ class AuthorControllerTest extends AbstractControllerTest
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        $title = 'test-'.uniqid('', true);
+
+        // test create
+        $this->client->request('POST', '/api/author', ['title' => $title], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals($title, $content['entry']['title']);
+        $this->assertEquals('author', $content['entry_entity']);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test read
+        $this->client->request('GET', '/api/author/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals($title, $content['entry']['title']);
+        $this->assertEquals('author', $content['entry_entity']);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test delete
+        $this->client->request('DELETE', '/api/author/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals($title, $content['entry']['title']);
+        $this->assertEquals('author', $content['entry_entity']);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
     public function testRead()

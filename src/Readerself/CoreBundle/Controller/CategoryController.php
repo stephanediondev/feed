@@ -9,6 +9,8 @@ use Readerself\CoreBundle\Controller\AbstractController;
 use Readerself\CoreBundle\Manager\CategoryManager;
 use Readerself\CoreBundle\Manager\ActionManager;
 
+use Readerself\CoreBundle\Form\Type\CategoryType;
+
 class CategoryController extends AbstractController
 {
     protected $categoryManager;
@@ -107,9 +109,25 @@ class CategoryController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$validateToken = $this->validateToken($request)) {
-            $data['error'] = true;
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
+        }
+
+        $form = $this->createForm(CategoryType::class, $this->categoryManager->init());
+
+        $form->submit($request->request->all(), false);
+
+        if($form->isValid()) {
+            $category_id = $this->categoryManager->persist($form->getData());
+
+            $data['entry'] = $this->categoryManager->getOne(['id' => $category_id])->toArray();
+            $data['entry_entity'] = 'category';
+
+        } else {
+            $errors = $form->getErrors(true);
+            foreach($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
         }
 
         return new JsonResponse($data);
@@ -237,7 +255,7 @@ class CategoryController extends AbstractController
         if($actionCategoryMember = $this->actionManager->actionCategoryMemberManager->getOne([
             'action' => $action,
             'category' => $category,
-            'member' => $member,
+            'member' => $memberConnected,
         ])) {
             $this->actionManager->actionCategoryMemberManager->remove($actionCategoryMember);
             $data['action'] = 'include';
@@ -246,7 +264,7 @@ class CategoryController extends AbstractController
             $actionCategoryMember = $this->actionManager->actionCategoryMemberManager->init();
             $actionCategoryMember->setAction($action);
             $actionCategoryMember->setCategory($category);
-            $actionCategoryMember->setMember($member);
+            $actionCategoryMember->setMember($memberConnected);
 
             $this->actionManager->actionCategoryMemberManager->persist($actionCategoryMember);
             $data['action'] = 'exclude';
