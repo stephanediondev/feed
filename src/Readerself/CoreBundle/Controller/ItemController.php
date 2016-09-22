@@ -242,8 +242,13 @@ class ItemController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $action = $this->actionManager->getOne(['title' => $case]);
         $item = $this->itemManager->getOne(['id' => $id]);
+
+        if(!$item) {
+            return new JsonResponse($data, 404);
+        }
+
+        $action = $this->actionManager->getOne(['title' => $case]);
 
         if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
             'action' => $action,

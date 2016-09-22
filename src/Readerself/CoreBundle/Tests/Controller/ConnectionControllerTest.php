@@ -1,84 +1,64 @@
 <?php
-namespace Readerself\CoreBundle\Tests\Manager;
+namespace Readerself\CoreBundle\Tests\Controller;
 
-use Readerself\CoreBundle\Entity\Category;
-
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-class ConnectionControllerTest extends WebTestCase
+class ConnectionControllerTest extends AbstractControllerTest
 {
-    public function testCreate403()
+    public function testCreate()
     {
-        $client = static::createClient();
-
-        $client->request('POST', '/api/connection', [], [], []);
-        $response = $client->getResponse();
+        // test 403
+        $this->client->request('POST', '/api/connection');
+        $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
-    public function testRead403()
+    public function testRead()
     {
-        $client = static::createClient();
-
-        $client->request('GET', '/api/connection/0', [], [], []);
-        $response = $client->getResponse();
+        // test 403
+        $this->client->request('GET', '/api/connection/0');
+        $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
 
-    public function testUpdate403()
-    {
-        $client = static::createClient();
-
-        $client->request('PUT', '/api/connection/0', [], [], []);
-        $response = $client->getResponse();
-
-        $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
-
-    public function testDelete403()
-    {
-        $client = static::createClient();
-
-        $client->request('DELETE', '/api/connection/0', [], [], []);
-        $response = $client->getResponse();
-
-        $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
-
-    public function testRead404()
-    {
-        $client = static::createClient();
-
-        $client->request('GET', '/api/connection/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => 'j5ybdQUKGYug2AzhEzR6tyn7gxJsGwdAmAw/OolHhOYw5kIq0G2xg/WU2A5oaW6x8bg=']);
-        $response = $client->getResponse();
+        // test 404
+        $this->client->request('GET', '/api/connection/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
-    public function testUpdate404()
+    public function testUpdate()
     {
-        $client = static::createClient();
+        // test 403
+        $this->client->request('PUT', '/api/connection/0');
+        $response = $this->client->getResponse();
 
-        $client->request('PUT', '/api/connection/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => 'j5ybdQUKGYug2AzhEzR6tyn7gxJsGwdAmAw/OolHhOYw5kIq0G2xg/WU2A5oaW6x8bg=']);
-        $response = $client->getResponse();
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 404
+        $this->client->request('PUT', '/api/connection/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
-    public function testDelete404()
+    public function testDelete()
     {
-        $client = static::createClient();
+        // test 403
+        $this->client->request('DELETE', '/api/connection/0');
+        $response = $this->client->getResponse();
 
-        $client->request('DELETE', '/api/connection/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => 'j5ybdQUKGYug2AzhEzR6tyn7gxJsGwdAmAw/OolHhOYw5kIq0G2xg/WU2A5oaW6x8bg=']);
-        $response = $client->getResponse();
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 404
+        $this->client->request('DELETE', '/api/connection/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));

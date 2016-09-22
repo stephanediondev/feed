@@ -61,8 +61,19 @@ class PushController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
+        if(!$validateToken = $this->validateToken($request)) {
+            $data['error'] = true;
+            return new JsonResponse($data, 403);
+        }
 
-        $data['id'] = $id;
+        $push = $this->memberManager->pushManager->getOne(['id' => $id]);
+
+        if(!$push) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $push->toArray();
+        $data['entry_entity'] = 'push';
 
         return new JsonResponse($data);
     }
@@ -80,8 +91,19 @@ class PushController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
+        if(!$validateToken = $this->validateToken($request)) {
+            $data['error'] = true;
+            return new JsonResponse($data, 403);
+        }
 
-        $data['id'] = $id;
+        $push = $this->memberManager->pushManager->getOne(['id' => $id]);
+
+        if(!$push) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $push->toArray();
+        $data['entry_entity'] = 'push';
 
         return new JsonResponse($data);
     }
@@ -99,8 +121,21 @@ class PushController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
+        if(!$validateToken = $this->validateToken($request)) {
+            $data['error'] = true;
+            return new JsonResponse($data, 403);
+        }
 
-        $data['id'] = $id;
+        $push = $this->memberManager->pushManager->getOne(['id' => $id]);
+
+        if(!$push) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $push->toArray();
+        $data['entry_entity'] = 'push';
+
+        $this->memberManager->pushManager->remove($push);
 
         return new JsonResponse($data);
     }

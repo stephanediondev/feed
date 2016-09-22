@@ -50,7 +50,7 @@ class CategoryController extends AbstractController
 
         if($request->query->get('excluded')) {
             $parameters['excluded'] = true;
-            $parameters['member'] = $member;
+            $parameters['member'] = $memberConnected;
         }
 
         if($request->query->get('feed')) {
@@ -69,7 +69,7 @@ class CategoryController extends AbstractController
         $index = 0;
         foreach($pagination as $result) {
             $category = $this->categoryManager->getOne(['id' => $result['id']]);
-            $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $member, 'category' => $category]);
+            $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category]);
 
             $data['entries'][$index] = $category->toArray();
             foreach($actions as $action) {
@@ -138,7 +138,7 @@ class CategoryController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $member, 'category' => $category]);
+        $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category]);
 
         $data['entry'] = $category->toArray();
         foreach($actions as $action) {
@@ -203,6 +203,8 @@ class CategoryController extends AbstractController
 
         $data['entry'] = $category->toArray();
         $data['entry_entity'] = 'category';
+
+        $this->categoryManager->remove($category);
 
         return new JsonResponse($data);
     }

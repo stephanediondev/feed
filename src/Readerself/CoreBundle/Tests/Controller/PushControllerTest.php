@@ -1,12 +1,12 @@
 <?php
 namespace Readerself\CoreBundle\Tests\Controller;
 
-class MemberControllerTest extends AbstractControllerTest
+class PushControllerTest extends AbstractControllerTest
 {
     public function testCreate()
     {
         // test 403
-        $this->client->request('POST', '/api/member');
+        $this->client->request('POST', '/api/push');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
@@ -16,14 +16,14 @@ class MemberControllerTest extends AbstractControllerTest
     public function testRead()
     {
         // test 403
-        $this->client->request('GET', '/api/member/0');
+        $this->client->request('GET', '/api/push/0');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test 404
-        $this->client->request('GET', '/api/member/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('GET', '/api/push/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -33,14 +33,14 @@ class MemberControllerTest extends AbstractControllerTest
     public function testUpdate()
     {
         // test 403
-        $this->client->request('PUT', '/api/member/0');
+        $this->client->request('PUT', '/api/push/0');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test 404
-        $this->client->request('PUT', '/api/member/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('PUT', '/api/push/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -50,47 +50,17 @@ class MemberControllerTest extends AbstractControllerTest
     public function testDelete()
     {
         // test 403
-        $this->client->request('DELETE', '/api/member/0');
+        $this->client->request('DELETE', '/api/push/0');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test 404
-        $this->client->request('DELETE', '/api/member/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('DELETE', '/api/push/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
-
-    public function testLogin()
-    {
-        // test 401
-        $this->client->request('POST', '/api/login');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
-
-    public function testProfile()
-    {
-        // test 403
-        $this->client->request('POST', '/api/profile');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
-
-    public function testLogout403()
-    {
-        // test 403
-        $this->client->request('GET', '/api/logout');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 }

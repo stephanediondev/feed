@@ -65,12 +65,12 @@ class FeedController extends AbstractController
 
         if($request->query->get('subscribed')) {
             $parameters['subscribed'] = true;
-            $parameters['member'] = $member;
+            $parameters['member'] = $memberConnected;
         }
 
         if($request->query->get('not_subscribed')) {
             $parameters['not_subscribed'] = true;
-            $parameters['member'] = $member;
+            $parameters['member'] = $memberConnected;
         }
 
         if($request->query->get('category')) {
@@ -91,10 +91,10 @@ class FeedController extends AbstractController
         $index = 0;
         foreach($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
-            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $member, 'feed' => $feed]);
+            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed]);
 
             $categories = [];
-            foreach($this->categoryManager->feedCategoryManager->getList(['member' => $member, 'feed' => $feed]) as $feedCategory) {
+            foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed]) as $feedCategory) {
                 $categories[] = $feedCategory->toArray();
             }
 
@@ -309,8 +309,13 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $action = $this->actionManager->getOne(['title' => $case]);
         $feed = $this->feedManager->getOne(['id' => $id]);
+
+        if(!$feed) {
+            return new JsonResponse($data, 404);
+        }
+
+        $action = $this->actionManager->getOne(['title' => $case]);
 
         if($actionFeedMember = $this->actionManager->actionFeedMemberManager->getOne([
             'action' => $action,

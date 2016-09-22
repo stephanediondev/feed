@@ -24,23 +24,6 @@
 
 <script type="text/template" id="view-profile">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-
-        <form action="#profile" data-query="/profile" method="POST">
-            <div class="mdl-card__supporting-text">
-                <p>
-                    <label for="password" class="required">{{trans 'password'}}</label>
-                    <input type="password" id="password" name="password" value="">
-                </p>
-                <p>
-                    <label for="passwordConfirm" class="required">{{trans 'password_confirm'}}</label>
-                    <input type="password" id="passwordConfirm" name="passwordConfirm" value="">
-                </p>
-                <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
-                </p>
-            </div>
-        </form>
-
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ entry.email }}
@@ -85,7 +68,7 @@
                 {{ connection.agent }}
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <form action="#profile/{{ connection.member.id }}" data-query="/connection/{{ connection.id }}" method="DELETE">
+                <form action="#profile" data-query="/connection/{{ connection.id }}" method="DELETE">
                     <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</button>
                 </form>
             </div>
@@ -95,25 +78,56 @@
 
 <script type="text/template" id="view-profile-update">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#items/unread" data-query="/login" method="POST">
+        <form action="#profile" data-query="/profile" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    {{trans 'profile'}}
+                    <a href="#profile" class="load-route">{{trans 'profile'}}</a>
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="email" class="required">{{trans 'email'}}</label>
-                    <input type="email" id="email" name="email" required="required" value="">
+                    <input type="email" id="email" name="email" required="required" value="{{ entry.email }}">
                 </p>
                 <p>
-                    <label for="password" class="required">{{trans 'password'}}</label>
-                    <input type="password" id="password" name="password" required="required" value="">
+                    <label for="password">{{trans 'password'}}</label>
+                    <input type="password" id="password" name="password" value="">
+                </p>
+                <p>
+                    <label for="passwordConfirm">{{trans 'password_confirm'}}</label>
+                    <input type="password" id="passwordConfirm" name="passwordConfirm" value="">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
                 </p>
             </div>
+            {{#if connectionData.member.member }}
+                <div class="mdl-card__actions mdl-card--border">
+                    <a href="#profile/delete" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
+                </div>
+            {{/if}}
+        </form>
+    </div>
+</script>
+
+<script type="text/template" id="view-profile-delete">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+        <form action="#login" data-query="/profile" method="DELETE">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    <a href="#profile" class="load-route">{{trans 'profile'}}</a>
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'delete'}}</button>
+                </p>
+            </div>
+            {{#if connectionData.member.member }}
+                <div class="mdl-card__actions mdl-card--border">
+                    <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+                </div>
+            {{/if}}
         </form>
     </div>
 </script>

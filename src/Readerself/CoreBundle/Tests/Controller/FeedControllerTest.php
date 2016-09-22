@@ -1,84 +1,101 @@
 <?php
-namespace Readerself\CoreBundle\Tests\Manager;
+namespace Readerself\CoreBundle\Tests\Controller;
 
-use Readerself\CoreBundle\Entity\Category;
-
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-class FeedControllerTest extends WebTestCase
+class FeedControllerTest extends AbstractControllerTest
 {
-    public function testCreate403()
+    public function testIndex()
     {
-        $client = static::createClient();
+        // test 403
+        $this->client->request('GET', '/api/feeds');
+        $response = $this->client->getResponse();
 
-        $client->request('POST', '/api/feed', [], [], []);
-        $response = $client->getResponse();
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test entries_entity
+        $this->client->request('GET', '/api/feeds', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals('feed', $content['entries_entity']);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+    }
+
+    public function testCreate()
+    {
+        // test 403
+        $this->client->request('POST', '/api/feed');
+        $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
-    public function testRead403()
+    public function testRead()
     {
-        $client = static::createClient();
-
-        $client->request('GET', '/api/feed/0', [], [], []);
-        $response = $client->getResponse();
+        // test 403
+        $this->client->request('GET', '/api/feed/0');
+        $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
 
-    public function testUpdate403()
-    {
-        $client = static::createClient();
-
-        $client->request('PUT', '/api/feed/0', [], [], []);
-        $response = $client->getResponse();
-
-        $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
-
-    public function testDelete403()
-    {
-        $client = static::createClient();
-
-        $client->request('DELETE', '/api/feed/0', [], [], []);
-        $response = $client->getResponse();
-
-        $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
-
-    public function testRead404()
-    {
-        $client = static::createClient();
-
-        $client->request('GET', '/api/feed/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => 'j5ybdQUKGYug2AzhEzR6tyn7gxJsGwdAmAw/OolHhOYw5kIq0G2xg/WU2A5oaW6x8bg=']);
-        $response = $client->getResponse();
+        // test 404
+        $this->client->request('GET', '/api/feed/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
-    public function testUpdate404()
+    public function testUpdate()
     {
-        $client = static::createClient();
+        // test 403
+        $this->client->request('PUT', '/api/feed/0');
+        $response = $this->client->getResponse();
 
-        $client->request('PUT', '/api/feed/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => 'j5ybdQUKGYug2AzhEzR6tyn7gxJsGwdAmAw/OolHhOYw5kIq0G2xg/WU2A5oaW6x8bg=']);
-        $response = $client->getResponse();
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 404
+        $this->client->request('PUT', '/api/feed/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
-    public function testDelete404()
+    public function testDelete()
     {
-        $client = static::createClient();
+        // test 403
+        $this->client->request('DELETE', '/api/feed/0');
+        $response = $this->client->getResponse();
 
-        $client->request('DELETE', '/api/feed/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => 'j5ybdQUKGYug2AzhEzR6tyn7gxJsGwdAmAw/OolHhOYw5kIq0G2xg/WU2A5oaW6x8bg=']);
-        $response = $client->getResponse();
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 404
+        $this->client->request('DELETE', '/api/feed/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+    }
+
+    public function testSubscribe()
+    {
+        // test 403
+        $this->client->request('GET', '/api/feed/subscribe/0');
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 404
+        $this->client->request('GET', '/api/feed/subscribe/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));

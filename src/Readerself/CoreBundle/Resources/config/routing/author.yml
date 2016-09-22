@@ -28,3 +28,10 @@ readerself_api_author_delete:
     requirements:
         id: '\d+'
     methods: DELETE
+
+#extra
+readerself_api_authors:
+    path: /authors
+    defaults:
+        _controller: "readerself_core_controller_author:indexAction"
+    methods: GET

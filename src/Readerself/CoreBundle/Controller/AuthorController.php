@@ -19,6 +19,61 @@ class AuthorController extends AbstractController
     }
 
     /**
+     * Retrieve all authors.
+     *
+     * @ApiDoc(
+     *     section="_ Author",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     *     parameters={
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
+     *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="categories per page"},
+     *     },
+     * )
+     */
+    public function indexAction(Request $request)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $parameters = [];
+
+        $paginator= $this->get('knp_paginator');
+        $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
+        $pagination = $paginator->paginate(
+            $this->authorManager->getList($parameters),
+            $page = $request->query->getInt('page', 1),
+            $request->query->getInt('perPage', 100)
+        );
+
+        $data['entries'] = [];
+        $index = 0;
+        foreach($pagination as $result) {
+            $author = $this->authorManager->getOne(['id' => $result['id']]);
+
+            $data['entries'][$index] = $author->toArray();
+            $index++;
+        }
+        $data['entries_entity'] = 'author';
+        $data['entries_total'] = $pagination->getTotalItemCount();
+        $data['entries_pages'] = $pages = $pagination->getPageCount();
+        $data['entries_page_current'] = $page;
+        $pagePrevious = $page - 1;
+        if($pagePrevious >= 1) {
+            $data['entries_page_previous'] = $pagePrevious;
+        }
+        $pageNext = $page + 1;
+        if($pageNext <= $pages) {
+            $data['entries_page_next'] = $pageNext;
+        }
+        return new JsonResponse($data);
+    }
+
+    /**
      * Create an author.
      *
      * @ApiDoc(

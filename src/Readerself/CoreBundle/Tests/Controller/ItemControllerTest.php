@@ -1,32 +1,32 @@
 <?php
 namespace Readerself\CoreBundle\Tests\Controller;
 
-class AuthorControllerTest extends AbstractControllerTest
+class ItemControllerTest extends AbstractControllerTest
 {
     public function testIndex()
     {
         // test 403
-        $this->client->request('GET', '/api/authors');
+        $this->client->request('GET', '/api/items');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test entries_entity
-        $this->client->request('GET', '/api/authors', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('GET', '/api/items', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $content = json_decode($response->getContent(), true);
 
-        $this->assertEquals('author', $content['entries_entity']);
+        $this->assertEquals('item', $content['entries_entity']);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
-    public function testCreate()
+    public function testMarkallasread()
     {
         // test 403
-        $this->client->request('POST', '/api/author');
+        $this->client->request('GET', '/api/items/markallasread');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
@@ -36,48 +36,31 @@ class AuthorControllerTest extends AbstractControllerTest
     public function testRead()
     {
         // test 403
-        $this->client->request('GET', '/api/author/0');
+        $this->client->request('GET', '/api/item/read/0');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test 404
-        $this->client->request('GET', '/api/author/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('GET', '/api/item/read/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
-    public function testUpdate()
+    public function testStar()
     {
         // test 403
-        $this->client->request('PUT', '/api/author/0');
+        $this->client->request('GET', '/api/item/star/0');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test 404
-        $this->client->request('PUT', '/api/author/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-    }
-
-    public function testDelete()
-    {
-        // test 403
-        $this->client->request('DELETE', '/api/author/0');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-
-        // test 404
-        $this->client->request('DELETE', '/api/author/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('GET', '/api/item/star/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
