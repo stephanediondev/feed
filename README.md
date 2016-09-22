@@ -50,6 +50,6 @@ http://example.com/api/documentation
 ####Docker (TODO)
 ```
 cd /path-to-installation
-docker-compose build -p readerself
+docker-compose build
 docker-compose up -d
 ```

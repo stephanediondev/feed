@@ -50,11 +50,12 @@ services:
             - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
 
     readerself_elasticsearch:
-        command: elasticsearch
+        build:
+        #    context: docker/elasticsearch
+            context: ./docker/elasticsearch
         container_name: readerself_elasticsearch
         #environment:
         #   - ES_CLUSTERNAME=readerself_cluster
-        image: elasticsearch
         ports:
             - "9200:9200"
             - "9300:9300"

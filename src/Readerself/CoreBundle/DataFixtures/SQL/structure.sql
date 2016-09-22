@@ -603,4 +603,67 @@ ALTER TABLE `item_category`
 ALTER TABLE `push`
   ADD CONSTRAINT `FK_5F3A16647597D3FE` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE;
 
+
+-- phpMyAdmin SQL Dump
+-- version 4.6.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Sep 22, 2016 at 10:47 AM
+-- Server version: 5.7.14
+-- PHP Version: 7.0.9
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Database: `readerself`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feed_category`
+--
+
+CREATE TABLE `feed_category` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `category_id` int(10) UNSIGNED NOT NULL,
+  `feed_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `feed_category`
+--
+ALTER TABLE `feed_category`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `feed_id_category_id` (`feed_id`,`category_id`),
+  ADD KEY `feed_id` (`feed_id`),
+  ADD KEY `category_id` (`category_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `feed_category`
+--
+ALTER TABLE `feed_category`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `feed_category`
+--
+ALTER TABLE `feed_category`
+  ADD CONSTRAINT `FK_26998E6612469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_26998E6651A5BC03` FOREIGN KEY (`feed_id`) REFERENCES `feed` (`id`) ON DELETE CASCADE;
+
+
 SET FOREIGN_KEY_CHECKS=1;
