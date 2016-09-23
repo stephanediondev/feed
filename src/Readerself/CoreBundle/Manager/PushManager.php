@@ -48,7 +48,7 @@ class PushManager extends AbstractManager
         $event = new PushEvent($data, $mode);
         $this->eventDispatcher->dispatch('Push.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -61,7 +61,7 @@ class PushManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 
     public function send($push_id, $payload)

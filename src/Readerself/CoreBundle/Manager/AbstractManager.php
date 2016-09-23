@@ -23,7 +23,7 @@ abstract class AbstractManager
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function removeCache()
+    public function clearCache()
     {
         if(function_exists('apcu_clear_cache')) {
             apcu_clear_cache();
@@ -50,17 +50,5 @@ abstract class AbstractManager
         }
         $stmt->bindValue('id', $id);
         $stmt->execute();
-    }
-
-    public function toAscii($url)
-    {
-        $parse_url = parse_url($url);
-        if(!isset($parse_url['host'])) {
-            return $url;
-        }
-        if(mb_detect_encoding($parse_url['host']) != 'ASCII') {
-            $url = str_replace($parse_url['host'], idn_to_ascii($parse_url['host']), $url);
-        }
-        return $url;
     }
 }

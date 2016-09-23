@@ -37,7 +37,7 @@ class CollectionFeedManager extends AbstractManager
         $event = new CollectionFeedEvent($data, $mode);
         $this->eventDispatcher->dispatch('CollectionFeed.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -50,6 +50,6 @@ class CollectionFeedManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 }

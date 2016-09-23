@@ -66,7 +66,7 @@ class CollectionManager extends AbstractManager
         $event = new CollectionEvent($data, $mode);
         $this->eventDispatcher->dispatch('Collection.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -79,7 +79,7 @@ class CollectionManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 
     public function setFacebook($enabled, $id, $secret)
@@ -656,5 +656,17 @@ class CollectionManager extends AbstractManager
         $title = mb_substr($title, 0, 255, 'UTF-8');
 
         return $title;
+    }
+
+    public function toAscii($url)
+    {
+        $parse_url = parse_url($url);
+        if(!isset($parse_url['host'])) {
+            return $url;
+        }
+        if(mb_detect_encoding($parse_url['host']) != 'ASCII') {
+            $url = str_replace($parse_url['host'], idn_to_ascii($parse_url['host']), $url);
+        }
+        return $url;
     }
 }

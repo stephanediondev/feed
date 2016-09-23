@@ -53,6 +53,26 @@
         {{/if}}
     </div>
 
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+        <form action="#profile" data-query="/pinboard" method="POST">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    Pinboard
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>Go to your <a href="https://pinboard.in/settings/password" target="_blank">settings page</a> on Pinboard to get your API Token.</p>
+                <p>
+                    <label for="token">{{trans 'token'}}</label>
+                    <input type="text" id="token" name="token" value="">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'save'}}</button>
+                </p>
+            </div>
+        </form>
+    </div>
+
     {{#each entry.connections as |connection connection_index|}}
         <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
             <div class="mdl-card__title">
@@ -78,7 +98,7 @@
 
 <script type="text/template" id="view-profile-update">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#profile/update" data-query="/profile/update" method="POST">
+        <form action="#profile/update" data-query="/profile/update" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     <a href="#profile" class="load-route">{{trans 'profile'}}</a>

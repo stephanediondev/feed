@@ -38,7 +38,7 @@ class ItemCategoryManager extends AbstractManager
         $event = new ItemCategoryEvent($data, $mode);
         $this->eventDispatcher->dispatch('ItemCategory.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -51,6 +51,6 @@ class ItemCategoryManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 }

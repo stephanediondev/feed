@@ -52,7 +52,7 @@ class MemberManager extends AbstractManager
         $event = new MemberEvent($data, $mode);
         $this->eventDispatcher->dispatch('Member.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -65,6 +65,6 @@ class MemberManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 }

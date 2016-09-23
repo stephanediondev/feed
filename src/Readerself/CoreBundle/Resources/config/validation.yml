@@ -1,3 +1,22 @@
+Readerself\CoreBundle\Entity\Feed:
+    properties:
+        title:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        link:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        website:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        language:
+            - Length:
+                min: 2
+                max: 2
+
 Readerself\CoreBundle\Entity\Member:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
@@ -5,6 +24,8 @@ Readerself\CoreBundle\Entity\Member:
         email:
             - NotBlank: ~
             - Email: ~
+            - Length:
+                max: 255
         plainPassword:
             - NotBlank: { groups: [insert] }
             - Type: string
@@ -22,10 +43,13 @@ Readerself\CoreBundle\Entity\Profile:
     properties:
         email:
             - NotBlank: ~
+            - Email: ~
+            - Length:
+                max: 255
 
-Readerself\CoreBundle\Entity\Feed:
+Readerself\CoreBundle\Entity\Pinboard:
     properties:
-        title:
+        token:
             - NotBlank: ~
-        link:
-            - NotBlank: ~
+            - Length:
+                max: 255

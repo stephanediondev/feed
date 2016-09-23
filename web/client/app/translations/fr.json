@@ -3,7 +3,7 @@
     "shortcut_g_then_u": "g then u",
     "shortcut_g_then_s": "g then s",
     "shortcut_shift_a": "shift + a",
-    "shortcut_shift_m": "shift + m",
+    "shortcut_shift_s": "shift + s",
 
     "error_401": "Error 401",
     "error_404": "Error 404",
@@ -49,6 +49,10 @@
     "view_items": "View items",
     "view_categories": "View categories",
     "view_feeds": "View feeds",
+
+    "used_by_feeds": "Used by feeds",
+    "excluded": "Excluded",
+    "categories_used_by_feeds": "Categories used by feeds",
 
     "search": "Recherche",
     "search_feeds": "Recherche de flux",

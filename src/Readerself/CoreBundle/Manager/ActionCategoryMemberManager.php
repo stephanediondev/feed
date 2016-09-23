@@ -37,7 +37,7 @@ class ActionCategoryMemberManager extends AbstractManager
         $event = new ActionCategoryMemberEvent($data, $mode);
         $this->eventDispatcher->dispatch('ActionCategoryMember.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -50,6 +50,6 @@ class ActionCategoryMemberManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 }

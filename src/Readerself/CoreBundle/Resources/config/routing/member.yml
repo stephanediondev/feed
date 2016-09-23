@@ -45,10 +45,16 @@ readerself_api_member_profile_update:
     path: /profile/update
     defaults:
         _controller: "readerself_core_controller_member:profileUpdateAction"
-    methods: POST
+    methods: PUT
 
 readerself_api_member_logout:
     path: /logout
     defaults:
         _controller: "readerself_core_controller_member:logoutAction"
     methods: GET
+
+readerself_api_member_pinboard:
+    path: /pinboard
+    defaults:
+        _controller: "readerself_core_controller_member:pinboardAction"
+    methods: POST

@@ -38,7 +38,7 @@ class FeedCategoryManager extends AbstractManager
         $event = new FeedCategoryEvent($data, $mode);
         $this->eventDispatcher->dispatch('FeedCategory.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -51,6 +51,6 @@ class FeedCategoryManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 }

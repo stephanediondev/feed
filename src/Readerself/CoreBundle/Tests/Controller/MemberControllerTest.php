@@ -98,7 +98,7 @@ class MemberControllerTest extends AbstractControllerTest
     public function testProfile()
     {
         // test 403
-        $this->client->request('POST', '/api/profile');
+        $this->client->request('GET', '/api/profile');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
@@ -106,6 +106,26 @@ class MemberControllerTest extends AbstractControllerTest
 
         // test GET
         $this->client->request('GET', '/api/profile', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals('member', $content['entry_entity']);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+    }
+
+    public function testProfileUpdate()
+    {
+        // test 403
+        $this->client->request('PUT', '/api/profile/update');
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test GET
+        $this->client->request('PUT', '/api/profile/update', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $content = json_decode($response->getContent(), true);

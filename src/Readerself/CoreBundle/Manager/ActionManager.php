@@ -57,7 +57,7 @@ class ActionManager extends AbstractManager
         $event = new ActionEvent($data, $mode);
         $this->eventDispatcher->dispatch('Action.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -70,6 +70,6 @@ class ActionManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 }

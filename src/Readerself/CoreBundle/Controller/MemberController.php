@@ -15,6 +15,9 @@ use Readerself\CoreBundle\Form\Type\LoginType;
 use Readerself\CoreBundle\Entity\Profile;
 use Readerself\CoreBundle\Form\Type\ProfileType;
 
+use Readerself\CoreBundle\Entity\Pinboard;
+use Readerself\CoreBundle\Form\Type\PinboardType;
+
 class MemberController extends AbstractController
 {
     /**
@@ -256,6 +259,11 @@ class MemberController extends AbstractController
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
+     *     parameters={
+     *         {"name"="email", "dataType"="string", "format"="email", "required"=true},
+     *         {"name"="password", "dataType"="string", "format"="", "required"=false},
+     *         {"name"="passwordConfirm", "dataType"="string", "format"="", "required"=false},
+     *     },
      * )
      */
     public function profileUpdateAction(Request $request)
@@ -322,6 +330,59 @@ class MemberController extends AbstractController
 
         $this->memberManager->connectionManager->remove($connection);
 
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * Profile update.
+     *
+     * @ApiDoc(
+     *     section="_ Member",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     *     parameters={
+     *         {"name"="email", "dataType"="string", "format"="email", "required"=true},
+     *     },
+     * )
+     */
+    public function pinboardAction(Request $request)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $pinboard = new Pinboard();
+        $form = $this->createForm(PinboardType::class, $pinboard);
+
+        $form->submit($request->request->all());
+
+        if($form->isValid()) {
+            $connection = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
+
+            if($connection) {
+                $connection->setToken($pinboard->getToken());
+            } else {
+                $connection = $this->memberManager->connectionManager->init();
+                $connection->setMember($memberConnected);
+                $connection->setType('pinboard');
+                $connection->setToken($pinboard->getToken());
+                $connection->setIp($request->getClientIp());
+                $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
+
+            }
+            $this->memberManager->connectionManager->persist($connection);
+
+            $data['entry'] = $connection->toArray();
+            $data['entry_entity'] = 'connection';
+        } else {
+            $errors = $form->getErrors(true);
+            foreach($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
+        }
 
         return new JsonResponse($data);
     }

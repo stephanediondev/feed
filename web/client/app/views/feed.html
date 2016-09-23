@@ -15,11 +15,12 @@
                 {{#if current_title }}
                     {{trans current_title}} ({{ entries_total }})
                 {{else}}
-                    {{trans 'all_feeds'}} ({{ entries_total }})
+                    {{trans 'feeds'}} ({{ entries_total }})
                 {{/if}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'all'}}</a>
             <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'recent_feeds'}}</a>
             <a href="#categories/feed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'view_categories'}}</a>
             <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
@@ -66,7 +67,7 @@
         <form action="#feeds" data-query="/feed" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    {{trans 'all_feeds'}}
+                    {{trans 'feeds'}}
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
@@ -91,7 +92,7 @@
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'back'}}</a>
+                <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
             </div>
         </form>
     </div>
@@ -101,11 +102,11 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{trans 'all_feeds'}}
+                {{trans 'feeds'}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'back'}}</a>
+            <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
         </div>
     </div>
 
@@ -183,11 +184,11 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{trans 'all_feeds'}}
+                {{trans 'feeds'}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#feed/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'back'}}</a>
+            <a href="#feed/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
         </div>
     </div>
 
@@ -230,11 +231,11 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{trans 'all_feeds'}}
+                {{trans 'feeds'}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#feed/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'back'}}</a>
+            <a href="#feed/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
         </div>
     </div>
 

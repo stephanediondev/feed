@@ -46,7 +46,7 @@ class FeedManager extends AbstractManager
         $event = new FeedEvent($data, $mode);
         $this->eventDispatcher->dispatch('Feed.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -59,7 +59,7 @@ class FeedManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 
     public function directCreate($result)

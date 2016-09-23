@@ -37,7 +37,7 @@ class EnclosureManager extends AbstractManager
         $event = new EnclosureEvent($data, $mode);
         $this->eventDispatcher->dispatch('Enclosure.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -50,6 +50,6 @@ class EnclosureManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 }

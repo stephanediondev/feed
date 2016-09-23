@@ -37,7 +37,7 @@ class ActionItemMemberManager extends AbstractManager
         $event = new ActionItemMemberEvent($data, $mode);
         $this->eventDispatcher->dispatch('ActionItemMember.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -50,6 +50,6 @@ class ActionItemMemberManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 }

@@ -50,7 +50,7 @@ class ItemManager extends AbstractManager
         $event = new ItemEvent($data, $mode);
         $this->eventDispatcher->dispatch('Item.after_persist', $event);
 
-        $this->removeCache();
+        $this->clearCache();
 
         return $data->getId();
     }
@@ -63,7 +63,7 @@ class ItemManager extends AbstractManager
         $this->em->remove($data);
         $this->em->flush();
 
-        $this->removeCache();
+        $this->clearCache();
     }
 
     public function readAll($parameters = [])
