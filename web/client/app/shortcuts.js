@@ -19,7 +19,7 @@ $(document).bind('keydown', function(event) {
     if($(event.target).parents('form').length === 0) {
         //g then a
         if(g_key && keycode == 65) {
-            loadRoute('#items/all');
+            loadRoute('#items');
 
         //g then u
         } else if(g_key && keycode == 85) {
@@ -28,6 +28,14 @@ $(document).bind('keydown', function(event) {
         //g then s
         } else if(g_key && keycode == 83) {
             loadRoute('#items/starred');
+
+        //g then f
+        } else if(g_key && keycode == 70) {
+            loadRoute('#feeds');
+
+        //g then c
+        } else if(g_key && keycode == 67) {
+            loadRoute('#categories');
 
         //1
         } else if(keycode == 49) {

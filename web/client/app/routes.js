@@ -42,7 +42,7 @@ routes['#categories/feed'] = {view: 'view-categories', view_unit: 'view-categori
 routes['#category/read/{id}'] = {view: 'view-category-read', query: '/category/{id}'};
 routes['#category/exclude/{id}'] = {view: false, query: '/category/exclude/{id}'};
 
-routes['#items/all'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items', title: 'all_items'};
+routes['#items'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items', title: 'all_items'};
 routes['#items/unread'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?unread=1', title: 'unread_items'};
 routes['#items/starred'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?starred=1', title: 'starred_items'};
 routes['#items/feed/{id}'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?feed={id}'};
