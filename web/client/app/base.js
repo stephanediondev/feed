@@ -106,6 +106,10 @@ function loadRoute(key, parameters) {
         parameters.link = false;
     }
 
+    if(typeof parameters.snackbar === 'undefined') {
+        parameters.snackbar = true;
+    }
+
     var replaceId = false;
 
     var parts = key.split('/');
@@ -190,13 +194,13 @@ function loadRoute(key, parameters) {
                             data_return.current_title = route.title;
                         }
 
-                        if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
+                        /*if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
                             for(i in data_return.entries) {
                                 if(data_return.entries.hasOwnProperty(i)) {
                                     store.set(data_return.entries_entity + '_' + data_return.entries[i].id, data_return.entries[i]);
                                 }
                             }
-                        }
+                        }*/
 
                         if(route.view) {
                             if(typeof data_return.entry == 'object' && typeof data_return.entry_entity == 'string') {
@@ -236,11 +240,13 @@ function loadRoute(key, parameters) {
                                 parameters.link.addClass(data_return.action);
                             }
                             if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
-                                setSnackbar(data_return.action + ' ' + data_return.entry.title);
+                                if(parameters.snackbar) {
+                                    setSnackbar(data_return.action + ' ' + data_return.entry.title);
+                                }
                             }
-                            if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
+                            /*if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
                                 store.remove(data_return.entry_entity + '_' + data_return.entry.id);
-                            }
+                            }*/
                         }
 
                         if(route.query == '/logout') {
@@ -271,7 +277,7 @@ function loadRoute(key, parameters) {
 }
 
 function setSnackbar(message) {
-    //snackbarContainer.MaterialSnackbar.showSnackbar({message: message, timeout: 1000});
+    snackbarContainer.MaterialSnackbar.showSnackbar({message: message, timeout: 1000});
 }
 
 function setPositions() {
@@ -323,7 +329,7 @@ function item_down() {
             } else if(liknActionRead.hasClass('progress')) {
             } else {
                 liknActionRead.addClass('progress');
-                loadRoute(liknActionRead.attr('href'), {link: liknActionRead});
+                loadRoute(liknActionRead.attr('href'), {link: liknActionRead, snackbar: false});
             }
         }
     }
@@ -435,14 +441,14 @@ $(document).ready(function() {
                 statusCode: {
                     200: function(data_return) {
                         if(data_return.entry.title) {
-                            setSnackbar(form.attr('method') + ' ' + data_return.entry.title);
+                            setSnackbar($.i18n._(form.attr('method')) + ' ' + data_return.entry.title);
                         }
 
                         if(form.attr('method') == 'DELETE') {
-                            store.remove(data_return.entry_entity + '_' + data_return.entry.id);
+                            //store.remove(data_return.entry_entity + '_' + data_return.entry.id);
                         }
                         if(form.attr('method') == 'PUT') {
-                            store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
+                            //store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
                         }
                         if(form.attr('method') == 'POST') {
                             if(form.data('query') == '/login') {
@@ -451,7 +457,7 @@ $(document).ready(function() {
 
                                 setSnackbar(form.attr('method') + ' ' + data_return.entry.type);
                             } else {
-                                store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
+                                //store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
                             }
                         }
                         loadRoute(form.attr('action'));
@@ -512,7 +518,7 @@ $(document).ready(function() {
                         } else if(liknActionRead.hasClass('progress')) {
                         } else {
                             liknActionRead.addClass('progress');
-                            loadRoute(liknActionRead.attr('href'), {link: liknActionRead});
+                            loadRoute(liknActionRead.attr('href'), {link: liknActionRead, snackbar: false});
                         }
                     }
                     return true;

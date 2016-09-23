@@ -19,6 +19,14 @@
     "delete": "Delete",
     "back": "Back",
     "more": "More",
+    "subscribe": "Subscribe",
+    "unsubscribe": "Unsubscribe",
+    "exclude": "Exclude",
+    "include": "Include",
+
+    "POST": "Create",
+    "PUT": "Update",
+    "DELETE": "Delete",
 
     "mark_all_as_read": "Mark all as read",
 
