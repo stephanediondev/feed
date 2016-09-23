@@ -21,6 +21,15 @@ class CategoryControllerTest extends AbstractControllerTest
         $this->assertEquals('category', $content['entries_entity']);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 403 excluded
+        $this->client->request('GET', '/api/categories', ['excluded' => true], [], []);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
     public function testCreate()

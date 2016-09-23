@@ -21,6 +21,24 @@ class FeedControllerTest extends AbstractControllerTest
         $this->assertEquals('feed', $content['entries_entity']);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 403 subscribed
+        $this->client->request('GET', '/api/feeds', ['subscribed' => true], [], []);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 403 not_subscribed
+        $this->client->request('GET', '/api/feeds', ['not_subscribed' => true], [], []);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
     public function testCreate()

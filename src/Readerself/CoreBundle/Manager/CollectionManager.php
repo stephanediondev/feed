@@ -244,21 +244,6 @@ class CollectionManager extends AbstractManager
         $updateCollection['memory'] = memory_get_peak_usage();
         $updateCollection['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
         $this->update('collection', $updateCollection, $collection_id);
-
-        /*$sql = 'SELECT psh.id, psh.agent, (SELECT COUNT(itm.id) FROM item AS itm WHERE itm.feed_id IN (SELECT sub.feed_id FROM subscription AS sub WHERE sub.member_id = psh.member_id) AND itm.id NOT IN (SELECT unread.item_id FROM action_item_member AS unread WHERE unread.member_id = psh.member_id AND unread.action_id = 1)) AS unread FROM push AS psh';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
-
-        foreach($results as $result) {
-            if($result['unread'] > 0) {
-                $payload = json_encode(array(
-                    'title' => $result['unread'].' unread items',
-                    'body' => '',
-                ));
-                $this->pushManager->send($result['id'], $payload);
-            }
-        }*/
     }
 
     public function setNextCollection($feed)

@@ -62,9 +62,7 @@ class ItemController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, 403);
-        }
+        $memberConnected = $this->validateToken($request);
 
         $parameters = [];
         $parameters['member'] = $memberConnected;
@@ -74,10 +72,16 @@ class ItemController extends AbstractController
         }
 
         if($request->query->get('starred')) {
+            if(!$memberConnected) {
+                return new JsonResponse($data, 403);
+            }
             $parameters['starred'] = $request->query->get('starred');
         }
 
         if($request->query->get('unread')) {
+            if(!$memberConnected) {
+                return new JsonResponse($data, 403);
+            }
             $parameters['unread'] = (bool) $request->query->get('unread');
         }
 

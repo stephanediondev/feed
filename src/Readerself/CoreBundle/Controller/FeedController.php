@@ -54,9 +54,7 @@ class FeedController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, 403);
-        }
+        $memberConnected = $this->validateToken($request);
 
         $parameters = [];
 
@@ -65,11 +63,17 @@ class FeedController extends AbstractController
         }
 
         if($request->query->get('subscribed')) {
+            if(!$memberConnected) {
+                return new JsonResponse($data, 403);
+            }
             $parameters['subscribed'] = true;
             $parameters['member'] = $memberConnected;
         }
 
         if($request->query->get('not_subscribed')) {
+            if(!$memberConnected) {
+                return new JsonResponse($data, 403);
+            }
             $parameters['not_subscribed'] = true;
             $parameters['member'] = $memberConnected;
         }

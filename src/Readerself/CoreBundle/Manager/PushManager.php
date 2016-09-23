@@ -64,6 +64,24 @@ class PushManager extends AbstractManager
         $this->clearCache();
     }
 
+    public function start()
+    {
+        $sql = 'SELECT psh.id, psh.agent, (SELECT COUNT(itm.id) FROM item AS itm WHERE itm.feed_id IN ( SELECT subscribe.feed_id FROM action_feed_member AS subscribe WHERE subscribe.member_id = psh.member_id AND subscribe.action_id = 3) AND itm.id NOT IN (SELECT unread.item_id FROM action_item_member AS unread WHERE unread.member_id = psh.member_id AND unread.action_id = 1) ) AS unread FROM push AS psh';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+
+        foreach($results as $result) {
+            if($result['unread'] > 0) {
+                $payload = json_encode(array(
+                    'title' => $result['unread'].' unread items',
+                    'body' => '',
+                ));
+                $this->send($result['id'], $payload);
+            }
+        }
+    }
+
     public function send($push_id, $payload)
     {
         $push = $this->getOne(['id' => $push_id]);

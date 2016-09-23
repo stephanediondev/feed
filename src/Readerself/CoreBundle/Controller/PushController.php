@@ -27,22 +27,22 @@ class PushController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$validateToken = $this->validateToken($request)) {
-            $data['error'] = true;
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
-        $data['error'] = false;
-
-        $member = $this->memberManager->getOne(['id' => 1]);
-
-        $push = $this->memberManager->pushManager->init();
-        $push->setMember($member);
-        $push->setEndpoint($request->request->get('endpoint'));
-        $push->setPublicKey($request->request->get('public_key'));
-        $push->setAuthenticationSecret($request->request->get('authentication_secret'));
-        $push->setAgent($request->server->get('HTTP_USER_AGENT'));
-
+        $push = $this->memberManager->pushManager->getOne(['endpoint' => $request->request->get('endpoint'), 'member' => $memberConnected]);
+        if(!$push) {
+            $push = $this->memberManager->pushManager->init();
+            $push->setMember($memberConnected);
+            $push->setEndpoint($request->request->get('endpoint'));
+            $push->setPublicKey($request->request->get('public_key'));
+            $push->setAuthenticationSecret($request->request->get('authentication_secret'));
+            $push->setAgent($request->server->get('HTTP_USER_AGENT'));
+        } else {
+            $push->setPublicKey($request->request->get('public_key'));
+            $push->setAuthenticationSecret($request->request->get('authentication_secret'));
+        }
         $push_id = $this->memberManager->pushManager->persist($push);
 
         return new JsonResponse($data);

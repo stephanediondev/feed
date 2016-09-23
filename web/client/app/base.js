@@ -70,6 +70,36 @@ function explainConnection(connection) {
     } else {
         $('body').removeClass('anonymous');
         $('body').addClass('connected');
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('serviceworker.js').then(function(reg) {
+                reg.pushManager.subscribe({
+                    userVisibleOnly: true
+                }).then(function(sub) {
+                    var sub_nice = sub.toJSON();
+
+                    $.ajax({
+                        headers: {
+                            'X-CONNECTION-TOKEN': connectionData.token
+                        },
+                        async: true,
+                        cache: false,
+                        data: {
+                            endpoint: sub.endpoint,
+                            public_key: sub_nice.keys.p256dh,
+                            authentication_secret: sub_nice.keys.auth
+                        },
+                        dataType: 'json',
+                        statusCode: {
+                            200: function() {
+                            }
+                        },
+                        type: 'POST',
+                        url: apiUrl + '/push'
+                    });
+                });
+            }).catch(function() {
+            });
+        }
     }
     return connection;
 }

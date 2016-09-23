@@ -21,6 +21,24 @@ class ItemControllerTest extends AbstractControllerTest
         $this->assertEquals('item', $content['entries_entity']);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 403 unread
+        $this->client->request('GET', '/api/items', ['unread' => true], [], []);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 403 starred
+        $this->client->request('GET', '/api/items', ['starred' => true], [], []);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
 
     public function testMarkallasread()

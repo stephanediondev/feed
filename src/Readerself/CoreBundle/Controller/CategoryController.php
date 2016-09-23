@@ -44,13 +44,14 @@ class CategoryController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, 403);
-        }
+        $memberConnected = $this->validateToken($request);
 
         $parameters = [];
 
         if($request->query->get('excluded')) {
+            if(!$memberConnected) {
+                return new JsonResponse($data, 403);
+            }
             $parameters['excluded'] = true;
             $parameters['member'] = $memberConnected;
         }
