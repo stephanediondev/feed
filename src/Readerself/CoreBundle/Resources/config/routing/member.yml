@@ -39,7 +39,13 @@ readerself_api_member_profile:
     path: /profile
     defaults:
         _controller: "readerself_core_controller_member:profileAction"
-    methods: GET|POST
+    methods: GET
+
+readerself_api_member_profile_update:
+    path: /profile/update
+    defaults:
+        _controller: "readerself_core_controller_member:profileUpdateAction"
+    methods: POST
 
 readerself_api_member_logout:
     path: /logout

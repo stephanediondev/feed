@@ -557,11 +557,23 @@ class CollectionManager extends AbstractManager
 
             $titles = array_unique($titles);
             foreach($titles as $title) {
-                $insertItemCategory = [
-                    'item_id' => $item_id,
-                    'category_id' => $this->setCategory($title),
-                ];
-                $this->insert('item_category', $insertItemCategory);
+                $category_id = $this->setCategory($title);
+
+                $sql = 'SELECT id FROM item_category WHERE item_id = :item_id AND category_id = :category_id';
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue('item_id', $item_id);
+                $stmt->bindValue('category_id', $category_id);
+                $stmt->execute();
+                $result = $stmt->fetch();
+
+                if($result) {
+                } else {
+                    $insertItemCategory = [
+                        'item_id' => $item_id,
+                        'category_id' => $category_id,
+                    ];
+                    $this->insert('item_category', $insertItemCategory);
+                }
             }
             unset($titles);
         }
@@ -569,29 +581,22 @@ class CollectionManager extends AbstractManager
 
     public function setCategory($title)
     {
-        $cache_id = 'readerself.category_title.'.$title;
+        $sql = 'SELECT id FROM category WHERE title = :title';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('title', $title);
+        $stmt->execute();
+        $result = $stmt->fetch();
 
-        if($this->cacheDriver->contains($cache_id)) {
-            $category_id = $this->cacheDriver->fetch($cache_id);
-
+        if($result) {
+            $category_id = $result['id'];
         } else {
-            $sql = 'SELECT id FROM category WHERE title = :title';
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue('title', $title);
-            $stmt->execute();
-            $result = $stmt->fetch();
-
-            if($result) {
-                $category_id = $result['id'];
-            } else {
-                $insertCategory = [
-                    'title' => $title,
-                    'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
-                ];
-                $category_id = $this->insert('category', $insertCategory);
-            }
-            $this->cacheDriver->save($cache_id, $category_id);
+            $insertCategory = [
+                'title' => $title,
+                'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+            ];
+            $category_id = $this->insert('category', $insertCategory);
         }
+
         return $category_id;
     }
 

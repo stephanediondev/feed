@@ -38,6 +38,10 @@ class MemberController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        if(!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
         $status = 200;
 
         $member = $this->memberManager->init();
@@ -84,6 +88,10 @@ class MemberController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        if(!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if(!$member) {
@@ -119,6 +127,10 @@ class MemberController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        if(!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if(!$member) {
@@ -142,6 +154,10 @@ class MemberController extends AbstractController
     {
         $data = [];
         if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        if(!$memberConnected->getAdministrator()) {
             return new JsonResponse($data, 403);
         }
 
@@ -220,17 +236,54 @@ class MemberController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        $connections = [];
+        foreach($this->memberManager->connectionManager->getList(['member' => $memberConnected]) as $connection) {
+            $connections[] = $connection->toArray();
+        }
+
+        $data['entry'] = $memberConnected->toArray();
+        $data['entry']['connections'] = $connections;
+        $data['entry_entity'] = 'member';
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * Profile update.
+     *
+     * @ApiDoc(
+     *     section="_ Member",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function profileUpdateAction(Request $request)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
         $profile = new Profile();
         $form = $this->createForm(ProfileType::class, $profile);
 
         $form->submit($request->request->all());
 
         if($form->isValid()) {
-            $encoder = $this->get('security.password_encoder');
-            $encoded = $encoder->encodePassword($memberConnected, $profile->getPassword());
-            $memberConnected->setPassword($encoded);
+            $memberConnected->setEmail($profile->getEmail());
+            if($profile->getPassword()) {
+                $encoder = $this->get('security.password_encoder');
+                $encoded = $encoder->encodePassword($memberConnected, $profile->getPassword());
+                $memberConnected->setPassword($encoded);
+            }
 
-            //$this->memberManager->persist($member);
+            $this->memberManager->persist($memberConnected);
+        } else {
+            $errors = $form->getErrors(true);
+            foreach($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
         }
 
         $connections = [];

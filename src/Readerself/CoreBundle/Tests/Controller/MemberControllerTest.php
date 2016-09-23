@@ -22,8 +22,15 @@ class MemberControllerTest extends AbstractControllerTest
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
-        // test 404
+        // test 403 not administrator
         $this->client->request('GET', '/api/member/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 404 administrator
+        $this->client->request('GET', '/api/member/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->tokenAdministrator]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -39,8 +46,15 @@ class MemberControllerTest extends AbstractControllerTest
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
-        // test 404
+        // test 403 not administrator
         $this->client->request('PUT', '/api/member/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 404 administrator
+        $this->client->request('PUT', '/api/member/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->tokenAdministrator]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -56,8 +70,15 @@ class MemberControllerTest extends AbstractControllerTest
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
-        // test 404
+        // test 403 not administrator
         $this->client->request('DELETE', '/api/member/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 404 administrator
+        $this->client->request('DELETE', '/api/member/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->tokenAdministrator]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());

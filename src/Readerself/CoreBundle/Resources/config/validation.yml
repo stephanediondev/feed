@@ -18,6 +18,11 @@ Readerself\CoreBundle\Entity\Login:
         password:
             - NotBlank: ~
 
+Readerself\CoreBundle\Entity\Profile:
+    properties:
+        email:
+            - NotBlank: ~
+
 Readerself\CoreBundle\Entity\Feed:
     properties:
         title:

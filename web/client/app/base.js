@@ -68,16 +68,6 @@ function explainConnection(connection) {
     if(typeof connection == 'undefined') {
         connection = {id: false, token: false, member: {id: false, administrator: false, member: false, demo: false}};
     } else {
-        if(connection.member.role == 'administrator') {
-            connection.member.administrator = true;
-        }
-        if(connection.member.role == 'member') {
-            connection.member.member = true;
-        }
-        if(connection.member.role == 'demo') {
-            connection.member.demo = true;
-        }
-
         $('body').removeClass('anonymous');
         $('body').addClass('connected');
     }
@@ -325,7 +315,7 @@ function item_down() {
             }
         }
 
-        if($('#' + next).hasClass('item')) {
+        if($('#' + next).hasClass('item') && $('body').hasClass('connected')) {
             liknActionRead = $('#' + next).find('.action-read');
             if(liknActionRead.hasClass('read')) {
             } else if(liknActionRead.hasClass('unread')) {
@@ -513,7 +503,7 @@ $(document).ready(function() {
                         }
                     }
 
-                    if($(this).hasClass('item') && connectionData.id) {// && items_display == 'expand'
+                    if($(this).hasClass('item') && $('body').hasClass('connected')) {// && items_display == 'expand'
                         liknActionRead = ref.find('.action-read');
 
                         if(liknActionRead.hasClass('read')) {

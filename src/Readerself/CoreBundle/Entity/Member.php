@@ -29,9 +29,9 @@ class Member implements AdvancedUserInterface, \Serializable
     private $nickname;
 
     /**
-     * @var string
+     * @var boolean
      */
-    private $role = 'member';
+    private $administrator = '0';
 
     /**
      * @var \DateTime
@@ -131,27 +131,27 @@ class Member implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set role
+     * Set administrator
      *
-     * @param string $role
+     * @param string $administrator
      *
      * @return Member
      */
-    public function setRole($role)
+    public function setAdministrator($administrator)
     {
-        $this->role = $role;
+        $this->administrator = $administrator;
 
         return $this;
     }
 
     /**
-     * Get role
+     * Get administrator
      *
      * @return string
      */
-    public function getRole()
+    public function getAdministrator()
     {
-        return $this->role;
+        return $this->administrator;
     }
 
     /**
@@ -239,8 +239,10 @@ class Member implements AdvancedUserInterface, \Serializable
     public function getRoles()
     {
         $roles = [];
-        if($role = $this->getRole()) {
-            $roles[] = 'ROLE_'.strtoupper($role);
+        if($this->getAdministrator()) {
+            $roles[] = 'ROLE_ADMINISTRATOR';
+        } else {
+            $roles[] = 'ROLE_USER';
         }
         return $roles;
     }
@@ -297,7 +299,7 @@ class Member implements AdvancedUserInterface, \Serializable
         return [
             'id' => $this->getId(),
             'email' => $this->getEmail(),
-            'role' => $this->getRole(),
+            'administrator' => $this->getAdministrator(),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : $this->getDateCreated(),
         ];
     }
