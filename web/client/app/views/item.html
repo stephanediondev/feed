@@ -22,7 +22,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#search/items" class="load-route more mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
-            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog" id="dialog-mark_all_as_read" title="{{trans 'shortcut_shift_a'}}">{{trans 'mark_all_as_read'}}</button>
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog connected" id="dialog-mark_all_as_read" title="{{trans 'shortcut_shift_a'}}">{{trans 'mark_all_as_read'}}</button>
             <dialog class="mdl-dialog" for="dialog-mark_all_as_read">
                 <div class="mdl-dialog__content">
                     <p>
@@ -85,18 +85,18 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             {{#if entry.read }}
-                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read" title="m">{{trans 'unread'}}</a>
+                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read connected" title="m">{{trans 'unread'}}</a>
             {{else}}
                 {{#if entry.read_all }}
-                    <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read" title="m">{{trans 'unread'}}</a>
+                    <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read connected" title="m">{{trans 'unread'}}</a>
                 {{else}}
-                    <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read" title="m">{{trans 'read'}}</a>
+                    <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read connected" title="m">{{trans 'read'}}</a>
                 {{/if}}
             {{/if}}
             {{#if entry.star }}
-                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star" title="s">{{trans 'unstar'}}</a>
+                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star connected" title="s">{{trans 'unstar'}}</a>
             {{else}}
-                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star" title="s">{{trans 'star'}}</a>
+                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star connected" title="s">{{trans 'star'}}</a>
             {{/if}}
 
             <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog action-share" id="dialog-share-{{ entry.id }}" title="{{trans 'shortcut_shift_m'}}">{{trans 'share'}}</button>

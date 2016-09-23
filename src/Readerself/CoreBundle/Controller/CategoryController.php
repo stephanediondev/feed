@@ -45,7 +45,7 @@ class CategoryController extends AbstractController
     {
         $data = [];
         if(!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            //return new JsonResponse($data, 403);
         }
 
         $parameters = [];
@@ -147,7 +147,7 @@ class CategoryController extends AbstractController
     {
         $data = [];
         if(!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            //return new JsonResponse($data, 403);
         }
 
         $category = $this->categoryManager->getOne(['id' => $id]);

@@ -79,6 +79,7 @@ function explainConnection(connection) {
         }
 
         $('body').removeClass('anonymous');
+        $('body').addClass('connected');
     }
     return connection;
 }
@@ -251,8 +252,10 @@ function loadRoute(key, parameters) {
 
                         if(route.query == '/logout') {
                             store.remove('connection');
+                            $('body').removeClass('connected');
                             $('body').addClass('anonymous');
                             loadRoute('#login');
+                            setSnackbar($.i18n._('logout'));
                         }
                     },
                     403: function() {
@@ -429,7 +432,7 @@ $(document).ready(function() {
         } else if(form.attr('id') == 'form-search-items') {
             loadRoute('#search/items/result', {page: 1, q:form.find('input[name="q"]').val()});
 
-        } else {
+        } else if(form.data('query')) {
             $.ajax({
                 headers: {
                     'X-CONNECTION-TOKEN': connectionData.token
@@ -455,7 +458,7 @@ $(document).ready(function() {
                                 store.set('connection', data_return.entry);
                                 connectionData = explainConnection(data_return.entry);
 
-                                setSnackbar(form.attr('method') + ' ' + data_return.entry.type);
+                                setSnackbar($.i18n._('login'));
                             } else {
                                 //store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
                             }
@@ -463,16 +466,16 @@ $(document).ready(function() {
                         loadRoute(form.attr('action'));
                     },
                     401: function() {
-                        loadRoute('#401');
+                        setSnackbar($.i18n._('error_401'));
                     },
                     403: function() {
                         loadRoute('#login');
                     },
                     404: function() {
-                        loadRoute('#404');
+                        setSnackbar($.i18n._('error_404'));
                     },
                     500: function() {
-                        loadRoute('#500');
+                        setSnackbar($.i18n._('error_500'));
                     }
                 },
                 type: form.attr('method'),
@@ -510,7 +513,7 @@ $(document).ready(function() {
                         }
                     }
 
-                    if($(this).hasClass('item')) {// && items_display == 'expand'
+                    if($(this).hasClass('item') && connectionData.id) {// && items_display == 'expand'
                         liknActionRead = ref.find('.action-read');
 
                         if(liknActionRead.hasClass('read')) {

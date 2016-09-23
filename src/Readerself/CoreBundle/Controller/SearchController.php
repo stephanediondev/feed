@@ -104,7 +104,7 @@ class SearchController extends AbstractController
     {
         $data = [];
         if(!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            //return new JsonResponse($data, 403);
         }
 
         $sortFields = ['date.sort', '_score', 'title.sort'];

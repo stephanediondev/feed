@@ -58,10 +58,12 @@ class ItemRepository extends AbstractRepository
             $memberSet = false;
 
             if(isset($parameters['feed']) == 0 && isset($parameters['author']) == 0 && isset($parameters['category']) == 0) {
-                $query->andWhere('fed.id IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
-                if(!$memberSet) {
-                    $query->setParameter(':member', $parameters['member']);
-                    $memberSet = true;
+                if(isset($parameters['member']) == 1 && $parameters['member']) {
+                    $query->andWhere('fed.id IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
+                    if(!$memberSet) {
+                        $query->setParameter(':member', $parameters['member']);
+                        $memberSet = true;
+                    }
                 }
             }
 
