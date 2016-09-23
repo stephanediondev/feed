@@ -13,6 +13,9 @@ use Readerself\CoreBundle\Manager\ActionManager;
 
 use Readerself\CoreBundle\Form\Type\FeedType;
 
+use Readerself\CoreBundle\Entity\ImportOpml;
+use Readerself\CoreBundle\Form\Type\ImportOpmlType;
+
 class FeedController extends AbstractController
 {
     protected $feedManager;
@@ -405,5 +408,85 @@ class FeedController extends AbstractController
         }
 
         return new JsonResponse($data);
+    }
+
+    /**
+     * Import an opml file.
+     *
+     * @ApiDoc(
+     *     section="_ Feed",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"="true"},
+     *     },
+     *     parameters={
+     *         {"name"="opml", "dataType"="file", "required"=true},
+     *     },
+     * )
+     */
+    public function importAction(Request $request)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $importOpml = new ImportOpml();
+        $form = $this->createForm(ImportOpmlType::class, $importOpml);
+
+        $form->submit($request->request->all(), false);
+
+        if($form->isValid()) {
+            $obj_simplexml = simplexml_load_file($request->files->get('file'));
+            if($obj_simplexml) {
+                $this->folders = [];
+                $this->feeds = [];
+
+                $this->transformOpml($obj_simplexml->body);
+
+                if(count($this->feeds) > 0) {
+                    foreach($this->feeds as $obj) {
+                        $data[] = print_r($obj, true);
+                    }
+                }
+            }
+
+        } else {
+            $errors = $form->getErrors(true);
+            foreach($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
+        }
+
+        return new JsonResponse($data);
+    }
+
+    private function transformOpml($obj, $flr = false) {
+        $feeds = array();
+        if(isset($obj->outline) == 1) {
+            foreach($obj->outline as $outline) {
+                if(isset($outline->outline) == 1) {
+                    //echo $outline->attributes()->title;
+                    //print_r($outline);
+                    if($outline->attributes()->title) {
+                        $flr = strval($outline->attributes()->title);
+                        $this->folders[] = $flr;
+                    } else if($outline->attributes()->text) {
+                        $flr = strval($outline->attributes()->text);
+                        $this->folders[] = $flr;
+                    }
+                    $this->transformOpml($outline, $flr);
+                    //array_merge($feeds, $this->import_opml($outline));
+                } else {
+                    //print_r($outline->attributes()->title);
+                    $feed = new \stdClass();
+                    foreach($outline->attributes() as $k => $attribute) {
+                        $feed->{$k} = strval($attribute);
+                    }
+                    $feed->flr = $flr;
+                    $this->feeds[] = $feed;
+                }
+            }
+        }
+        return $feeds;
     }
 }

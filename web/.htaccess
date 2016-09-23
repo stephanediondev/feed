@@ -19,7 +19,7 @@ FileETag None
 <IfModule mod_headers.c>
     Header always set Access-Control-Allow-Origin: "*"
     Header always set Access-Control-Allow-Methods: "POST, GET, PUT, DELETE, OPTIONS"
-    Header always set Access-Control-Allow-Headers: "Content-Type, x-requested-with, X-CONNECTION-TOKEN"
+    Header always set Access-Control-Allow-Headers: "content-type, x-requested-with, x-connection-token"
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set X-Xss-Protection "1; mode=block"
     Header always set X-Content-Type-Options "nosniff"

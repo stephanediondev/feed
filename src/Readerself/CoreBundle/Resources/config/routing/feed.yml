@@ -57,3 +57,9 @@ readerself_api_feeds_discover:
     requirements:
         id: '\w+'
     methods: GET
+
+readerself_api_feeds_import:
+    path: /feeds/import
+    defaults:
+        _controller: "readerself_core_controller_feed:importAction"
+    methods: POST

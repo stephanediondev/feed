@@ -21,11 +21,12 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
-            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'recent'}}</a>
+            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'recent'}}</a>
             <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'with_errors'}}</a>
             <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
             <a href="#feed/create" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'create'}}</a>
-            <a href="#feed/export" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'export'}}</a>
+            <a href="#feeds/export" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'export'}}</a>
+            <a href="#feeds/import" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'import'}}</a>
         </div>
     </div>
 </script>
@@ -107,7 +108,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
-            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'recent'}}</a>
+            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'recent'}}</a>
             <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'with_errors'}}</a>
             <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
         </div>
@@ -192,7 +193,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
-            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'recent'}}</a>
+            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'recent'}}</a>
             <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'with_errors'}}</a>
             <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
         </div>
@@ -242,7 +243,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
-            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'recent'}}</a>
+            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'recent'}}</a>
             <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'with_errors'}}</a>
             <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
         </div>
@@ -262,6 +263,41 @@
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script type="text/template" id="view-feeds-import">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{trans 'feeds'}}
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
+            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'recent'}}</a>
+            <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'with_errors'}}</a>
+            <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <form action="#feeds/recent" data-query="/feeds/import" method="POST" enctype="multipart/form-data">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    {{trans 'import'}}
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="file" class="required">{{trans 'opml'}}</label>
+                    <input type="file" id="file" name="file" required="required">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
+                </p>
             </div>
         </form>
     </div>

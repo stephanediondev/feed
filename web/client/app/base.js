@@ -381,8 +381,16 @@ $(document).ready(function() {
         loadRoute('#items/unread');
     }
 
+    $('.mdl-layout__drawer').on('click', '.mdl-list__item a', function() {
+        if($('.mdl-layout__drawer').hasClass('is-visible')) {
+            d = document.querySelector('.mdl-layout');
+            d.MaterialLayout.toggleDrawer();
+        }
+    });
+
     $(document).on('click', '.load-route', function(event) {
         event.preventDefault();
+
         loadRoute($(this).attr('href'), {page: $(this).data('page'), q: $(this).data('q'), link: $(this)});
     });
 
@@ -414,6 +422,27 @@ $(document).ready(function() {
 
         var dialog = document.querySelector('dialog[for="' + id + '"]');
         dialog.close();
+    });
+
+    $(document).on('click', '.action-toggle', function(event) {
+        event.preventDefault();
+        if($('body').hasClass('collapse')) {
+            $('body').removeClass('collapse');
+        } else {
+            $('body').addClass('collapse');
+        }
+    });
+
+    $(document).on('click', '.action-toggle-unit', function(event) {
+        event.preventDefault();
+        var ref = $( $(this).attr('href') );
+        if(ref.hasClass('collapse')) {
+            ref.removeClass('collapse');
+            ref.addClass('expand');
+        } else {
+            ref.removeClass('expand');
+            ref.addClass('collapse');
+        }
     });
 
     $(document).on('click', '.action-refresh', function(event) {
@@ -453,13 +482,31 @@ $(document).ready(function() {
             loadRoute('#search/items/result', {page: 1, q:form.find('input[name="q"]').val()});
 
         } else if(form.data('query')) {
+
+            if(window.FormData && form.attr('enctype') == 'multipart/form-data') {
+                contentType = false;
+                data = new FormData();
+                var file = document.getElementById('file');
+                if(file.files.length === 1 && window.FileReader) {
+                    data.append('file', file.files[0]);
+                }
+
+            } else {
+                contentType = 'application/x-www-form-urlencoded';
+                data = form.serialize();
+            }
+
             $.ajax({
                 headers: {
                     'X-CONNECTION-TOKEN': connectionData.token
                 },
                 async: true,
                 cache: false,
-                data: form.serialize(),
+                data: data,
+
+                processData: false,
+                contentType: contentType,
+
                 dataType: 'json',
                 statusCode: {
                     200: function(data_return) {

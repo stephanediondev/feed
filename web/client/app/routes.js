@@ -9,8 +9,6 @@ routes['#404'] = {view: 'view-404', query: false, title: 'error_404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};
 routes['#configuration'] = {view: 'view-configuration', query: false, title: 'configuration'};
 
-routes['#search'] = {view: 'view-search', query: false, title: 'search'};
-
 routes['#search/categories'] = {view: 'view-search-categories', query: false, title: 'search_categories'};
 routes['#search/categories/result'] = {view: 'view-search-categories', view_unit: 'view-categories-unit', query: '/categories/search', title: 'search_categories'};
 
@@ -28,6 +26,8 @@ routes['#feeds/subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit',
 routes['#feeds/not_subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?not_subscribed=1', title: 'unsubscribed_feeds'};
 routes['#feeds/category/{id}'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?category={id}'};
 routes['#feeds/recent'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?sortField=date_created&sortDirection=DESC', title: 'recent_feeds'};
+
+routes['#feeds/import'] = {view: 'view-feeds-import', query: false, title: 'import_feeds'};
 
 routes['#feed/create'] = {view: 'view-feed-create', query: false};
 routes['#feed/read/{id}'] = {view: 'view-feed-read', query: '/feed/{id}'};

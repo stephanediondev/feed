@@ -37,12 +37,10 @@ $(document).bind('keydown', function(event) {
         } else if(g_key && keycode == 67) {
             loadRoute('#categories');
 
-        //1
-        } else if(keycode == 49) {
+        //t
+        } else if(keycode == 84) {
             event.preventDefault();
-            if(items_display == 'expand') {
-                items_collapse();
-            }
+            $('.mdl-layout__header-row').find('.action-toggle').trigger('click');
 
         //2
         } else if(keycode == 50) {
@@ -77,13 +75,8 @@ $(document).bind('keydown', function(event) {
 
         //o or enter
         } else if(keycode == 79 || keycode == 13) {
-            if($('.mdl-grid .item-selected').length > 0) {
-                ref = $('.mdl-grid .item-selected');
-                if(ref.hasClass('collapse')) {
-                    item_expand(ref.find('.expand'));
-                } else {
-                    item_collapse(ref);
-                }
+            if($('.mdl-grid .card-selected').length > 0) {
+                $('.mdl-grid .card-selected').find('.action-toggle-unit').trigger('click');
             }
 
         } else if(keycode == 65 && $('body').hasClass('connected')) {
@@ -113,9 +106,7 @@ $(document).bind('keydown', function(event) {
 
         //r
         } else if(keycode == 82) {
-            if(window.location.hash) {
-                loadRoute(window.location.hash);
-            }
+            $('.mdl-layout__header-row').find('.action-refresh').trigger('click');
         }
     }
 });

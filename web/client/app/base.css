@@ -193,3 +193,15 @@ body.anonymous .connected {
 body.connected .anonymous {
     display: none;
 }
+
+body.collapse .mdl-card__supporting-text {
+    display: none;
+}
+
+body .mdl-card.collapse .mdl-card__supporting-text {
+    display: none;
+}
+
+body .mdl-card.expand .mdl-card__supporting-text {
+    display: block;
+}
