@@ -11,14 +11,14 @@ routes['#404'] = {view: 'view-404', query: false, title: 'error_404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};
 routes['#configuration'] = {view: 'view-configuration', query: false, title: 'configuration'};
 
-routes['#search/categories'] = {view: 'view-search-categories', query: false, title: 'search_categories'};
-routes['#search/categories/result'] = {view: 'view-search-categories', view_unit: 'view-categories-unit', query: '/categories/search', title: 'search_categories'};
+routes['#search/categories'] = {view: 'view-search-categories', query: false, title: 'title.search_categories'};
+routes['#search/categories/result'] = {view: 'view-search-categories', view_unit: 'view-categories-unit', query: '/categories/search', title: 'title.search_categories'};
 
-routes['#search/items'] = {view: 'view-search-items', query: false, title: 'search_items'};
-routes['#search/items/result'] = {view: 'view-search-items', view_unit: 'view-items-unit', query: '/items/search', title: 'search_items'};
+routes['#search/items'] = {view: 'view-search-items', query: false, title: 'title.search_items'};
+routes['#search/items/result'] = {view: 'view-search-items', view_unit: 'view-items-unit', query: '/items/search', title: 'title.search_items'};
 
-routes['#search/feeds'] = {view: 'view-search-feeds', query: false, title: 'search_feeds'};
-routes['#search/feeds/result'] = {view: 'view-search-feeds', view_unit: 'view-feeds-unit', query: '/feeds/search', title: 'search_feeds'};
+routes['#search/feeds'] = {view: 'view-search-feeds', query: false, title: 'title.search_feeds'};
+routes['#search/feeds/result'] = {view: 'view-search-feeds', view_unit: 'view-feeds-unit', query: '/feeds/search', title: 'title.search_feeds'};
 
 routes['#feeds/discover/digg'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds/discover/digg', title: 'all_feeds'};
 
