@@ -17,26 +17,29 @@
     "create": "Create",
     "update": "Update",
     "delete": "Delete",
-    "back": "Back",
+
+    "add": "Add",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
     "more": "More",
+    "search": "Search",
+
     "subscribe": "Subscribe",
     "unsubscribe": "Unsubscribe",
     "exclude": "Exclude",
     "include": "Include",
-
-    "POST": "Create",
-    "PUT": "Update",
-    "DELETE": "Delete",
-
-    "mark_all_as_read": "Mark all as read",
-
     "read": "Mark as read",
     "unread": "Mark as unread",
-
     "star": "Star",
     "unstar": "Unstar",
 
     "share": "Share",
+
+    "POST": "Created",
+    "PUT": "Updated",
+    "DELETE": "Deleted",
+
+    "mark_all_as_read": "Mark all as read",
 
     "email": "Email",
     "password": "Password",
@@ -47,8 +50,8 @@
     "language": "Language",
 
     "view_items": "View items",
-    "view_categories": "View categories",
     "view_feeds": "View feeds",
+
 
     "author": "Author",
     "category": "Category",
@@ -83,8 +86,8 @@
     "title.categories_usedbyfeeds": "Categories used by feeds",
     "button.categories_usedbyfeeds": "Used by feeds",
 
-    "title.search_items": "Search items",
-    "button.search_items": "Search",
+    "title.search_categories": "Search categories",
+    "button.search_categories": "Search",
 
 
     "title.all_items": "All items",
@@ -96,6 +99,6 @@
     "title.starred_items": "Starred items",
     "button.starred_items": "Starred",
 
-    "title.search_categories": "Search categories",
-    "button.search_categories": "Search"
+    "title.search_items": "Search items",
+    "button.search_items": "Search"
 }

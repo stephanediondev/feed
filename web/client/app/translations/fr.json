@@ -11,32 +11,35 @@
 
     "login": "Connexion",
     "logout": "Déconnexion",
-    "forgotpassword": "Oubli mot de passe ?",
+    "forgotpassword": "Forgot password?",
     "profile": "Profil",
 
-    "create": "Ajouter",
+    "create": "Créer",
     "update": "Modifier",
     "delete": "Supprimer",
-    "back": "Retour",
+
+    "add": "Ajouter",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
     "more": "Plus",
-    "subscribe": "Subscribe",
-    "unsubscribe": "Unsubscribe",
-    "exclude": "Exclude",
-    "include": "Include",
+    "search": "Rechercher",
 
-    "POST": "Ajouter",
-    "PUT": "Modifier",
-    "DELETE": "Supprimer",
-
-    "mark_all_as_read": "Marquer tout comme lu",
-
-    "read": "Marquer lu",
-    "unread": "Marquer non lu",
-
-    "star": "Ajout favoris",
-    "unstar": "Retrait favoris",
+    "subscribe": "Souscrire",
+    "unsubscribe": "Désinscrire",
+    "exclude": "Exclure",
+    "include": "Inclure",
+    "read": "Marquer comme lu",
+    "unread": "Marquer comme non lu",
+    "star": "Favori",
+    "unstar": "Non favori",
 
     "share": "Partager",
+
+    "POST": "Ajouté",
+    "PUT": "Modifié",
+    "DELETE": "Supprimé",
+
+    "mark_all_as_read": "Marquer tout comme lu",
 
     "email": "Email",
     "password": "Mot de passe",
@@ -46,32 +49,55 @@
     "description": "Description",
     "language": "Langue",
 
-    "view_items": "View items",
-    "view_categories": "View categories",
-    "view_feeds": "View feeds",
-
-    "used_by_feeds": "Used by feeds",
-    "excluded": "Excluded",
-    "categories_used_by_feeds": "Categories used by feeds",
-
-    "search": "Recherche",
-    "search_feeds": "Recherche de flux",
-    "search_items": "Recherche d'items",
-    "search_categories": "Recherche de catégories",
+    "view_items": "Voir les items",
+    "view_feeds": "Voir les flux",
 
     "author": "Auteur",
     "category": "Catégorie",
-    "feed": "Fil",
+    "feed": "Flux",
 
-    "all_feeds": "Tous les flux",
-    "subscribed_feeds": "Flux souscrits",
-    "unsubscribed_feeds": "Flux non souscrits",
-    "feeds_errors": "Flux avec erreurs",
 
-    "all_categories": "Toutes les catégories",
-    "excluded_categories": "Catégories exclues",
+    "title.all_feeds": "Tous les flux",
+    "button.all_feeds": "Tous",
 
-    "all_items": "Tous les items",
-    "unread_items": "Items non lus",
-    "starred_items": "Items favoris"
+    "title.recent_feeds": "Flux récents",
+    "button.recent_feeds": "Récents",
+
+    "title.subscribed_feeds": "Flux souscrits",
+    "button.subscribed_feeds": "Souscrits",
+
+    "title.unsubscribed_feeds": "Flux non souscrits",
+    "button.unsubscribed_feeds": "Non souscrits",
+
+    "title.feeds_witherrors": "Flux avec erreurs",
+    "button.feeds_witherrors": "Avec erreurs",
+
+    "title.search_feeds": "Recherche de flux",
+    "button.search_feeds": "Recherche",
+
+
+    "title.all_categories": "Toutes les catégories",
+    "button.all_categories": "Toutes",
+
+    "title.excluded_categories": "Catégories exclues",
+    "button.excluded_categories": "Exclues",
+
+    "title.categories_usedbyfeeds": "Catégories utilisées par des flux",
+    "button.categories_usedbyfeeds": "utilisées par des flux",
+
+    "title.search_categories": "Recherche de catégories",
+    "button.search_categories": "Recherche",
+
+
+    "title.all_items": "Tous les items",
+    "button.all_items": "Tous",
+
+    "title.unread_items": "Items non lus",
+    "button.unread_items": "Non lus",
+
+    "title.starred_items": "Items favoris",
+    "button.starred_items": "Favoris",
+
+    "title.search_items": "Recherche d'items",
+    "button.search_items": "Recherche"
 }
