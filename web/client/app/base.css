@@ -34,7 +34,6 @@ a:link, a:visited {
 }
 .mdl-card {
     min-height: inherit;
-    overflow: visible;
 }
 .mdl-card[direction="rtl"] {
     text-align: right;
@@ -63,7 +62,6 @@ a:link, a:visited {
     background-color: transparent;
 }
 .mdl-card__supporting-text {
-    overflow: visible;
     padding: 0px 8px 8px 8px;
     width: auto;
 }
@@ -109,7 +107,11 @@ h1 .favicon, h1.favicon, h1 a.favicon:link, h1 a.favicon:visited {
 img, iframe, video {
     max-width: 100%;
 }
-
+figure {
+    display: block;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
 label, .label {
     display: block;
     font-weight: bold;
