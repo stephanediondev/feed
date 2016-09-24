@@ -41,6 +41,18 @@ readerself_api_member_profile:
         _controller: "readerself_core_controller_member:profileAction"
     methods: GET
 
+readerself_api_member_profile_connections:
+    path: /profile/connections
+    defaults:
+        _controller: "readerself_core_controller_member:profileConnectionsAction"
+    methods: GET
+
+readerself_api_member_profile_notifications:
+    path: /profile/notifications
+    defaults:
+        _controller: "readerself_core_controller_member:profileNotificationsAction"
+    methods: GET
+
 readerself_api_member_profile_update:
     path: /profile/update
     defaults:

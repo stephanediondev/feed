@@ -13,8 +13,8 @@ if(window.location.port) {
     var apiUrl = '//' + window.location.hostname + window.location.pathname;
 }
 apiUrl = apiUrl.replace('index.html', '');
-apiUrl = apiUrl.replace('client/', 'api');
-//apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
+//apiUrl = apiUrl.replace('client/', 'api');
+apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
 
 var connectionData = explainConnection(store.get('connection'));
 var pushData = store.get('push');

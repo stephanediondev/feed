@@ -50,28 +50,52 @@
     "view_categories": "View categories",
     "view_feeds": "View feeds",
 
-    "used_by_feeds": "Used by feeds",
-    "excluded": "Excluded",
-    "categories_used_by_feeds": "Categories used by feeds",
-
-    "search": "Search",
-    "search_feeds": "Search feeds",
-    "search_items": "Search items",
-    "search_categories": "Search categories",
-
     "author": "Author",
     "category": "Category",
     "feed": "Feed",
 
-    "all_feeds": "All feeds",
-    "subscribed_feeds": "Subscribed feeds",
-    "unsubscribed_feeds": "Unsubscribed feeds",
-    "feeds_errors": "Feeds with errors",
 
-    "all_categories": "All categories",
-    "excluded_categories": "Excluded categories",
+    "title.all_feeds": "All feeds",
+    "button.all_feeds": "All",
 
-    "all_items": "All items",
-    "unread_items": "Unread items",
-    "starred_items": "Starred items"
+    "title.recent_feeds": "Recent feeds",
+    "button.recent_feeds": "Recent",
+
+    "title.subscribed_feeds": "Subscribed feeds",
+    "button.subscribed_feeds": "Subscribed",
+
+    "title.unsubscribed_feeds": "Unsubscribed feeds",
+    "button.unsubscribed_feeds": "Unsubscribed",
+
+    "title.feeds_witherrors": "Feeds with errors",
+    "button.feeds_witherrors": "With errors",
+
+    "title.search_feeds": "Search feeds",
+    "button.search_feeds": "Search",
+
+
+    "title.all_categories": "All categories",
+    "button.all_categories": "All",
+
+    "title.excluded_categories": "Excluded categories",
+    "button.excluded_categories": "Excluded",
+
+    "title.categories_usedbyfeeds": "Categories used by feeds",
+    "button.categories_usedbyfeeds": "Used by feeds",
+
+    "title.search_items": "Search items",
+    "button.search_items": "Search",
+
+
+    "title.all_items": "All items",
+    "button.all_items": "All",
+
+    "title.unread_items": "Unread items",
+    "button.unread_items": "Unread",
+
+    "title.starred_items": "Starred items",
+    "button.starred_items": "Starred",
+
+    "title.search_categories": "Search categories",
+    "button.search_categories": "Search"
 }

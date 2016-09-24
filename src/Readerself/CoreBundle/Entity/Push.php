@@ -30,6 +30,11 @@ class Push
     /**
      * @var string
      */
+    private $ip;
+
+    /**
+     * @var string
+     */
     private $agent;
 
     /**
@@ -128,6 +133,30 @@ class Push
     public function getAuthenticationSecret()
     {
         return $this->authenticationSecret;
+    }
+
+    /**
+     * Set ip
+     *
+     * @param string $ip
+     *
+     * @return Connection
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+
+        return $this;
+    }
+
+    /**
+     * Get ip
+     *
+     * @return string
+     */
+    public function getIp()
+    {
+        return $this->ip;
     }
 
     /**
@@ -234,8 +263,9 @@ class Push
         return [
             'id' => $this->getId(),
             'member' => $this->getMember()->toArray(),
+            'endpoint' => $this->getEndpoint(),
             'agent' => $this->getAgent(),
-            //'ip' => $this->getIp(),
+            'ip' => $this->getIp(),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : $this->getDateCreated(),
         ];
     }

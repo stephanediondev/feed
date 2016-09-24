@@ -38,10 +38,13 @@ class PushController extends AbstractController
             $push->setEndpoint($request->request->get('endpoint'));
             $push->setPublicKey($request->request->get('public_key'));
             $push->setAuthenticationSecret($request->request->get('authentication_secret'));
+            $push->setIp($request->getClientIp());
             $push->setAgent($request->server->get('HTTP_USER_AGENT'));
         } else {
             $push->setPublicKey($request->request->get('public_key'));
             $push->setAuthenticationSecret($request->request->get('authentication_secret'));
+            $push->setIp($request->getClientIp());
+            $push->setAgent($request->server->get('HTTP_USER_AGENT'));
         }
         $push_id = $this->memberManager->pushManager->persist($push);
 
@@ -126,7 +129,6 @@ class PushController extends AbstractController
     {
         $data = [];
         if(!$validateToken = $this->validateToken($request)) {
-            $data['error'] = true;
             return new JsonResponse($data, 403);
         }
 

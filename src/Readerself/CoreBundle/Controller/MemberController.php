@@ -101,13 +101,7 @@ class MemberController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        $connections = [];
-        foreach($this->memberManager->connectionManager->getList(['member' => $member]) as $connection) {
-            $connections[] = $connection->toArray();
-        }
-
         $data['entry'] = $member->toArray();
-        $data['entry']['connections'] = $connections;
         $data['entry_entity'] = 'member';
 
         return new JsonResponse($data);
@@ -239,14 +233,76 @@ class MemberController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        $pinboard = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
+
+        if($pinboard) {
+            $data['pinboard'] = $pinboard->toArray();
+        }
+
+        $data['entry'] = $memberConnected->toArray();
+        $data['entry_entity'] = 'member';
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * Profile connections.
+     *
+     * @ApiDoc(
+     *     section="_ Member",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function profileConnectionsAction(Request $request)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
         $connections = [];
         foreach($this->memberManager->connectionManager->getList(['member' => $memberConnected]) as $connection) {
             $connections[] = $connection->toArray();
         }
 
         $data['entry'] = $memberConnected->toArray();
-        $data['entry']['connections'] = $connections;
         $data['entry_entity'] = 'member';
+
+        $data['entries'] = $connections;
+        $data['entries_entity'] = 'connection';
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * Profile notifications.
+     *
+     * @ApiDoc(
+     *     section="_ Member",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function profileNotificationsAction(Request $request)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $notifications = [];
+        foreach($this->memberManager->pushManager->getList(['member' => $memberConnected]) as $connection) {
+            $notifications[] = $connection->toArray();
+        }
+
+        $data['entry'] = $memberConnected->toArray();
+        $data['entry_entity'] = 'member';
+
+        $data['entries'] = $notifications;
+        $data['entries_entity'] = 'push';
 
         return new JsonResponse($data);
     }

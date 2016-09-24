@@ -40,6 +40,12 @@ Readerself\CoreBundle\Entity\Push:
             options:
                 fixed: false
             column: authentication_secret
+        ip:
+            type: string
+            nullable: true
+            length: 255
+            options:
+                fixed: false
         agent:
             type: string
             nullable: true

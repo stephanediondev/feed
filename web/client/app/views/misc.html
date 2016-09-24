@@ -1,17 +1,17 @@
 <!-- Misc. -->
 <script type="text/template" id="view-aside">
     <ul class="mdl-list">
-        <li class="mdl-list__item"><a href="#items" class="load-route" title="{{trans 'shortcut_g_then_a'}}">{{trans 'all_items'}}</a></li>
-        <li class="mdl-list__item connected"><a href="#items/unread" class="load-route" title="{{trans 'shortcut_g_then_u'}}">{{trans 'unread_items'}}</a></li>
-        <li class="mdl-list__item connected"><a href="#items/starred" class="load-route" title="{{trans 'shortcut_g_then_s'}}">{{trans 'starred_items'}}</a></li>
+        <li class="mdl-list__item"><a href="#items" class="load-route" title="{{trans 'shortcut_g_then_a'}}">{{trans 'title.all_items'}}</a></li>
+        <li class="mdl-list__item connected"><a href="#items/unread" class="load-route" title="{{trans 'shortcut_g_then_u'}}">{{trans 'title.unread_items'}}</a></li>
+        <li class="mdl-list__item connected"><a href="#items/starred" class="load-route" title="{{trans 'shortcut_g_then_s'}}">{{trans 'title.starred_items'}}</a></li>
 
-        <li class="mdl-list__item"><a href="#feeds" class="load-route">{{trans 'all_feeds'}}</a></li>
-        <li class="mdl-list__item connected"><a href="#feeds/subscribed" class="load-route">{{trans 'subscribed_feeds'}}</a></li>
-        <li class="mdl-list__item connected"><a href="#feeds/not_subscribed" class="load-route">{{trans 'unsubscribed_feeds'}}</a></li>
-        <li class="mdl-list__item connected"><a href="#feeds/errors" class="load-route">{{trans 'feeds_errors'}}</a></li>
+        <li class="mdl-list__item"><a href="#feeds" class="load-route">{{trans 'title.all_feeds'}}</a></li>
+        <li class="mdl-list__item connected"><a href="#feeds/subscribed" class="load-route">{{trans 'title.subscribed_feeds'}}</a></li>
+        <li class="mdl-list__item connected"><a href="#feeds/not_subscribed" class="load-route">{{trans 'title.unsubscribed_feeds'}}</a></li>
+        <li class="mdl-list__item connected"><a href="#feeds/errors" class="load-route">{{trans 'title.feeds_witherrors'}}</a></li>
 
-        <li class="mdl-list__item"><a href="#categories" class="load-route">{{trans 'all_categories'}}</a></li>
-        <li class="mdl-list__item connected"><a href="#categories/excluded" class="load-route">{{trans 'excluded_categories'}}</a></li>
+        <li class="mdl-list__item"><a href="#categories" class="load-route">{{trans 'title.all_categories'}}</a></li>
+        <li class="mdl-list__item connected"><a href="#categories/excluded" class="load-route">{{trans 'title.excluded_categories'}}</a></li>
 
         <li class="mdl-list__item connected"><a href="#profile" class="load-route">{{trans 'profile'}}</a>
         <li class="mdl-list__item connected"><a href="#logout" class="load-route">{{trans 'logout'}}</a>
@@ -64,9 +64,9 @@
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                 {{#if entries_total }}
-                    {{trans 'search_feeds'}} ({{ entries_total }})
+                    {{trans 'title.search_feeds'}} ({{ entries_total }})
                 {{else}}
-                    {{trans 'search_feeds'}}
+                    {{trans 'title.search_feeds'}}
                 {{/if}}
                 </h1>
             </div>
@@ -80,10 +80,10 @@
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
-                <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'recent'}}</a>
-                <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'with_errors'}}</a>
-                <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
+                <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_feeds'}}</a>
+                <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_feeds'}}</a>
+                <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
+                <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_feeds'}}</a>
             </div>
         </form>
     </div>
@@ -95,9 +95,9 @@
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                 {{#if entries_total }}
-                    {{trans 'search_categories'}} ({{ entries_total }})
+                    {{trans 'title.search_categories'}} ({{ entries_total }})
                 {{else}}
-                    {{trans 'search_categories'}}
+                    {{trans 'title.search_categories'}}
                 {{/if}}
                 </h1>
             </div>
@@ -111,10 +111,10 @@
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#categories" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
-                <a href="#categories/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'excluded'}}</a>
-                <a href="#categories/feed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'used_by_feeds'}}</a>
-                <a href="#search/categories" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
+                <a href="#categories" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_categories'}}</a>
+                <a href="#categories/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_categories'}}</a>
+                <a href="#categories/feed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.categories_usedbyfeeds'}}</a>
+                <a href="#search/categories" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_categories'}}</a>
             </div>
         </form>
     </div>
@@ -126,9 +126,9 @@
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                 {{#if entries_total }}
-                    {{trans 'search_items'}} ({{ entries_total }})
+                    {{trans 'title.search_items'}} ({{ entries_total }})
                 {{else}}
-                    {{trans 'search_items'}}
+                    {{trans 'title.search_items'}}
                 {{/if}}
                 </h1>
             </div>
@@ -142,10 +142,10 @@
                 </p>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <a href="#items" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'all'}}</a>
-                <a href="#items/unread" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'unread_fix'}}</a>
-                <a href="#items/starred" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'starred'}}</a>
-                <a href="#search/items" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'search'}}</a>
+                <a href="#items" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_items'}}</a>
+                <a href="#items/unread" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unread_items'}}</a>
+                <a href="#items/starred" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.starred_items'}}</a>
+                <a href="#search/items" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_items'}}</a>
             </div>
         </form>
     </div>

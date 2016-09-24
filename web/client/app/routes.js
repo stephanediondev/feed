@@ -4,6 +4,8 @@ routes['#logout'] = {view: 'view-logout', query: '/logout'};
 routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
 routes['#profile/update'] = {view: 'view-profile-update', query: '/profile', title: 'profile'};
 routes['#profile/delete'] = {view: 'view-profile-delete', query: '/profile', title: 'profile'};
+routes['#profile/connections'] = {view: 'view-profile-connections', query: '/profile/connections', title: 'profile'};
+routes['#profile/notifications'] = {view: 'view-profile-notifications', query: '/profile/notifications', title: 'profile'};
 routes['#401'] = {view: 'view-401', query: false, title: 'error_401'};
 routes['#404'] = {view: 'view-404', query: false, title: 'error_404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};
@@ -20,12 +22,12 @@ routes['#search/feeds/result'] = {view: 'view-search-feeds', view_unit: 'view-fe
 
 routes['#feeds/discover/digg'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds/discover/digg', title: 'all_feeds'};
 
-routes['#feeds'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds', title: 'all_feeds'};
-routes['#feeds/errors'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?errors=1', title: 'feeds_errors'};
-routes['#feeds/subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?subscribed=1', title: 'subscribed_feeds'};
-routes['#feeds/not_subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?not_subscribed=1', title: 'unsubscribed_feeds'};
+routes['#feeds'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds', title: 'title.all_feeds'};
+routes['#feeds/errors'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?errors=1', title: 'title.feeds_witherrors'};
+routes['#feeds/subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?subscribed=1', title: 'title.subscribed_feeds'};
+routes['#feeds/not_subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?not_subscribed=1', title: 'title.unsubscribed_feeds'};
 routes['#feeds/category/{id}'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?category={id}'};
-routes['#feeds/recent'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?sortField=date_created&sortDirection=DESC', title: 'recent_feeds'};
+routes['#feeds/recent'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?sortField=date_created&sortDirection=DESC', title: 'title.recent_feeds'};
 
 routes['#feeds/import'] = {view: 'view-feeds-import', query: false, title: 'import_feeds'};
 
@@ -35,16 +37,16 @@ routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}'};
 routes['#feed/delete/{id}'] = {view: 'view-feed-delete', query: '/feed/{id}'};
 routes['#feed/subscribe/{id}'] = {view: false, query: '/feed/subscribe/{id}'};
 
-routes['#categories'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories', title: 'all_categories'};
-routes['#categories/excluded'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?excluded=1', title: 'excluded_categories'};
-routes['#categories/feed'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?feed=1', title: 'categories_used_by_feeds'};
+routes['#categories'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories', title: 'title.all_categories'};
+routes['#categories/excluded'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?excluded=1', title: 'title.excluded_categories'};
+routes['#categories/feed'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?feed=1', title: 'title.categories_usedbyfeeds'};
 
 routes['#category/read/{id}'] = {view: 'view-category-read', query: '/category/{id}'};
 routes['#category/exclude/{id}'] = {view: false, query: '/category/exclude/{id}'};
 
-routes['#items'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items', title: 'all_items'};
-routes['#items/unread'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?unread=1', title: 'unread_items'};
-routes['#items/starred'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?starred=1', title: 'starred_items'};
+routes['#items'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items', title: 'title.all_items'};
+routes['#items/unread'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?unread=1', title: 'title.unread_items'};
+routes['#items/starred'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?starred=1', title: 'title.starred_items'};
 routes['#items/feed/{id}'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?feed={id}'};
 routes['#items/author/{id}'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?author={id}'};
 routes['#items/category/{id}'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?category={id}'};
