@@ -225,5 +225,18 @@ class Push
     {
         return $this->member;
     }
-}
 
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'member' => $this->getMember()->toArray(),
+            'agent' => $this->getAgent(),
+            //'ip' => $this->getIp(),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : $this->getDateCreated(),
+        ];
+    }
+}

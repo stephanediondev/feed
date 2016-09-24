@@ -45,6 +45,10 @@ class PushController extends AbstractController
         }
         $push_id = $this->memberManager->pushManager->persist($push);
 
+        $push = $this->memberManager->pushManager->getOne(['id' => $push_id, 'member' => $memberConnected]);
+        $data['entry'] = $push->toArray();
+        $data['entry_entity'] = 'push';
+
         return new JsonResponse($data);
     }
 

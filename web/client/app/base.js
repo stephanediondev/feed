@@ -17,6 +17,7 @@ apiUrl = apiUrl.replace('client/', 'api');
 //apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
 
 var connectionData = explainConnection(store.get('connection'));
+var pushData = store.get('push');
 
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
@@ -78,25 +79,28 @@ function explainConnection(connection) {
                 }).then(function(sub) {
                     var sub_nice = sub.toJSON();
 
-                    $.ajax({
-                        headers: {
-                            'X-CONNECTION-TOKEN': connectionData.token
-                        },
-                        async: true,
-                        cache: false,
-                        data: {
-                            endpoint: sub.endpoint,
-                            public_key: sub_nice.keys.p256dh,
-                            authentication_secret: sub_nice.keys.auth
-                        },
-                        dataType: 'json',
-                        statusCode: {
-                            200: function() {
-                            }
-                        },
-                        type: 'POST',
-                        url: apiUrl + '/push'
-                    });
+                    if(!pushData) {
+                        $.ajax({
+                            headers: {
+                                'X-CONNECTION-TOKEN': connectionData.token
+                            },
+                            async: true,
+                            cache: false,
+                            data: {
+                                endpoint: sub.endpoint,
+                                public_key: sub_nice.keys.p256dh,
+                                authentication_secret: sub_nice.keys.auth
+                            },
+                            dataType: 'json',
+                            statusCode: {
+                                200: function(data_return) {
+                                    store.set('push', data_return.entry);
+                                }
+                            },
+                            type: 'POST',
+                            url: apiUrl + '/push'
+                        });
+                    }
                 });
             }).catch(function() {
             });
