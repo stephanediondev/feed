@@ -99,12 +99,13 @@ h1 .favicon, h1.favicon, h1 a.favicon:link, h1 a.favicon:visited {
 
 .material-icons {
     font-feature-settings: 'liga';
-    font-size: 16px;
-    margin-right: 2px;
     text-rendering: optimizeLegibility;
     vertical-align: middle;
 }
-
+.mdl-card__subtitle-text .material-icons {
+    font-size: 16px;
+    margin-right: 2px;
+}
 img, iframe, video {
     max-width: 100%;
 }

@@ -28,8 +28,8 @@
     "unsubscribe": "Désinscrire",
     "exclude": "Exclure",
     "include": "Inclure",
-    "read": "Marquer comme lu",
-    "unread": "Marquer comme non lu",
+    "read": "Marquer lu",
+    "unread": "Marquer non lu",
     "star": "Favori",
     "unstar": "Non favori",
 
@@ -39,7 +39,7 @@
     "PUT": "Modifié",
     "DELETE": "Supprimé",
 
-    "mark_all_as_read": "Marquer tout comme lu",
+    "mark_all_as_read": "Marquer tout lu",
 
     "email": "Email",
     "password": "Mot de passe",

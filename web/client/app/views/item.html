@@ -87,7 +87,6 @@
             {{/if}}
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#item-{{ entry.id }}" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-toggle-unit" title="{{trans 'shortcut_o_or_enter'}}">{{trans 'toggle'}}</a>
             {{#if entry.read }}
                 <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read connected" title="m">{{trans 'unread'}}</a>
             {{else}}

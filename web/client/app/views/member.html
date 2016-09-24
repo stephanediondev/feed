@@ -1,6 +1,6 @@
 <!-- Member -->
 <script type="text/template" id="view-login">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
         <form action="#items/unread" data-query="/login" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
@@ -149,7 +149,7 @@
                     {{ notification.endpoint }}
                 </h1>
                 <div class="mdl-card__subtitle-text">
-                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ connection.date_created }}"></span></span>
+                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ notification.date_created }}"></span></span>
                     <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{ notification.ip }}</span>
                 </div>
             </div>

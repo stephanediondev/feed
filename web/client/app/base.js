@@ -72,35 +72,33 @@ function explainConnection(connection) {
     } else {
         $('body').removeClass('anonymous');
         $('body').addClass('connected');
-        if('serviceWorker' in navigator) {
+        if('serviceWorker' in navigator && window.location.protocol == 'https:') {
             navigator.serviceWorker.register('serviceworker.js').then(function(reg) {
                 reg.pushManager.subscribe({
                     userVisibleOnly: true
                 }).then(function(sub) {
-                    var sub_nice = sub.toJSON();
+                    var subJson = sub.toJSON();
 
-                    if(!pushData) {
-                        $.ajax({
-                            headers: {
-                                'X-CONNECTION-TOKEN': connectionData.token
-                            },
-                            async: true,
-                            cache: false,
-                            data: {
-                                endpoint: sub.endpoint,
-                                public_key: sub_nice.keys.p256dh,
-                                authentication_secret: sub_nice.keys.auth
-                            },
-                            dataType: 'json',
-                            statusCode: {
-                                200: function(data_return) {
-                                    store.set('push', data_return.entry);
-                                }
-                            },
-                            type: 'POST',
-                            url: apiUrl + '/push'
-                        });
-                    }
+                    $.ajax({
+                        headers: {
+                            'X-CONNECTION-TOKEN': connectionData.token
+                        },
+                        async: true,
+                        cache: false,
+                        data: {
+                            endpoint: sub.endpoint,
+                            public_key: subJson.keys.p256dh,
+                            authentication_secret: subJson.keys.auth
+                        },
+                        dataType: 'json',
+                        statusCode: {
+                            200: function(data_return) {
+                                store.set('push', data_return.entry);
+                            }
+                        },
+                        type: 'POST',
+                        url: apiUrl + '/push'
+                    });
                 });
             }).catch(function() {
             });
@@ -420,6 +418,7 @@ $(document).ready(function() {
 
     $(document).on('click', 'dialog .close', function(event) {
         if($(this).hasClass('load-route')) {
+        } else if($(this).attr('target') == '_blank') {
         } else {
             event.preventDefault();
         }
