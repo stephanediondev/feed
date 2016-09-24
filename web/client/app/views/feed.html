@@ -160,7 +160,20 @@
             {{/if}}
             {{#if connectionData.member.administrator }}
                 <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'update'}}</a>
-                <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'delete'}}</a>
+                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog action-share" id="dialog-delete-{{ entry.id }}">{{trans 'delete'}}</button>
+                <dialog class="mdl-dialog" for="dialog-delete-{{ entry.id }}">
+                    <div class="mdl-dialog__content">
+                        <p>
+                        {{ entry.title }}
+                        </p>
+                    </div>
+                    <div class="mdl-dialog__actions">
+                        <form action="#feeds" data-query="/feed/{{ entry.id }}" method="DELETE">
+                            <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white close_submit">{{trans 'delete'}}</button>
+                        </form>
+                        <a href="#" class="mdl-button close">{{trans 'cancel'}}</a>
+                    </div>
+                </dialog>
             {{/if}}
         </div>
     </div>
@@ -226,43 +239,6 @@
                 <p>
                     <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
                 </p>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <a href="#feed/delete/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
-            </div>
-        </form>
-    </div>
-</script>
-
-<script type="text/template" id="view-feed-delete">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
-                {{trans 'title.all_feeds'}}
-            </h1>
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_feeds'}}</a>
-            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_feeds'}}</a>
-            <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
-            <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_feeds'}}</a>
-        </div>
-    </div>
-
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-        <form action="#feeds" data-query="/feed/{{ entry.id }}" method="DELETE">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
-                    <a href="#feed/read/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>{{ entry.title }}</a>
-                </h1>
-            </div>
-            <div class="mdl-card__supporting-text">
-                <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'delete'}}</button>
-                </p>
-            </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
             </div>
         </form>
     </div>

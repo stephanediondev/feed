@@ -235,11 +235,17 @@ class SearchController extends AbstractController
                         if($feed) {
                             $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed]);
 
+                            $categories = [];
+                            foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed]) as $feedCategory) {
+                                $categories[] = $feedCategory->toArray();
+                            }
+
                             $data['entries'][$index] = $feed->toArray();
                             $data['entries'][$index]['score'] = $hit['_score'];
                             foreach($actions as $action) {
                                 $data['entries'][$index][$action->getAction()->getTitle()] = true;
                             }
+                            $data['entries'][$index]['categories'] = $categories;
 
                             if(isset($hit['highlight']['title']) == 1) {
                                 $data['entries'][$index]['title'] = $hit['highlight']['title'][0];

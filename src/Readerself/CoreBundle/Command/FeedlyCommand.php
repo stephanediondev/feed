@@ -7,18 +7,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class NotificationCommand extends ContainerAwareCommand
+class FeedlyCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('readerself:notification')
-            ->setDescription('Send notifications (unread items)')
+            ->setName('readerself:feedly')
+            ->setDescription('Import Feedly feeds')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('readerself_core_manager_push')->start();
+        $this->getContainer()->get('readerself_core_manager_feedly')->start();
     }
 }

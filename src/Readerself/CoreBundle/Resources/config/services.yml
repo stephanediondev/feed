@@ -196,7 +196,17 @@ services:
         parent: "readerself_core_manager_abstract"
         public: true
 
-    #Manager
+    readerself_core_manager_digg:
+        class: Readerself\CoreBundle\Manager\DiggManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_feedly:
+        class: Readerself\CoreBundle\Manager\FeedlyManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    #Listener
     readerself_core_eventlistener_search:
         class: Readerself\CoreBundle\EventListener\SearchListener
         arguments:

@@ -3,7 +3,6 @@ routes['#login'] = {view: 'view-login', query: false, title: 'login'};
 routes['#logout'] = {view: 'view-logout', query: '/logout'};
 routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
 routes['#profile/update'] = {view: 'view-profile-update', query: '/profile', title: 'profile'};
-routes['#profile/delete'] = {view: 'view-profile-delete', query: '/profile', title: 'profile'};
 routes['#profile/connections'] = {view: 'view-profile-connections', query: '/profile/connections', title: 'profile'};
 routes['#profile/notifications'] = {view: 'view-profile-notifications', query: '/profile/notifications', title: 'profile'};
 routes['#401'] = {view: 'view-401', query: false, title: 'error_401'};
@@ -20,8 +19,6 @@ routes['#search/items/result'] = {view: 'view-search-items', view_unit: 'view-it
 routes['#search/feeds'] = {view: 'view-search-feeds', query: false, title: 'title.search_feeds'};
 routes['#search/feeds/result'] = {view: 'view-search-feeds', view_unit: 'view-feeds-unit', query: '/feeds/search', title: 'title.search_feeds'};
 
-routes['#feeds/discover/digg'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds/discover/digg', title: 'all_feeds'};
-
 routes['#feeds'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds', title: 'title.all_feeds'};
 routes['#feeds/errors'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?errors=1', title: 'title.feeds_witherrors'};
 routes['#feeds/subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?subscribed=1', title: 'title.subscribed_feeds'};
@@ -34,7 +31,6 @@ routes['#feeds/import'] = {view: 'view-feeds-import', query: false, title: 'impo
 routes['#feed/create'] = {view: 'view-feed-create', query: false};
 routes['#feed/read/{id}'] = {view: 'view-feed-read', query: '/feed/{id}'};
 routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}'};
-routes['#feed/delete/{id}'] = {view: 'view-feed-delete', query: '/feed/{id}'};
 routes['#feed/subscribe/{id}'] = {view: false, query: '/feed/subscribe/{id}'};
 
 routes['#categories'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories', title: 'title.all_categories'};

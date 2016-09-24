@@ -365,52 +365,6 @@ class FeedController extends AbstractController
     }
 
     /**
-     * Discover feeds.
-     *
-     * @ApiDoc(
-     *     section="_ Feed",
-     *     headers={
-     *         {"name"="X-CONNECTION-TOKEN","required"=true},
-     *     },
-     * )
-     */
-    public function discoverAction(Request $request, $type)
-    {
-        $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
-        }
-
-        $data['entries'] = [];
-
-        if($type == 'digg') {
-            $content = json_decode(file_get_contents('https://digg.com/api/discovery/list.json'), true);
-            $index = 0;
-            foreach($content['data'] as $category => $sub) {
-                foreach($sub['subs'] as $result) {
-                    $result['category'] = $category;
-                    $this->feedManager->directCreate($result);
-
-                    /*$data['entries'][$index] = [];
-                    $data['entries'][$index]['discover'] = true;
-                    $data['entries'][$index]['title'] = $result['title'];
-                    $data['entries'][$index]['link'] = $result['feed_url'];
-                    $data['entries'][$index]['website'] = $result['html_url'];
-                    $data['entries'][$index]['description'] = $result['description'];
-                    if(isset($parse_url['host']) == 1) {
-                        $data['entries'][$index]['hostname'] = $parse_url['host'];
-                    }
-                    $data['entries'][$index]['categories'] = [];
-                    $data['entries'][$index]['categories'][] = ['title' => mb_strtolower($category, 'UTF-8')];*/
-                    $index++;
-                }
-            }
-        }
-
-        return new JsonResponse($data);
-    }
-
-    /**
      * Import an opml file.
      *
      * @ApiDoc(

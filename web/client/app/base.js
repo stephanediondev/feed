@@ -428,6 +428,13 @@ $(document).ready(function() {
         dialog.close();
     });
 
+    $(document).on('click', 'dialog .close_submit', function() {
+        id = $(this).parent().parent().parent().attr('for');
+
+        var dialog = document.querySelector('dialog[for="' + id + '"]');
+        dialog.close();
+    });
+
     $(document).on('click', '.action-toggle', function(event) {
         event.preventDefault();
         if($('body').hasClass('collapse')) {
@@ -471,7 +478,7 @@ $(document).ready(function() {
         $(this).parent().parent().remove();
     });
 
-    $('main > .mdl-grid').on('submit', 'form', function(event) {
+    $('body').on('submit', 'form', function(event) {
         event.preventDefault();
 
         var form = $(this);

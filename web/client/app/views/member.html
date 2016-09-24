@@ -45,7 +45,6 @@
             <a href="#profile/notifications" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'notifications'}}</a>
             <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view'}}</a>
             <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
-            <a href="#profile/delete" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
         </div>
     </div>
 
@@ -201,36 +200,6 @@
                 </p>
                 <p>
                     <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
-                </p>
-            </div>
-        </form>
-    </div>
-</script>
-
-<script type="text/template" id="view-profile-delete">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
-                {{ entry.email }}
-            </h1>
-            <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
-            </div>
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
-            <a href="#profile/notifications" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'notifications'}}</a>
-            <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view'}}</a>
-            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
-            <a href="#profile/delete" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</a>
-        </div>
-    </div>
-
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
-        <form action="#login" data-query="/profile" method="DELETE">
-            <div class="mdl-card__supporting-text">
-                <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'delete'}}</button>
                 </p>
             </div>
         </form>
