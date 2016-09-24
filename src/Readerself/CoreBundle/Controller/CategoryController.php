@@ -29,7 +29,7 @@ class CategoryController extends AbstractController
      * Retrieve all categories.
      *
      * @ApiDoc(
-     *     section="_ Category",
+     *     section="Category",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -232,7 +232,7 @@ class CategoryController extends AbstractController
      * Set "exclude" action / Remove "exclude" action.
      *
      * @ApiDoc(
-     *     section="_ Category",
+     *     section="Category",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },

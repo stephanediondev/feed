@@ -33,7 +33,7 @@ class ItemController extends AbstractController
      * Retrieve all items.
      *
      * @ApiDoc(
-     *     section="_ Item",
+     *     section="Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -165,7 +165,7 @@ class ItemController extends AbstractController
      * Mark all items as read.
      *
      * @ApiDoc(
-     *     section="_ Item",
+     *     section="Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -214,7 +214,7 @@ class ItemController extends AbstractController
      * Set "read" action / Remove "read" action.
      *
      * @ApiDoc(
-     *     section="_ Item",
+     *     section="Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -229,7 +229,7 @@ class ItemController extends AbstractController
      * Set "star" action / Remove "star" action.
      *
      * @ApiDoc(
-     *     section="_ Item",
+     *     section="Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -332,7 +332,7 @@ class ItemController extends AbstractController
      * Retrieve content with Readability.
      *
      * @ApiDoc(
-     *     section="_ Item",
+     *     section="Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -369,7 +369,7 @@ class ItemController extends AbstractController
      * Send item by email.
      *
      * @ApiDoc(
-     *     section="_ Item",
+     *     section="Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },

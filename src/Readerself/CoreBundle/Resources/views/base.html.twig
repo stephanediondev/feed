@@ -1,26 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{% block title %}Welcome!{% endblock %}</title>
-
-{% block meta %}
-<link rel="icon" type="image/png" href="{{ asset('bundles/axipibackend/axipi-16x16.png') }}">
-<link rel="icon" sizes="400x400" href="{{ asset('bundles/axipibackend/axipi-400x400.png') }}">
-<link rel="apple-touch-icon" href="{{ asset('bundles/axipibackend/axipi-400x400.png') }}">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow, noarchive">
+<meta charset="utf-8">
+<title>Reader Self - Self-hosted rss reader</title>
+<meta name="description" content="Self-hosted rss reader - Import OPML - Responsive desktop, tablet and mobile - Main keyboard shortcuts from Google Reader - Automatic tags - Shared items with public feed">
+<meta property="og:description" content="Self-hosted rss reader - Import OPML - Responsive desktop, tablet and mobile - Main keyboard shortcuts from Google Reader - Automatic tags - Shared items with public feed">
+<meta property="og:site_name" content="Reader Self - Self-hosted rss reader">
+<meta property="og:title" content="Reader Self - Self-hosted rss reader">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://readerself.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 <meta name="HandheldFriendly" content="true">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#3e4eb8">
-{% endblock %}
-
-{% block style %}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" type="text/css" href="{{ asset('client/vendor/material-design-lite/material.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('client/app/base.css') }}">
-{% endblock %}
+<link rel="stylesheet" type="text/css" href="client/vendor/material-design-lite/material.min.css">
+<link rel="stylesheet" type="text/css" href="client/app/base.css">
 </head>
 
 <body>
@@ -31,47 +27,30 @@
             <div class="mdl-layout__header-row">
                 <div class="mdl-layout-spacer">
                 </div>
-                <a class="mdl-button mdl-color--pink mdl-color-text--white" target="_blank" href="https://github.com/readerself">Code</a>
-                <a class="mdl-button mdl-color--pink mdl-color-text--white" target="_blank" href="https://www.facebook.com/readerself">Community</a>
+                <a href="client" class="mdl-button mdl-color--pink mdl-color-text--white">Login</a>
             </div>
         </header>
         <div class="mdl-layout__drawer">
+            <ul class="mdl-list">
+                <li class="mdl-list__item"><a target="_blank" href="https://github.com/readerself">Download</a></li>
+                <li class="mdl-list__item"><a target="_blank" href="https://github.com/readerself/readerself/issues">Support</a></li>
+                <li class="mdl-list__item"><a target="_blank" href="https://github.com/readerself/readerself/archive/master.zip">Download</a></li>
+                <li class="mdl-list__item"><a target="_blank" href="https://www.facebook.com/readerself">Community</a></li>
+            </ul>
         </div>
     {% endblock %}
 
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid">
             {% block body %}
-                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__title">
                         <h1 class="mdl-card__title-text">
-                            Client
+                            Reader Self - Self-hosted rss reader
                         </h1>
-                    </div>
-                    <div class="mdl-card__actions mdl-card--border">
-                        <a href="client" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Go</a>
-                    </div>
-                </div>
-
-                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-                    <div class="mdl-card__title">
-                        <h1 class="mdl-card__title-text">
-                            API Documentation
-                        </h1>
-                    </div>
-                    <div class="mdl-card__actions mdl-card--border">
-                        <a href="api/documentation" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Go</a>
-                    </div>
-                </div>
-
-                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-                    <div class="mdl-card__title">
-                        <h1 class="mdl-card__title-text">
-                            API Endpoint
-                        </h1>
-                    </div>
-                    <div class="mdl-card__supporting-text">
-                        <p>URL/api</p>
+                        <div class="mdl-card__subtitle-text">
+                            Import OPML - Responsive desktop, tablet and mobile - Main keyboard shortcuts from Google Reader - Automatic tags - Shared items with public feed
+                        </div>
                     </div>
                 </div>
 
@@ -83,12 +62,12 @@
                     </div>
                     <div class="mdl-card__supporting-text">
                         <ul>
-                            <li>API server (Symfony), with provided html5 client</li>
+                            <li><a href="api/documentation">API server (Symfony)</a>, with provided html5 client</li>
                             <li>Built-in authentication</li>
                             <li>Responsive desktop, tablet and mobile</li>
                             <li>Multilingual (English and French)</li>
                             <li>Get feed from Facebook Pages</li>
-                            <li>Automatic tags from item feed categories</li>
+                            <li>Automatic tags from item categories</li>
                             <li>List items by feed</li>
                             <li>List items by tag</li>
                             <li>List items by author</li>
@@ -97,16 +76,15 @@
                             <li>Keep only iframes from Dailymotion, Vimeo and Youtube</li>
                             <li>Starred items</li>
                             <li>Sync starred items with Pinboard</li>
-                            <li>Multi-users (optional)</li>
+                            <li>Multi-users</li>
                             <li>Share on Facebook, Google+, LinkedIn, Twitter ...</li>
                             <li>Elastic search integration (feeds, items and categories)</li>
                             <li>Adaptive crawl by feed (older than 96 hours, next crawl in 12 hours / older than 48 hours, next crawl in 6 hours / older than 24 hours, next crawl in 3 hours)</li>
-                            <li>Text direction according to feed language (left to right / right to left)</li>
-                            <li>Send article to Evernote (retrieve content with Readability if enabled, cleanup html and create a note)</li>
-
+                            <li>Expand / Collapse items</li>
+                            <li>TODO Text direction according to feed language (left to right / right to left)</li>
+                            <li>TODO Send article to Evernote</li>
                             <li>TODO Add a feed or website url (feed detection)</li>
                             <li>TODO Import and export OPML</li>
-                            <li>TODO Expand / Collapse items</li>
                             <li>TODO Live unread counter in title bar / tab</li>
                             <li>TODO Share by email</li>
                             <li>TODO Full content from Readability</li>
@@ -125,25 +103,34 @@
                     <div class="mdl-card__supporting-text">
                         <ul>
                             <li>r: reload</li>
+                            <li>t: expand / collapse all items</li>
                             <li>a: add a subscription</li>
                             <li>k or p or shift + space: up / previous item</li>
                             <li>j or n or space: down / next item</li>
                             <li>g then a: go to all items</li>
+                            <li>g then u: go to unread items</li>
                             <li>g then s: go to starred items</li>
-                            <li>TODO shift + p: previous in menu</li>
-                            <li>TODO shift + n: next in menu</li>
-                            <li>TODO shift + x: expand / collapse folder in menu</li>
                             <li>shift + a: mark all as read</li>
-                            <li>TODO 1: collapse all items</li>
-                            <li>TODO 2: expand all items</li>
                             <li>v: view original from selected item</li>
                             <li>m: read / unread selected item</li>
                             <li>s: star / unstar selected item</li>
-                            <li>TODO o or enter: expand / collapse selected item</li>
+                            <li>o or enter: expand / collapse selected item</li>
                         </ul>
                     </div>
                 </div>
 
+                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+                    <div class="mdl-card__title">
+                        <h1 class="mdl-card__title-text">
+                            Screenshots
+                        </h1>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <p>
+                            <a href="client/screenshot.png" target="_blank"><img src="client/screenshot.png" alt=""></a>
+                        </p>
+                    </div>
+                </div>
             {% endblock %}
         </div>
     </main>

@@ -38,7 +38,7 @@ class SearchController extends AbstractController
      * Search feeds.
      *
      * @ApiDoc(
-     *     section="_ Feed",
+     *     section="Feed",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -60,7 +60,7 @@ class SearchController extends AbstractController
      * Search categories.
      *
      * @ApiDoc(
-     *     section="_ Category",
+     *     section="Category",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -82,7 +82,7 @@ class SearchController extends AbstractController
      * Search items.
      *
      * @ApiDoc(
-     *     section="_ Item",
+     *     section="Item",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },

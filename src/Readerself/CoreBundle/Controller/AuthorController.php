@@ -24,7 +24,7 @@ class AuthorController extends AbstractController
      * Retrieve all authors.
      *
      * @ApiDoc(
-     *     section="_ Author",
+     *     section="Author",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },

@@ -38,7 +38,7 @@ class FeedController extends AbstractController
      * Retrieve all feeds.
      *
      * @ApiDoc(
-     *     section="_ Feed",
+     *     section="Feed",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -313,7 +313,7 @@ class FeedController extends AbstractController
      * Set "subscribe" action / Remove "subscribe" action.
      *
      * @ApiDoc(
-     *     section="_ Feed",
+     *     section="Feed",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -368,7 +368,7 @@ class FeedController extends AbstractController
      * Import an opml file.
      *
      * @ApiDoc(
-     *     section="_ Feed",
+     *     section="Feed",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"="true"},
      *     },

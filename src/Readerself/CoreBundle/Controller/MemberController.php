@@ -171,7 +171,7 @@ class MemberController extends AbstractController
      * Login.
      *
      * @ApiDoc(
-     *     section="_ Member",
+     *     section="Member",
      *     parameters={
      *         {"name"="email", "dataType"="string", "format"="email", "required"=true},
      *         {"name"="password", "dataType"="string", "format"="", "required"=true},
@@ -220,7 +220,7 @@ class MemberController extends AbstractController
      * Profile.
      *
      * @ApiDoc(
-     *     section="_ Member",
+     *     section="Member",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -249,7 +249,7 @@ class MemberController extends AbstractController
      * Profile connections.
      *
      * @ApiDoc(
-     *     section="_ Member",
+     *     section="Member",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -280,7 +280,7 @@ class MemberController extends AbstractController
      * Profile notifications.
      *
      * @ApiDoc(
-     *     section="_ Member",
+     *     section="Member",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -311,7 +311,7 @@ class MemberController extends AbstractController
      * Profile update.
      *
      * @ApiDoc(
-     *     section="_ Member",
+     *     section="Member",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -366,7 +366,7 @@ class MemberController extends AbstractController
      * Logout.
      *
      * @ApiDoc(
-     *     section="_ Member",
+     *     section="Member",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
@@ -394,7 +394,7 @@ class MemberController extends AbstractController
      * Profile update.
      *
      * @ApiDoc(
-     *     section="_ Member",
+     *     section="Member",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
