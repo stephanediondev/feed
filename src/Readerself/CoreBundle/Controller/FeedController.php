@@ -172,8 +172,7 @@ class FeedController extends AbstractController
         if($form->isValid()) {
             $feed_id = $this->feedManager->persist($form->getData());
 
-            $data['entry'] = $this->feedManager->getOne(['id' => $feed_id])->toArray();
-            $data['entry_entity'] = 'feed';
+            return $this->setAction('subscribe', $request, $feed_id);
 
         } else {
             $errors = $form->getErrors(true);

@@ -5,6 +5,7 @@
 * php-curl
 * php-iconv
 * php-mbstring
+* php-gmp
 * php-tidy (recommended, to cleanup and repair html from feeds)
 
 #####Database

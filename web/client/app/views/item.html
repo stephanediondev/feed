@@ -14,7 +14,7 @@
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{#if current_title }}
-                    {{trans current_title}} ({{ entries_total }})
+                    {{trans current_title}} (<span class="count">{{ entries_total }}</span>)
                 {{else}}
                     {{trans 'title.all_items'}} ({{ entries_total }})
                 {{/if}}

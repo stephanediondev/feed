@@ -188,7 +188,7 @@ function loadRoute(key, parameters) {
             }
 
             if(route.title) {
-                window.document.title = $.i18n._(route.title);//TODO: get first h1 in card
+                window.document.title = $.i18n._(route.title);
             }
         }
 
@@ -250,6 +250,11 @@ function loadRoute(key, parameters) {
                                         $('main > .mdl-grid').append(template_unit({connectionData: connectionData, entry: data_return.entries[i]}));
                                     }
                                 }
+
+                                if(route.title) {
+                                    window.document.title = $.i18n._(route.title) + ' (' + data_return.entries_total + ')';
+                                }
+                                $('.count').text(data_return.entries_total);
 
                                 if(data_return.entries_page_next) {
                                     var source_more = $('#view-more').text();
