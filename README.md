@@ -25,10 +25,8 @@ innodb_file_format = BARRACUDA
 
 ```text
 cd /path-to-installation
-composer install
-bin/console doctrine:fixtures:load --append --fixtures="src/Readerself/CoreBundle/DataFixtures"
-cd web/client
-bower install
+chmod +x install.sh
+./install.sh
 ```
 
 Add to cron (hourly)
@@ -41,9 +39,8 @@ cd /path-to-installation && bin/console readerself:elasticsearch
 
 ```text
 cd /path-to-installation
-composer update
-cd web/client
-bower update
+chmod +x update.sh
+./update.sh
 ```
 
 ####Client

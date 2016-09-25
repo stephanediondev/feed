@@ -13,10 +13,10 @@ parameters:
     secret: ThisTokenIsNotSoSecretChangeIt
 
     google_cloud_messaging_enabled: false
-    google_cloud_messaging_key: false
+    google_cloud_messaging_key: ~
 
     google_static_maps_enabled: false
-    google_static_maps_key: false
+    google_static_maps_key: ~
 
     elasticsearch_enabled: false
     elasticsearch_index: readerself
