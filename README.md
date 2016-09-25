@@ -25,7 +25,7 @@ innodb_file_format = BARRACUDA
 
 ```text
 cd /path-to-installation
-chmod +x install.sh
+chmod +x install.sh && chmod +x update.sh
 ./install.sh
 ```
 
@@ -39,7 +39,6 @@ cd /path-to-installation && bin/console readerself:elasticsearch
 
 ```text
 cd /path-to-installation
-chmod +x update.sh
 ./update.sh
 ```
 
