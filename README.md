@@ -57,3 +57,9 @@ cd /path-to-installation
 docker-compose build --no-cache --force-rm
 docker-compose up -d
 ```
+
+####Screenshots
+
+![Desktop](screenshot.png)
+![Add to home screen](web/add-to-homescreen.png)
+![Notification](web/notification.png)
