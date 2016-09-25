@@ -11,7 +11,7 @@ self.addEventListener('push', function(event) {
         event.waitUntil(
             self.registration.showNotification(data.title, {
                 body: data.body,
-                icon: 'icon-192x192.png',
+                icon: 'icon-512x512.png',
                 actions: [
                     //{action: 'action1', title: 'test action', icon: 'icon-192x192.png'}
                 ],
