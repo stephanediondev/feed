@@ -102,11 +102,7 @@ class CollectionManager extends AbstractManager
             $accessToken = $fbApp->getAccessToken();
         }
 
-        /*$sql = 'DELETE FROM item WHERE feed_id = 47';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute();*/
-
-        $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date';//id = 47
+        $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date';
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue('date', (new \Datetime())->format('Y-m-d H:i:s'));
         $stmt->execute();

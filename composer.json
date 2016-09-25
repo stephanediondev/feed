@@ -22,7 +22,7 @@
         "minishlink/web-push-bundle": "*",
         "simplepie/simplepie": "*",
         "nelmio/api-doc-bundle": "*",
-        "facebook/php-sdk-v4" : "~5.0",
+        "facebook/graph-sdk" : "~5.0",
         "php": ">=5.5.9",
         "symfony/symfony": "3.1.*",
         "doctrine/orm": "^2.5",

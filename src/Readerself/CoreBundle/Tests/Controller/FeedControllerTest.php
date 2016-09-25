@@ -74,16 +74,6 @@ class FeedControllerTest extends AbstractControllerTest
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
-        // test subscribe
-        $this->client->request('GET', '/api/feed/subscribe/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
-        $response = $this->client->getResponse();
-
-        $content = json_decode($response->getContent(), true);
-
-        $this->assertEquals('subscribe', $content['action']);
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-
         // test unsubscribe
         $this->client->request('GET', '/api/feed/subscribe/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
@@ -91,6 +81,16 @@ class FeedControllerTest extends AbstractControllerTest
         $content = json_decode($response->getContent(), true);
 
         $this->assertEquals('unsubscribe', $content['action']);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test subscribe
+        $this->client->request('GET', '/api/feed/subscribe/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals('subscribe', $content['action']);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 

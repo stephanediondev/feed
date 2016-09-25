@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "46c91ab1b71b2345c6331b4ecfcc5cf9",
-    "content-hash": "855a9addf7909db03295a1fb083d0be0",
+    "hash": "c497cd2cf497ed1170bc0e48887fd001",
+    "content-hash": "ee50d213582d2cbaa5e10f42d6afcfef",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -951,7 +951,7 @@
             "time": "2016-09-10 18:51:13"
         },
         {
-            "name": "facebook/php-sdk-v4",
+            "name": "facebook/graph-sdk",
             "version": "5.3.1",
             "source": {
                 "type": "git",
@@ -1005,7 +1005,6 @@
                 "facebook",
                 "sdk"
             ],
-            "abandoned": "facebook/graph-sdk",
             "time": "2016-08-09 11:32:26"
         },
         {

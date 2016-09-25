@@ -254,6 +254,11 @@ class SearchController extends AbstractController
                                 $data['entries'][$index]['description'] = $this->cleanContent($hit['highlight']['description'][0]);
                             }
                             $index++;
+                        } else {
+                            $action = 'DELETE';
+                            $path = '/'.$this->searchManager->getIndex().'/feed/'.$hit['_id'];
+                            $body = [];
+                            $this->searchManager->query($action, $path, $body);
                         }
                     }
 
@@ -272,6 +277,11 @@ class SearchController extends AbstractController
                                 $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
                             }
                             $index++;
+                        } else {
+                            $action = 'DELETE';
+                            $path = '/'.$this->searchManager->getIndex().'/category/'.$hit['_id'];
+                            $body = [];
+                            $this->searchManager->query($action, $path, $body);
                         }
                     }
 
@@ -300,6 +310,11 @@ class SearchController extends AbstractController
                                 $data['entries'][$index]['content'] = $this->cleanContent($hit['highlight']['content'][0]);
                             }
                             $index++;
+                        } else {
+                            $action = 'DELETE';
+                            $path = '/'.$this->searchManager->getIndex().'/item/'.$hit['_id'];
+                            $body = [];
+                            $this->searchManager->query($action, $path, $body);
                         }
                     }
                 }

@@ -13,11 +13,13 @@ if(window.location.port) {
     var apiUrl = '//' + window.location.hostname + window.location.pathname;
 }
 apiUrl = apiUrl.replace('index.html', '');
-apiUrl = apiUrl.replace('client/', 'api');
-//apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
+if(window.location.hostname == 'localhost') {
+    apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
+} else {
+    apiUrl = apiUrl.replace('client/', 'api');
+}
 
 var connectionData = explainConnection(store.get('connection'));
-var pushData = store.get('push');
 
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
