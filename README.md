@@ -60,6 +60,6 @@ docker-compose up -d
 
 ####Screenshots
 
-![Desktop](screenshot.png)
+![Desktop](web/screenshot.png)
 ![Add to home screen](web/add-to-homescreen.png)
 ![Notification](web/notification.png)
