@@ -37,7 +37,9 @@ class CategoryController extends AbstractController
      *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="categories per page"},
+     *         {"name"="recent", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="recent categories"},
      *         {"name"="excluded", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="excluded categories"},
+     *         {"name"="usedbyfeeds", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="categories used by feeds"},
      *     },
      * )
      */
@@ -56,8 +58,22 @@ class CategoryController extends AbstractController
             $parameters['member'] = $memberConnected;
         }
 
-        if($request->query->get('feed')) {
-            $parameters['feed'] = true;
+        if($request->query->get('usedbyfeeds')) {
+            $parameters['usedbyfeeds'] = true;
+        }
+
+        $fields = ['title' => 'cat.title', 'date_created' => 'cat.dateCreated'];
+        if($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
+            $parameters['sortField'] = $fields[$request->query->get('sortField')];
+        } else {
+            $parameters['sortField'] = 'cat.title';
+        }
+
+        $directions = ['ASC', 'DESC'];
+        if($request->query->get('sortDirection') && in_array($request->query->get('sortDirection'), $directions)) {
+            $parameters['sortDirection'] = $request->query->get('sortDirection');
+        } else {
+            $parameters['sortDirection'] = 'ASC';
         }
 
         $paginator= $this->get('knp_paginator');

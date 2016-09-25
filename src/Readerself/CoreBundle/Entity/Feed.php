@@ -43,11 +43,6 @@ class Feed
     private $language;
 
     /**
-     * @var string
-     */
-    private $direction;
-
-    /**
      * @var \DateTime
      */
     private $nextCollection;
@@ -215,30 +210,6 @@ class Feed
     public function getLanguage()
     {
         return $this->language;
-    }
-
-    /**
-     * Set direction
-     *
-     * @param string $direction
-     *
-     * @return Feed
-     */
-    public function setDirection($direction)
-    {
-        $this->direction = $direction;
-
-        return $this;
-    }
-
-    /**
-     * Get direction
-     *
-     * @return string
-     */
-    public function getDirection()
-    {
-        return $this->direction;
     }
 
     /**

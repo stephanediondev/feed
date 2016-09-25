@@ -34,8 +34,9 @@ routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}'};
 routes['#feed/subscribe/{id}'] = {view: false, query: '/feed/subscribe/{id}'};
 
 routes['#categories'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories', title: 'title.all_categories'};
+routes['#categories/recent'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?sortField=date_created&sortDirection=DESC', title: 'title.recent_categories'};
 routes['#categories/excluded'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?excluded=1', title: 'title.excluded_categories'};
-routes['#categories/feed'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?feed=1', title: 'title.categories_usedbyfeeds'};
+routes['#categories/feed'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?usedbyfeeds=1', title: 'title.categories_usedbyfeeds'};
 
 routes['#category/read/{id}'] = {view: 'view-category-read', query: '/category/{id}'};
 routes['#category/exclude/{id}'] = {view: false, query: '/category/exclude/{id}'};

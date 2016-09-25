@@ -61,4 +61,67 @@ class FeedManager extends AbstractManager
 
         $this->clearCache();
     }
+
+    public function import($opml)
+    {
+        $this->categories = [];
+        $this->feeds = [];
+
+        $this->transformOpml($opml);
+
+        if(count($this->feeds) > 0) {
+            foreach($this->feeds as $obj) {
+                $link = $this->cleanLink($obj->xmlUrl);
+
+                $sql = 'SELECT id FROM feed WHERE link = :link';
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue('link', $link);
+                $stmt->execute();
+                $test = $stmt->fetch();
+
+                if($test) {
+                    $feed_id = $test['id'];
+
+                } else {
+                    $parse_url = parse_url($obj->xmlUrl);
+
+                    $insertFeed = [
+                        'title' => $this->cleanTitle($obj->title),
+                        'link' => $link,
+                        'website' => $this->cleanWebsite($obj->htmlUrl),
+                        'hostname' => $parse_url['host'],
+                        'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                        'date_modified' => (new \Datetime())->format('Y-m-d H:i:s'),
+                    ];
+                    $feed_id = $this->insert('feed', $insertFeed);
+                }
+            }
+        }
+    }
+
+    private function transformOpml($obj, $cat = false) {
+        $feeds = array();
+        if(isset($obj->outline) == 1) {
+            foreach($obj->outline as $outline) {
+                if(isset($outline->outline) == 1) {
+                    if($outline->attributes()->title) {
+                        $cat = strval($outline->attributes()->title);
+                        $this->categories[] = $cat;
+                    } else if($outline->attributes()->text) {
+                        $cat = strval($outline->attributes()->text);
+                        $this->categories[] = $cat;
+                    }
+                    $this->transformOpml($outline, $cat);
+                } else {
+                    $feed = new \stdClass();
+                    foreach($outline->attributes() as $k => $attribute) {
+                        $feed->{$k} = strval($attribute);
+                    }
+                    $feed->flr = $cat;
+                    $this->feeds[] = $feed;
+                }
+            }
+        }
+        return $feeds;
+    }
 }

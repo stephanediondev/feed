@@ -47,6 +47,7 @@ class FeedController extends AbstractController
      *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""ASC"" or ""DESC"", default ""ASC""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="items per page"},
+     *         {"name"="recent", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="recent feeds"},
      *         {"name"="subscribed", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="subscribed feeds"},
      *         {"name"="unsubscribed", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="unsubscribed feeds"},
      *         {"name"="errors", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="feeds with errors"},
@@ -392,16 +393,7 @@ class FeedController extends AbstractController
         if($form->isValid()) {
             $obj_simplexml = simplexml_load_file($request->files->get('file'));
             if($obj_simplexml) {
-                $this->folders = [];
-                $this->feeds = [];
-
-                $this->transformOpml($obj_simplexml->body);
-
-                if(count($this->feeds) > 0) {
-                    foreach($this->feeds as $obj) {
-                        $data[] = print_r($obj, true);
-                    }
-                }
+                $this->feedManager->import($obj_simplexml->body);
             }
 
         } else {
@@ -412,35 +404,5 @@ class FeedController extends AbstractController
         }
 
         return new JsonResponse($data);
-    }
-
-    private function transformOpml($obj, $flr = false) {
-        $feeds = array();
-        if(isset($obj->outline) == 1) {
-            foreach($obj->outline as $outline) {
-                if(isset($outline->outline) == 1) {
-                    //echo $outline->attributes()->title;
-                    //print_r($outline);
-                    if($outline->attributes()->title) {
-                        $flr = strval($outline->attributes()->title);
-                        $this->folders[] = $flr;
-                    } else if($outline->attributes()->text) {
-                        $flr = strval($outline->attributes()->text);
-                        $this->folders[] = $flr;
-                    }
-                    $this->transformOpml($outline, $flr);
-                    //array_merge($feeds, $this->import_opml($outline));
-                } else {
-                    //print_r($outline->attributes()->title);
-                    $feed = new \stdClass();
-                    foreach($outline->attributes() as $k => $attribute) {
-                        $feed->{$k} = strval($attribute);
-                    }
-                    $feed->flr = $flr;
-                    $this->feeds[] = $feed;
-                }
-            }
-        }
-        return $feeds;
     }
 }

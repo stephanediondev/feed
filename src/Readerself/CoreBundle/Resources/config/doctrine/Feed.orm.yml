@@ -56,12 +56,6 @@ Readerself\CoreBundle\Entity\Feed:
             length: 2
             options:
                 fixed: true
-        direction:
-            type: string
-            nullable: true
-            length: 3
-            options:
-                fixed: true
         nextCollection:
             type: datetime
             nullable: true

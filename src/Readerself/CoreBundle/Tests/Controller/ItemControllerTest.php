@@ -77,4 +77,21 @@ class ItemControllerTest extends AbstractControllerTest
         $this->assertEquals(404, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
     }
+
+    public function testEmail()
+    {
+        // test 403
+        $this->client->request('POST', '/api/item/email/0');
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test 404
+        $this->client->request('POST', '/api/item/email/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+    }
 }

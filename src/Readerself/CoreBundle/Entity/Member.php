@@ -24,11 +24,6 @@ class Member implements AdvancedUserInterface, \Serializable
     private $password;
 
     /**
-     * @var string
-     */
-    private $nickname;
-
-    /**
      * @var boolean
      */
     private $administrator = '0';
@@ -104,30 +99,6 @@ class Member implements AdvancedUserInterface, \Serializable
     public function getPassword()
     {
         return $this->password;
-    }
-
-    /**
-     * Set nickname
-     *
-     * @param string $nickname
-     *
-     * @return Member
-     */
-    public function setNickname($nickname)
-    {
-        $this->nickname = $nickname;
-
-        return $this;
-    }
-
-    /**
-     * Get nickname
-     *
-     * @return string
-     */
-    public function getNickname()
-    {
-        return $this->nickname;
     }
 
     /**

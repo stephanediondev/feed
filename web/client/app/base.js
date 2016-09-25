@@ -28,8 +28,10 @@ if($.inArray(language, languages)) {
     languageFinal = 'en';
 }
 
-$.get('vendor/jquery-timeago/locales/jquery.timeago.' + languageFinal + '.js', function() {
-});
+if(languageFinal != 'en') {
+    $.get('vendor/moment/locale/' + languageFinal + '.js', function() {
+    });
+}
 
 $.ajax({
     async: false,
@@ -256,7 +258,12 @@ function loadRoute(key, parameters) {
                                 }
                             }
 
-                            $('.timeago').timeago();
+                            $('main > .mdl-grid').find('.timeago').each(function() {
+                                var result = moment($(this).attr('title')).add(timezone, 'hours');
+                                $(this).attr('title', result.format('LLLL'));
+                                $(this).text(result.fromNow());
+                            });
+
                             componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
                             if(parameters.link) {
@@ -521,8 +528,10 @@ $(document).ready(function() {
                 dataType: 'json',
                 statusCode: {
                     200: function(data_return) {
-                        if(data_return.entry.title) {
-                            setSnackbar($.i18n._(form.attr('method')) + ' ' + data_return.entry.title);
+                        if(typeof data_return.entry != 'undefined') {
+                            if(data_return.entry.title) {
+                                setSnackbar($.i18n._(form.attr('method')) + ' ' + data_return.entry.title);
+                            }
                         }
 
                         if(form.attr('method') == 'DELETE') {

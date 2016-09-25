@@ -329,43 +329,6 @@ class ItemController extends AbstractController
     }
 
     /**
-     * Retrieve content with Readability.
-     *
-     * @ApiDoc(
-     *     section="Item",
-     *     headers={
-     *         {"name"="X-CONNECTION-TOKEN","required"=true},
-     *     },
-     * )
-     */
-    public function readabilityAction(Request $request, ParameterBag $parameterBag, $id)
-    {
-        $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
-        }
-
-        $parameterBag->set('action', $this->actionManager->getOne(['title' => 'readability']));
-        $parameterBag->set('item', $this->itemManager->getOne(['id' => $id]));
-
-        if($actionItem = $this->actionManager->actionItemManager->getOne([
-            'action' => $parameterBag->get('action'),
-            'item' => $parameterBag->get('item'),
-        ])) {
-        } else {
-            $actionItem = $this->actionManager->actionItemManager->init();
-            $actionItem->setAction($parameterBag->get('action'));
-            $actionItem->setItem($parameterBag->get('item'));
-
-            $this->actionManager->actionItemManager->persist($actionItem);
-        }
-
-        $this->itemManager->getContentFull($parameterBag->get('item'));
-
-        return new JsonResponse($data);
-    }
-
-    /**
      * Send item by email.
      *
      * @ApiDoc(
@@ -381,27 +344,20 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function emailAction(Request $request, ParameterBag $parameterBag, $id)
+    public function emailAction(Request $request, $id)
     {
         $data = [];
         if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
-        $parameterBag->set('action', $this->actionManager->getOne(['title' => 'email']));
-        $parameterBag->set('item', $this->memberManager->getOne(['id' => $id]));
+        $item = $this->itemManager->getOne(['id' => $id]);
 
-        if($actionItem = $this->actionManager->actionItemManager->getOne([
-            'action' => $parameterBag->get('action'),
-            'item' => $parameterBag->get('item'),
-        ])) {
-        } else {
-            $actionItem = $this->actionManager->actionItemManager->init();
-            $actionItem->setAction($parameterBag->get('action'));
-            $actionItem->setItem($parameterBag->get('item'));
-
-            $this->actionManager->actionItemManager->persist($actionItem);
+        if(!$item) {
+            return new JsonResponse($data, 404);
         }
+
+        $action = $this->actionManager->getOne(['title' => 'email']);
 
         return new JsonResponse($data);
     }

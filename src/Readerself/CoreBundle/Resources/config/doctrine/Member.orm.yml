@@ -6,9 +6,6 @@ Readerself\CoreBundle\Entity\Member:
         email:
             columns:
                 - email
-        nickname:
-            columns:
-                - nickname
     id:
         id:
             type: integer
@@ -28,12 +25,6 @@ Readerself\CoreBundle\Entity\Member:
         password:
             type: string
             nullable: false
-            length: 255
-            options:
-                fixed: false
-        nickname:
-            type: string
-            nullable: true
             length: 255
             options:
                 fixed: false

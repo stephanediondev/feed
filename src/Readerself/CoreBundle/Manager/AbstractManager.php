@@ -51,4 +51,50 @@ abstract class AbstractManager
         $stmt->bindValue('id', $id);
         $stmt->execute();
     }
+
+    public function setCategory($title)
+    {
+        $sql = 'SELECT id FROM category WHERE title = :title';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('title', $title);
+        $stmt->execute();
+        $result = $stmt->fetch();
+
+        if($result) {
+            $category_id = $result['id'];
+        } else {
+            $insertCategory = [
+                'title' => $title,
+                'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+            ];
+            $category_id = $this->insert('category', $insertCategory);
+        }
+
+        return $category_id;
+    }
+
+    public function cleanWebsite($website)
+    {
+        $website = str_replace('&amp;', '&', $website);
+        $website = mb_substr($website, 0, 255, 'UTF-8');
+
+        return $website;
+    }
+
+    public function cleanLink($link)
+    {
+        $link = str_replace('&amp;', '&', $link);
+        $link = mb_substr($link, 0, 255, 'UTF-8');
+
+        return $link;
+    }
+
+    public function cleanTitle($title)
+    {
+        $title = trim( strip_tags( html_entity_decode( $title ) ) );
+        $title = str_replace('&amp;', '&', $title);
+        $title = mb_substr($title, 0, 255, 'UTF-8');
+
+        return $title;
+    }
 }

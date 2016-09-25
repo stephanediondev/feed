@@ -79,6 +79,9 @@
     "title.all_categories": "Toutes les catégories",
     "button.all_categories": "Toutes",
 
+    "title.recent_categories": "Catégories récentes",
+    "button.recent_categories": "Récentes",
+
     "title.excluded_categories": "Catégories exclues",
     "button.excluded_categories": "Exclues",
 

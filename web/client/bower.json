@@ -1,5 +1,5 @@
 {
-    "name": "axipi",
+    "name": "Reader Self",
     "license": "GPL-3.0",
     "dependencies": {
         "jquery": "*",
@@ -7,7 +7,7 @@
         "dialog-polyfill": "*",
         "store.js": "*",
         "jquery-i18n": "*",
-        "jquery-timeago": "*",
+        "moment": "*",
         "jquery.scrollTo": "*",
         "handlebars": "*"
     }

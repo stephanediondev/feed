@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 20, 2016 at 07:54 PM
+-- Generation Time: Sep 25, 2016 at 03:51 AM
 -- Server version: 5.7.14
 -- PHP Version: 7.0.9
 
@@ -12,7 +12,7 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `readerself_symfony`
+-- Database: `readerself`
 --
 
 -- --------------------------------------------------------
@@ -22,10 +22,12 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `action`;
-CREATE TABLE `action` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `action` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -35,11 +37,15 @@ CREATE TABLE `action` (
 --
 
 DROP TABLE IF EXISTS `action_category`;
-CREATE TABLE `action_category` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `action_category` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `action_id` int(10) UNSIGNED NOT NULL,
   `category_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `action_id_category_id` (`action_id`,`category_id`) USING BTREE,
+  KEY `category_id` (`category_id`),
+  KEY `action_id` (`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -49,12 +55,17 @@ CREATE TABLE `action_category` (
 --
 
 DROP TABLE IF EXISTS `action_category_member`;
-CREATE TABLE `action_category_member` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `action_category_member` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `action_id` int(10) UNSIGNED NOT NULL,
   `category_id` int(10) UNSIGNED NOT NULL,
   `member_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `action_id_category_id_member_id` (`action_id`,`category_id`,`member_id`) USING BTREE,
+  KEY `member_id` (`member_id`),
+  KEY `category_id` (`category_id`),
+  KEY `action_id` (`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -64,12 +75,17 @@ CREATE TABLE `action_category_member` (
 --
 
 DROP TABLE IF EXISTS `action_feed_member`;
-CREATE TABLE `action_feed_member` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `action_feed_member` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `action_id` int(10) UNSIGNED NOT NULL,
   `feed_id` int(10) UNSIGNED NOT NULL,
   `member_id` int(10) UNSIGNED NOT NULL,
-  `action_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `action_id_feed_id_member_id` (`action_id`,`feed_id`,`member_id`),
+  KEY `feed_id` (`feed_id`),
+  KEY `member_id` (`member_id`),
+  KEY `action_id` (`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -79,11 +95,15 @@ CREATE TABLE `action_feed_member` (
 --
 
 DROP TABLE IF EXISTS `action_item`;
-CREATE TABLE `action_item` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `action_item` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `action_id` int(10) UNSIGNED NOT NULL,
   `item_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `action_id_item_id` (`action_id`,`item_id`) USING BTREE,
+  KEY `item_id` (`item_id`),
+  KEY `action_id` (`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -93,12 +113,17 @@ CREATE TABLE `action_item` (
 --
 
 DROP TABLE IF EXISTS `action_item_member`;
-CREATE TABLE `action_item_member` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `action_item_member` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `action_id` int(10) UNSIGNED NOT NULL,
   `item_id` int(10) UNSIGNED NOT NULL,
   `member_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `action_id_item_id_member_id` (`action_id`,`item_id`,`member_id`) USING BTREE,
+  KEY `item_id` (`item_id`),
+  KEY `member_id` (`member_id`),
+  KEY `action_id` (`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -108,10 +133,12 @@ CREATE TABLE `action_item_member` (
 --
 
 DROP TABLE IF EXISTS `author`;
-CREATE TABLE `author` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `author` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -121,10 +148,12 @@ CREATE TABLE `author` (
 --
 
 DROP TABLE IF EXISTS `category`;
-CREATE TABLE `category` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `category` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -134,14 +163,15 @@ CREATE TABLE `category` (
 --
 
 DROP TABLE IF EXISTS `collection`;
-CREATE TABLE `collection` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `collection` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `feeds` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `errors` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `time` double UNSIGNED NOT NULL DEFAULT '0',
   `memory` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `date_created` datetime NOT NULL,
-  `date_modified` datetime NOT NULL
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -151,12 +181,16 @@ CREATE TABLE `collection` (
 --
 
 DROP TABLE IF EXISTS `collection_feed`;
-CREATE TABLE `collection_feed` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `collection_feed` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `collection_id` int(10) UNSIGNED NOT NULL,
   `feed_id` int(10) UNSIGNED NOT NULL,
   `error` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `collection_id_feed_id` (`collection_id`,`feed_id`) USING BTREE,
+  KEY `collection_id` (`collection_id`),
+  KEY `feed_id` (`feed_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -166,15 +200,18 @@ CREATE TABLE `collection_feed` (
 --
 
 DROP TABLE IF EXISTS `connection`;
-CREATE TABLE `connection` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `connection` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `member_id` int(10) UNSIGNED NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date_created` datetime NOT NULL,
-  `date_modified` datetime NOT NULL
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `type_token` (`type`,`token`),
+  KEY `member_id` (`member_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -184,15 +221,18 @@ CREATE TABLE `connection` (
 --
 
 DROP TABLE IF EXISTS `enclosure`;
-CREATE TABLE `enclosure` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `enclosure` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `item_id` int(10) UNSIGNED DEFAULT NULL,
   `link` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `length` int(10) UNSIGNED DEFAULT NULL,
   `width` int(10) UNSIGNED DEFAULT NULL,
   `height` int(10) UNSIGNED DEFAULT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item_id`),
+  KEY `type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -202,18 +242,37 @@ CREATE TABLE `enclosure` (
 --
 
 DROP TABLE IF EXISTS `feed`;
-CREATE TABLE `feed` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `feed` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `link` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `website` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `hostname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
-  `direction` char(3) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `language` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `next_collection` datetime DEFAULT NULL,
   `date_created` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
-  `language` char(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `link` (`link`),
+  KEY `next_collection` (`next_collection`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feed_category`
+--
+
+DROP TABLE IF EXISTS `feed_category`;
+CREATE TABLE IF NOT EXISTS `feed_category` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `feed_id` int(10) UNSIGNED NOT NULL,
+  `category_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `feed_id_category_id` (`feed_id`,`category_id`),
+  KEY `feed_id` (`feed_id`),
+  KEY `category_id` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -223,8 +282,8 @@ CREATE TABLE `feed` (
 --
 
 DROP TABLE IF EXISTS `item`;
-CREATE TABLE `item` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `item` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `feed_id` int(10) UNSIGNED NOT NULL,
   `author_id` int(10) UNSIGNED DEFAULT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -235,7 +294,12 @@ CREATE TABLE `item` (
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   `date_created` datetime NOT NULL,
-  `date_modified` datetime NOT NULL
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `link` (`link`),
+  KEY `feed_id` (`feed_id`),
+  KEY `author_id` (`author_id`),
+  KEY `date` (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -245,10 +309,14 @@ CREATE TABLE `item` (
 --
 
 DROP TABLE IF EXISTS `item_category`;
-CREATE TABLE `item_category` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `item_category` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `item_id` int(10) UNSIGNED NOT NULL,
-  `category_id` int(10) UNSIGNED NOT NULL
+  `category_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `item_id_category_id` (`item_id`,`category_id`) USING BTREE,
+  KEY `item_id` (`item_id`),
+  KEY `category_id` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -258,14 +326,15 @@ CREATE TABLE `item_category` (
 --
 
 DROP TABLE IF EXISTS `member`;
-CREATE TABLE `member` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `member` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nickname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `administrator` tinyint(1) NOT NULL DEFAULT '0',
   `date_created` datetime NOT NULL,
-  `date_modified` datetime NOT NULL
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -275,253 +344,21 @@ CREATE TABLE `member` (
 --
 
 DROP TABLE IF EXISTS `push`;
-CREATE TABLE `push` (
-  `id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `push` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `member_id` int(10) UNSIGNED NOT NULL,
   `endpoint` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `public_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `authentication_secret` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date_created` datetime NOT NULL,
-  `date_modified` datetime NOT NULL
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `endpoint` (`endpoint`),
+  KEY `member_id` (`member_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `action`
---
-ALTER TABLE `action`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `title` (`title`);
-
---
--- Indexes for table `action_category`
---
-ALTER TABLE `action_category`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_category_id` (`action_id`,`category_id`) USING BTREE,
-  ADD KEY `category_id` (`category_id`),
-  ADD KEY `action_id` (`action_id`);
-
---
--- Indexes for table `action_category_member`
---
-ALTER TABLE `action_category_member`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_category_id_member_id` (`action_id`,`category_id`,`member_id`) USING BTREE,
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `category_id` (`category_id`),
-  ADD KEY `action_id` (`action_id`);
-
---
--- Indexes for table `action_feed_member`
---
-ALTER TABLE `action_feed_member`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_feed_id_member_id` (`action_id`,`feed_id`,`member_id`),
-  ADD KEY `feed_id` (`feed_id`),
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `action_id` (`action_id`);
-
---
--- Indexes for table `action_item`
---
-ALTER TABLE `action_item`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_item_id` (`action_id`,`item_id`) USING BTREE,
-  ADD KEY `item_id` (`item_id`),
-  ADD KEY `action_id` (`action_id`);
-
---
--- Indexes for table `action_item_member`
---
-ALTER TABLE `action_item_member`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_item_id_member_id` (`action_id`,`item_id`,`member_id`) USING BTREE,
-  ADD KEY `item_id` (`item_id`),
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `action_id` (`action_id`);
-
---
--- Indexes for table `author`
---
-ALTER TABLE `author`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `title` (`title`);
-
---
--- Indexes for table `category`
---
-ALTER TABLE `category`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `title` (`title`);
-
---
--- Indexes for table `collection`
---
-ALTER TABLE `collection`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `collection_feed`
---
-ALTER TABLE `collection_feed`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `collection_id_feed_id` (`collection_id`,`feed_id`) USING BTREE,
-  ADD KEY `collection_id` (`collection_id`),
-  ADD KEY `feed_id` (`feed_id`);
-
---
--- Indexes for table `connection`
---
-ALTER TABLE `connection`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `type_token` (`type`,`token`),
-  ADD KEY `member_id` (`member_id`);
-
---
--- Indexes for table `enclosure`
---
-ALTER TABLE `enclosure`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `item_id` (`item_id`),
-  ADD KEY `type` (`type`);
-
---
--- Indexes for table `feed`
---
-ALTER TABLE `feed`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `link` (`link`),
-  ADD KEY `next_collection` (`next_collection`) USING BTREE;
-
---
--- Indexes for table `item`
---
-ALTER TABLE `item`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `link` (`link`),
-  ADD KEY `feed_id` (`feed_id`),
-  ADD KEY `author_id` (`author_id`),
-  ADD KEY `date` (`date`);
-
---
--- Indexes for table `item_category`
---
-ALTER TABLE `item_category`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `item_id_category_id` (`item_id`,`category_id`) USING BTREE,
-  ADD KEY `item_id` (`item_id`),
-  ADD KEY `category_id` (`category_id`);
-
---
--- Indexes for table `member`
---
-ALTER TABLE `member`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `nickname` (`nickname`);
-
---
--- Indexes for table `push`
---
-ALTER TABLE `push`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `endpoint` (`endpoint`),
-  ADD KEY `member_id` (`member_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `action`
---
-ALTER TABLE `action`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT for table `action_category`
---
-ALTER TABLE `action_category`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3131;
---
--- AUTO_INCREMENT for table `action_category_member`
---
-ALTER TABLE `action_category_member`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
---
--- AUTO_INCREMENT for table `action_feed_member`
---
-ALTER TABLE `action_feed_member`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=771;
---
--- AUTO_INCREMENT for table `action_item`
---
-ALTER TABLE `action_item`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17038;
---
--- AUTO_INCREMENT for table `action_item_member`
---
-ALTER TABLE `action_item_member`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55776;
---
--- AUTO_INCREMENT for table `author`
---
-ALTER TABLE `author`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7109;
---
--- AUTO_INCREMENT for table `category`
---
-ALTER TABLE `category`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30928;
---
--- AUTO_INCREMENT for table `collection`
---
-ALTER TABLE `collection`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=338;
---
--- AUTO_INCREMENT for table `collection_feed`
---
-ALTER TABLE `collection_feed`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10501;
---
--- AUTO_INCREMENT for table `connection`
---
-ALTER TABLE `connection`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
---
--- AUTO_INCREMENT for table `enclosure`
---
-ALTER TABLE `enclosure`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6675;
---
--- AUTO_INCREMENT for table `feed`
---
-ALTER TABLE `feed`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1172;
---
--- AUTO_INCREMENT for table `item`
---
-ALTER TABLE `item`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=431845;
---
--- AUTO_INCREMENT for table `item_category`
---
-ALTER TABLE `item_category`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37307;
---
--- AUTO_INCREMENT for table `member`
---
-ALTER TABLE `member`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT for table `push`
---
-ALTER TABLE `push`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- Constraints for dumped tables
 --
@@ -584,6 +421,13 @@ ALTER TABLE `enclosure`
   ADD CONSTRAINT `FK_E0F73063126F525E` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `feed_category`
+--
+ALTER TABLE `feed_category`
+  ADD CONSTRAINT `FK_26998E6612469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_26998E6651A5BC03` FOREIGN KEY (`feed_id`) REFERENCES `feed` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `item`
 --
 ALTER TABLE `item`
@@ -602,68 +446,4 @@ ALTER TABLE `item_category`
 --
 ALTER TABLE `push`
   ADD CONSTRAINT `FK_5F3A16647597D3FE` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE;
-
-
--- phpMyAdmin SQL Dump
--- version 4.6.3
--- https://www.phpmyadmin.net/
---
--- Host: localhost
--- Generation Time: Sep 22, 2016 at 10:47 AM
--- Server version: 5.7.14
--- PHP Version: 7.0.9
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
---
--- Database: `readerself`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `feed_category`
---
-
-CREATE TABLE `feed_category` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `category_id` int(10) UNSIGNED NOT NULL,
-  `feed_id` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `feed_category`
---
-ALTER TABLE `feed_category`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `feed_id_category_id` (`feed_id`,`category_id`),
-  ADD KEY `feed_id` (`feed_id`),
-  ADD KEY `category_id` (`category_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `feed_category`
---
-ALTER TABLE `feed_category`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `feed_category`
---
-ALTER TABLE `feed_category`
-  ADD CONSTRAINT `FK_26998E6612469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_26998E6651A5BC03` FOREIGN KEY (`feed_id`) REFERENCES `feed` (`id`) ON DELETE CASCADE;
-
-
 SET FOREIGN_KEY_CHECKS=1;
