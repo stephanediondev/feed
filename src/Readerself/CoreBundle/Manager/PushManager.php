@@ -12,7 +12,7 @@ class PushManager extends AbstractManager
     protected $gcm;
 
     public function __construct(
-        string $gcm
+        $gcm
     ) {
         $this->gcm = $gcm;
     }
