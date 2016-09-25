@@ -1,6 +1,6 @@
 git fetch origin
 git reset --hard origin/master
-SYMFONY_ENV=prod composer update --no-dev -o --prefer-dist
+SYMFONY_ENV=prod ./composer.phar install --no-dev -o --prefer-dist
 cd web/client
-bower update
+bower install
 cd ../../
