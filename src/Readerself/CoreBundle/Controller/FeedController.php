@@ -393,7 +393,7 @@ class FeedController extends AbstractController
         if($form->isValid()) {
             $obj_simplexml = simplexml_load_file($request->files->get('file'));
             if($obj_simplexml) {
-                $this->feedManager->import($obj_simplexml->body);
+                $this->feedManager->import($memberConnected, $obj_simplexml->body);
             }
 
         } else {
