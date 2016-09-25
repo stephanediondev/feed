@@ -10,9 +10,16 @@
 #####Database
 * MySQL 5.5.3 or greater (utf8mb4 character set)
 
+To fix ```#1709 - Index column size too large. The maximum column size is 767 bytes.```, add in MySQL configuration:
+
+```
+innodb_large_prefix = ON
+innodb_file_format = BARRACUDA
+```
+
 #####Web server
 * Apache 2.2 or greater with mod_rewrite module enabled (and "Allowoverride All" in VirtualHost / Directory configuration to allow .htaccess file)
-* Nginx (see https://www.nginx.com/resources/wiki/start/topics/recipes/symfony/)
+* Nginx (see [/docker/nginx/nginx.conf](/docker/nginx/nginx.conf))
 
 ####Installation
 
