@@ -60,8 +60,6 @@ class FeedRepository extends AbstractRepository
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('fed.id');
 
-        $getQuery = $query->getQuery();
-
-        return $getQuery->getResult();
+        return $query->getQuery();
     }
 }

@@ -46,7 +46,7 @@ class MigrationManager extends AbstractManager
         }
 
         //retrieve all items
-        $sql = 'SELECT itm.*, auh.*, fed.* FROM items AS itm LEFT JOIN authors AS auh ON auh.auh_id = itm.auh_id LEFT JOIN feeds AS fed ON fed.fed_id = itm.fed_id WHERE fed.fed_id IS NOT NULL LIMIT 0,30000';
+        $sql = 'SELECT itm.*, auh.*, fed.* FROM items AS itm LEFT JOIN authors AS auh ON auh.auh_id = itm.auh_id LEFT JOIN feeds AS fed ON fed.fed_id = itm.fed_id WHERE fed.fed_id IS NOT NULL LIMIT 0,25000';
         $stmt = $this->connectionOld->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll();
