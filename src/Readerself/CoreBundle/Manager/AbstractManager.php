@@ -1,7 +1,7 @@
 <?php
 namespace Readerself\CoreBundle\Manager;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractManager
@@ -10,12 +10,15 @@ abstract class AbstractManager
 
     protected $connection;
 
+    protected $connectionOld;
+
     protected $eventDispatcher;
 
-    public function setEntityManager(EntityManagerInterface $em)
+    public function setDoctrine(Registry $doctrine)
     {
-        $this->em = $em;
-        $this->connection = $em->getConnection();
+        $this->em = $doctrine->getManager('default');
+        $this->connection = $this->em->getConnection();
+        $this->connectionOld = $doctrine->getManager('old')->getConnection();
     }
 
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)

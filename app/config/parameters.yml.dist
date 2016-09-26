@@ -5,6 +5,12 @@ parameters:
     database_user: root
     database_password: ~
 
+    database_host_old: 127.0.0.1
+    database_port_old: ~
+    database_name_old: readerself
+    database_userv: root
+    database_password_old: ~
+
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: ~
