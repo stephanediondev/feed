@@ -12,9 +12,6 @@ self.addEventListener('push', function(event) {
             self.registration.showNotification(data.title, {
                 body: data.body,
                 icon: 'icon-192x192.png',
-                actions: [
-                    //{action: 'action1', title: 'test action', icon: 'icon-192x192.png'}
-                ],
                 tag: 'readerself'
             })
         );
@@ -24,17 +21,18 @@ self.addEventListener('push', function(event) {
 self.addEventListener('notificationclick', function (event) {
     event.notification.close();
 
-    /*event.waitUntil(
+    event.waitUntil(
         clients.matchAll({
             type: "window"
         }).then(function(clientList) {
-            if(clientList.length && 'focus' in client) {
+            for(var i=0;i<clientList.length;i++) {
+                var client = clientList[i];
                 return client.focus();
             }
 
             if(clients.openWindow) {
-                return clients.openWindow('/#items/unread');
+                return clients.openWindow('./#items/unread');
             }
         })
-    );*/
+    );
 });

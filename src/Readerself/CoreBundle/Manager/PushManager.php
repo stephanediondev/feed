@@ -66,17 +66,37 @@ class PushManager extends AbstractManager
 
     public function start()
     {
-        $sql = 'SELECT psh.id, psh.agent, (SELECT COUNT(itm.id) FROM item AS itm WHERE itm.feed_id IN ( SELECT subscribe.feed_id FROM action_feed_member AS subscribe WHERE subscribe.member_id = psh.member_id AND subscribe.action_id = 3) AND itm.id NOT IN (SELECT unread.item_id FROM action_item_member AS unread WHERE unread.member_id = psh.member_id AND unread.action_id = 1) ) AS unread FROM push AS psh';
+        $sql = 'SELECT psh.id, psh.agent, psh.member_id,
+            (SELECT COUNT(itm.id) FROM item AS itm WHERE
+                itm.feed_id IN ( SELECT subscribe.feed_id FROM action_feed_member AS subscribe WHERE subscribe.member_id = psh.member_id AND subscribe.action_id = 3)
+                AND itm.id NOT IN (SELECT unread.item_id FROM action_item_member AS unread WHERE unread.member_id = psh.member_id AND unread.action_id = 1) )
+            AS unread
+        FROM push AS psh';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll();
 
         foreach($results as $result) {
             if($result['unread'] > 0) {
-                $payload = json_encode(array(
+
+                $sql = 'SELECT itm.title AS item_title, fed.title AS feed_title FROM item AS itm LEFT JOIN feed AS fed ON fed.id = itm.feed_id WHERE
+                    itm.feed_id IN ( SELECT subscribe.feed_id FROM action_feed_member AS subscribe WHERE subscribe.member_id = :member_id AND subscribe.action_id = 3)
+                    AND itm.id NOT IN (SELECT unread.item_id FROM action_item_member AS unread WHERE unread.member_id = :member_id AND unread.action_id = 1)
+                ORDER BY itm.date DESC LIMIT 0,3';
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue('member_id', $result['member_id']);
+                $stmt->execute();
+                $lastList = $stmt->fetchAll();
+
+                $body = [];
+                foreach($lastList as $last) {
+                    $body[] = html_entity_decode($last['item_title'].' ('.$last['feed_title'].')');
+                }
+
+                $payload = json_encode([
                     'title' => $result['unread'].' unread items',
-                    'body' => '',
-                ));
+                    'body' => implode("\r\n", $body),
+                ]);
                 $this->send($result['id'], $payload);
             }
         }
