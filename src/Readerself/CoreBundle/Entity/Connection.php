@@ -239,7 +239,8 @@ class Connection
             'token' => $this->getToken(),
             'agent' => $this->getAgent(),
             'ip' => $this->getIp(),
-            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : $this->getDateCreated(),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : '',
+            'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : '',
         ];
     }
 }

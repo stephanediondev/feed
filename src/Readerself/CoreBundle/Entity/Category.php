@@ -89,7 +89,7 @@ class Category
         return [
             'id' => $this->getId(),
             'title' => $this->getTitle(),
-            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : $this->getDateCreated(),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : '',
         ];
     }
 }

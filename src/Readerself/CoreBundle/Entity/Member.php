@@ -271,7 +271,7 @@ class Member implements AdvancedUserInterface, \Serializable
             'id' => $this->getId(),
             'email' => $this->getEmail(),
             'administrator' => $this->getAdministrator(),
-            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : $this->getDateCreated(),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : '',
         ];
     }
 }
