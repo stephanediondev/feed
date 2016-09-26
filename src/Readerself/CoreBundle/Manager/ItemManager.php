@@ -68,7 +68,7 @@ class ItemManager extends AbstractManager
 
     public function readAll($parameters = [])
     {
-        foreach($this->em->getRepository('ReaderselfCoreBundle:Item')->getList($parameters) as $result) {
+        foreach($this->em->getRepository('ReaderselfCoreBundle:Item')->getList($parameters)->getResult() as $result) {
             $sql = 'SELECT id FROM action_item_member WHERE member_id = :member_id AND item_id = :item_id AND action_id = :action_id';
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue('member_id', $parameters['member']->getId());
