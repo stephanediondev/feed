@@ -17,12 +17,6 @@ class MigrationManager extends AbstractManager
             $results = $stmt->fetchAll();
 
             foreach($results as $result) {
-                //REMOVE after production OK
-                if($result['mbr_id'] == 3) {
-                    continue;
-                }
-                $result['mbr_id'] = 1;
-
                 $item_id = $this->insertItem($result);
 
                 //test star
