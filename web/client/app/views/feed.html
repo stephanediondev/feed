@@ -102,7 +102,7 @@
 </script>
 
 <script type="text/template" id="view-feed-read">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="feeds">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{trans 'title.all_feeds'}}
@@ -118,7 +118,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed">
         <div class="mdl-card__title">
             <h1 class="favicon mdl-card__title-text"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>
                 {{ entry.title }}
@@ -184,7 +184,7 @@
 
     {{#each entry.collections as |collection collection_index|}}
         {{#if collection.error }}
-            <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone connected">
+            <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone connected" id="collection-{{ collection.id }}">
                 <div class="mdl-card__title">
                     <h1 class="mdl-card__title-text">
                         {{ collection.date_created }}
@@ -202,7 +202,7 @@
 </script>
 
 <script type="text/template" id="view-feed-update">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="feeds">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{trans 'title.all_feeds'}}
@@ -218,7 +218,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed">
         <form action="#feed/read/{{ entry.id }}" data-query="/feed/{{ entry.id }}" method="PUT">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
@@ -251,7 +251,7 @@
 </script>
 
 <script type="text/template" id="view-feeds-import">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="feeds">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{trans 'title.all_feeds'}}
@@ -267,7 +267,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feeds-import">
         <form action="#feeds/recent" data-query="/feeds/import" method="POST" enctype="multipart/form-data">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
