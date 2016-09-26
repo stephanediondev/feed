@@ -487,6 +487,11 @@ $(document).ready(function() {
         item_down();
     });
 
+    $(document).on('click', '.action-top', function(event) {
+        event.preventDefault();
+        scrollTo('#top');
+    });
+
     $(document).on('click', '.more', function(event) {
         event.preventDefault();
         $(this).parent().parent().remove();
