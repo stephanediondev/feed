@@ -7,18 +7,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MigrationCommand extends ContainerAwareCommand
+class MigrationStarredItemsCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('readerself:migration')
+            ->setName('readerself:migration:starred_items')
             ->setDescription('Migration from old version: get starred items')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('readerself_core_manager_migration')->start();
+        $this->getContainer()->get('readerself_core_manager_migration')->start('starred_items');
     }
 }

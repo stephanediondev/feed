@@ -7,57 +7,61 @@ use PDO;
 
 class MigrationManager extends AbstractManager
 {
-    public function start()
+    public function start($type)
     {
         //retrieve starred items
-        $sql = 'SELECT fav.*, itm.*, auh.*, fed.* FROM favorites AS fav LEFT JOIN items AS itm ON itm.itm_id = fav.itm_id LEFT JOIN authors AS auh ON auh.auh_id = itm.auh_id LEFT JOIN feeds AS fed ON fed.fed_id = itm.fed_id WHERE fed.fed_id IS NOT NULL';
-        $stmt = $this->connectionOld->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
-
-        foreach($results as $result) {
-            //REMOVE after production OK
-            if($result['mbr_id'] == 3) {
-                continue;
-            }
-            $result['mbr_id'] = 5;
-
-            $item_id = $this->insertItem($result);
-
-            //test star
-            $sql = 'SELECT id FROM action_item_member WHERE member_id = :member_id AND item_id = :item_id AND action_id = :action_id';
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue('member_id', $result['mbr_id']);
-            $stmt->bindValue('item_id', $item_id);
-            $stmt->bindValue('action_id', 2);
+        if($type == 'starred_items') {
+            $sql = 'SELECT fav.*, itm.*, auh.*, fed.* FROM favorites AS fav LEFT JOIN items AS itm ON itm.itm_id = fav.itm_id LEFT JOIN authors AS auh ON auh.auh_id = itm.auh_id LEFT JOIN feeds AS fed ON fed.fed_id = itm.fed_id WHERE fed.fed_id IS NOT NULL';
+            $stmt = $this->connectionOld->prepare($sql);
             $stmt->execute();
-            $test = $stmt->fetch();
+            $results = $stmt->fetchAll();
 
-            if($test) {
-            } else {
-                $insertActionItemMember = [
-                    'member_id' => $result['mbr_id'],
-                    'item_id' => $item_id,
-                    'action_id' => 2,
-                    'date_created' => $result['fav_datecreated'],
-                ];
-                $this->insert('action_item_member', $insertActionItemMember);
+            foreach($results as $result) {
+                //REMOVE after production OK
+                if($result['mbr_id'] == 3) {
+                    continue;
+                }
+                $result['mbr_id'] = 1;
+
+                $item_id = $this->insertItem($result);
+
+                //test star
+                $sql = 'SELECT id FROM action_item_member WHERE member_id = :member_id AND item_id = :item_id AND action_id = :action_id';
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue('member_id', $result['mbr_id']);
+                $stmt->bindValue('item_id', $item_id);
+                $stmt->bindValue('action_id', 2);
+                $stmt->execute();
+                $test = $stmt->fetch();
+
+                if($test) {
+                } else {
+                    $insertActionItemMember = [
+                        'member_id' => $result['mbr_id'],
+                        'item_id' => $item_id,
+                        'action_id' => 2,
+                        'date_created' => $result['fav_datecreated'],
+                    ];
+                    $this->insert('action_item_member', $insertActionItemMember);
+                }
             }
         }
 
         //retrieve all items
-        $sql = 'SELECT itm.*, auh.*, fed.* FROM items AS itm LEFT JOIN authors AS auh ON auh.auh_id = itm.auh_id LEFT JOIN feeds AS fed ON fed.fed_id = itm.fed_id WHERE fed.fed_id IS NOT NULL LIMIT 0,25000';
-        $stmt = $this->connectionOld->prepare($sql);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
-
-        foreach($results as $result) {
-            $item_id = $this->insertItem($result);
-
-            $sql = 'DELETE FROM items WHERE itm_id = :itm_id';
+        if($type == 'all_items') {
+            $sql = 'SELECT itm.*, auh.*, fed.* FROM items AS itm LEFT JOIN authors AS auh ON auh.auh_id = itm.auh_id LEFT JOIN feeds AS fed ON fed.fed_id = itm.fed_id WHERE fed.fed_id IS NOT NULL LIMIT 0,25000';
             $stmt = $this->connectionOld->prepare($sql);
-            $stmt->bindValue('itm_id', $result['itm_id']);
             $stmt->execute();
+            $results = $stmt->fetchAll();
+
+            foreach($results as $result) {
+                $item_id = $this->insertItem($result);
+
+                $sql = 'DELETE FROM items WHERE itm_id = :itm_id';
+                $stmt = $this->connectionOld->prepare($sql);
+                $stmt->bindValue('itm_id', $result['itm_id']);
+                $stmt->execute();
+            }
         }
     }
 
