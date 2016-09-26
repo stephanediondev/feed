@@ -1,6 +1,6 @@
 <!-- Member -->
 <script type="text/template" id="view-login">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="login">
         <form action="#items/unread" data-query="/login" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
@@ -23,7 +23,7 @@
 </script>
 
 <script type="text/template" id="view-profile">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="profile">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ entry.email }}
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="profile-pinboard">
         <form action="#profile" data-query="/pinboard" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
@@ -81,7 +81,7 @@
 </script>
 
 <script type="text/template" id="view-profile-connections">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="profile">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ entry.email }}
@@ -100,7 +100,7 @@
     </div>
 
     {{#each entries as |connection connection_index|}}
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="connection-{{ connection.id }}">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     {{ connection.type }}
@@ -123,7 +123,7 @@
 </script>
 
 <script type="text/template" id="view-profile-notifications">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="profile">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ entry.email }}
@@ -142,7 +142,7 @@
     </div>
 
     {{#each entries as |notification notification_index|}}
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="notification-{{ connection.id }}">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     {{ notification.endpoint }}
@@ -165,7 +165,7 @@
 </script>
 
 <script type="text/template" id="view-profile-update">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="profile">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{ entry.email }}
@@ -183,7 +183,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="profile-form">
         <form action="#profile/update" data-query="/profile/update" method="PUT">
             <div class="mdl-card__supporting-text">
                 <p>
