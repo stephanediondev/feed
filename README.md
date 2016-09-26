@@ -30,10 +30,13 @@ chmod +x install.sh && chmod +x update.sh
 ./install.sh
 ```
 
-Add to cron (hourly)
+Set commands
 ```text
-cd /path-to-installation && bin/console readerself:collection
-cd /path-to-installation && bin/console readerself:elasticsearch
+crontab -e
+# m h dom mon dow command
+0 * * * * cd /path-to-installation && bin/console readerself:collection
+#10 * * * * cd /path-to-installation && bin/console readerself:notification
+#20 * * * * cd /path-to-installation && bin/console readerself:elasticsearch
 ```
 
 ####Update
