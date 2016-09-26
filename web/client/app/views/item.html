@@ -1,7 +1,7 @@
 <!-- Item -->
 <script type="text/template" id="view-items">
     {{#if entry }}
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="title-entry">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     <a href="#{{ entry_entity }}/read/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a>
@@ -10,7 +10,7 @@
         </div>
     {{/if}}
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="title-entries">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 {{#if current_title }}

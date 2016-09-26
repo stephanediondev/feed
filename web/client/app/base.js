@@ -341,7 +341,7 @@ function item_up() {
 }
 function item_down() {
     if($('.mdl-grid .card-selected').length === 0) {
-        itm_id = $('.mdl-grid').find('.item:first').attr('id');
+        itm_id = $('.mdl-grid').find('.mdl-card:first').attr('id');
         next = $('#' + itm_id).attr('id');
         $('#' + itm_id).addClass('card-selected');
     } else {
