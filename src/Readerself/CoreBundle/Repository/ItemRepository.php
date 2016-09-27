@@ -58,39 +58,11 @@ class ItemRepository extends AbstractRepository
             $memberSet = false;
 
             if(isset($parameters['unread']) == 1 && $parameters['unread']) {
-                $feeds = [];
-                $queryFeeds = $em->createQueryBuilder();
-                $queryFeeds->addSelect('IDENTITY(act_fed_mbr.feed)');
-                $queryFeeds->from('ReaderselfCoreBundle:ActionFeedMember', 'act_fed_mbr');
-
-                $queryFeeds->andWhere('act_fed_mbr.action = :action');
-                $queryFeeds->setParameter(':action', 3);
-
-                $queryFeeds->andWhere('act_fed_mbr.member = :member');
-                $queryFeeds->setParameter(':member', $parameters['member']);
-
-                $getQueryFeeds = $queryFeeds->getQuery();
-
-                /*if($cacheDriver = $this->cacheDriver()) {
-                    $cacheDriver->setNamespace('readerself.feeds.');
-                    $getQueryFeeds->setResultCacheDriver($cacheDriver);
-                    $getQueryFeeds->setResultCacheLifetime(86400);
-                }*/
-
-                $results = $getQueryFeeds->getResult();
-                foreach($results as $result) {
-                    $feeds[] = $result[1];
-                }
-
-                if(count($feeds) > 0) {
-                    $query->andWhere('itm.feed IN ('.implode(',', $feeds).')');
-                }
-
-                /*$query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
+                $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
                 if(!$memberSet) {
                     $query->setParameter(':member', $parameters['member']);
                     $memberSet = true;
-                }*/
+                }
 
                 $query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
                 if(!$memberSet) {

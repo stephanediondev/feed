@@ -437,14 +437,14 @@ $(document).ready(function() {
         } else {
             event.preventDefault();
         }
-        id = $(this).parent().parent().attr('for');
+        id = $(this).parents('.mdl-dialog').attr('for');
 
         var dialog = document.querySelector('dialog[for="' + id + '"]');
         dialog.close();
     });
 
     $(document).on('click', 'dialog .close_submit', function() {
-        id = $(this).parent().parent().parent().attr('for');
+        id = $(this).parents('.mdl-dialog').attr('for');
 
         var dialog = document.querySelector('dialog[for="' + id + '"]');
         dialog.close();

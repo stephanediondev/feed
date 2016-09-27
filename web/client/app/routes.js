@@ -28,7 +28,6 @@ routes['#feeds/recent'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', que
 
 routes['#feeds/import'] = {view: 'view-feeds-import', query: false, title: 'import_feeds'};
 
-routes['#feed/create'] = {view: 'view-feed-create', query: false};
 routes['#feed/read/{id}'] = {view: 'view-feed-read', query: '/feed/{id}'};
 routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}'};
 routes['#feed/subscribe/{id}'] = {view: false, query: '/feed/subscribe/{id}'};

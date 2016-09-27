@@ -95,7 +95,7 @@ $(document).bind('keydown', function(event) {
                 }
             //a
             } else {
-                loadRoute('#feed/create');
+                //loadRoute('#feed/create');
             }
 
         //nothing when meta + k
