@@ -25,6 +25,7 @@ INSERT INTO `action` VALUES(4, 'read_all', '2016-09-09 20:46:23');
 INSERT INTO `action` VALUES(5, 'exclude', '2016-09-09 20:46:23');
 INSERT INTO `action` VALUES(7, 'email', '2016-09-09 20:46:23');
 INSERT INTO `action` VALUES(11, 'elasticsearch', '2016-09-09 20:46:23');
+INSERT INTO `action` VALUES(12, 'unread', '2016-09-09 20:46:23');
 
 --
 -- Dumping data for table `member`

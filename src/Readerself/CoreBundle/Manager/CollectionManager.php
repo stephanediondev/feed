@@ -102,12 +102,6 @@ class CollectionManager extends AbstractManager
             $accessToken = $fbApp->getAccessToken();
         }
 
-        $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue('date', (new \Datetime())->format('Y-m-d H:i:s'));
-        $stmt->execute();
-        $feeds_result = $stmt->fetchAll();
-
         $feeds = 0;
         $errors = 0;
         $time = 0;
@@ -122,6 +116,12 @@ class CollectionManager extends AbstractManager
             'date_modified' => (new \Datetime())->format('Y-m-d H:i:s'),
         ];
         $collection_id = $this->insert('collection', $insertCollection);
+
+        $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('date', (new \Datetime())->format('Y-m-d H:i:s'));
+        $stmt->execute();
+        $feeds_result = $stmt->fetchAll();
 
         foreach($feeds_result as $feed) {
             $feeds++;
@@ -240,6 +240,24 @@ class CollectionManager extends AbstractManager
         $updateCollection['memory'] = memory_get_peak_usage();
         $updateCollection['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
         $this->update('collection', $updateCollection, $collection_id);
+
+        $sql = 'SELECT id FROM member';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $members_result = $stmt->fetchAll();
+
+        foreach($members_result as $member) {
+            $sql = 'INSERT INTO action_item_member (item_id, member_id, action_id, date_created) SELECT itm.id, :member_id, :action_id, :date_created FROM item AS itm
+                WHERE itm.feed_id IN (SELECT subscribed.feed_id FROM action_feed_member AS subscribed WHERE subscribed.member_id = :member_id AND subscribed.action_id = 3)
+                AND itm.id NOT IN (SELECT alreadyRead.item_id FROM action_item_member AS alreadyRead WHERE alreadyRead.member_id = :member_id AND alreadyRead.action_id IN(1,4))
+                AND itm.id NOT IN (SELECT unreadSaved.item_id FROM action_item_member AS unreadSaved WHERE unreadSaved.member_id = :member_id AND unreadSaved.action_id = 12)
+            ';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue('member_id', $member['id']);
+            $stmt->bindValue('action_id', 12);
+            $stmt->bindValue('date_created', (new \Datetime())->format('Y-m-d H:i:s'));
+            $stmt->execute();
+        }
     }
 
     public function setNextCollection($feed)

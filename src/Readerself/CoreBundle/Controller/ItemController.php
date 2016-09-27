@@ -258,6 +258,7 @@ class ItemController extends AbstractController
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);
+        $actionUnread = $this->actionManager->getOne(['title' => 'unread']);
 
         if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
             'action' => $action,
@@ -267,6 +268,22 @@ class ItemController extends AbstractController
             $this->actionManager->actionItemMemberManager->remove($actionItemMember);
             $data['action'] = 'un'.$case;
             $data['action_reverse'] = $case;
+
+            if($case == 'read') {
+                if($actionItemMemberUnread = $this->actionManager->actionItemMemberManager->getOne([
+                    'action' => $actionUnread,
+                    'item' => $item,
+                    'member' => $memberConnected,
+                ])) {
+                } else {
+                    $actionItemMemberUnread = $this->actionManager->actionItemMemberManager->init();
+                    $actionItemMemberUnread->setAction($actionUnread);
+                    $actionItemMemberUnread->setItem($item);
+                    $actionItemMemberUnread->setMember($memberConnected);
+
+                    $this->actionManager->actionItemMemberManager->persist($actionItemMemberUnread);
+                }
+            }
 
             if($case == 'star') {
                 if($connectionPinboard) {
@@ -282,6 +299,16 @@ class ItemController extends AbstractController
             $this->actionManager->actionItemMemberManager->persist($actionItemMember);
             $data['action'] = $case;
             $data['action_reverse'] = 'un'.$case;
+
+            if($case == 'read') {
+                if($actionItemMemberUnread = $this->actionManager->actionItemMemberManager->getOne([
+                    'action' => $actionUnread,
+                    'item' => $item,
+                    'member' => $memberConnected,
+                ])) {
+                    $this->actionManager->actionItemMemberManager->remove($actionItemMemberUnread);
+                }
+            }
 
             if($case == 'star') {
                 if($connectionPinboard) {

@@ -36,7 +36,18 @@ class ItemRepository extends AbstractRepository
 
         $query = $em->createQueryBuilder();
         $query->addSelect('itm.id');
-        $query->from('ReaderselfCoreBundle:Item', 'itm');
+
+        if(isset($parameters['member']) == 1 && $parameters['member'] && isset($parameters['unread']) == 1 && $parameters['unread']) {
+            $query->from('ReaderselfCoreBundle:ActionItemMember', 'act_itm_mbr');
+            $query->leftJoin('act_itm_mbr.item', 'itm');
+
+        } else if(isset($parameters['member']) == 1 && $parameters['member'] && isset($parameters['starred']) == 1 && $parameters['starred']) {
+            $query->from('ReaderselfCoreBundle:ActionItemMember', 'act_itm_mbr');
+            $query->leftJoin('act_itm_mbr.item', 'itm');
+
+        } else {
+            $query->from('ReaderselfCoreBundle:Item', 'itm');
+        }
 
         if(isset($parameters['feed']) == 1) {
             $query->andWhere('itm.feed = :feed');
@@ -58,25 +69,39 @@ class ItemRepository extends AbstractRepository
             $memberSet = false;
 
             if(isset($parameters['unread']) == 1 && $parameters['unread']) {
-                $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
+                $query->andWhere('act_itm_mbr.member = :member');
+                $query->andWhere('act_itm_mbr.action = 12');
                 if(!$memberSet) {
                     $query->setParameter(':member', $parameters['member']);
                     $memberSet = true;
                 }
 
-                $query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
+                /*$query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
                 if(!$memberSet) {
                     $query->setParameter(':member', $parameters['member']);
                     $memberSet = true;
-                }
+                }*/
+
+                /*$query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
+                if(!$memberSet) {
+                    $query->setParameter(':member', $parameters['member']);
+                    $memberSet = true;
+                }*/
             }
 
             if(isset($parameters['starred']) == 1 && $parameters['starred']) {
-                $query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM ReaderselfCoreBundle:ActionItemMember AS starred WHERE starred.member = :member AND starred.action = 2)');
+                $query->andWhere('act_itm_mbr.member = :member');
+                $query->andWhere('act_itm_mbr.action = 2');
                 if(!$memberSet) {
                     $query->setParameter(':member', $parameters['member']);
                     $memberSet = true;
                 }
+
+                /*$query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM ReaderselfCoreBundle:ActionItemMember AS starred WHERE starred.member = :member AND starred.action = 2)');
+                if(!$memberSet) {
+                    $query->setParameter(':member', $parameters['member']);
+                    $memberSet = true;
+                }*/
             }
         }
 

@@ -86,6 +86,13 @@ class ItemManager extends AbstractManager
                     'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                 ];
                 $this->insert('action_item_member', $insertActionItemMember);
+
+                $sql = 'DELETE FROM action_item_member WHERE action_id = :action_id AND item_id = :item_id AND member_id = :member_id';
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue('action_id', 12);
+                $stmt->bindValue('item_id', $result['id']);
+                $stmt->bindValue('member_id', $parameters['member']->getId());
+                $stmt->execute();
             }
         }
     }
