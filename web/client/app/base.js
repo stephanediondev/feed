@@ -276,6 +276,7 @@ function loadRoute(key, parameters) {
                             if(parameters.link) {
                                 parameters.link.text($.i18n._(data_return.action_reverse));
                                 parameters.link.addClass(data_return.action);
+                                parameters.link.removeClass(data_return.action_reverse);
                             }
                             if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
                                 if(parameters.snackbar) {
@@ -447,6 +448,26 @@ $(document).ready(function() {
 
         var dialog = document.querySelector('dialog[for="' + id + '"]');
         dialog.close();
+    });
+
+    $('.mdl-grid').on('click', '.item .mdl-card__title h1 a, .item .mdl-card__supporting-text a', function(event) {
+        var ref = $(this).parents('.item');
+        ref.attr('target', '_blank');
+        if(ref.hasClass('collapse')) {
+            event.preventDefault();
+            if(ref.hasClass('collapse')) {
+                ref.removeClass('collapse');
+                ref.addClass('expand');
+            } else {
+                ref.removeClass('expand');
+                ref.addClass('collapse');
+            }
+        }
+        var action = ref.find('.action-read');
+        if(action.hasClass('read')) {
+        } else {
+            action.trigger('click');
+        }
     });
 
     $(document).on('click', '.action-toggle', function(event) {
