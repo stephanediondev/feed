@@ -378,9 +378,9 @@ function item_down() {
 }
 
 $(document).ready(function() {
-    var sourceHeader = $('#view-header').text();
-    var templateHeader = Handlebars.compile(sourceHeader);
-    $('.mdl-layout__header').html(templateHeader());
+    var sourceNavigation = $('#view-navigation').text();
+    var templateNavigation = Handlebars.compile(sourceNavigation);
+    $('.mdl-navigation').html(templateNavigation());
 
     var sourceAside = $('#view-aside').text();
     var templateAside = Handlebars.compile(sourceAside);
