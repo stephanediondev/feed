@@ -523,7 +523,14 @@ $(document).ready(function() {
 
         var form = $(this);
 
-        if(form.attr('id') == 'form-search-feeds') {
+        if(form.hasClass('share-form')) {
+            choice = form.find('input[type="radio"]:checked').val();
+            if(choice) {
+                window.open(choice, 'share');
+            }
+            
+
+        } else if(form.attr('id') == 'form-search-feeds') {
             loadRoute('#feeds/search/result', {page: 1, q: form.find('input[name="q"]').val()});
 
         } else if(form.attr('id') == 'form-search-categories') {
