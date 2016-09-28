@@ -398,6 +398,10 @@ class FeedController extends AbstractController
                     $this->actionManager->actionFeedMemberManager->remove($actionFeedMemberReverse);
                 }
             }
+
+            if($case == 'subscribe') {
+                $this->memberManager->syncUnread($memberConnected->getid());
+            }
         }
 
         $data['entry'] = $feed->toArray();
