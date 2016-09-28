@@ -66,7 +66,7 @@ class CategoryControllerTest extends AbstractControllerTest
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test exclude
-        $this->client->request('GET', '/api/category/exclude/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('GET', '/api/category/action/exclude/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $content = json_decode($response->getContent(), true);
@@ -76,7 +76,7 @@ class CategoryControllerTest extends AbstractControllerTest
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test include
-        $this->client->request('GET', '/api/category/exclude/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('GET', '/api/category/action/exclude/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $content = json_decode($response->getContent(), true);
@@ -144,14 +144,14 @@ class CategoryControllerTest extends AbstractControllerTest
     public function testExclude()
     {
         // test 403
-        $this->client->request('GET', '/api/category/exclude/0');
+        $this->client->request('GET', '/api/category/action/exclude/0');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test 404
-        $this->client->request('GET', '/api/category/exclude/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('GET', '/api/category/action/exclude/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());

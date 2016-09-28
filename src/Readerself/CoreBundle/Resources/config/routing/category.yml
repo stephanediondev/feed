@@ -37,7 +37,7 @@ readerself_api_categories:
     methods: GET
 
 readerself_api_category_exclude:
-    path: /category/exclude/{id}
+    path: /category/action/exclude/{id}
     defaults:
         _controller: "readerself_core_controller_category:excludeAction"
     requirements:

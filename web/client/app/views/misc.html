@@ -7,8 +7,8 @@
 
         <li class="mdl-list__item"><a href="#feeds" class="load-route">{{trans 'title.all_feeds'}}</a></li>
         <li class="mdl-list__item connected"><a href="#feeds/subscribed" class="load-route">{{trans 'title.subscribed_feeds'}}</a></li>
-        <li class="mdl-list__item connected"><a href="#feeds/not_subscribed" class="load-route">{{trans 'title.unsubscribed_feeds'}}</a></li>
-        <li class="mdl-list__item connected"><a href="#feeds/errors" class="load-route">{{trans 'title.feeds_witherrors'}}</a></li>
+        <li class="mdl-list__item connected"><a href="#feeds/unsubscribed" class="load-route">{{trans 'title.unsubscribed_feeds'}}</a></li>
+        <li class="mdl-list__item connected"><a href="#feeds/witherrors" class="load-route">{{trans 'title.feeds_witherrors'}}</a></li>
 
         <li class="mdl-list__item"><a href="#categories" class="load-route">{{trans 'title.all_categories'}}</a></li>
         <li class="mdl-list__item connected"><a href="#categories/excluded" class="load-route">{{trans 'title.excluded_categories'}}</a></li>
@@ -82,10 +82,10 @@
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_feeds'}}</a>
                 <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_feeds'}}</a>
-                <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.subscribed_feeds'}}</a>
-                <a href="#feeds/not_subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.unsubscribed_feeds'}}</a>
-                <a href="#feeds/errors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
-                <a href="#search/feeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_feeds'}}</a>
+                <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.subscribed_feeds'}}</a>
+                <a href="#feeds/unsubscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unsubscribed_feeds'}}</a>
+                <a href="#feeds/witherrors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
+                <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_feeds'}}</a>
             </div>
         </form>
     </div>
@@ -115,8 +115,8 @@
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#categories" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_categories'}}</a>
                 <a href="#categories/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_categories'}}</a>
-                <a href="#categories/feed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.categories_usedbyfeeds'}}</a>
-                <a href="#search/categories" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_categories'}}</a>
+                <a href="#categories/usedbyfeeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.categories_usedbyfeeds'}}</a>
+                <a href="#categories/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_categories'}}</a>
             </div>
         </form>
     </div>
@@ -147,7 +147,7 @@
                 <a href="#items" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_items'}}</a>
                 <a href="#items/unread" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unread_items'}}</a>
                 <a href="#items/starred" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.starred_items'}}</a>
-                <a href="#search/items" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_items'}}</a>
+                <a href="#items/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_items'}}</a>
             </div>
         </form>
     </div>

@@ -188,7 +188,7 @@ class CollectionManager extends AbstractManager
                     $sp_feed->sanitize->strip_htmltags = $stripTagsNew;
                     $sp_feed->set_feed_url($this->toAscii($feed['link']));
                     $sp_feed->enable_cache(false);
-                    $sp_feed->set_timeout(5);
+                    $sp_feed->set_timeout(10);
                     $sp_feed->force_feed(true);
                     $sp_feed->init();
                     $sp_feed->handle_content_type();

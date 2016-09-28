@@ -54,7 +54,7 @@ class ItemControllerTest extends AbstractControllerTest
     public function testRead()
     {
         // test 404
-        $this->client->request('GET', '/api/item/read/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('GET', '/api/item/action/read/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -64,14 +64,14 @@ class ItemControllerTest extends AbstractControllerTest
     public function testStar()
     {
         // test 403
-        $this->client->request('GET', '/api/item/star/0');
+        $this->client->request('GET', '/api/item/action/star/0');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test 404
-        $this->client->request('GET', '/api/item/star/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('GET', '/api/item/action/star/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());
@@ -81,14 +81,14 @@ class ItemControllerTest extends AbstractControllerTest
     public function testEmail()
     {
         // test 403
-        $this->client->request('POST', '/api/item/email/0');
+        $this->client->request('POST', '/api/item/action/email/0');
         $response = $this->client->getResponse();
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test 404
-        $this->client->request('POST', '/api/item/email/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('POST', '/api/item/action/email/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());

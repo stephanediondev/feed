@@ -12,7 +12,7 @@ readerself_api_items_markallasread:
     methods: GET
 
 readerself_api_item_read:
-    path: /item/read/{id}
+    path: /item/action/read/{id}
     defaults:
         _controller: "readerself_core_controller_item:readAction"
     requirements:
@@ -20,7 +20,7 @@ readerself_api_item_read:
     methods: GET
 
 readerself_api_item_star:
-    path: /item/star/{id}
+    path: /item/action/star/{id}
     defaults:
         _controller: "readerself_core_controller_item:starAction"
     requirements:
@@ -36,7 +36,7 @@ readerself_api_item_readability:
     methods: GET
 
 readerself_api_item_email:
-    path: /item/email/{id}
+    path: /item/action/email/{id}
     defaults:
         _controller: "readerself_core_controller_item:emailAction"
     requirements:

@@ -524,13 +524,13 @@ $(document).ready(function() {
         var form = $(this);
 
         if(form.attr('id') == 'form-search-feeds') {
-            loadRoute('#search/feeds/result', {page: 1, q: form.find('input[name="q"]').val()});
+            loadRoute('#feeds/search/result', {page: 1, q: form.find('input[name="q"]').val()});
 
         } else if(form.attr('id') == 'form-search-categories') {
-            loadRoute('#search/categories/result', {page: 1, q:form.find('input[name="q"]').val()});
+            loadRoute('#categories/search/result', {page: 1, q:form.find('input[name="q"]').val()});
 
         } else if(form.attr('id') == 'form-search-items') {
-            loadRoute('#search/items/result', {page: 1, q:form.find('input[name="q"]').val()});
+            loadRoute('#items/search/result', {page: 1, q:form.find('input[name="q"]').val()});
 
         } else if(form.data('query')) {
 

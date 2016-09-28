@@ -4,7 +4,7 @@
         <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="title-entry">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    <a href="#{{ entry_entity }}/read/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a>
+                    <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a>
                 </h1>
             </div>
         </div>
@@ -24,7 +24,7 @@
             <a href="#items" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_items'}}</a>
             <a href="#items/unread" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unread_items'}}</a>
             <a href="#items/starred" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.starred_items'}}</a>
-            <a href="#search/items" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_items'}}</a>
+            <a href="#items/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_items'}}</a>
             <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog connected" id="dialog-mark_all_as_read" title="{{trans 'shortcut_shift_a'}}">{{trans 'mark_all_as_read'}}</button>
             <dialog class="mdl-dialog" for="dialog-mark_all_as_read">
                 <div class="mdl-dialog__content">
@@ -88,18 +88,18 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             {{#if entry.read }}
-                <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read connected" title="m">{{trans 'unread'}}</a>
+                <a href="#item/action/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read connected" title="m">{{trans 'unread'}}</a>
             {{else}}
                 {{#if entry.read_all }}
-                    <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read connected" title="m">{{trans 'unread'}}</a>
+                    <a href="#item/action/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read read connected" title="m">{{trans 'unread'}}</a>
                 {{else}}
-                    <a href="#item/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read connected" title="m">{{trans 'read'}}</a>
+                    <a href="#item/action/read/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-read connected" title="m">{{trans 'read'}}</a>
                 {{/if}}
             {{/if}}
             {{#if entry.star }}
-                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star connected" title="s">{{trans 'unstar'}}</a>
+                <a href="#item/action/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star connected" title="s">{{trans 'unstar'}}</a>
             {{else}}
-                <a href="#item/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star connected" title="s">{{trans 'star'}}</a>
+                <a href="#item/action/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star connected" title="s">{{trans 'star'}}</a>
             {{/if}}
 
             <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog action-share" id="dialog-share-{{ entry.id }}" title="{{trans 'shortcut_shift_s'}}">{{trans 'share'}}</button>

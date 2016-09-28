@@ -62,8 +62,11 @@ class FeedController extends AbstractController
 
         $parameters = [];
 
-        if($request->query->get('errors')) {
-            $parameters['errors'] = true;
+        if($request->query->get('witherrors')) {
+            if(!$memberConnected) {
+                return new JsonResponse($data, 403);
+            }
+            $parameters['witherrors'] = true;
         }
 
         if($request->query->get('subscribed')) {
@@ -74,11 +77,11 @@ class FeedController extends AbstractController
             $parameters['member'] = $memberConnected;
         }
 
-        if($request->query->get('not_subscribed')) {
+        if($request->query->get('unsubscribed')) {
             if(!$memberConnected) {
                 return new JsonResponse($data, 403);
             }
-            $parameters['not_subscribed'] = true;
+            $parameters['unsubscribed'] = true;
             $parameters['member'] = $memberConnected;
         }
 

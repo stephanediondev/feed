@@ -37,7 +37,7 @@ readerself_api_feeds:
     methods: GET
 
 readerself_api_feed_subscribe:
-    path: /feed/subscribe/{id}
+    path: /feed/action/subscribe/{id}
     defaults:
         _controller: "readerself_core_controller_feed:subscribeAction"
     requirements:
