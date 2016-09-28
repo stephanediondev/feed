@@ -349,8 +349,24 @@ class FeedController extends AbstractController
         ])) {
             $this->actionManager->actionFeedMemberManager->remove($actionFeedMember);
 
-            $data['action'] = 'un'.$case;
-            $data['action_reverse'] = $case;
+            $data['action'] = $action->getReverse()->getTitle();
+            $data['action_reverse'] = $action->getTitle();
+
+            if($action->getReverse()) {
+                if($actionFeedMemberReverse = $this->actionManager->actionFeedMemberManager->getOne([
+                    'action' => $action->getReverse(),
+                    'feed' => $feed,
+                    'member' => $memberConnected,
+                ])) {
+                } else {
+                    $actionFeedMemberReverse = $this->actionManager->actionFeedMemberManager->init();
+                    $actionFeedMemberReverse->setAction($action->getReverse());
+                    $actionFeedMemberReverse->setFeed($feed);
+                    $actionFeedMemberReverse->setMember($memberConnected);
+                    $this->actionManager->actionFeedMemberManager->persist($actionFeedMemberReverse);
+                }
+            }
+
         } else {
             $actionFeedMember = $this->actionManager->actionFeedMemberManager->init();
             $actionFeedMember->setAction($action);
@@ -358,12 +374,18 @@ class FeedController extends AbstractController
             $actionFeedMember->setMember($memberConnected);
             $this->actionManager->actionFeedMemberManager->persist($actionFeedMember);
 
-            if($case == 'subscribe') {
-                $this->memberManager->syncUnread($memberConnected->getid());
-            }
+            $data['action'] = $action->getTitle();
+            $data['action_reverse'] = $action->getReverse()->getTitle();
 
-            $data['action'] = $case;
-            $data['action_reverse'] = 'un'.$case;
+            if($action->getReverse()) {
+                if($actionFeedMemberReverse = $this->actionManager->actionFeedMemberManager->getOne([
+                    'action' => $action->getReverse(),
+                    'feed' => $feed,
+                    'member' => $memberConnected,
+                ])) {
+                    $this->actionManager->actionFeedMemberManager->remove($actionFeedMemberReverse);
+                }
+            }
         }
 
         $data['entry'] = $feed->toArray();

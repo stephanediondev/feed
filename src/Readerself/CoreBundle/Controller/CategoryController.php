@@ -287,7 +287,7 @@ class CategoryController extends AbstractController
             if($action->getReverse()) {
                 if($actionCategoryMemberReverse = $this->actionManager->actionCategoryMemberManager->getOne([
                     'action' => $action->getReverse(),
-                    'item' => $category,
+                    'category' => $category,
                     'member' => $memberConnected,
                 ])) {
                 } else {
@@ -312,7 +312,7 @@ class CategoryController extends AbstractController
             if($action->getReverse()) {
                 if($actionCategoryMemberReverse = $this->actionManager->actionCategoryMemberManager->getOne([
                     'action' => $action->getReverse(),
-                    'item' => $category,
+                    'category' => $category,
                     'member' => $memberConnected,
                 ])) {
                     $this->actionManager->actionCategoryMemberManager->remove($actionCategoryMemberReverse);
