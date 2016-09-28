@@ -1,0 +1,56 @@
+Readerself\CoreBundle\Entity\ActionAuthor:
+    repositoryClass: Readerself\CoreBundle\Repository\ActionAuthorRepository
+    type: entity
+    table: action_author
+    indexes:
+        author_id:
+            columns:
+                - author_id
+        action_id:
+            columns:
+                - action_id
+    uniqueConstraints:
+        action_id_author_id:
+            columns:
+                - action_id
+                - author_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        dateCreated:
+            type: datetime
+            nullable: false
+            column: date_created
+    manyToOne:
+        author:
+            targetEntity: Author
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                author_id:
+                    nullable: false
+                    referencedColumnName: id
+                    onDelete: "cascade"
+            orphanRemoval: false
+        action:
+            targetEntity: Action
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                action_id:
+                    nullable: false
+                    referencedColumnName: id
+                    onDelete: "cascade"
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

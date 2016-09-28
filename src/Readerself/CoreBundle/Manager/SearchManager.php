@@ -94,6 +94,33 @@ class SearchManager extends AbstractManager
                 $this->insert('action_category', $insertActionCategory);
             }
 
+            //authors
+            $sql = 'SELECT aut.*
+            FROM author AS aut
+            WHERE aut.id NOT IN (SELECT act_aut.author_id FROM action_author AS act_aut WHERE act_aut.author_id = aut.id AND act_aut.action_id = 11)
+            LIMIT 0,2000';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll();
+
+            foreach($results as $result) {
+                $action = 'PUT';
+
+                $path = '/'.$this->getIndex().'/author/'.$result['id'];
+
+                $body = array(
+                    'title' => $result['title'],
+                );
+                $this->query($action, $path, $body);
+
+                $insertActionCategory = [
+                    'author_id' => $result['id'],
+                    'action_id' => 11,
+                    'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                ];
+                $this->insert('action_author', $insertActionCategory);
+            }
+
             //items
             $sql = 'SELECT itm.*, auh.title AS author_title, fed.title AS feed_title, fed.language AS feed_language
             FROM item AS itm
@@ -216,6 +243,24 @@ class SearchManager extends AbstractManager
             $path = '/'.$this->getIndex().'/_mapping/category';
             $body = array(
                 'category' => array(
+                    'properties' => array( 
+                        'title' => array( 
+                            'type' => 'string',
+                            'fields' => array(
+                                'sort' => array( 
+                                    'type' => 'string',
+                                    'analyzer' => 'case_insensitive_sort',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            );
+            $result = $this->query('PUT', $path, $body);
+
+            $path = '/'.$this->getIndex().'/_mapping/author';
+            $body = array(
+                'author' => array(
                     'properties' => array( 
                         'title' => array( 
                             'type' => 'string',

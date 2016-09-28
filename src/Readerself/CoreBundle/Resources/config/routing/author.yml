@@ -35,3 +35,9 @@ readerself_api_authors:
     defaults:
         _controller: "readerself_core_controller_author:indexAction"
     methods: GET
+
+readerself_api_search_authors:
+    path: /authors/search
+    defaults:
+        _controller: "readerself_core_controller_search:authorsAction"
+    methods: GET

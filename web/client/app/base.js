@@ -45,6 +45,11 @@ $.ajax({
             var result = $.i18n._(key);
             return new Handlebars.SafeString(result);
         });
+
+        Handlebars.registerHelper('score', function(key) {
+            key = key * 100;
+            return Math.round(key) / 100;
+        });
     }
 });
 
@@ -540,6 +545,9 @@ $(document).ready(function() {
 
         } else if(form.attr('id') == 'form-search-categories') {
             loadRoute('#categories/search/result', {page: 1, q:form.find('input[name="q"]').val()});
+
+        } else if(form.attr('id') == 'form-search-authors') {
+            loadRoute('#authors/search/result', {page: 1, q:form.find('input[name="q"]').val()});
 
         } else if(form.attr('id') == 'form-search-items') {
             loadRoute('#items/search/result', {page: 1, q:form.find('input[name="q"]').val()});

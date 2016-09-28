@@ -67,6 +67,7 @@
                 <a href="#feed/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
             </h1>
             <div class="mdl-card__subtitle-text">
+                {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{score entry.score }}</span>{{/if}}
                 {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
                 <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
                 {{#if entry.categories }}

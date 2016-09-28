@@ -54,7 +54,7 @@
                 <a title="{{trans 'shortcut_v'}}" class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
             </h1>
             <div class="mdl-card__subtitle-text">
-                {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{ entry.score }}</span>{{/if}}
+                {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{score entry.score }}</span>{{/if}}
                 <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date }}"></span></span>
                 <a href="#items/feed/{{ entry.feed.id }}" class="load-route mdl-navigation__link"><i class="material-icons">rss_feed</i>{{ entry.feed.title }}</a>
                 {{#if entry.author }}<a href="#items/author/{{ entry.author.id }}" class="load-route mdl-navigation__link"><i class="material-icons">person</i>{{ entry.author.title }}</a>{{/if}}

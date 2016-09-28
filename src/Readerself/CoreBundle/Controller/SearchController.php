@@ -79,6 +79,28 @@ class SearchController extends AbstractController
     }
 
     /**
+     * Search authors.
+     *
+     * @ApiDoc(
+     *     section="Category",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     *     parameters={
+     *         {"name"="q", "dataType"="string", "required"=true, "description"="query"},
+     *         {"name"="sortField", "dataType"="string", "required"=false, "format"="""score"", ""title"" or ""date"", default ""score""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""ASC"" or ""DESC"", default ""DESC""", "description"=""},
+     *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
+     *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""20""", "description"="items per page"},
+     *     },
+     * )
+     */
+    public function authorsAction(Request $request)
+    {
+        return $this->getResults($request, 'author');
+    }
+
+    /**
      * Search items.
      *
      * @ApiDoc(
@@ -160,6 +182,26 @@ class SearchController extends AbstractController
             }
 
             if($type == 'category') {
+                $body['query'] = array(
+                    'query_string' => array(
+                        'fields' => ['title'],
+                        'query' => $request->query->get('q'),
+                    ),
+                );
+                $body['highlight'] = array(
+                    //'encoder' => 'html',
+                    'pre_tags' => array('<strong>'),
+                    'post_tags' => array('</strong>'),
+                    'fields' => array(
+                        'title' => array(
+                            'fragment_size' => 255,
+                            'number_of_fragments' => 1,
+                        ),
+                    ),
+                );
+            }
+
+            if($type == 'author') {
                 $body['query'] = array(
                     'query_string' => array(
                         'fields' => ['title'],
@@ -280,6 +322,24 @@ class SearchController extends AbstractController
                         } else {
                             $action = 'DELETE';
                             $path = '/'.$this->searchManager->getIndex().'/category/'.$hit['_id'];
+                            $body = [];
+                            $this->searchManager->query($action, $path, $body);
+                        }
+                    }
+
+                    if($type == 'author') {
+                        $author = $this->get('readerself_core_manager_author')->getOne(['id' => $hit['_id']]);
+                        if($author) {
+                            $data['entries'][$index] = $author->toArray();
+                            $data['entries'][$index]['score'] = $hit['_score'];
+
+                            if(isset($hit['highlight']['title']) == 1) {
+                                $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
+                            }
+                            $index++;
+                        } else {
+                            $action = 'DELETE';
+                            $path = '/'.$this->searchManager->getIndex().'/author/'.$hit['_id'];
                             $body = [];
                             $this->searchManager->query($action, $path, $body);
                         }
