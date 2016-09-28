@@ -45,9 +45,7 @@ class AuthorController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
-        }
+        $memberConnected = $this->validateToken($request);
 
         $parameters = [];
 
@@ -155,7 +153,7 @@ class AuthorController extends AbstractController
     {
         $data = [];
         if(!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            //return new JsonResponse($data, 403);
         }
 
         $author = $this->authorManager->getOne(['id' => $id]);
