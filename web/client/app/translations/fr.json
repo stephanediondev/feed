@@ -14,13 +14,15 @@
     "forgotpassword": "Forgot password?",
     "profile": "Profil",
 
-    "create": "Créer",
+    "add": "Ajouter",
     "update": "Modifier",
     "delete": "Supprimer",
 
-    "add": "Ajouter",
+    "refresh": "Recharg.",
+    "up": "Précédent",
+    "down": "Suivant",
+    "top": "Haut",
     "cancel": "Annuler",
-    "confirm": "Confirmer",
     "more": "Plus",
     "search": "Rechercher",
 
@@ -35,9 +37,9 @@
 
     "share": "Partager",
 
-    "POST": "Ajouté",
-    "PUT": "Modifié",
-    "DELETE": "Supprimé",
+    "POST": "Ajouter",
+    "PUT": "Modifier",
+    "DELETE": "Supprimer",
 
     "mark_all_as_read": "Marquer tout lu",
 

@@ -2,7 +2,7 @@ a:link, a:visited {
     color: #757575;
 }
 .mdl-layout__header {
-    min-height: auto;
+    min-height: inherit;
 }
 .mdl-layout__drawer-button {
     height: auto;

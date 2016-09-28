@@ -14,13 +14,15 @@
     "forgotpassword": "Forgot password?",
     "profile": "Profile",
 
-    "create": "Create",
+    "add": "Add",
     "update": "Update",
     "delete": "Delete",
 
-    "add": "Add",
+    "refresh": "Refresh",
+    "up": "&nbsp;&nbsp;Up&nbsp;&nbsp;",
+    "down": "Down",
+    "top": "&nbsp;Top&nbsp;",
     "cancel": "Cancel",
-    "confirm": "Confirm",
     "more": "More",
     "search": "Search",
 
@@ -35,9 +37,9 @@
 
     "share": "Share",
 
-    "POST": "Created",
-    "PUT": "Updated",
-    "DELETE": "Deleted",
+    "POST": "Add",
+    "PUT": "Update",
+    "DELETE": "Delete",
 
     "mark_all_as_read": "Mark all as read",
 

@@ -1,4 +1,17 @@
 <!-- Misc. -->
+<script type="text/template" id="view-header">
+    <div class="mdl-layout__header-row">
+        <div class="mdl-layout-spacer">
+        </div>
+        <a href="#login" class="load-route anonymous mdl-button mdl-color--pink mdl-color-text--white">{{trans 'login'}}</a>
+
+        <a href="#" class="action-refresh connected mdl-button mdl-color--pink mdl-color-text--white" title="r">{{trans 'refresh'}}</a>
+        <a href="#" class="action-up connected mdl-button mdl-color--pink mdl-color-text--white" title="k">{{trans 'up'}}</a>
+        <a href="#" class="action-down connected mdl-button mdl-color--pink mdl-color-text--white" title="j">{{trans 'down'}}</a>
+        <a href="#" class="action-top connected mdl-button mdl-color--pink mdl-color-text--white" title="k">{{trans 'top'}}</a>
+    </div>
+</script>
+
 <script type="text/template" id="view-aside">
     <ul class="mdl-list">
         <li class="mdl-list__item"><a href="#items" class="load-route" title="{{trans 'shortcut_g_then_a'}}">{{trans 'title.all_items'}}</a></li>

@@ -280,7 +280,7 @@ function loadRoute(key, parameters) {
                             }
                             if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
                                 if(parameters.snackbar) {
-                                    setSnackbar(data_return.action + ' ' + data_return.entry.title);
+                                    setSnackbar($.i18n._(data_return.action) + ' ' + data_return.entry.title);
                                 }
                             }
                             /*if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
@@ -377,9 +377,13 @@ function item_down() {
 }
 
 $(document).ready(function() {
-    var source = $('#view-aside').text();
-    var template = Handlebars.compile(source);
-    $('.mdl-layout__drawer').html(template());
+    var sourceHeader = $('#view-header').text();
+    var templateHeader = Handlebars.compile(sourceHeader);
+    $('.mdl-layout__header').html(templateHeader());
+
+    var sourceAside = $('#view-aside').text();
+    var templateAside = Handlebars.compile(sourceAside);
+    $('.mdl-layout__drawer').html(templateAside());
 
     setPositions();
 
