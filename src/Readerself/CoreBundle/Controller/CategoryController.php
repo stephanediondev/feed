@@ -256,6 +256,11 @@ class CategoryController extends AbstractController
      */
     public function excludeAction(Request $request, $id)
     {
+        return $this->setAction('exclude', $request, $id);
+    }
+
+    private function setAction($case, Request $request, $id)
+    {
         $data = [];
         if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
@@ -267,7 +272,7 @@ class CategoryController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        $action = $this->actionManager->getOne(['title' => 'exclude']);
+        $action = $this->actionManager->getOne(['title' => $case]);
 
         if($actionCategoryMember = $this->actionManager->actionCategoryMemberManager->getOne([
             'action' => $action,
@@ -275,17 +280,44 @@ class CategoryController extends AbstractController
             'member' => $memberConnected,
         ])) {
             $this->actionManager->actionCategoryMemberManager->remove($actionCategoryMember);
-            $data['action'] = 'include';
-            $data['action_reverse'] = 'exclude';
+
+            $data['action'] = $action->getReverse()->getTitle();
+            $data['action_reverse'] = $action->getTitle();
+
+            if($action->getReverse()) {
+                if($actionCategoryMemberReverse = $this->actionManager->actionCategoryMemberManager->getOne([
+                    'action' => $action->getReverse(),
+                    'item' => $category,
+                    'member' => $memberConnected,
+                ])) {
+                } else {
+                    $actionCategoryMemberReverse = $this->actionManager->actionCategoryMemberManager->init();
+                    $actionCategoryMemberReverse->setAction($action->getReverse());
+                    $actionCategoryMemberReverse->setCategory($category);
+                    $actionCategoryMemberReverse->setMember($memberConnected);
+                    $this->actionManager->actionCategoryMemberManager->persist($actionCategoryMemberReverse);
+                }
+            }
+
         } else {
             $actionCategoryMember = $this->actionManager->actionCategoryMemberManager->init();
             $actionCategoryMember->setAction($action);
             $actionCategoryMember->setCategory($category);
             $actionCategoryMember->setMember($memberConnected);
-
             $this->actionManager->actionCategoryMemberManager->persist($actionCategoryMember);
-            $data['action'] = 'exclude';
-            $data['action_reverse'] = 'include';
+
+            $data['action'] = $action->getTitle();
+            $data['action_reverse'] = $action->getReverse()->getTitle();
+
+            if($action->getReverse()) {
+                if($actionCategoryMemberReverse = $this->actionManager->actionCategoryMemberManager->getOne([
+                    'action' => $action->getReverse(),
+                    'item' => $category,
+                    'member' => $memberConnected,
+                ])) {
+                    $this->actionManager->actionCategoryMemberManager->remove($actionCategoryMemberReverse);
+                }
+            }
         }
 
         $data['entry'] = $category->toArray();

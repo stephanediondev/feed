@@ -348,6 +348,7 @@ class FeedController extends AbstractController
             'member' => $memberConnected,
         ])) {
             $this->actionManager->actionFeedMemberManager->remove($actionFeedMember);
+
             $data['action'] = 'un'.$case;
             $data['action_reverse'] = $case;
         } else {
@@ -355,7 +356,6 @@ class FeedController extends AbstractController
             $actionFeedMember->setAction($action);
             $actionFeedMember->setFeed($feed);
             $actionFeedMember->setMember($memberConnected);
-
             $this->actionManager->actionFeedMemberManager->persist($actionFeedMember);
 
             if($case == 'subscribe') {

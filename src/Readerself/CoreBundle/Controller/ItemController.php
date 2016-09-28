@@ -265,8 +265,9 @@ class ItemController extends AbstractController
             'member' => $memberConnected,
         ])) {
             $this->actionManager->actionItemMemberManager->remove($actionItemMember);
-            $data['action'] = 'un'.$case;
-            $data['action_reverse'] = $case;
+
+            $data['action'] = $action->getReverse()->getTitle();
+            $data['action_reverse'] = $action->getTitle();
 
             if($action->getReverse()) {
                 if($actionItemMemberReverse = $this->actionManager->actionItemMemberManager->getOne([
@@ -279,7 +280,6 @@ class ItemController extends AbstractController
                     $actionItemMemberReverse->setAction($action->getReverse());
                     $actionItemMemberReverse->setItem($item);
                     $actionItemMemberReverse->setMember($memberConnected);
-
                     $this->actionManager->actionItemMemberManager->persist($actionItemMemberReverse);
                 }
             }
@@ -294,10 +294,10 @@ class ItemController extends AbstractController
             $actionItemMember->setAction($action);
             $actionItemMember->setItem($item);
             $actionItemMember->setMember($memberConnected);
-
             $this->actionManager->actionItemMemberManager->persist($actionItemMember);
-            $data['action'] = $case;
-            $data['action_reverse'] = 'un'.$case;
+
+            $data['action'] = $action->getTitle();
+            $data['action_reverse'] = $action->getReverse()->getTitle();
 
             if($action->getReverse()) {
                 if($actionItemMemberReverse = $this->actionManager->actionItemMemberManager->getOne([
