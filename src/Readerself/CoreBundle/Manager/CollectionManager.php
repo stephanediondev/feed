@@ -12,7 +12,7 @@ class CollectionManager extends AbstractManager
 {
     protected $simplepie;
 
-    protected $pushManager;
+    protected $memberManager;
 
     protected $facebookEnabled;
 
@@ -22,10 +22,10 @@ class CollectionManager extends AbstractManager
 
     public function __construct(
         Simplepie $simplepie,
-        PushManager $pushManager
+        MemberManager $memberManager
     ) {
         $this->simplepie = $simplepie;
-        $this->pushManager = $pushManager;
+        $this->memberManager = $memberManager;
 
         $this->cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
     }
@@ -247,16 +247,7 @@ class CollectionManager extends AbstractManager
         $members_result = $stmt->fetchAll();
 
         foreach($members_result as $member) {
-            $sql = 'INSERT INTO action_item_member (item_id, member_id, action_id, date_created) SELECT itm.id, :member_id, :action_id, :date_created FROM item AS itm
-                WHERE itm.feed_id IN (SELECT subscribed.feed_id FROM action_feed_member AS subscribed WHERE subscribed.member_id = :member_id AND subscribed.action_id = 3)
-                AND itm.id NOT IN (SELECT alreadyRead.item_id FROM action_item_member AS alreadyRead WHERE alreadyRead.member_id = :member_id AND alreadyRead.action_id IN(1,4))
-                AND itm.id NOT IN (SELECT unreadSaved.item_id FROM action_item_member AS unreadSaved WHERE unreadSaved.member_id = :member_id AND unreadSaved.action_id = 12)
-            ';
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue('member_id', $member['id']);
-            $stmt->bindValue('action_id', 12);
-            $stmt->bindValue('date_created', (new \Datetime())->format('Y-m-d H:i:s'));
-            $stmt->execute();
+            $this->memberManager->syncUnread($member['id']);
         }
     }
 

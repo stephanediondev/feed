@@ -357,6 +357,11 @@ class FeedController extends AbstractController
             $actionFeedMember->setMember($memberConnected);
 
             $this->actionManager->actionFeedMemberManager->persist($actionFeedMember);
+
+            if($case == 'subscribe') {
+                $this->memberManager->syncUnread($memberConnected->getid());
+            }
+
             $data['action'] = $case;
             $data['action_reverse'] = 'un'.$case;
         }

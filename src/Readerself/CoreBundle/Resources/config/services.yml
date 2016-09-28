@@ -81,7 +81,7 @@ services:
         public: true
         arguments:
             - "@simplepie"
-            - "@readerself_core_manager_push"
+            - "@readerself_core_manager_member"
         calls:
             - [ "setFacebook", [ "%facebook_enabled%", "%facebook_id%", "%facebook_secret%" ] ]
 

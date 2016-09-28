@@ -76,11 +76,11 @@ class ItemRepository extends AbstractRepository
                     $memberSet = true;
                 }
 
-                /*$query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
+                $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM ReaderselfCoreBundle:ActionFeedMember AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
                 if(!$memberSet) {
                     $query->setParameter(':member', $parameters['member']);
                     $memberSet = true;
-                }*/
+                }
 
                 /*$query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
                 if(!$memberSet) {

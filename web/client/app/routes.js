@@ -20,7 +20,7 @@ routes['#feeds/witherrors'] = {view: 'view-feeds', view_unit: 'view-feeds-unit',
 routes['#feeds/search'] = {view: 'view-search-feeds', query: false, title: 'title.search_feeds'};
 routes['#feeds/search/result'] = {view: 'view-search-feeds', view_unit: 'view-feeds-unit', query: '/feeds/search', title: 'title.search_feeds'};
 
-routes['#feed/action/subscribe/{id}'] = {view: false, query: '/feed/subscribe/{id}'};
+routes['#feed/action/subscribe/{id}'] = {view: false, query: '/feed/action/subscribe/{id}'};
 
 routes['#feeds/category/{id}'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?category={id}'};
 
@@ -61,7 +61,7 @@ routes['#categories/usedbyfeeds'] = {view: 'view-categories', view_unit: 'view-c
 routes['#categories/search'] = {view: 'view-search-categories', query: false, title: 'title.search_categories'};
 routes['#categories/search/result'] = {view: 'view-search-categories', view_unit: 'view-categories-unit', query: '/categories/search', title: 'title.search_categories'};
 
-routes['#category/action/exclude/{id}'] = {view: false, query: '/category/exclude/{id}'};
+routes['#category/action/exclude/{id}'] = {view: false, query: '/category/action/exclude/{id}'};
 
 routes['#category/{id}'] = {view: 'view-category-read', query: '/category/{id}'};
 
