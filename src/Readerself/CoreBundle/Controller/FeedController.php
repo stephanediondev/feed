@@ -9,6 +9,7 @@ use Readerself\CoreBundle\Controller\AbstractController;
 
 use Readerself\CoreBundle\Manager\FeedManager;
 use Readerself\CoreBundle\Manager\CategoryManager;
+use Readerself\CoreBundle\Manager\AuthorManager;
 use Readerself\CoreBundle\Manager\ActionManager;
 
 use Readerself\CoreBundle\Form\Type\FeedType;
@@ -22,15 +23,19 @@ class FeedController extends AbstractController
 
     protected $categoryManager;
 
+    protected $authorManager;
+
     protected $actionManager;
 
     public function __construct(
         FeedManager $feedManager,
         CategoryManager $categoryManager,
+        AuthorManager $authorManager,
         ActionManager $actionManager
     ) {
         $this->feedManager = $feedManager;
         $this->categoryManager = $categoryManager;
+        $this->authorManager = $authorManager;
         $this->actionManager = $actionManager;
     }
 
@@ -50,8 +55,9 @@ class FeedController extends AbstractController
      *         {"name"="recent", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="recent feeds"},
      *         {"name"="subscribed", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="subscribed feeds"},
      *         {"name"="unsubscribed", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="unsubscribed feeds"},
-     *         {"name"="errors", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="feeds with errors"},
+     *         {"name"="witherrors", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="feeds with errors"},
      *         {"name"="category", "dataType"="integer", "required"=false, "format"="category ID", "description"="feeds by category"},
+     *         {"name"="author", "dataType"="integer", "required"=false, "format"="author ID", "description"="feeds by author"},
      *     },
      * )
      */
@@ -89,6 +95,12 @@ class FeedController extends AbstractController
             $parameters['category'] = (int) $request->query->get('category');
             $data['entry'] = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])->toArray();
             $data['entry_entity'] = 'category';
+        }
+
+        if($request->query->get('author')) {
+            $parameters['author'] = (int) $request->query->get('author');
+            $data['entry'] = $this->authorManager->getOne(['id' => (int) $request->query->get('author')])->toArray();
+            $data['entry_entity'] = 'author';
         }
 
         $fields = ['title' => 'fed.title', 'date_created' => 'fed.dateCreated'];

@@ -20,6 +20,7 @@ services:
         arguments:
             - "@readerself_core_manager_feed"
             - "@readerself_core_manager_category"
+            - "@readerself_core_manager_author"
             - "@readerself_core_manager_action"
 
     readerself_core_controller_item:
@@ -51,6 +52,7 @@ services:
         parent: "readerself_core_controller_abstract"
         arguments:
             - "@readerself_core_manager_author"
+            - "@readerself_core_manager_feed"
 
     readerself_core_controller_push:
         class: Readerself\CoreBundle\Controller\PushController

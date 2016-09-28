@@ -41,6 +41,11 @@ class AuthorRepository extends AbstractRepository
         $query->addSelect('aut.id');
         $query->from('ReaderselfCoreBundle:Author', 'aut');
 
+        if(isset($parameters['feed']) == 1) {
+            $query->andWhere('aut.id IN (SELECT IDENTITY(item.author) FROM ReaderselfCoreBundle:Item AS item WHERE item.feed = :feed)');
+            $query->setParameter(':feed', $parameters['feed']);
+        }
+
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('aut.id');
 

@@ -23,6 +23,7 @@ routes['#feeds/search/result'] = {view: 'view-search-feeds', view_unit: 'view-fe
 routes['#feed/action/subscribe/{id}'] = {view: false, query: '/feed/action/subscribe/{id}'};
 
 routes['#feeds/category/{id}'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?category={id}'};
+routes['#feeds/author/{id}'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?author={id}'};
 
 routes['#feed/{id}'] = {view: 'view-feed-read', query: '/feed/{id}'};
 
@@ -72,5 +73,7 @@ routes['#authors/recent'] = {view: 'view-authors', view_unit: 'view-authors-unit
 
 routes['#authors/search'] = {view: 'view-search-authors', query: false, title: 'title.search_authors'};
 routes['#authors/search/result'] = {view: 'view-search-authors', view_unit: 'view-authors-unit', query: '/authors/search', title: 'title.search_authors'};
+
+routes['#authors/feed/{id}'] = {view: 'view-authors', view_unit: 'view-authors-unit', query: '/authors?feed={id}'};
 
 routes['#author/{id}'] = {view: 'view-author-read', query: '/author/{id}'};

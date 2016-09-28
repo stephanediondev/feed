@@ -147,6 +147,7 @@
             {{/if}}
         </div>
         <div class="mdl-card__actions mdl-card--border">
+            <a href="#authors/feed/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_authors'}}</a>
             <a href="#items/feed/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
             {{#if entry.subscribe }}
                 <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'unsubscribe'}}</a>

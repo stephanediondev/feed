@@ -1,8 +1,22 @@
 <script type="text/template" id="view-authors">
+    {{#if entry }}
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="title-entry">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a>
+                </h1>
+            </div>
+        </div>
+    {{/if}}
+
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="title-entries">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{trans current_title}} ({{ entries_total }})
+                {{#if current_title }}
+                    {{trans current_title}} ({{ entries_total }})
+                {{else}}
+                    {{trans 'title.all_authors'}} ({{ entries_total }})
+                {{/if}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
@@ -25,6 +39,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#items/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
+            <a href="#feeds/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_feeds'}}</a>
         </div>
     </div>
 </script>
@@ -54,6 +69,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#items/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
+            <a href="#feeds/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_feeds'}}</a>
         </div>
     </div>
 </script>

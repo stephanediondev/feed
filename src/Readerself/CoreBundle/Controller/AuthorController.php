@@ -7,6 +7,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 use Readerself\CoreBundle\Manager\AuthorManager;
+use Readerself\CoreBundle\Manager\FeedManager;
 
 use Readerself\CoreBundle\Form\Type\AuthorType;
 
@@ -14,10 +15,14 @@ class AuthorController extends AbstractController
 {
     protected $authorManager;
 
+    protected $feedManager;
+
     public function __construct(
-        AuthorManager $authorManager
+        AuthorManager $authorManager,
+        FeedManager $feedManager
     ) {
         $this->authorManager = $authorManager;
+        $this->feedManager = $feedManager;
     }
 
     /**
@@ -31,7 +36,9 @@ class AuthorController extends AbstractController
      *     parameters={
      *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
-     *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="categories per page"},
+     *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="authors per page"},
+     *         {"name"="recent", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="recent authors"},
+     *         {"name"="feed", "dataType"="integer", "required"=false, "format"="feed ID", "description"="authors by feed"},
      *     },
      * )
      */
@@ -43,6 +50,12 @@ class AuthorController extends AbstractController
         }
 
         $parameters = [];
+
+        if($request->query->get('feed')) {
+            $parameters['feed'] = (int) $request->query->get('feed');
+            $data['entry'] = $this->get('readerself_core_manager_feed')->getOne(['id' => (int) $request->query->get('feed')])->toArray();
+            $data['entry_entity'] = 'feed';
+        }
 
         $fields = ['title' => 'aut.title', 'date_created' => 'aut.dateCreated'];
         if($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
