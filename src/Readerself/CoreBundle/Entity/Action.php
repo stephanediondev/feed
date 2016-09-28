@@ -22,6 +22,10 @@ class Action
      */
     private $dateCreated;
 
+    /**
+     * @var \Readerself\CoreBundle\Entity\Action
+     */
+    private $reverse;
 
     /**
      * Get id
@@ -79,6 +83,30 @@ class Action
     public function getDateCreated()
     {
         return $this->dateCreated;
+    }
+
+    /**
+     * Set reverse
+     *
+     * @param \Readerself\CoreBundle\Entity\Action $reverse
+     *
+     * @return Action
+     */
+    public function setReverse(\Readerself\CoreBundle\Entity\Action $reverse = null)
+    {
+        $this->reverse = $reverse;
+
+        return $this;
+    }
+
+    /**
+     * Get reverse
+     *
+     * @return \Readerself\CoreBundle\Entity\Action
+     */
+    public function getReverse()
+    {
+        return $this->reverse;
     }
 
     /**

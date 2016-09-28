@@ -258,7 +258,6 @@ class ItemController extends AbstractController
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);
-        $actionUnread = $this->actionManager->getOne(['title' => 'unread']);
 
         if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
             'action' => $action,
@@ -269,19 +268,19 @@ class ItemController extends AbstractController
             $data['action'] = 'un'.$case;
             $data['action_reverse'] = $case;
 
-            if($case == 'read') {
-                if($actionItemMemberUnread = $this->actionManager->actionItemMemberManager->getOne([
-                    'action' => $actionUnread,
+            if($action->getReverse()) {
+                if($actionItemMemberReverse = $this->actionManager->actionItemMemberManager->getOne([
+                    'action' => $action->getReverse(),
                     'item' => $item,
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionItemMemberUnread = $this->actionManager->actionItemMemberManager->init();
-                    $actionItemMemberUnread->setAction($actionUnread);
-                    $actionItemMemberUnread->setItem($item);
-                    $actionItemMemberUnread->setMember($memberConnected);
+                    $actionItemMemberReverse = $this->actionManager->actionItemMemberManager->init();
+                    $actionItemMemberReverse->setAction($action->getReverse());
+                    $actionItemMemberReverse->setItem($item);
+                    $actionItemMemberReverse->setMember($memberConnected);
 
-                    $this->actionManager->actionItemMemberManager->persist($actionItemMemberUnread);
+                    $this->actionManager->actionItemMemberManager->persist($actionItemMemberReverse);
                 }
             }
 
@@ -300,13 +299,13 @@ class ItemController extends AbstractController
             $data['action'] = $case;
             $data['action_reverse'] = 'un'.$case;
 
-            if($case == 'read') {
-                if($actionItemMemberUnread = $this->actionManager->actionItemMemberManager->getOne([
-                    'action' => $actionUnread,
+            if($action->getReverse()) {
+                if($actionItemMemberReverse = $this->actionManager->actionItemMemberManager->getOne([
+                    'action' => $action->getReverse(),
                     'item' => $item,
                     'member' => $memberConnected,
                 ])) {
-                    $this->actionManager->actionItemMemberManager->remove($actionItemMemberUnread);
+                    $this->actionManager->actionItemMemberManager->remove($actionItemMemberReverse);
                 }
             }
 

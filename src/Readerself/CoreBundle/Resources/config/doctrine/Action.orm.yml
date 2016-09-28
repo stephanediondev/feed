@@ -26,4 +26,16 @@ Readerself\CoreBundle\Entity\Action:
             type: datetime
             nullable: false
             column: date_created
-    lifecycleCallbacks: {  }
+    oneToOne:
+        reverse:
+            targetEntity: Action
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                reverse:
+                    referencedColumnName: id
+                    onDelete: "set null"
+            orphanRemoval: false
+lifecycleCallbacks: {  }
