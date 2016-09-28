@@ -41,7 +41,7 @@ class AuthorRepository extends AbstractRepository
         $query->addSelect('aut.id');
         $query->from('ReaderselfCoreBundle:Author', 'aut');
 
-        $query->addOrderBy('aut.title');
+        $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('aut.id');
 
         return $query->getQuery();

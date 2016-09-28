@@ -1,4 +1,3 @@
-<!-- Misc. -->
 <script type="text/template" id="view-header">
     <div class="mdl-layout__header-row">
         <div class="mdl-layout-spacer">
@@ -127,6 +126,7 @@
             </div>
             <div class="mdl-card__actions mdl-card--border">
                 <a href="#categories" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_categories'}}</a>
+                <a href="#categories/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_categories'}}</a>
                 <a href="#categories/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_categories'}}</a>
                 <a href="#categories/usedbyfeeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.categories_usedbyfeeds'}}</a>
                 <a href="#categories/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_categories'}}</a>
@@ -161,6 +161,36 @@
                 <a href="#items/unread" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unread_items'}}</a>
                 <a href="#items/starred" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.starred_items'}}</a>
                 <a href="#items/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_items'}}</a>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script type="text/template" id="view-search-authors">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="search-authors">
+        <form action="" method="GET" id="form-search-authors">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                {{#if entries_total }}
+                    {{trans 'title.search_authors'}} ({{ entries_total }})
+                {{else}}
+                    {{trans 'title.search_authors'}}
+                {{/if}}
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <label for="q" class="required">{{trans 'q'}}</label>
+                    <input type="text" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                </p>
+                <p>
+                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'search'}}</button>
+                </p>
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+                <a href="#authors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_authors'}}</a>
+                <a href="#authors/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_authors'}}</a>
+                <a href="#authors/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_authors'}}</a>
             </div>
         </form>
     </div>

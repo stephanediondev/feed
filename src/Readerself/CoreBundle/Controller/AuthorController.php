@@ -44,6 +44,20 @@ class AuthorController extends AbstractController
 
         $parameters = [];
 
+        $fields = ['title' => 'aut.title', 'date_created' => 'aut.dateCreated'];
+        if($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
+            $parameters['sortField'] = $fields[$request->query->get('sortField')];
+        } else {
+            $parameters['sortField'] = 'aut.title';
+        }
+
+        $directions = ['ASC', 'DESC'];
+        if($request->query->get('sortDirection') && in_array($request->query->get('sortDirection'), $directions)) {
+            $parameters['sortDirection'] = $request->query->get('sortDirection');
+        } else {
+            $parameters['sortDirection'] = 'ASC';
+        }
+
         $paginator= $this->get('knp_paginator');
         $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
         $pagination = $paginator->paginate(

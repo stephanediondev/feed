@@ -104,5 +104,15 @@
     "button.starred_items": "Favoris",
 
     "title.search_items": "Recherche d'items",
-    "button.search_items": "Recherche"
+    "button.search_items": "Recherche",
+
+
+    "title.all_authors": "Tous les auteurs",
+    "button.all_authors": "Tous",
+
+    "title.recent_authors": "Auteurs récents",
+    "button.recent_authors": "Récents",
+
+    "title.search_authors": "Recherche d'auteurs",
+    "button.search_authors": "Recherche"
 }

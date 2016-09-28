@@ -105,5 +105,15 @@
     "button.starred_items": "Starred",
 
     "title.search_items": "Search items",
-    "button.search_items": "Search"
+    "button.search_items": "Search",
+
+
+    "title.all_authors": "All authors",
+    "button.all_authors": "All",
+
+    "title.recent_authors": "Recent authors",
+    "button.recent_authors": "Recent",
+
+    "title.search_authors": "Search authors",
+    "button.search_authors": "Search"
 }

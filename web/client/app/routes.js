@@ -65,3 +65,12 @@ routes['#category/action/exclude/{id}'] = {view: false, query: '/category/action
 
 routes['#category/{id}'] = {view: 'view-category-read', query: '/category/{id}'};
 
+
+//Author
+routes['#authors'] = {view: 'view-authors', view_unit: 'view-authors-unit', query: '/authors', title: 'title.all_authors'};
+routes['#authors/recent'] = {view: 'view-authors', view_unit: 'view-authors-unit', query: '/authors?sortField=date_created&sortDirection=DESC', title: 'title.recent_authors'};
+
+routes['#authors/search'] = {view: 'view-search-authors', query: false, title: 'title.search_authors'};
+routes['#authors/search/result'] = {view: 'view-search-authors', view_unit: 'view-authors-unit', query: '/authors/search', title: 'title.search_authors'};
+
+routes['#author/{id}'] = {view: 'view-author-read', query: '/author/{id}'};

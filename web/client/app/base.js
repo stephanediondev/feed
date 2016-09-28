@@ -54,6 +54,7 @@ var files = [
     'app/views/item.html',
     'app/views/feed.html',
     'app/views/category.html',
+    'app/views/author.html',
 ];
 function loadFile(url) {
     $.ajax({

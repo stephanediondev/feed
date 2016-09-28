@@ -1,0 +1,59 @@
+<script type="text/template" id="view-authors">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="title-entries">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{trans current_title}} ({{ entries_total }})
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#authors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_authors'}}</a>
+            <a href="#authors/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_authors'}}</a>
+            <a href="#authors/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_authors'}}</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="view-authors-unit">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="author-{{ entry.id }}">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                <a href="#author/{{ entry.id }}" class="load-route">{{{ entry.title }}}</a>
+            </h1>
+            <div class="mdl-card__subtitle-text">
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#items/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="view-author-read">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="authors">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{trans 'title.all_authors'}}
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#authors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_authors'}}</a>
+            <a href="#authors/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_authors'}}</a>
+            <a href="#authors/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_authors'}}</a>
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="author">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{ entry.title }}
+            </h1>
+            <div class="mdl-card__subtitle-text">
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#items/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
+        </div>
+    </div>
+</script>
