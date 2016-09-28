@@ -391,7 +391,7 @@ class MemberController extends AbstractController
     }
 
     /**
-     * Profile update.
+     * Set Pinboard API token.
      *
      * @ApiDoc(
      *     section="Member",
@@ -399,7 +399,7 @@ class MemberController extends AbstractController
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
-     *         {"name"="email", "dataType"="string", "format"="email", "required"=true},
+     *         {"name"="token", "dataType"="string", "required"=true},
      *     },
      * )
      */

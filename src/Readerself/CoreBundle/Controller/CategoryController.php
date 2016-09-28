@@ -34,7 +34,8 @@ class CategoryController extends AbstractController
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
      *     parameters={
-     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""asc"" or ""desc"", default ""desc""", "description"=""},
+     *         {"name"="sortField", "dataType"="string", "required"=false, "format"="""title"" or ""date_created"", default ""title""", "description"=""},
+     *         {"name"="sortDirection", "dataType"="string", "required"=false, "format"="""ASC"" or ""DESC"", default ""DESC""", "description"=""},
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="categories per page"},
      *         {"name"="recent", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="recent categories"},
