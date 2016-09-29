@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 28, 2016 at 03:15 PM
+-- Generation Time: Sep 29, 2016 at 06:01 AM
 -- Server version: 5.7.14
 -- PHP Version: 7.0.9
 
@@ -26,6 +26,20 @@ CREATE TABLE `action` (
   `id` int(10) UNSIGNED NOT NULL,
   `reverse` int(10) UNSIGNED DEFAULT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date_created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `action_author`
+--
+
+DROP TABLE IF EXISTS `action_author`;
+CREATE TABLE `action_author` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `author_id` int(10) UNSIGNED NOT NULL,
+  `action_id` int(10) UNSIGNED NOT NULL,
   `date_created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -312,6 +326,15 @@ ALTER TABLE `action`
   ADD UNIQUE KEY `UNIQ_47CC8C92AA779117` (`reverse`);
 
 --
+-- Indexes for table `action_author`
+--
+ALTER TABLE `action_author`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `action_id_author_id` (`action_id`,`author_id`),
+  ADD KEY `author_id` (`author_id`),
+  ADD KEY `action_id` (`action_id`);
+
+--
 -- Indexes for table `action_category`
 --
 ALTER TABLE `action_category`
@@ -465,6 +488,11 @@ ALTER TABLE `push`
 ALTER TABLE `action`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `action_author`
+--
+ALTER TABLE `action_author`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `action_category`
 --
 ALTER TABLE `action_category`
@@ -558,6 +586,13 @@ ALTER TABLE `push`
 --
 ALTER TABLE `action`
   ADD CONSTRAINT `FK_47CC8C92AA779117` FOREIGN KEY (`reverse`) REFERENCES `action` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `action_author`
+--
+ALTER TABLE `action_author`
+  ADD CONSTRAINT `FK_7F9FE9A39D32F035` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_7F9FE9A3F675F31B` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `action_category`
