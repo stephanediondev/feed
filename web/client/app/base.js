@@ -222,7 +222,7 @@ function loadRoute(key, parameters) {
 
                         data_return.current_key = key;
                         data_return.current_key_markallasread = key.replace('#items', '#items/markallasread');
-                        data_return.current_q = parameters.q;
+                        data_return.current_q = parameters.q ? decodeURIComponent(parameters.q) : '';
 
                         if(route.title) {
                             data_return.current_title = route.title;
@@ -541,16 +541,16 @@ $(document).ready(function() {
             
 
         } else if(form.attr('id') == 'form-search-feeds') {
-            loadRoute('#feeds/search/result', {page: 1, q: form.find('input[name="q"]').val()});
+            loadRoute('#feeds/search/result', {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
 
         } else if(form.attr('id') == 'form-search-categories') {
-            loadRoute('#categories/search/result', {page: 1, q:form.find('input[name="q"]').val()});
+            loadRoute('#categories/search/result', {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
 
         } else if(form.attr('id') == 'form-search-authors') {
-            loadRoute('#authors/search/result', {page: 1, q:form.find('input[name="q"]').val()});
+            loadRoute('#authors/search/result', {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
 
         } else if(form.attr('id') == 'form-search-items') {
-            loadRoute('#items/search/result', {page: 1, q:form.find('input[name="q"]').val()});
+            loadRoute('#items/search/result', {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
 
         } else if(form.data('query')) {
 
