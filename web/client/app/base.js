@@ -77,7 +77,7 @@ function loadFile(url) {
 }
 
 function explainConnection(connection) {
-    if(typeof connection == 'undefined') {
+    if(typeof connection === 'undefined') {
         connection = {id: false, token: false, member: {id: false, administrator: false, member: false, demo: false}};
     } else {
         $('body').removeClass('anonymous');
@@ -382,7 +382,22 @@ function item_down() {
     }
 }
 
+function updateOnlineStatus() {
+    if(navigator.onLine) {
+        $('body').removeClass('offline');
+        $('body').addClass('online');
+    } else {
+        $('body').removeClass('online');
+        $('body').addClass('offline');
+    }
+}
+
 $(document).ready(function() {
+    updateOnlineStatus();
+
+    window.addEventListener('online',  updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
     var sourceNavigation = $('#view-navigation').text();
     var templateNavigation = Handlebars.compile(sourceNavigation);
     $('.mdl-navigation').html(templateNavigation());
@@ -581,7 +596,7 @@ $(document).ready(function() {
                 dataType: 'json',
                 statusCode: {
                     200: function(data_return) {
-                        if(typeof data_return.entry != 'undefined') {
+                        if(typeof data_return.entry !== 'undefined') {
                             if(data_return.entry.title) {
                                 setSnackbar($.i18n._(form.attr('method')) + ' ' + data_return.entry.title);
                             }

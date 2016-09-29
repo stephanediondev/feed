@@ -10,7 +10,7 @@
             <a href="#categories/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_categories'}}</a>
             <a href="#categories/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_categories'}}</a>
             <a href="#categories/usedbyfeeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.categories_usedbyfeeds'}}</a>
-            <a href="#categories/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_categories'}}</a>
+            <a href="#categories/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_categories'}}</a>
         </div>
     </div>
 </script>
@@ -30,9 +30,9 @@
             <a href="#items/category/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
             <a href="#feeds/category/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_feeds'}}</a>
             {{#if entry.exclude }}
-                <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'include'}}</a>
+                <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'include'}}</a>
             {{else}}
-                <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'exclude'}}</a>
+                <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'exclude'}}</a>
             {{/if}}
         </div>
     </div>
@@ -50,7 +50,7 @@
             <a href="#categories/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_categories'}}</a>
             <a href="#categories/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_categories'}}</a>
             <a href="#categories/usedbyfeeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.categories_usedbyfeeds'}}</a>
-            <a href="#categories/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_categories'}}</a>
+            <a href="#categories/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_categories'}}</a>
         </div>
     </div>
 
@@ -67,9 +67,9 @@
             <a href="#items/category/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
             <a href="#feeds/category/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_feeds'}}</a>
             {{#if entry.exclude }}
-                <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'include'}}</a>
+                <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'include'}}</a>
             {{else}}
-                <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'exclude'}}</a>
+                <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'exclude'}}</a>
             {{/if}}
         </div>
     </div>

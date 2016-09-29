@@ -25,9 +25,9 @@
             <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.subscribed_feeds'}}</a>
             <a href="#feeds/unsubscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unsubscribed_feeds'}}</a>
             <a href="#feeds/witherrors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
-            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_feeds'}}</a>
+            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_feeds'}}</a>
 
-            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog connected" id="dialog-add_feed">{{trans 'add'}}</button>
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog connected online" id="dialog-add_feed">{{trans 'add'}}</button>
             <dialog class="mdl-dialog" for="dialog-add_feed">
                 <form action="#feeds/recent" data-query="/feed" method="POST">
                     <div class="mdl-dialog__content">
@@ -55,7 +55,7 @@
                 </form>
             </dialog>
 
-            <a href="#feeds/import" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'import'}}</a>
+            <a href="#feeds/import" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'import'}}</a>
         </div>
     </div>
 </script>
@@ -85,9 +85,9 @@
         <div class="mdl-card__actions mdl-card--border">
             <a href="#items/feed/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
             {{#if entry.subscribe }}
-                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'unsubscribe'}}</a>
+                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'unsubscribe'}}</a>
             {{else}}
-                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'subscribe'}}</a>
+                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'subscribe'}}</a>
             {{/if}}
         </div>
     </div>
@@ -106,7 +106,7 @@
             <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.subscribed_feeds'}}</a>
             <a href="#feeds/unsubscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unsubscribed_feeds'}}</a>
             <a href="#feeds/witherrors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
-            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_feeds'}}</a>
+            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_feeds'}}</a>
         </div>
     </div>
 
@@ -151,13 +151,13 @@
             <a href="#authors/feed/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_authors'}}</a>
             <a href="#items/feed/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view_items'}}</a>
             {{#if entry.subscribe }}
-                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'unsubscribe'}}</a>
+                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'unsubscribe'}}</a>
             {{else}}
-                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'subscribe'}}</a>
+                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'subscribe'}}</a>
             {{/if}}
             {{#if connectionData.member.administrator }}
-                <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
-                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog action-share" id="dialog-delete-{{ entry.id }}">{{trans 'delete'}}</button>
+                <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'update'}}</a>
+                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog online" id="dialog-delete-{{ entry.id }}">{{trans 'delete'}}</button>
                 <dialog class="mdl-dialog" for="dialog-delete-{{ entry.id }}">
                     <form action="#feeds" data-query="/feed/{{ entry.id }}" method="DELETE">
                         <div class="mdl-dialog__content">
@@ -204,7 +204,7 @@
             <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.subscribed_feeds'}}</a>
             <a href="#feeds/unsubscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unsubscribed_feeds'}}</a>
             <a href="#feeds/witherrors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
-            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_feeds'}}</a>
+            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_feeds'}}</a>
         </div>
     </div>
 
@@ -253,7 +253,7 @@
             <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.subscribed_feeds'}}</a>
             <a href="#feeds/unsubscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unsubscribed_feeds'}}</a>
             <a href="#feeds/witherrors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
-            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.search_feeds'}}</a>
+            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_feeds'}}</a>
         </div>
     </div>
 

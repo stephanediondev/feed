@@ -43,11 +43,11 @@
             <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
             <a href="#profile/notifications" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'notifications'}}</a>
             <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view'}}</a>
-            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'update'}}</a>
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="profile-pinboard">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col online" id="profile-pinboard">
         <form action="#profile" data-query="/pinboard" method="POST">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
@@ -93,7 +93,7 @@
             <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
             <a href="#profile/notifications" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'notifications'}}</a>
             <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view'}}</a>
-            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'update'}}</a>
         </div>
     </div>
 
@@ -111,7 +111,7 @@
             <div class="mdl-card__supporting-text">
                 {{ connection.agent }}
             </div>
-            <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-card__actions mdl-card--border online">
                 <form action="#profile/connections" data-query="/connection/{{ connection.id }}" method="DELETE">
                     <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</button>
                 </form>
@@ -134,7 +134,7 @@
             <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
             <a href="#profile/notifications" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'notifications'}}</a>
             <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view'}}</a>
-            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'update'}}</a>
         </div>
     </div>
 
@@ -152,7 +152,7 @@
             <div class="mdl-card__supporting-text">
                 {{ notification.agent }}
             </div>
-            <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-card__actions mdl-card--border online">
                 <form action="#profile/notifications" data-query="/push/{{ notification.id }}" method="DELETE">
                     <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</button>
                 </form>
@@ -175,11 +175,11 @@
             <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
             <a href="#profile/notifications" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'notifications'}}</a>
             <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'view'}}</a>
-            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'update'}}</a>
+            <a href="#profile/update" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'update'}}</a>
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="profile-form">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col online" id="profile-form">
         <form action="#profile/update" data-query="/profile/update" method="PUT">
             <div class="mdl-card__supporting-text">
                 <p>

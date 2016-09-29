@@ -195,8 +195,14 @@ input:-webkit-autofill {
 body.anonymous .connected {
     display: none;
 }
-
 body.connected .anonymous {
+    display: none;
+}
+
+body.online .offline {
+    display: none;
+}
+body.offline .online {
     display: none;
 }
 
