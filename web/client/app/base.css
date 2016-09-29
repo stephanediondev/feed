@@ -56,7 +56,7 @@ a:link, a:visited {
 }
 .mdl-button {
     padding: 0px 8px;
-    min-width: auto;
+    min-width: inherit;
 }
 .mdl-button:focus:not(:active) {
     background-color: transparent;
