@@ -73,12 +73,6 @@
         <div class="mdl-card__supporting-text">
             {{{ entry.content }}}
 
-            {{#if entry.latitude }}
-                {{#if entry.longitude }}
-                    <p><a target="_blank" href="https://maps.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyBToUXooSauIjBaU1Nt9WpmZk_Qpd-vOe0&center={{ entry.latitude }},{{ entry.longitude }}&markers=color:red|{{ entry.latitude }},{{ entry.longitude }}&zoom=12&size=540x200&sensor=false" alt=""></a></p>
-                {{/if}}
-            {{/if}}
-
             {{#if entry.enclosures }}
                 {{#each entry.enclosures as |enclosure enclosure_index|}}
                     <p><img src="{{ enclosure.link }}" alt=""></p>

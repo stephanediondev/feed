@@ -98,6 +98,13 @@ $(document).bind('keydown', function(event) {
                 //loadRoute('#feed/create');
             }
 
+        //slash
+        } else if(keycode == 191) {
+            event.preventDefault();
+            if($('input[name="q"]').length > 0) {
+                $('input[name="q"]').focus();
+            }
+
         //nothing when meta + k
         } else if(event.metaKey && keycode == 75) {
 
