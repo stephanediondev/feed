@@ -100,6 +100,8 @@ class MigrationManager extends AbstractManager
 
             //test author
             if($result['auh_id']) {
+                $result['auh_title'] = $this->cleanTitle($result['auh_title']);
+
                 $sql = 'SELECT id FROM author WHERE title = :title';
                 $stmt = $this->connection->prepare($sql);
                 $stmt->bindValue('title', $result['auh_title']);

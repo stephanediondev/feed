@@ -80,23 +80,29 @@ class PushManager extends AbstractManager
         foreach($results as $result) {
             if($result['unread'] > 0) {
 
-                $sql = 'SELECT itm.title AS item_title, fed.title AS feed_title FROM item AS itm LEFT JOIN feed AS fed ON fed.id = itm.feed_id
+                $sql = 'SELECT itm.title AS item_title FROM item AS itm LEFT JOIN feed AS fed ON fed.id = itm.feed_id
                     WHERE itm.feed_id IN (SELECT subscribed.feed_id FROM action_feed_member AS subscribed WHERE subscribed.member_id = :member_id AND subscribed.action_id = 3)
                     AND itm.id NOT IN (SELECT alreadyRead.item_id FROM action_item_member AS alreadyRead WHERE alreadyRead.member_id = :member_id AND alreadyRead.action_id IN(1,4))
                     AND itm.id IN (SELECT unreadSaved.item_id FROM action_item_member AS unreadSaved WHERE unreadSaved.member_id = :member_id AND unreadSaved.action_id = 12)
-                ORDER BY itm.date DESC LIMIT 0,3';
+                ORDER BY itm.date DESC LIMIT 0,7';
                 $stmt = $this->connection->prepare($sql);
                 $stmt->bindValue('member_id', $result['member_id']);
                 $stmt->execute();
                 $lastList = $stmt->fetchAll();
 
                 $body = [];
+                $u = 1;
                 foreach($lastList as $last) {
-                    $body[] = html_entity_decode($last['item_title'].' ('.$last['feed_title'].')');
+                    if($u == 1) {
+                        $title = html_entity_decode($last['item_title']);
+                    } else {
+                        $body[] = html_entity_decode($last['item_title']);
+                    }
+                    $u++;
                 }
 
                 $payload = json_encode([
-                    'title' => $result['unread'].' unread items',
+                    'title' => $title,
                     'body' => implode("\r\n", $body),
                 ]);
                 $this->send($result['id'], $payload);
