@@ -180,14 +180,11 @@
             <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone connected" id="collection-{{ collection.id }}">
                 <div class="mdl-card__title">
                     <h1 class="mdl-card__title-text">
-                        {{ collection.date_created }}
+                        {{ collection.error }}
                     </h1>
-                </div>
-                <div class="mdl-card__supporting-text">
-                    <p>
-                        <span class="label">{{trans 'error'}}</span>
-                        {{ collection.error }}</a>
-                    </p>
+                    <div class="mdl-card__subtitle-text">
+                        <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ collection.date_created }}"></span></span>
+                    </div>
                 </div>
             </div>
         {{/if}}

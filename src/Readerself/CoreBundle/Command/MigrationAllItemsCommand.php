@@ -19,6 +19,7 @@ class MigrationAllItemsCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        date_default_timezone_set('UTC');
         $this->getContainer()->get('readerself_core_manager_migration')->start('all_items');
     }
 }

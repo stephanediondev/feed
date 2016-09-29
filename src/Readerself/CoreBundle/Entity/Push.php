@@ -260,9 +260,12 @@ class Push
      */
     public function toArray()
     {
+        $parse_url = parse_url($this->getEndpoint());
+
         return [
             'id' => $this->getId(),
             'member' => $this->getMember()->toArray(),
+            'hostname' => $parse_url['host'],
             'endpoint' => $this->getEndpoint(),
             'agent' => $this->getAgent(),
             'ip' => $this->getIp(),
