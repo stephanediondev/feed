@@ -5,11 +5,11 @@ class AuthorControllerTest extends AbstractControllerTest
 {
     public function testIndex()
     {
-        // test 403
+        // test GET
         $this->client->request('GET', '/api/authors');
         $response = $this->client->getResponse();
 
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test entries_entity
@@ -70,13 +70,6 @@ class AuthorControllerTest extends AbstractControllerTest
 
     public function testRead()
     {
-        // test 403
-        $this->client->request('GET', '/api/author/0');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(403, $response->getStatusCode());
-        $this->assertEquals('application/json', $response->headers->get('Content-type'));
-
         // test 404
         $this->client->request('GET', '/api/author/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
         $response = $this->client->getResponse();
