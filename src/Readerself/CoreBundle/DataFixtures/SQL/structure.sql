@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 29, 2016 at 06:01 AM
+-- Generation Time: Sep 30, 2016 at 10:26 AM
 -- Server version: 5.7.14
 -- PHP Version: 7.0.9
 
@@ -304,6 +304,7 @@ DROP TABLE IF EXISTS `push`;
 CREATE TABLE `push` (
   `id` int(10) UNSIGNED NOT NULL,
   `member_id` int(10) UNSIGNED NOT NULL,
+  `item_id` int(10) UNSIGNED DEFAULT NULL,
   `endpoint` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `public_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `authentication_secret` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -476,7 +477,8 @@ ALTER TABLE `member`
 ALTER TABLE `push`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `endpoint` (`endpoint`),
-  ADD KEY `member_id` (`member_id`);
+  ADD KEY `member_id` (`member_id`),
+  ADD KEY `item_id` (`item_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -676,5 +678,6 @@ ALTER TABLE `item_category`
 -- Constraints for table `push`
 --
 ALTER TABLE `push`
+  ADD CONSTRAINT `FK_5F3A1664126F525E` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `FK_5F3A16647597D3FE` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE;
 SET FOREIGN_KEY_CHECKS=1;
