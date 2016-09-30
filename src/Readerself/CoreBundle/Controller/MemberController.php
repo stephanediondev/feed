@@ -442,4 +442,78 @@ class MemberController extends AbstractController
 
         return new JsonResponse($data);
     }
+
+    /**
+     * Notifier.
+     *
+     * @ApiDoc(
+     *     section="Member",
+     *     parameters={
+     *         {"name"="email", "dataType"="string", "format"="email", "required"=true},
+     *         {"name"="password", "dataType"="string", "format"="", "required"=true},
+     *     },
+     * )
+     */
+    public function notifierAction(Request $request)
+    {
+        $data = [];
+
+        $status = 401;
+
+        $login = new Login();
+        $form = $this->createForm(LoginType::class, $login);
+
+        $form->submit($request->request->all());
+
+        if($form->isValid()) {
+            $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
+
+            if($member) {
+                $encoder = $this->get('security.password_encoder');
+
+                if($encoder->isPasswordValid($member, $login->getPassword())) {
+                    $connection = $this->memberManager->connectionManager->init();
+                    $connection->setMember($member);
+                    $connection->setType('notifier');
+                    $connection->setToken(base64_encode(random_bytes(50)));
+                    $connection->setIp($request->getClientIp());
+                    $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
+
+                    $this->memberManager->connectionManager->persist($connection);
+
+                    $data['entry'] = $connection->toArray();
+                    $data['entry_entity'] = 'connection';
+
+                    $status = 200;
+                }
+            }
+        }
+
+        return new JsonResponse($data, $status);
+    }
+
+    /**
+     * Get unread.
+     *
+     * @ApiDoc(
+     *     section="Member",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     *     parameters={
+     *         {"name"="token", "dataType"="string", "required"=true},
+     *     },
+     * )
+     */
+    public function unreadAction(Request $request)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request, 'notifier')) {
+            return new JsonResponse($data, 403);
+        }
+
+        $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+
+        return new JsonResponse($data);
+    }
 }

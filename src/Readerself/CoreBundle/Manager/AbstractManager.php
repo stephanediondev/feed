@@ -94,8 +94,8 @@ abstract class AbstractManager
 
     public function cleanTitle($title)
     {
-        $title = trim( strip_tags( html_entity_decode( $title ) ) );
         $title = str_replace('&amp;', '&', $title);
+        $title = trim( strip_tags( html_entity_decode( $title ) ) );
         $title = mb_substr($title, 0, 255, 'UTF-8');
 
         return $title;

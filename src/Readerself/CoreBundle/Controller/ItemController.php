@@ -158,6 +158,11 @@ class ItemController extends AbstractController
         if($pageNext <= $pages) {
             $data['entries_page_next'] = $pageNext;
         }
+
+        /*if($memberConnected) {
+            $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+        }*/
+
         return new JsonResponse($data);
     }
 

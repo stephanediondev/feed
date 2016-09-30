@@ -18,8 +18,8 @@ abstract class AbstractController extends Controller
         $this->memberManager = $memberManager;
     }
 
-    public function validateToken(Request $request) {
-        if($request->headers->get('X-CONNECTION-TOKEN') && $connection = $this->memberManager->connectionManager->getOne(['type' => 'login', 'token' => $request->headers->get('X-CONNECTION-TOKEN')])) {
+    public function validateToken(Request $request, $type = 'login') {
+        if($request->headers->get('X-CONNECTION-TOKEN') && $connection = $this->memberManager->connectionManager->getOne(['type' => $type, 'token' => $request->headers->get('X-CONNECTION-TOKEN')])) {
             return $connection->getMember();
         }
         return false;

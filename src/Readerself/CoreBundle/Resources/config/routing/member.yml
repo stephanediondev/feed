@@ -71,3 +71,15 @@ readerself_api_member_pinboard:
     defaults:
         _controller: "readerself_core_controller_member:pinboardAction"
     methods: POST
+
+readerself_api_member_notifier_set:
+    path: /notifier/set
+    defaults:
+        _controller: "readerself_core_controller_member:notifierAction"
+    methods: POST
+
+readerself_api_member_notifier_unread:
+    path: /notifier/unread
+    defaults:
+        _controller: "readerself_core_controller_member:unreadAction"
+    methods: GET
