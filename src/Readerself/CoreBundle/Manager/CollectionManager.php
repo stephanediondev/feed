@@ -89,7 +89,7 @@ class CollectionManager extends AbstractManager
         $this->facebookSecret = $secret;
     }
 
-    public function start()
+    public function start($feed_id = false)
     {
         $startTime = microtime(1);
 
@@ -117,9 +117,15 @@ class CollectionManager extends AbstractManager
         ];
         $collection_id = $this->insert('collection', $insertCollection);
 
-        $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date';
-        $stmt = $this->connection->prepare($sql);
-        $stmt->bindValue('date', (new \Datetime())->format('Y-m-d H:i:s'));
+        if($feed_id) {
+            $sql = 'SELECT id, link FROM feed WHERE id = :feed_id';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue('feed_id', $feed_id);
+        } else {
+            $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue('date', (new \Datetime())->format('Y-m-d H:i:s'));
+        }
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
 

@@ -66,7 +66,7 @@ class PushManager extends AbstractManager
 
     public function start()
     {
-        $sql = 'SELECT psh.id, psh.agent, psh.member_id,
+        $sql = 'SELECT psh.id, psh.item_id, psh.member_id,
             (SELECT COUNT(itm.id) FROM item AS itm
                 WHERE itm.feed_id IN (SELECT subscribed.feed_id FROM action_feed_member AS subscribed WHERE subscribed.member_id = psh.member_id AND subscribed.action_id = 3)
                 AND itm.id NOT IN (SELECT alreadyRead.item_id FROM action_item_member AS alreadyRead WHERE alreadyRead.member_id = psh.member_id AND alreadyRead.action_id IN(1,4))
@@ -80,7 +80,7 @@ class PushManager extends AbstractManager
         foreach($results as $result) {
             if($result['unread'] > 0) {
 
-                $sql = 'SELECT itm.title AS item_title FROM item AS itm LEFT JOIN feed AS fed ON fed.id = itm.feed_id
+                $sql = 'SELECT itm.id AS item_id, itm.title AS item_title FROM item AS itm LEFT JOIN feed AS fed ON fed.id = itm.feed_id
                     WHERE itm.feed_id IN (SELECT subscribed.feed_id FROM action_feed_member AS subscribed WHERE subscribed.member_id = :member_id AND subscribed.action_id = 3)
                     AND itm.id NOT IN (SELECT alreadyRead.item_id FROM action_item_member AS alreadyRead WHERE alreadyRead.member_id = :member_id AND alreadyRead.action_id IN(1,4))
                     AND itm.id IN (SELECT unreadSaved.item_id FROM action_item_member AS unreadSaved WHERE unreadSaved.member_id = :member_id AND unreadSaved.action_id = 12)
@@ -94,6 +94,7 @@ class PushManager extends AbstractManager
                 $u = 1;
                 foreach($lastList as $last) {
                     if($u == 1) {
+                        $last_item_id = $last['item_id'];
                         $title = html_entity_decode($last['item_title']);
                     } else {
                         $body[] = html_entity_decode($last['item_title']);
@@ -101,11 +102,18 @@ class PushManager extends AbstractManager
                     $u++;
                 }
 
-                $payload = json_encode([
-                    'title' => $title,
-                    'body' => implode("\r\n", $body),
-                ]);
-                $this->send($result['id'], $payload);
+                if($result['item_id'] != $last_item_id) {
+                    $updatePush = [];
+                    $updatePush['item_id'] = $last_item_id;
+                    $updatePush['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
+                    $this->update('push', $updatePush, $result['id']);
+
+                    $payload = json_encode([
+                        'title' => $title,
+                        'body' => implode("\r\n", $body),
+                    ]);
+                    $this->send($result['id'], $payload);
+                }
             }
         }
     }

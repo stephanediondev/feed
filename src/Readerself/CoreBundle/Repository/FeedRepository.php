@@ -17,6 +17,11 @@ class FeedRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
+        if(isset($parameters['link']) == 1) {
+            $query->andWhere('fed.link = :link');
+            $query->setParameter(':link', $parameters['link']);
+        }
+
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 

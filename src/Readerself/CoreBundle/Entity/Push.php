@@ -52,6 +52,11 @@ class Push
      */
     private $member;
 
+    /**
+     * @var \Readerself\CoreBundle\Entity\Item
+     */
+    private $item;
+
 
     /**
      * Get id
@@ -253,6 +258,30 @@ class Push
     public function getMember()
     {
         return $this->member;
+    }
+
+    /**
+     * Set item
+     *
+     * @param \Readerself\CoreBundle\Entity\Item $item
+     *
+     * @return ActionItem
+     */
+    public function setItem(\Readerself\CoreBundle\Entity\Item $item = null)
+    {
+        $this->item = $item;
+
+        return $this;
+    }
+
+    /**
+     * Get item
+     *
+     * @return \Readerself\CoreBundle\Entity\Item
+     */
+    public function getItem()
+    {
+        return $this->item;
     }
 
     /**

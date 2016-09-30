@@ -1,7 +1,6 @@
 Readerself\CoreBundle\Entity\Feed:
     properties:
         title:
-            - NotBlank: ~
             - Length:
                 max: 255
         link:
@@ -9,7 +8,6 @@ Readerself\CoreBundle\Entity\Feed:
             - Length:
                 max: 255
         website:
-            - NotBlank: ~
             - Length:
                 max: 255
         language:

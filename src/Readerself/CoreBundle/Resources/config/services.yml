@@ -22,6 +22,7 @@ services:
             - "@readerself_core_manager_category"
             - "@readerself_core_manager_author"
             - "@readerself_core_manager_action"
+            - "@readerself_core_manager_collection"
 
     readerself_core_controller_item:
         class: Readerself\CoreBundle\Controller\ItemController

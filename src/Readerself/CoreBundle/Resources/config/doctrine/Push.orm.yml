@@ -6,6 +6,9 @@ Readerself\CoreBundle\Entity\Push:
         member_id:
             columns:
                 - member_id
+        item_id:
+            columns:
+                - item_id
     uniqueConstraints:
         endpoint:
             columns:
@@ -72,5 +75,16 @@ Readerself\CoreBundle\Entity\Push:
                     nullable: false
                     referencedColumnName: id
                     onDelete: "cascade"
+            orphanRemoval: false
+        item:
+            targetEntity: Item
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                item_id:
+                    referencedColumnName: id
+                    onDelete: "set null"
             orphanRemoval: false
     lifecycleCallbacks: {  }

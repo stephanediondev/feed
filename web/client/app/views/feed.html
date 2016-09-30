@@ -32,24 +32,12 @@
                 <form action="#feeds/recent" data-query="/feed" method="POST">
                     <div class="mdl-dialog__content">
                         <p>
-                            <label for="title" class="required">{{trans 'title'}}</label>
-                            <input type="text" id="title" name="title" required="required" value="">
-                        </p>
-                        <p>
                             <label for="title" class="required">{{trans 'link'}}</label>
                             <input type="url" id="link" name="link" required="required" value="">
                         </p>
-                        <p>
-                            <label for="website" class="required">{{trans 'website'}}</label>
-                            <input type="url" id="website" name="website" required="required" value="">
-                        </p>
-                        <p>
-                            <label for="language">{{trans 'language'}}</label>
-                            <input type="text" id="language" name="language" value="">
-                        </p>
                     </div>
                     <div class="mdl-dialog__actions">
-                        <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'add'}}</button>
+                        <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white close_submit">{{trans 'add'}}</button>
                         <a href="#" class="mdl-button close">{{trans 'cancel'}}</a>
                     </div>
                 </form>
@@ -218,7 +206,7 @@
             <div class="mdl-card__supporting-text">
                 <p>
                     <label for="title" class="required">{{trans 'title'}}</label>
-                    <input type="text" id="title" name="title" required="required" value="{{ entry.title }}">
+                    <input type="text" id="title" name="title" value="{{ entry.title }}">
                 </p>
                 <p>
                     <label for="title" class="required">{{trans 'link'}}</label>
@@ -226,7 +214,7 @@
                 </p>
                 <p>
                     <label for="website" class="required">{{trans 'website'}}</label>
-                    <input type="url" id="website" name="website" required="required" value="{{ entry.website }}">
+                    <input type="url" id="website" name="website" value="{{ entry.website }}">
                 </p>
                 <p>
                     <label for="language">{{trans 'language'}}</label>

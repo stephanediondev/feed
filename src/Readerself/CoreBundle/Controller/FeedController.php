@@ -11,6 +11,7 @@ use Readerself\CoreBundle\Manager\FeedManager;
 use Readerself\CoreBundle\Manager\CategoryManager;
 use Readerself\CoreBundle\Manager\AuthorManager;
 use Readerself\CoreBundle\Manager\ActionManager;
+use Readerself\CoreBundle\Manager\CollectionManager;
 
 use Readerself\CoreBundle\Form\Type\FeedType;
 
@@ -27,16 +28,20 @@ class FeedController extends AbstractController
 
     protected $actionManager;
 
+    protected $collectionManager;
+
     public function __construct(
         FeedManager $feedManager,
         CategoryManager $categoryManager,
         AuthorManager $authorManager,
-        ActionManager $actionManager
+        ActionManager $actionManager,
+        CollectionManager $collectionManager
     ) {
         $this->feedManager = $feedManager;
         $this->categoryManager = $categoryManager;
         $this->authorManager = $authorManager;
         $this->actionManager = $actionManager;
+        $this->collectionManager = $collectionManager;
     }
 
     /**
@@ -185,9 +190,20 @@ class FeedController extends AbstractController
         $form->submit($request->request->all(), false);
 
         if($form->isValid()) {
-            $feed_id = $this->feedManager->persist($form->getData());
+            $test = $this->feedManager->getOne(['link' => $form->getData()->getLink()]);
 
-            return $this->setAction('subscribe', $request, $feed_id);
+            if(!$test) {
+                $feed_id = $this->feedManager->persist($form->getData());
+                $resutlAction = $this->setAction('subscribe', $request, $feed_id);
+
+                $this->collectionManager->start($feed_id);
+
+                return $resutlAction;
+
+            } else {
+                $data['entry'] = $test->toArray();
+                $data['entry_entity'] = 'feed';
+            }
 
         } else {
             $errors = $form->getErrors(true);
