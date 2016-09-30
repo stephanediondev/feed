@@ -206,6 +206,13 @@ body.offline .online {
     display: none;
 }
 
+body.not_administrator .administrator {
+    display: none;
+}
+body.administrator .not_administrator {
+    display: none;
+}
+
 body.collapse .mdl-card__supporting-text {
     display: none;
 }

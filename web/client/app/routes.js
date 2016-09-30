@@ -8,7 +8,7 @@ routes['#profile/notifications'] = {view: 'view-profile-notifications', query: '
 routes['#401'] = {view: 'view-401', query: false, title: 'error_401'};
 routes['#404'] = {view: 'view-404', query: false, title: 'error_404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};
-routes['#configuration'] = {view: 'view-configuration', query: false, title: 'configuration'};
+routes['#status'] = {view: 'view-status', query: '/status', title: 'status'};
 
 //Feed
 routes['#feeds'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds', title: 'title.all_feeds'};

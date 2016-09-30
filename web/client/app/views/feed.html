@@ -143,23 +143,21 @@
             {{else}}
                 <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'subscribe'}}</a>
             {{/if}}
-            {{#if connectionData.member.administrator }}
-                <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'update'}}</a>
-                <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog online" id="dialog-delete-{{ entry.id }}">{{trans 'delete'}}</button>
-                <dialog class="mdl-dialog" for="dialog-delete-{{ entry.id }}">
-                    <form action="#feeds" data-query="/feed/{{ entry.id }}" method="DELETE">
-                        <div class="mdl-dialog__content">
-                            <p>
-                                {{ entry.title }} ({{trans 'feed'}})
-                            </p>
-                        </div>
-                        <div class="mdl-dialog__actions">
-                            <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white close_submit">{{trans 'delete'}}</button>
-                            <a href="#" class="mdl-button close">{{trans 'cancel'}}</a>
-                        </div>
-                    </form>
-                </dialog>
-            {{/if}}
+            <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online administrator">{{trans 'update'}}</a>
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog online administrator" id="dialog-delete-{{ entry.id }}">{{trans 'delete'}}</button>
+            <dialog class="mdl-dialog" for="dialog-delete-{{ entry.id }}">
+                <form action="#feeds" data-query="/feed/{{ entry.id }}" method="DELETE">
+                    <div class="mdl-dialog__content">
+                        <p>
+                            {{ entry.title }} ({{trans 'feed'}})
+                        </p>
+                    </div>
+                    <div class="mdl-dialog__actions">
+                        <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white close_submit">{{trans 'delete'}}</button>
+                        <a href="#" class="mdl-button close">{{trans 'cancel'}}</a>
+                    </div>
+                </form>
+            </dialog>
         </div>
     </div>
 

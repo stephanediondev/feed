@@ -22,6 +22,7 @@
         <li class="mdl-list__item"><a href="#authors" class="load-route">{{trans 'title.all_authors'}}</a></li>
 
         <li class="mdl-list__item connected"><a href="#profile" class="load-route">{{trans 'profile'}}</a>
+        <li class="mdl-list__item connected administartor"><a href="#status" class="load-route">{{trans 'status'}}</a>
         <li class="mdl-list__item connected"><a href="#logout" class="load-route">{{trans 'logout'}}</a>
     </ul>
 </script>
@@ -190,4 +191,194 @@
             </div>
         </form>
     </div>
+</script>
+
+<script type="text/template" id="view-status">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="status">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Server
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <p>
+                <span class="label">{{trans 'SERVER_ADDR'}}</span>
+                {{ _server.SERVER_ADDR }}
+            </p>
+            <p>
+                <span class="label">{{trans 'HTTP_HOST'}}</span>
+                {{ _server.HTTP_HOST }}
+            </p>
+            <p>
+                <span class="label">{{trans 'SERVER_NAME'}}</span>
+                {{ _server.SERVER_NAME }}
+            </p>
+            {{#if _server.HTTPS }}
+                <p>
+                    <span class="label">{{trans 'HTTPS'}}</span>
+                    {{ _server.HTTPS }}
+                </p>
+            {{/if}}
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="status">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Webserver
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <p>
+                <span class="label">{{trans 'SERVER_SOFTWARE'}}</span>
+                {{ _server.SERVER_SOFTWARE }}
+            </p>
+            <p>
+                <span class="label">{{trans 'DOCUMENT_ROOT'}}</span>
+                {{ _server.DOCUMENT_ROOT }}
+            </p>
+            <p>
+                <span class="label">{{trans 'PHP_SELF'}}</span>
+                {{ _server.PHP_SELF }}
+            </p>
+            <p>
+                <span class="label">{{trans 'SCRIPT_FILENAME'}}</span>
+                {{ _server.SCRIPT_FILENAME }}
+            </p>
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="status">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Language
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <p>
+                <span class="label">{{trans 'php_sapi_name'}}</span>
+                {{ function.php_sapi_name }}
+            </p>
+            <p>
+                <span class="label">{{trans 'phpversion'}}</span>
+                {{ function.phpversion }}
+            </p>
+            <p>
+                <span class="label">{{trans 'symfony'}}</span>
+                {{ symfony }}
+            </p>
+            <p>
+                <span class="label">{{trans 'get_current_user'}}</span>
+                {{ function.get_current_user }}
+            </p>
+        </div>
+    </div>
+
+    {{#if search.enabled }}
+        {{#if search.stats.indices }}
+            {{#each search.stats.indices as |indice indice_index|}}
+                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="search-node-{{ node.name }}">
+                    <div class="mdl-card__title">
+                        <h1 class="mdl-card__title-text">
+                            Index (Elastic Search)
+                        </h1>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <p>
+                            <span class="label">name</span>
+                            {{ indice_index }}
+                        </p>
+                        <p>
+                            <span class="label">total.store.size_in_bytes</span>
+                            {{ indice.total.store.size_in_bytes }}
+                        </p>
+                        <p>
+                            <span class="label">total.docs.count</span>
+                            {{ indice.total.docs.count }}
+                        </p>
+                        <p>
+                            <span class="label">total.docs.deleted</span>
+                            {{ indice.total.docs.deleted }}
+                        </p>
+                        <p>
+                            <span class="label">total.search.query_total</span>
+                            {{ indice.total.search.query_total }}
+                        </p>
+                        <p>
+                            <span class="label">total.search.fetch_total</span>
+                            {{ indice.total.search.fetch_total }}
+                        </p>
+                    </div>
+                </div>
+            {{/each}}
+        {{/if}}
+
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="search-cluster">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    Cluster (Elastic Search)
+                </h1>
+            </div>
+            <div class="mdl-card__supporting-text">
+                <p>
+                    <span class="label">name</span>
+                    {{ search.health.cluster_name }}
+                </p>
+                <p>
+                    <span class="label">status</span>
+                    {{ search.health.status }}
+                </p>
+                <p>
+                    <span class="label">number_of_nodes</span>
+                    {{ search.health.number_of_nodes }}
+                </p>
+                <p>
+                    <span class="label">active_primary_shards</span>
+                    {{ search.health.active_primary_shards }}
+                </p>
+                <p>
+                    <span class="label">active_shards</span>
+                    {{ search.health.active_shards }}
+                </p>
+            </div>
+        </div>
+
+        {{#if search.nodes }}
+            {{#each search.nodes.nodes as |node node_index|}}
+                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="search-node-{{ node.name }}">
+                    <div class="mdl-card__title">
+                        <h1 class="mdl-card__title-text">
+                            Node (Elastic Search)
+                        </h1>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <p>
+                            <span class="label">name</span>
+                            {{ node.name }}
+                        </p>
+                        <p>
+                            <span class="label">ip</span>
+                            {{ node.ip }}
+                        </p>
+                        <p>
+                            <span class="label">version</span>
+                            {{ node.version }}
+                        </p>
+                        <p>
+                            <span class="label">os.name</span>
+                            {{ node.os.name }}
+                        </p>
+                        <p>
+                            <span class="label">os.arch</span>
+                            {{ node.os.arch }}
+                        </p>
+                        <p>
+                            <span class="label">os.version</span>
+                            {{ node.os.version }}
+                        </p>
+                    </div>
+                </div>
+            {{/each}}
+        {{/if}}
+    {{/if}}
 </script>

@@ -79,9 +79,20 @@ function loadFile(url) {
 function explainConnection(connection) {
     if(typeof connection === 'undefined') {
         connection = {id: false, token: false, member: {id: false, administrator: false, member: false, demo: false}};
+
+        $('body').removeClass('connected');
+        $('body').addClass('anonymous');
+
+        $('body').removeClass('administrator');
+        $('body').addClass('not_administrator');
+
     } else {
         $('body').removeClass('anonymous');
         $('body').addClass('connected');
+
+        $('body').removeClass('not_administrator');
+        $('body').addClass('administrator');
+
         if('serviceWorker' in navigator && window.location.protocol == 'https:') {
             navigator.serviceWorker.register('serviceworker.js').then(function(reg) {
                 reg.pushManager.subscribe({

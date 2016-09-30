@@ -18,3 +18,9 @@ ReaderselfCoreBundle_connection:
 
 ReaderselfCoreBundle_push:
     resource: "@ReaderselfCoreBundle/Resources/config/routing/push.yml"
+
+readerself_api_status:
+    path: /status
+    defaults:
+        _controller: "readerself_core_controller_status:indexAction"
+    methods: GET
