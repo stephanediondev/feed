@@ -5,14 +5,19 @@ use Readerself\CoreBundle\Manager\AbstractManager;
 
 class FeedlyManager extends AbstractManager
 {
-    public function start()
+    public function start($locale)
     {
-        $content = json_decode(file_get_contents('http://s3.feedly.com/essentials/essentials_en-US.json'), true);
+        $content = json_decode(file_get_contents('http://s3.feedly.com/essentials/essentials_'.$locale.'.json'), true);
 
         foreach($content as $category => $sub) {
             foreach($sub['subscriptions'] as $result) {
                 $category = mb_strtolower($sub['label'], 'UTF-8');
                 $category = $this->cleanTitle($category);
+
+                //typo in one file
+                if(isset($result['tit le']) == 1) {
+                    $result['title'] = $result['tit le'];
+                }
 
                 $result['title'] = $this->cleanTitle($result['title']);
                 $result['id'] = $this->cleanLink(substr($result['id'], 5));
