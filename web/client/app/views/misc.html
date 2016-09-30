@@ -28,7 +28,7 @@
 </script>
 
 <script type="text/template" id="view-401">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="error-401">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="error-401">
         <div class="mdl-card__supporting-text">
             <p>
                 <a href="#login" class="load-route mdl-button mdl-color--pink mdl-color-text--white">{{trans 'login'}}</a>
@@ -38,7 +38,7 @@
 </script>
 
 <script type="text/template" id="view-404">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="error-404">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="error-404">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 404
@@ -48,7 +48,7 @@
 </script>
 
 <script type="text/template" id="view-500">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="error-500">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="error-500">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 500
@@ -194,7 +194,7 @@
 </script>
 
 <script type="text/template" id="view-status">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="status">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 Server
@@ -222,7 +222,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="status">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 Webserver
@@ -248,7 +248,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="status">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 Language
@@ -277,7 +277,7 @@
     {{#if search.enabled }}
         {{#if search.stats.indices }}
             {{#each search.stats.indices as |indice indice_index|}}
-                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="search-node-{{ node.name }}">
+                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-node-{{ node.name }}">
                     <div class="mdl-card__title">
                         <h1 class="mdl-card__title-text">
                             Index (Elastic Search)
@@ -313,7 +313,7 @@
             {{/each}}
         {{/if}}
 
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="search-cluster">
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-cluster">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     Cluster (Elastic Search)
@@ -345,7 +345,7 @@
 
         {{#if search.nodes }}
             {{#each search.nodes.nodes as |node node_index|}}
-                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col" id="search-node-{{ node.name }}">
+                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-node-{{ node.name }}">
                     <div class="mdl-card__title">
                         <h1 class="mdl-card__title-text">
                             Node (Elastic Search)
