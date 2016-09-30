@@ -9,7 +9,6 @@ use Readerself\CoreBundle\Controller\AbstractController;
 
 use Readerself\CoreBundle\Manager\ItemManager;
 use Readerself\CoreBundle\Manager\CategoryManager;
-use Readerself\CoreBundle\Manager\ActionManager;
 use Readerself\CoreBundle\Manager\SearchManager;
 
 class SearchController extends AbstractController
@@ -25,12 +24,10 @@ class SearchController extends AbstractController
     public function __construct(
         ItemManager $itemManager,
         CategoryManager $categoryManager,
-        ActionManager $actionManager,
         SearchManager $searchManager
     ) {
         $this->itemManager = $itemManager;
         $this->categoryManager = $categoryManager;
-        $this->actionManager = $actionManager;
         $this->searchManager = $searchManager;
     }
 

@@ -9,6 +9,7 @@ services:
         calls:
             - [ "setContainer", [ "@service_container" ] ]
             - [ "setMemberManager", [ "@readerself_core_manager_member" ] ]
+            - [ "setActionManager", [ "@readerself_core_manager_action" ] ]
 
     readerself_core_controller_content:
         class: Readerself\CoreBundle\Controller\ContentController
@@ -21,7 +22,6 @@ services:
             - "@readerself_core_manager_feed"
             - "@readerself_core_manager_category"
             - "@readerself_core_manager_author"
-            - "@readerself_core_manager_action"
             - "@readerself_core_manager_collection"
 
     readerself_core_controller_item:
@@ -30,7 +30,6 @@ services:
         arguments:
             - "@readerself_core_manager_item"
             - "@readerself_core_manager_category"
-            - "@readerself_core_manager_action"
 
     readerself_core_controller_status:
         class: Readerself\CoreBundle\Controller\StatusController
@@ -44,7 +43,6 @@ services:
         arguments:
             - "@readerself_core_manager_item"
             - "@readerself_core_manager_category"
-            - "@readerself_core_manager_action"
             - "@readerself_core_manager_search"
 
     readerself_core_controller_category:
@@ -52,7 +50,6 @@ services:
         parent: "readerself_core_controller_abstract"
         arguments:
             - "@readerself_core_manager_category"
-            - "@readerself_core_manager_action"
 
     readerself_core_controller_author:
         class: Readerself\CoreBundle\Controller\AuthorController

@@ -12,7 +12,7 @@ class MigrationStarredItemsCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('readerself:migration:starred_items')
+            ->setName('readerself:migration:starred-items')
             ->setDescription('Migration from old version: get starred items')
         ;
     }

@@ -7,7 +7,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 use Readerself\CoreBundle\Manager\CategoryManager;
-use Readerself\CoreBundle\Manager\ActionManager;
 
 use Readerself\CoreBundle\Form\Type\CategoryType;
 
@@ -15,14 +14,10 @@ class CategoryController extends AbstractController
 {
     protected $categoryManager;
 
-    protected $actionManager;
-
     public function __construct(
-        CategoryManager $categoryManager,
-        ActionManager $actionManager
+        CategoryManager $categoryManager
     ) {
         $this->categoryManager = $categoryManager;
-        $this->actionManager = $actionManager;
     }
 
     /**

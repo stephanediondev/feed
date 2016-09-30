@@ -397,14 +397,20 @@ class CollectionManager extends AbstractManager
                 $insertItem['longitude'] = $sp_item->get_longitude();
             }
 
+            $dateReference = (new \Datetime())->format('Y-m-d H:i:s');
+
             if($date = $sp_item->get_gmdate('Y-m-d H:i:s')) {
-                $insertItem['date'] = $date;
+                if($date > $dateReference) {
+                    $insertItem['date'] = $dateReference;
+                } else {
+                    $insertItem['date'] = $date;
+                }
             } else {
-                $insertItem['date'] = (new \Datetime())->format('Y-m-d H:i:s');
+                $insertItem['date'] = $dateReference;
             }
 
-            $insertItem['date_created'] = (new \Datetime())->format('Y-m-d H:i:s');
-            $insertItem['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
+            $insertItem['date_created'] = $dateReference;
+            $insertItem['date_modified'] = $dateReference;
 
             $item_id = $this->insert('item', $insertItem);
 
@@ -462,14 +468,16 @@ class CollectionManager extends AbstractManager
                 }
             }
 
+            $dateReference = (new \Datetime())->format('Y-m-d H:i:s');
+
             if($date = $sp_item['created_time']) {
                 $insertItem['date'] = (new \Datetime($date))->format('Y-m-d H:i:s');;
             } else {
-                $insertItem['date'] = (new \Datetime())->format('Y-m-d H:i:s');
+                $insertItem['date'] = $dateReference;
             }
 
-            $insertItem['date_created'] = (new \Datetime())->format('Y-m-d H:i:s');
-            $insertItem['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
+            $insertItem['date_created'] = $dateReference;
+            $insertItem['date_modified'] = $dateReference;
 
             $item_id = $this->insert('item', $insertItem);
 
@@ -478,7 +486,7 @@ class CollectionManager extends AbstractManager
                     'item_id' => $item_id,
                     'link' => $this->cleanLink($sp_item['full_picture']),
                     'type' => 'image/jpeg',
-                    'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                    'date_created' => $dateReference,
                 ];
                 $this->insert('enclosure', $insertEnclosure);
             }

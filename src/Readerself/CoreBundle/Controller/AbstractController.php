@@ -7,15 +7,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Readerself\CoreBundle\Manager\MemberManager;
+use Readerself\CoreBundle\Manager\ActionManager;
 
 abstract class AbstractController extends Controller
 {
     protected $memberManager;
 
+    protected $actionManager;
+
     public function setMemberManager(
         MemberManager $memberManager
     ) {
         $this->memberManager = $memberManager;
+    }
+
+    public function setActionManager(
+        ActionManager $actionManager
+    ) {
+        $this->actionManager = $actionManager;
     }
 
     public function validateToken(Request $request, $type = 'login') {

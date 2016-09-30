@@ -10,7 +10,6 @@ use Readerself\CoreBundle\Controller\AbstractController;
 use Readerself\CoreBundle\Manager\FeedManager;
 use Readerself\CoreBundle\Manager\CategoryManager;
 use Readerself\CoreBundle\Manager\AuthorManager;
-use Readerself\CoreBundle\Manager\ActionManager;
 use Readerself\CoreBundle\Manager\CollectionManager;
 
 use Readerself\CoreBundle\Form\Type\FeedType;
@@ -26,21 +25,17 @@ class FeedController extends AbstractController
 
     protected $authorManager;
 
-    protected $actionManager;
-
     protected $collectionManager;
 
     public function __construct(
         FeedManager $feedManager,
         CategoryManager $categoryManager,
         AuthorManager $authorManager,
-        ActionManager $actionManager,
         CollectionManager $collectionManager
     ) {
         $this->feedManager = $feedManager;
         $this->categoryManager = $categoryManager;
         $this->authorManager = $authorManager;
-        $this->actionManager = $actionManager;
         $this->collectionManager = $collectionManager;
     }
 

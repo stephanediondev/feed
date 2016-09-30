@@ -20,3 +20,5 @@
 /vendor/
 /web/bundles/
 /web/client/vendor/
+/web/proxy/*
+!web/proxy/.gitkeep

@@ -12,7 +12,7 @@ class MigrationAllItemsCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('readerself:migration:all_items')
+            ->setName('readerself:migration:all-items')
             ->setDescription('Migration from old version: get all items')
         ;
     }

@@ -9,7 +9,6 @@ use Readerself\CoreBundle\Controller\AbstractController;
 
 use Readerself\CoreBundle\Manager\ItemManager;
 use Readerself\CoreBundle\Manager\CategoryManager;
-use Readerself\CoreBundle\Manager\ActionManager;
 
 class ItemController extends AbstractController
 {
@@ -17,16 +16,12 @@ class ItemController extends AbstractController
 
     protected $categoryManager;
 
-    protected $actionManager;
-
     public function __construct(
         ItemManager $itemManager,
-        CategoryManager $categoryManager,
-        ActionManager $actionManager
+        CategoryManager $categoryManager
     ) {
         $this->itemManager = $itemManager;
         $this->categoryManager = $categoryManager;
-        $this->actionManager = $actionManager;
     }
 
     /**
@@ -138,12 +133,70 @@ class ItemController extends AbstractController
                 $enclosures[] = $enclosure->toArray();
             }
 
+            /*if(class_exists('DOMDocument') && $item->getContent() != '') {
+                try {
+                    libxml_use_internal_errors(true);
+
+                    $content = mb_convert_encoding($item->getContent(), 'HTML-ENTITIES', 'UTF-8');
+
+                    $path = $_SERVER['DOCUMENT_ROOT'].$request->getBasePath();
+
+                    $dom = new \DOMDocument();
+                    $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
+
+                    $xpath = new \DOMXPath($dom);
+
+                    $nodes = $xpath->query('//*[@src]');
+                    foreach($nodes as $node) {
+                        if($node->tagName == 'img') {
+                            $src = $node->getAttribute('src');
+                            if(substr($src, 0, 5) == 'http:') {
+                                $key = sha1($src);
+
+                                $replace = false;
+
+                                if(!file_exists($path.'/proxy/'.$key)) {
+                                    $opts = array(
+                                        'http' => array(
+                                            'method' => 'GET',
+                                            'user_agent'=> $_SERVER['HTTP_USER_AGENT']
+                                        )
+                                    );
+                                    $context = stream_context_create($opts);
+
+                                    $file = @file_get_contents($src, false, $context);
+                                    if($file){
+                                        $replace = true;
+                                        file_put_contents($path.'/proxy/'.$key, $file);
+                                    }
+                                } else {
+                                    $replace = true;
+                                }
+                                if($replace) {
+                                    $node->setAttribute('src', '../proxy/'.$key);
+                                }
+                            }
+                        }
+                    }
+
+                    $content = html_entity_decode($dom->saveHTML(), ENT_HTML5);
+
+                    libxml_clear_errors();
+                } catch (Exception $e) {
+                }
+            }*/
+
             $data['entries'][$index] = $item->toArray();
             foreach($actions as $action) {
                 $data['entries'][$index][$action->getAction()->getTitle()] = true;
             }
             $data['entries'][$index]['categories'] = $categories;
             $data['entries'][$index]['enclosures'] = $enclosures;
+
+            /*if(isset($content) == 1) {
+                $data['entries'][$index]['content'] = $content;
+            }*/
+
             $index++;
         }
         $data['entries_entity'] = 'item';
