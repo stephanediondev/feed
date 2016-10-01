@@ -215,6 +215,10 @@ class AuthorController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        if(!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if(!$author) {

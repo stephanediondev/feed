@@ -56,8 +56,15 @@ class AuthorControllerTest extends AbstractControllerTest
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
-        // test DELETE
+        // test DELETE not administrator
         $this->client->request('DELETE', '/api/author/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals('application/json', $response->headers->get('Content-type'));
+
+        // test DELETE administrator
+        $this->client->request('DELETE', '/api/author/'.$content['entry']['id'], [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->tokenAdministrator]);
         $response = $this->client->getResponse();
 
         $content = json_decode($response->getContent(), true);
@@ -105,7 +112,7 @@ class AuthorControllerTest extends AbstractControllerTest
         $this->assertEquals('application/json', $response->headers->get('Content-type'));
 
         // test 404
-        $this->client->request('DELETE', '/api/author/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->token]);
+        $this->client->request('DELETE', '/api/author/0', [], [], ['HTTP_X-CONNECTION-TOKEN' => $this->tokenAdministrator]);
         $response = $this->client->getResponse();
 
         $this->assertEquals(404, $response->getStatusCode());

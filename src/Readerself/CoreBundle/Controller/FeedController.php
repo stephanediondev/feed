@@ -321,6 +321,10 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        if(!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if(!$feed) {
@@ -345,7 +349,7 @@ class FeedController extends AbstractController
      *     },
      * )
      */
-    public function subscribeAction(Request $request, $id)
+    public function actionSubscribeAction(Request $request, $id)
     {
         return $this->setAction('subscribe', $request, $id);
     }

@@ -36,10 +36,10 @@ readerself_api_feeds:
         _controller: "readerself_core_controller_feed:indexAction"
     methods: GET
 
-readerself_api_feed_subscribe:
+readerself_api_feed_action_subscribe:
     path: /feed/action/subscribe/{id}
     defaults:
-        _controller: "readerself_core_controller_feed:subscribeAction"
+        _controller: "readerself_core_controller_feed:actionSubscribeAction"
     requirements:
         id: '\d+'
     methods: GET

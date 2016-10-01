@@ -220,6 +220,85 @@ class ItemController extends AbstractController
     }
 
     /**
+     * Retrieve an item.
+     *
+     * @ApiDoc(
+     *     section="Item",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function readAction(Request $request, $id)
+    {
+        $data = [];
+        $memberConnected = $this->validateToken($request);
+
+        $item = $this->itemManager->getOne(['id' => $id]);
+
+        if(!$item) {
+            return new JsonResponse($data, 404);
+        }
+
+        $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item]);
+
+        $categories = [];
+        foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item]) as $itemCategory) {
+            $categories[] = $itemCategory->toArray();
+        }
+
+        $enclosures = [];
+        foreach($this->itemManager->enclosureManager->getList(['item' => $item]) as $enclosure) {
+            $enclosures[] = $enclosure->toArray();
+        }
+
+        $data['entry'] = $item->toArray();
+        foreach($actions as $action) {
+            $data['entry'][$action->getAction()->getTitle()] = true;
+        }
+        $data['entry']['categories'] = $categories;
+        $data['entry']['enclosures'] = $enclosures;
+        $data['entry_entity'] = 'item';
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * Delete an item.
+     *
+     * @ApiDoc(
+     *     section="Item",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        if(!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
+        $item = $this->itemManager->getOne(['id' => $id]);
+
+        if(!$item) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $item->toArray();
+        $data['entry_entity'] = 'item';
+
+        $this->itemManager->remove($item);
+
+        return new JsonResponse($data);
+    }
+
+    /**
      * Mark all items as read.
      *
      * @ApiDoc(
@@ -278,7 +357,7 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function readAction(Request $request, $id)
+    public function actionReadAction(Request $request, $id)
     {
         return $this->setAction('read', $request, $id);
     }
@@ -293,7 +372,7 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function starAction(Request $request, $id)
+    public function actionStarAction(Request $request, $id)
     {
         return $this->setAction('star', $request, $id);
     }
@@ -428,7 +507,7 @@ class ItemController extends AbstractController
      *     },
      * )
      */
-    public function emailAction(Request $request, $id)
+    public function actionEmailAction(Request $request, $id)
     {
         $data = [];
         if(!$memberConnected = $this->validateToken($request)) {

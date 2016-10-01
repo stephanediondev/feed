@@ -226,6 +226,10 @@ class CategoryController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        if(!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if(!$category) {
@@ -250,7 +254,7 @@ class CategoryController extends AbstractController
      *     },
      * )
      */
-    public function excludeAction(Request $request, $id)
+    public function actionExcludeAction(Request $request, $id)
     {
         return $this->setAction('exclude', $request, $id);
     }

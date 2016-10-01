@@ -1,3 +1,20 @@
+#crud
+readerself_api_item_read:
+    path: /item/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:readAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
+readerself_api_item_delete:
+    path: /item/{id}
+    defaults:
+        _controller: "readerself_core_controller_item:deleteAction"
+    requirements:
+        id: '\d+'
+    methods: DELETE
+
 #extra
 readerself_api_items:
     path: /items
@@ -11,34 +28,26 @@ readerself_api_items_markallasread:
         _controller: "readerself_core_controller_item:markallasreadAction"
     methods: GET
 
-readerself_api_item_read:
+readerself_api_item_action_read:
     path: /item/action/read/{id}
     defaults:
-        _controller: "readerself_core_controller_item:readAction"
+        _controller: "readerself_core_controller_item:actionReadAction"
     requirements:
         id: '\d+'
     methods: GET
 
-readerself_api_item_star:
+readerself_api_item_action_star:
     path: /item/action/star/{id}
     defaults:
-        _controller: "readerself_core_controller_item:starAction"
+        _controller: "readerself_core_controller_item:actionStarAction"
     requirements:
         id: '\d+'
     methods: GET
 
-readerself_api_item_readability:
-    path: /item/readability/{id}
-    defaults:
-        _controller: "readerself_core_controller_item:readabilityAction"
-    requirements:
-        id: '\d+'
-    methods: GET
-
-readerself_api_item_email:
+readerself_api_item_action_email:
     path: /item/action/email/{id}
     defaults:
-        _controller: "readerself_core_controller_item:emailAction"
+        _controller: "readerself_core_controller_item:actionEmailAction"
     requirements:
         id: '\d+'
     methods: POST

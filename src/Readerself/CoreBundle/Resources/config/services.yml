@@ -217,4 +217,7 @@ services:
         arguments:
             - "@readerself_core_manager_search"
         tags:
-            - { name: "kernel.event_listener", event: "Feed.before_remove", method: "persist" }
+            - { name: "kernel.event_listener", event: "Author.before_remove", method: "removeAuthor" }
+            - { name: "kernel.event_listener", event: "Category.before_remove", method: "removeCategory" }
+            - { name: "kernel.event_listener", event: "Feed.before_remove", method: "removeFeed" }
+            - { name: "kernel.event_listener", event: "Item.before_remove", method: "removeItem" }
