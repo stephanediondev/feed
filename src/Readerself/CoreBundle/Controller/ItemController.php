@@ -390,10 +390,6 @@ class ItemController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        if($case == 'star') {
-            $connectionPinboard = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
-        }
-
         $action = $this->actionManager->getOne(['title' => $case]);
 
         if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
@@ -420,12 +416,6 @@ class ItemController extends AbstractController
                     $this->actionManager->actionItemMemberManager->persist($actionItemMemberReverse);
                 }
             }
-
-            if($case == 'star') {
-                if($connectionPinboard) {
-                    $this->pinboard($connectionPinboard, $item, 'delete');
-                }
-            }
         } else {
             $actionItemMember = $this->actionManager->actionItemMemberManager->init();
             $actionItemMember->setAction($action);
@@ -445,50 +435,12 @@ class ItemController extends AbstractController
                     $this->actionManager->actionItemMemberManager->remove($actionItemMemberReverse);
                 }
             }
-
-            if($case == 'star') {
-                if($connectionPinboard) {
-                    $this->pinboard($connectionPinboard, $item, 'add');
-                }
-            }
         }
 
         $data['entry'] = $item->toArray();
         $data['entry_entity'] = 'item';
 
         return new JsonResponse($data);
-    }
-
-    private function pinboard($connection, $item, $method) {
-        $url = 'https://api.pinboard.in/v1/posts/'.$method;
-        $fields = array(
-            'auth_token' => $connection->getToken(),
-            'url' => $item->getLink(),
-            'description' => $item->getTitle(),
-            'replace' => 'yes',
-        );
-        $ci = curl_init();
-        curl_setopt($ci, CURLOPT_URL, $url.'?'.http_build_query($fields));
-        curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
-        curl_exec($ci);
-
-        /*$action = $this->actionManager->getOne(['title' => 'pinboard']);
-
-        if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
-            'action' => $action,
-            'item' => $item,
-            'member' => $connection->getmember(),
-        ]) && $method == 'delete') {
-            $this->actionManager->actionItemMemberManager->remove($actionItemMember);
-
-        } else if(!$actionItemMember && $method == 'add') {
-            $actionItemMember = $this->actionManager->actionItemMemberManager->init();
-            $actionItemMember->setAction($action);
-            $actionItemMember->setItem($item);
-            $actionItemMember->setMember($connection->getmember());
-            $this->actionManager->actionItemMemberManager->persist($actionItemMember);
-        }*/
     }
 
     /**

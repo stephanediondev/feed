@@ -221,3 +221,18 @@ services:
             - { name: "kernel.event_listener", event: "Category.before_remove", method: "removeCategory" }
             - { name: "kernel.event_listener", event: "Feed.before_remove", method: "removeFeed" }
             - { name: "kernel.event_listener", event: "Item.before_remove", method: "removeItem" }
+
+    readerself_core_eventlistener_pinboard:
+        class: Readerself\CoreBundle\EventListener\PinboardListener
+        arguments:
+            - "@readerself_core_manager_member"
+        tags:
+            - { name: "kernel.event_listener", event: "ActionItemMember.after_persist", method: "add" }
+            - { name: "kernel.event_listener", event: "ActionItemMember.before_remove", method: "delete" }
+
+    readerself_core_eventlistener_subscribe:
+        class: Readerself\CoreBundle\EventListener\SubscribeListener
+        arguments:
+            - "@readerself_core_manager_member"
+        tags:
+            - { name: "kernel.event_listener", event: "ActionFeedMember.after_persist", method: "unread" }
