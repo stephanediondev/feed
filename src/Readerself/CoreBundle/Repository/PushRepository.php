@@ -53,6 +53,7 @@ class PushRepository extends AbstractRepository
             $query->setParameter(':member', $parameters['member']);
         }
 
+        $query->addOrderBy('psh.dateModified', 'DESC');
         $query->groupBy('psh.id');
 
         $getQuery = $query->getQuery();

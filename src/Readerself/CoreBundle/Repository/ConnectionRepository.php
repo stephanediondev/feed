@@ -51,7 +51,7 @@ class ConnectionRepository extends AbstractRepository
             $query->setParameter(':member', $parameters['member']);
         }
 
-        $query->addOrderBy('cnt.id', 'DESC');
+        $query->addOrderBy('cnt.dateModified', 'DESC');
         $query->groupBy('cnt.id');
 
         $getQuery = $query->getQuery();

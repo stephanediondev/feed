@@ -117,8 +117,8 @@ function explainConnection(connection) {
                     }
 
                     if(status == 'prompt' || status == 'granted') {
-                        reg.pushManager.subscribe({userVisibleOnly: true}).then(function(sub) {
-                            var subJson = sub.toJSON();
+                        reg.pushManager.subscribe({userVisibleOnly: true}).then(function(pushSubscription) {
+                            var toJSON = pushSubscription.toJSON();
                             $.ajax({
                                 headers: {
                                     'X-CONNECTION-TOKEN': connection.token
@@ -126,9 +126,9 @@ function explainConnection(connection) {
                                 async: true,
                                 cache: false,
                                 data: {
-                                    endpoint: sub.endpoint,
-                                    public_key: subJson.keys.p256dh,
-                                    authentication_secret: subJson.keys.auth
+                                    endpoint: pushSubscription.endpoint,
+                                    public_key: toJSON.keys.p256dh,
+                                    authentication_secret: toJSON.keys.auth
                                 },
                                 dataType: 'json',
                                 statusCode: {
