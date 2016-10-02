@@ -69,7 +69,6 @@ class ActionFeedMemberRepository extends AbstractRepository
         $query->groupBy('act_fed_mbr.id');
 
         $getQuery = $query->getQuery();
-
-        return $getQuery->getResult();
+        return $getQuery;
     }
 }

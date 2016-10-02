@@ -107,16 +107,6 @@ class CollectionManager extends AbstractManager
         $time = 0;
         $memory = 0;
 
-        $insertCollection = [
-            'feeds' => $feeds,
-            'errors' => $errors,
-            'time' => $time,
-            'memory' => $memory,
-            'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
-            'date_modified' => (new \Datetime())->format('Y-m-d H:i:s'),
-        ];
-        $collection_id = $this->insert('collection', $insertCollection);
-
         if($feed_id) {
             $sql = 'SELECT id, link FROM feed WHERE id = :feed_id';
             $stmt = $this->connection->prepare($sql);
@@ -128,6 +118,10 @@ class CollectionManager extends AbstractManager
         }
         $stmt->execute();
         $feeds_result = $stmt->fetchAll();
+
+        $collection = $this->init();
+        $collection->setFeeds(count($feeds_result));
+        $collection_id = $this->persist($collection);
 
         foreach($feeds_result as $feed) {
             $feeds++;
@@ -239,13 +233,11 @@ class CollectionManager extends AbstractManager
             $this->insert('collection_feed', $insertCollectionFeed);
         }
 
-        $updateCollection = [];
-        $updateCollection['feeds'] = $feeds;
-        $updateCollection['errors'] = $errors;
-        $updateCollection['time'] = microtime(1) - $startTime;
-        $updateCollection['memory'] = memory_get_peak_usage();
-        $updateCollection['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
-        $this->update('collection', $updateCollection, $collection_id);
+        $collection->setFeeds($feeds);
+        $collection->setErrors($errors);
+        $collection->setTime(microtime(1) - $startTime);
+        $collection->setMemory(memory_get_peak_usage());
+        $this->persist($collection);
 
         $sql = 'SELECT id FROM member';
         $stmt = $this->connection->prepare($sql);

@@ -9,8 +9,10 @@ class ActionItemRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('act_itm');
+        $query->addSelect('act_itm', 'act', 'itm');
         $query->from('ReaderselfCoreBundle:ActionItem', 'act_itm');
+        $query->leftJoin('act_itm.action', 'act');
+        $query->leftJoin('act_itm.item', 'itm');
 
         if(isset($parameters['id']) == 1) {
             $query->andWhere('act_itm.id = :id');
@@ -37,28 +39,23 @@ class ActionItemRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('itm', 'fed', 'aut');
-        $query->from('ReaderselfCoreBundle:Item', 'itm');
-        $query->leftJoin('itm.feed', 'fed');
-        $query->leftJoin('itm.author', 'aut');
+        $query->addSelect('act_itm', 'act', 'itm');
+        $query->from('ReaderselfCoreBundle:ActionItem', 'act_itm');
+        $query->leftJoin('act_itm.action', 'act');
+        $query->leftJoin('act_itm.item', 'itm');
 
-        if(isset($parameters['feed']) == 1) {
-            $query->andWhere('itm.feed = :feed');
-            $query->setParameter(':feed', $parameters['feed']);
+        if(isset($parameters['action']) == 1) {
+            $query->andWhere('act_itm.action = :action');
+            $query->setParameter(':action', $parameters['action']);
         }
 
-        if(isset($parameters['member']) == 1) {
-            $query->leftJoin('fed.subscriptions', 'sub');
-            $query->andWhere('sub.member = :action');
-            $query->setParameter(':member', $parameters['member']);
+        if(isset($parameters['item']) == 1) {
+            $query->andWhere('act_itm.item = :item');
+            $query->setParameter(':item', $parameters['item']);
         }
 
-        $query->addOrderBy('itm.date', 'DESC');
-        $query->groupBy('itm.id');
-        $query->setMaxResults(20);
+        $query->groupBy('act_itm.id');
 
-        $getQuery = $query->getQuery();
-
-        return $getQuery->getResult();
+        return $query->getQuery();
     }
 }

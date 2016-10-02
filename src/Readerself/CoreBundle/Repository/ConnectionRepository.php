@@ -55,7 +55,6 @@ class ConnectionRepository extends AbstractRepository
         $query->groupBy('cnt.id');
 
         $getQuery = $query->getQuery();
-
-        return $getQuery->getResult();
+        return $getQuery;
     }
 }

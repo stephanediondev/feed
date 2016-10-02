@@ -118,6 +118,7 @@ class ItemRepository extends AbstractRepository
 
         $query->groupBy('itm.id');
 
-        return $query->getQuery();
+        $getQuery = $query->getQuery();
+        return $getQuery;
     }
 }

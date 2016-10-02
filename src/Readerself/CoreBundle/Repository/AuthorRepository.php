@@ -49,6 +49,7 @@ class AuthorRepository extends AbstractRepository
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('aut.id');
 
-        return $query->getQuery();
+        $getQuery = $query->getQuery();
+        return $getQuery;
     }
 }

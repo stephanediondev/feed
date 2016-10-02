@@ -53,6 +53,7 @@ class CategoryRepository extends AbstractRepository
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('cat.id');
 
-        return $query->getQuery();
+        $getQuery = $query->getQuery();
+        return $getQuery;
     }
 }

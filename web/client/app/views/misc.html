@@ -238,12 +238,12 @@
                 {{ _server.DOCUMENT_ROOT }}
             </p>
             <p>
-                <span class="label">{{trans 'PHP_SELF'}}</span>
-                {{ _server.PHP_SELF }}
-            </p>
-            <p>
                 <span class="label">{{trans 'SCRIPT_FILENAME'}}</span>
                 {{ _server.SCRIPT_FILENAME }}
+            </p>
+            <p>
+                <span class="label">{{trans 'get_current_user'}}</span>
+                {{ function.get_current_user }}
             </p>
         </div>
     </div>
@@ -267,10 +267,24 @@
                 <span class="label">{{trans 'symfony'}}</span>
                 {{ symfony }}
             </p>
-            <p>
-                <span class="label">{{trans 'get_current_user'}}</span>
-                {{ function.get_current_user }}
-            </p>
+            {{#if test.apcu }}
+                <p>
+                    <span class="label">{{trans 'apcu'}}</span>
+                    {{ test.apcu }}
+                </p>
+            {{/if}}
+            {{#if test.tidy }}
+                <p>
+                    <span class="label">{{trans 'tidy'}}</span>
+                    {{ test.tidy }}
+                </p>
+            {{/if}}
+            {{#if test.mbstring }}
+                <p>
+                    <span class="label">{{trans 'mbstring'}}</span>
+                    {{ test.mbstring }}
+                </p>
+            {{/if}}
         </div>
     </div>
 

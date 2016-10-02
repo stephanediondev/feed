@@ -65,6 +65,6 @@ class FeedCategoryRepository extends AbstractRepository
             $getQuery->setResultCacheLifetime(86400);
         }
 
-        return $getQuery->getResult();
+        return $getQuery;
     }
 }

@@ -69,7 +69,6 @@ class ActionCategoryMemberRepository extends AbstractRepository
         $query->groupBy('act_cat_mbr.id');
 
         $getQuery = $query->getQuery();
-
-        return $getQuery->getResult();
+        return $getQuery;
     }
 }

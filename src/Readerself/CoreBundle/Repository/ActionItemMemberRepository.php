@@ -69,7 +69,6 @@ class ActionItemMemberRepository extends AbstractRepository
         $query->groupBy('act_itm_mbr.id');
 
         $getQuery = $query->getQuery();
-
-        return $getQuery->getResult();
+        return $getQuery;
     }
 }

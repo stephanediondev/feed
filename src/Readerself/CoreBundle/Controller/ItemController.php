@@ -121,15 +121,15 @@ class ItemController extends AbstractController
         foreach($pagination as $result) {
             $item = $this->itemManager->getOne(['id' => $result['id']]);
 
-            $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item]);
+            $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
 
             $categories = [];
-            foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item]) as $itemCategory) {
+            foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
                 $categories[] = $itemCategory->toArray();
             }
 
             $enclosures = [];
-            foreach($this->itemManager->enclosureManager->getList(['item' => $item]) as $enclosure) {
+            foreach($this->itemManager->enclosureManager->getList(['item' => $item])->getResult() as $enclosure) {
                 $enclosures[] = $enclosure->toArray();
             }
 
@@ -240,15 +240,15 @@ class ItemController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item]);
+        $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
 
         $categories = [];
-        foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item]) as $itemCategory) {
+        foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
             $categories[] = $itemCategory->toArray();
         }
 
         $enclosures = [];
-        foreach($this->itemManager->enclosureManager->getList(['item' => $item]) as $enclosure) {
+        foreach($this->itemManager->enclosureManager->getList(['item' => $item])->getResult() as $enclosure) {
             $enclosures[] = $enclosure->toArray();
         }
 

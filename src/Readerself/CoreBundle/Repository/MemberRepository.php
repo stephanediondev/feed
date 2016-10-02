@@ -39,7 +39,6 @@ class MemberRepository extends AbstractRepository
         $query->groupBy('mbr.id');
 
         $getQuery = $query->getQuery();
-
-        return $getQuery->getResult();
+        return $getQuery;
     }
 }

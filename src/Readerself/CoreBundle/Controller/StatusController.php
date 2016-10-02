@@ -56,6 +56,11 @@ class StatusController extends AbstractController
         $data['ini_get']['safe_mode'] = ini_get('safe_mode');
         $data['ini_get']['open_basedir'] = ini_get('open_basedir');
 
+        $data['test'] = [];
+        $data['test']['apcu'] = function_exists('apcu_clear_cache');
+        $data['test']['tidy'] = class_exists('Tidy');
+        $data['test']['mbstring'] = extension_loaded('mbstring');
+
         //$data['connection'] = $this->get('doctrine')->getManager('default')->getConnection();
 
         $data['symfony'] = \Symfony\Component\HttpKernel\Kernel::VERSION;

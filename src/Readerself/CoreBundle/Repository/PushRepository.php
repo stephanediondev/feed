@@ -56,7 +56,6 @@ class PushRepository extends AbstractRepository
         $query->groupBy('psh.id');
 
         $getQuery = $query->getQuery();
-
-        return $getQuery->getResult();
+        return $getQuery;
     }
 }

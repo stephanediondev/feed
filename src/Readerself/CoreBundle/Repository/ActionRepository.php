@@ -38,34 +38,12 @@ class ActionRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('itm', 'fed', 'aut');
-        $query->from('ReaderselfCoreBundle:Item', 'itm');
-        $query->leftJoin('itm.feed', 'fed');
-        $query->leftJoin('itm.author', 'aut');
+        $query->addSelect('act');
+        $query->from('ReaderselfCoreBundle:Action', 'act');
 
-        if(isset($parameters['feed']) == 1) {
-            $query->andWhere('itm.feed = :feed');
-            $query->setParameter(':feed', $parameters['feed']);
-        }
-
-        if(isset($parameters['member']) == 1) {
-            $query->leftJoin('fed.subscriptions', 'sub');
-            $query->andWhere('sub.member = :action');
-            $query->setParameter(':member', $parameters['member']);
-        }
-
-        $query->addOrderBy('itm.date', 'DESC');
-        $query->groupBy('itm.id');
-        $query->setMaxResults(20);
+        $query->groupBy('act.id');
 
         $getQuery = $query->getQuery();
-
-        if($cacheDriver = $this->cacheDriver()) {
-            $cacheDriver->setNamespace('readerself.action.');
-            $getQuery->setResultCacheDriver($cacheDriver);
-            $getQuery->setResultCacheLifetime(86400);
-        }
-
-        return $getQuery->getResult();
+        return $getQuery;
     }
 }

@@ -263,7 +263,7 @@ class MemberController extends AbstractController
         }
 
         $connections = [];
-        foreach($this->memberManager->connectionManager->getList(['member' => $memberConnected]) as $connection) {
+        foreach($this->memberManager->connectionManager->getList(['member' => $memberConnected])->getResult() as $connection) {
             $connections[] = $connection->toArray();
         }
 
@@ -294,7 +294,7 @@ class MemberController extends AbstractController
         }
 
         $notifications = [];
-        foreach($this->memberManager->pushManager->getList(['member' => $memberConnected]) as $connection) {
+        foreach($this->memberManager->pushManager->getList(['member' => $memberConnected])->getResult() as $connection) {
             $notifications[] = $connection->toArray();
         }
 
@@ -350,13 +350,7 @@ class MemberController extends AbstractController
             }
         }
 
-        $connections = [];
-        foreach($this->memberManager->connectionManager->getList(['member' => $memberConnected]) as $connection) {
-            $connections[] = $connection->toArray();
-        }
-
         $data['entry'] = $memberConnected->toArray();
-        $data['entry']['connections'] = $connections;
         $data['entry_entity'] = 'member';
 
         return new JsonResponse($data);

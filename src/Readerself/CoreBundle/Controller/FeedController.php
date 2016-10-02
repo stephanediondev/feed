@@ -129,10 +129,10 @@ class FeedController extends AbstractController
         $index = 0;
         foreach($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
-            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed]);
+            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
             $categories = [];
-            foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed]) as $feedCategory) {
+            foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
                 $categories[] = $feedCategory->toArray();
             }
 
@@ -233,15 +233,15 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed]);
+        $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
         $categories = [];
-        foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed]) as $feedCategory) {
+        foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
             $categories[] = $feedCategory->toArray();
         }
 
         $collections = [];
-        foreach($this->feedManager->collectionFeedManager->getList(['feed' => $feed]) as $collection) {
+        foreach($this->feedManager->collectionFeedManager->getList(['feed' => $feed])->getResult() as $collection) {
             $collections[] = $collection->toArray();
         }
 
