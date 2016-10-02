@@ -2,7 +2,6 @@ var routes = [];
 routes['#login'] = {view: 'view-login', query: false, title: 'login'};
 routes['#logout'] = {view: 'view-logout', query: '/logout'};
 routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
-routes['#profile/update'] = {view: 'view-profile-update', query: '/profile', title: 'profile'};
 routes['#profile/connections'] = {view: 'view-profile-connections', query: '/profile/connections', title: 'profile'};
 routes['#profile/notifications'] = {view: 'view-profile-notifications', query: '/profile/notifications', title: 'profile'};
 routes['#401'] = {view: 'view-401', query: false, title: 'error_401'};
