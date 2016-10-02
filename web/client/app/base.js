@@ -95,28 +95,29 @@ function explainConnection(connection) {
 
         if('serviceWorker' in navigator && window.location.protocol == 'https:') {
             navigator.serviceWorker.register('serviceworker.js').then(function(reg) {
-                reg.pushManager.subscribe({userVisibleOnly: true}).then(function(sub) {
-                    reg.pushManager.permissionState({userVisibleOnly: true}).then(function(status) {
-                        var pushData = store.get('push');
-                        if(status == 'denied' && pushData) {
-                            $.ajax({
-                                headers: {
-                                    'X-CONNECTION-TOKEN': connection.token
-                                },
-                                async: true,
-                                cache: false,
-                                dataType: 'json',
-                                statusCode: {
-                                    200: function() {
-                                        store.remove('push');
-                                    }
-                                },
-                                type: 'DELETE',
-                                url: apiUrl + '/push/' + pushData.id
-                            });
-                        }
 
-                        if(status == 'granted') {
+                reg.pushManager.permissionState({userVisibleOnly: true}).then(function(status) {
+                    var pushData = store.get('push');
+                    if(status == 'denied' && pushData) {
+                        $.ajax({
+                            headers: {
+                                'X-CONNECTION-TOKEN': connection.token
+                            },
+                            async: true,
+                            cache: false,
+                            dataType: 'json',
+                            statusCode: {
+                                200: function() {
+                                    store.remove('push');
+                                }
+                            },
+                            type: 'DELETE',
+                            url: apiUrl + '/push/' + pushData.id
+                        });
+                    }
+
+                    if(status == 'prompt' || status == 'granted') {
+                        reg.pushManager.subscribe({userVisibleOnly: true}).then(function(sub) {
                             var subJson = sub.toJSON();
                             $.ajax({
                                 headers: {
@@ -138,8 +139,8 @@ function explainConnection(connection) {
                                 type: 'POST',
                                 url: apiUrl + '/push'
                             });
-                        }
-                    });
+                        });
+                    }
                 });
             }).catch(function() {
             });
