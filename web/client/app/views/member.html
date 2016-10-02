@@ -130,11 +130,17 @@
                 </h1>
                 <div class="mdl-card__subtitle-text">
                     <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ connection.date_modified }}"></span></span>
-                    <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{ connection.ip }}</span>
+                    <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{#if connection.currentIp }}<strong>{{ connection.ip }}</strong>{{else}}{{ connection.ip }}{{/if}}</span>
                 </div>
             </div>
             <div class="mdl-card__supporting-text">
-                {{ connection.agent }}
+                <p>
+                    {{#if connection.currentAgent }}
+                        <strong>{{ connection.agent }}</strong>
+                    {{else}}
+                        {{ connection.agent }}
+                    {{/if}}
+                </p>
             </div>
             <div class="mdl-card__actions mdl-card--border online">
                 <form action="#profile/connections" data-query="/connection/{{ connection.id }}" method="DELETE">
@@ -170,11 +176,17 @@
                 </h1>
                 <div class="mdl-card__subtitle-text">
                     <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ notification.date_modified }}"></span></span>
-                    <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{ notification.ip }}</span>
+                    <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{#if notification.currentIp }}<strong>{{ notification.ip }}</strong>{{else}}{{ notification.ip }}{{/if}}</span>
                 </div>
             </div>
             <div class="mdl-card__supporting-text">
-                {{ notification.agent }}
+                <p>
+                    {{#if notification.currentAgent }}
+                        <strong>{{ notification.agent }}</strong>
+                    {{else}}
+                        {{ notification.agent }}
+                    {{/if}}
+                </p>
             </div>
             <div class="mdl-card__actions mdl-card--border online">
                 <form action="#profile/notifications" data-query="/push/{{ notification.id }}" method="DELETE">
