@@ -1,3 +1,12 @@
+var files = [
+    'app/views/misc.html',
+    'app/views/member.html',
+    'app/views/item.html',
+    'app/views/feed.html',
+    'app/views/category.html',
+    'app/views/author.html',
+];
+
 var timezone = new Date();
 timezone = -timezone.getTimezoneOffset() / 60;
 var lastHistory = false;
@@ -53,14 +62,6 @@ $.ajax({
     }
 });
 
-var files = [
-    'app/views/misc.html',
-    'app/views/member.html',
-    'app/views/item.html',
-    'app/views/feed.html',
-    'app/views/category.html',
-    'app/views/author.html',
-];
 function loadFile(url) {
     $.ajax({
         async: false,
@@ -360,9 +361,9 @@ function setSnackbar(message) {
 }
 
 function setPositions() {
-    _window_height = $(window).height();
-    _offset = $('.mdl-layout__content').offset();
-    _height = _window_height - _offset.top;
+    var _window_height = $(window).height();
+    var _offset = $('.mdl-layout__content').offset();
+    var _height = _window_height - _offset.top;
     $('.mdl-layout__content').css({ 'height': _height});
     $('main > .mdl-grid').css({ 'padding-bottom': _height});
 }
@@ -379,6 +380,8 @@ function item_up() {
     }
 }
 function item_down() {
+    var itm_id = false;
+    var next = false;
     if($('.mdl-grid .card-selected').length === 0) {
         itm_id = $('.mdl-grid').find('.mdl-card:first').attr('id');
         next = $('#' + itm_id).attr('id');
@@ -391,26 +394,31 @@ function item_down() {
         scrollTo('#' + next);
 
         if($('#' + next).hasClass('more')) {
-            liknActionMore = $('#' + next).find('.more');
-
-            if(liknActionMore.hasClass('progress')) {
-            } else {
-                liknActionMore.addClass('progress');
-                liknActionMore.trigger('click');
-                //loadRoute(liknActionMore.attr('href'));
-            }
+            actionMore($('#' + next).find('.more'));
         }
 
         if($('#' + next).hasClass('item') && $('body').hasClass('connected')) {
-            liknActionRead = $('#' + next).find('.action-read');
-            if(liknActionRead.hasClass('read')) {
-            } else if(liknActionRead.hasClass('unread')) {
-            } else if(liknActionRead.hasClass('progress')) {
-            } else {
-                liknActionRead.addClass('progress');
-                loadRoute(liknActionRead.attr('href'), {link: liknActionRead, snackbar: false});
-            }
+            actionRead($('#' + next).find('.action-read'));
         }
+    }
+}
+
+function actionMore(liknActionMore) {
+    if(liknActionMore.hasClass('progress')) {
+    } else {
+        liknActionMore.addClass('progress');
+        liknActionMore.trigger('click');
+        //loadRoute(liknActionMore.attr('href'));
+    }
+}
+
+function actionRead(liknActionRead) {
+    if(liknActionRead.hasClass('read')) {
+    } else if(liknActionRead.hasClass('unread')) {
+    } else if(liknActionRead.hasClass('progress')) {
+    } else {
+        liknActionRead.addClass('progress');
+        loadRoute(liknActionRead.attr('href'), {link: liknActionRead, snackbar: false});
     }
 }
 
@@ -458,7 +466,7 @@ $(document).ready(function() {
 
     $('.mdl-layout__drawer').on('click', '.mdl-list__item a', function() {
         if($('.mdl-layout__drawer').hasClass('is-visible')) {
-            d = document.querySelector('.mdl-layout');
+            var d = document.querySelector('.mdl-layout');
             d.MaterialLayout.toggleDrawer();
         }
     });
@@ -472,10 +480,10 @@ $(document).ready(function() {
     $(document).on('click', '.dialog', function(event) {
         event.preventDefault();
 
-        id = $(this).attr('id');
+        var id = $(this).attr('id');
 
         if($('body > dialog[for="' + id + '"]').length === 0) {
-            html = $('dialog[for="' + id + '"]')[0].outerHTML;
+            var html = $('dialog[for="' + id + '"]')[0].outerHTML;
             $('dialog[for="' + id + '"]').remove();
             $('body').append(html);
         }
@@ -494,14 +502,14 @@ $(document).ready(function() {
         } else {
             event.preventDefault();
         }
-        id = $(this).parents('.mdl-dialog').attr('for');
+        var id = $(this).parents('.mdl-dialog').attr('for');
 
         var dialog = document.querySelector('dialog[for="' + id + '"]');
         dialog.close();
     });
 
     $(document).on('click', 'dialog .close_submit', function() {
-        id = $(this).parents('.mdl-dialog').attr('for');
+        var id = $(this).parents('.mdl-dialog').attr('for');
 
         var dialog = document.querySelector('dialog[for="' + id + '"]');
         dialog.close();
@@ -581,7 +589,7 @@ $(document).ready(function() {
         var form = $(this);
 
         if(form.hasClass('share-form')) {
-            choice = form.find('input[type="radio"]:checked').val();
+            var choice = form.find('input[type="radio"]:checked').val();
             if(choice) {
                 window.open(choice, 'share');
             }
@@ -690,26 +698,11 @@ $(document).ready(function() {
                 var offset = $(this).offset();
                 if(offset.top + ref.height() - 60 < 0) {
                     if($(this).hasClass('more')) {
-                        liknActionMore = ref.find('.more');
-
-                        if(liknActionMore.hasClass('progress')) {
-                        } else {
-                            liknActionMore.addClass('progress');
-                            liknActionMore.trigger('click');
-                            //loadRoute(liknActionMore.attr('href'));
-                        }
+                        actionMore(ref.find('.more'));
                     }
 
                     if($(this).hasClass('item') && $('body').hasClass('connected')) {// && items_display == 'expand'
-                        liknActionRead = ref.find('.action-read');
-
-                        if(liknActionRead.hasClass('read')) {
-                        } else if(liknActionRead.hasClass('unread')) {
-                        } else if(liknActionRead.hasClass('progress')) {
-                        } else {
-                            liknActionRead.addClass('progress');
-                            loadRoute(liknActionRead.attr('href'), {link: liknActionRead, snackbar: false});
-                        }
+                        actionRead(ref.find('.action-read'));
                     }
                     return true;
                 } else {

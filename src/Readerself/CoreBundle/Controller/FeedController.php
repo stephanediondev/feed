@@ -223,9 +223,7 @@ class FeedController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, 403);
-        }
+        $memberConnected = $this->validateToken($request);
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
