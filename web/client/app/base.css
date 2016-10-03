@@ -1,13 +1,10 @@
-a:link, a:visited {
-    color: #757575;
-}
 .mdl-layout__header {
     min-height: inherit;
 }
 .mdl-layout__drawer-button {
     height: auto;
     line-height: 1;
-    padding: 5px 5px 5px 5px;
+    padding: 7px 5px 7px 5px;
     width: auto;
 }
 .mdl-layout__header-row {
@@ -84,59 +81,10 @@ a:link, a:visited {
 .mdl-menu__item a:link, .mdl-menu__item a:visited {
     text-decoration: none;
 }
-.favicon, a.favicon:link, a.favicon:visited {
-    background-position: center left;
-    background-repeat: no-repeat;
-    background-size: 13px 13px;
-    padding-left: 16px;
-}
-h1 .favicon, h1.favicon, h1 a.favicon:link, h1 a.favicon:visited {
-    background-size: 16px 16px;
-    padding-left: 19px;
-}
-
-.material-icons {
-    font-feature-settings: 'liga';
-    text-rendering: optimizeLegibility;
-    vertical-align: middle;
-}
 .mdl-card__subtitle-text .material-icons {
     font-size: 16px;
     margin-right: 2px;
 }
-img, iframe, video {
-    max-width: 100%;
-}
-figure {
-    display: block;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-}
-label, .label {
-    display: block;
-    font-weight: bold;
-}
-
-input[type="text"], input[type="email"], input[type="password"], input[type="url"], textarea {
-    border: none;
-    border-bottom: 1px solid rgba(0,0,0,.12);
-    color: inherit;
-    display: block;
-    font-size: inherit;
-    padding: 4px 0;
-    text-align: left;
-    width: 100%;
-}
-textarea {
-    min-height: 250px;
-}
-input[type="text"][required="required"], input[type="email"][required="required"], input[type="password"][required="required"], input[type="url"][required="required"], textarea[required="required"] {
-    border-color: #d50000;
-}
-input:-webkit-autofill {
-    -webkit-box-shadow: 0px 0px 0px 1000px #FFFFFF inset;
-}
-
 .mdl-card__supporting-text h1 {
     font-size: 17px;
     line-height: 1;
@@ -190,6 +138,60 @@ input:-webkit-autofill {
 }
 .mdl-dialog__content {
     padding: 0px;
+}
+
+.favicon, a.favicon:link, a.favicon:visited {
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: 13px 13px;
+    padding-left: 16px;
+}
+h1 .favicon, h1.favicon, h1 a.favicon:link, h1 a.favicon:visited {
+    background-size: 16px 16px;
+    padding-left: 19px;
+}
+
+.material-icons {
+    font-feature-settings: 'liga';
+    text-rendering: optimizeLegibility;
+    vertical-align: middle;
+}
+
+a:link, a:visited {
+    color: #757575;
+}
+img, iframe, video {
+    max-width: 100%;
+}
+figure {
+    display: block;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+label, .label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="url"], textarea {
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,.12);
+    border-radius: 0px;
+    color: inherit;
+    display: block;
+    font-size: inherit;
+    padding: 4px 0;
+    text-align: left;
+    width: 100%;
+}
+textarea {
+    min-height: 250px;
+}
+input[type="text"][required="required"], input[type="email"][required="required"], input[type="password"][required="required"], input[type="url"][required="required"], textarea[required="required"] {
+    border-color: #d50000;
+}
+input:-webkit-autofill {
+    -webkit-box-shadow: 0px 0px 0px 1000px #FFFFFF inset;
 }
 
 body.anonymous .connected {
