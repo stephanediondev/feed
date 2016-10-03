@@ -146,6 +146,7 @@ class SearchManager extends AbstractManager
                     'title' => $result['title'],
                     'date' => $result['date'],
                     'content' => $result['content'],
+                    'content_full' => $result['content_full'],
                 );
                 if($result['author_id']) {
                     $body['author'] = array(

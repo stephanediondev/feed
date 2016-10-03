@@ -71,7 +71,11 @@
             </div>
         </div>
         <div class="mdl-card__supporting-text">
-            {{{ entry.content }}}
+            {{#if entry.content_full }}
+                {{{ entry.content_full }}}
+            {{else}}
+                {{{ entry.content }}}
+            {{/if}}
 
             {{#if entry.enclosures }}
                 {{#each entry.enclosures as |enclosure enclosure_index|}}

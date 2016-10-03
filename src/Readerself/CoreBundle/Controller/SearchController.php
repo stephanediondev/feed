@@ -221,7 +221,7 @@ class SearchController extends AbstractController
             if($type == 'item') {
                 $body['query'] = array(
                     'query_string' => array(
-                        'fields' => ['title', 'content', 'feed.title', 'author.title'],
+                        'fields' => ['title', 'content', 'content_full', 'feed.title', 'author.title'],
                         'query' => $request->query->get('q'),
                     ),
                 );
@@ -235,6 +235,10 @@ class SearchController extends AbstractController
                             'number_of_fragments' => 1,
                         ),
                         'content' => array(
+                            'fragment_size' => 255,
+                            'number_of_fragments' => 1,
+                        ),
+                        'content_full' => array(
                             'fragment_size' => 255,
                             'number_of_fragments' => 1,
                         ),
@@ -365,6 +369,9 @@ class SearchController extends AbstractController
                             }
                             if(isset($hit['highlight']['content']) == 1) {
                                 $data['entries'][$index]['content'] = $this->cleanContent($hit['highlight']['content'][0]);
+                            }
+                            if(isset($hit['highlight']['content_full']) == 1) {
+                                $data['entries'][$index]['content_full'] = $this->cleanContent($hit['highlight']['content_full'][0]);
                             }
                             $index++;
                         } else {

@@ -20,6 +20,10 @@ class CollectionManager extends AbstractManager
 
     protected $facebookSecret;
 
+    protected $readabilityEnabled;
+
+    protected $readabilityKey;
+
     public function __construct(
         Simplepie $simplepie,
         MemberManager $memberManager
@@ -87,6 +91,27 @@ class CollectionManager extends AbstractManager
         $this->facebookEnabled = $enabled;
         $this->facebookId = $id;
         $this->facebookSecret = $secret;
+    }
+
+    public function setReadability($enabled, $key)
+    {
+        $this->readabilityEnabled = $enabled;
+        $this->readabilityKey = $key;
+    }
+
+    public function getFullContent($link) {
+        if($this->readabilityEnabled) {
+            $url = 'https://www.readability.com/api/content/v1/parser?url='.urlencode($link).'&token='.$this->readabilityKey;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            $result = json_decode(curl_exec($ch), true);
+            curl_close($ch);
+            if(isset($result['content']) == 1) {
+                return $result['content'];
+            }
+        }
+        return null;
     }
 
     public function start($feed_id = false)
@@ -383,6 +408,8 @@ class CollectionManager extends AbstractManager
             } else {
                 $insertItem['content'] = '-';
             }
+
+            $insertItem['content_full'] = $this->getFullContent($link);
 
             if($sp_item->get_latitude() && $sp_item->get_longitude()) {
                 $insertItem['latitude'] = $sp_item->get_latitude();
