@@ -142,7 +142,7 @@ class ItemController extends AbstractController
             }
 
 
-            if(class_exists('DOMDocument') && $item->getContent() != '' && $request->server->get('HTTPS') == 'on') {
+            if(class_exists('DOMDocument') && $item->getContent() != '') {
                 try {
                     libxml_use_internal_errors(true);
 
