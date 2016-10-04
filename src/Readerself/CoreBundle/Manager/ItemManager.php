@@ -96,27 +96,4 @@ class ItemManager extends AbstractManager
             }
         }
     }
-
-    public function setReadability($enabled, $key)
-    {
-        $this->readabilityEnabled = $enabled;
-        $this->readabilityKey = $key;
-    }
-
-    public function getContentFull(Item $item)
-    {
-        if($this->readabilityEnabled && !$item->getContentFull()) {
-            $url = 'https://www.readability.com/api/content/v1/parser?url='.urlencode($item->getLink()).'&token='.$this->readabilityKey;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            $result = json_decode(curl_exec($ch), true);
-            curl_close($ch);
-
-            if(isset($result['error']) == 0) {
-                $item->setContentFull($result['content']);
-                $this->persist($item);
-            }
-        }
-    }
 }

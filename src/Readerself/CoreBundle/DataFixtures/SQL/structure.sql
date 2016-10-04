@@ -258,7 +258,6 @@ CREATE TABLE `item` (
   `link` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
   `content` longtext COLLATE utf8mb4_unicode_ci,
-  `content_full` longtext COLLATE utf8mb4_unicode_ci,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   `date_created` datetime NOT NULL,

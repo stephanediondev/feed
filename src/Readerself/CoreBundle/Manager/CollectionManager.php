@@ -20,10 +20,6 @@ class CollectionManager extends AbstractManager
 
     protected $facebookSecret;
 
-    protected $readabilityEnabled;
-
-    protected $readabilityKey;
-
     public function __construct(
         Simplepie $simplepie,
         MemberManager $memberManager
@@ -91,27 +87,6 @@ class CollectionManager extends AbstractManager
         $this->facebookEnabled = $enabled;
         $this->facebookId = $id;
         $this->facebookSecret = $secret;
-    }
-
-    public function setReadability($enabled, $key)
-    {
-        $this->readabilityEnabled = $enabled;
-        $this->readabilityKey = $key;
-    }
-
-    public function getFullContent($link) {
-        if($this->readabilityEnabled) {
-            $url = 'https://www.readability.com/api/content/v1/parser?url='.urlencode($link).'&token='.$this->readabilityKey;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            $result = json_decode(curl_exec($ch), true);
-            curl_close($ch);
-            if(isset($result['content']) == 1) {
-                return $result['content'];
-            }
-        }
-        return null;
     }
 
     public function start($feed_id = false)
@@ -362,8 +337,10 @@ class CollectionManager extends AbstractManager
                                 $u = 0;
                                 foreach($tags as $tag) {
                                     $src = $tags->item($u)->getAttribute('src');
+                                    $parse_src = parse_url($src);
                                     //keep iframes from youtube, vimeo and dailymotion (to improve)
-                                    if(stristr($src, 'youtube.com') || stristr($src, 'vimeo.com') || stristr($src, 'dailymotion.com')) {
+                                    if(isset($parse_src['host']) && (stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
+                                        $tags->item($u)->setAttribute('src', str_replace('http://', 'https://', $src));
                                     } else {
                                         $tags->item($u)->parentNode->removeChild($tags->item($u));
                                     }
@@ -408,8 +385,6 @@ class CollectionManager extends AbstractManager
             } else {
                 $insertItem['content'] = '-';
             }
-
-            $insertItem['content_full'] = $this->getFullContent($link);
 
             if($sp_item->get_latitude() && $sp_item->get_longitude()) {
                 $insertItem['latitude'] = $sp_item->get_latitude();

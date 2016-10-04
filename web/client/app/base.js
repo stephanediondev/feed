@@ -305,6 +305,14 @@ function loadRoute(key, parameters) {
                                 }
                             }
 
+                            $('main > .mdl-grid').find('img').each(function() {
+                                var img = $(this);
+                                if(img.data('src')) {
+                                    $(this).attr('src', $(this).attr('data-src'));
+                                    $(this).removeAttr('data-src');
+                                }
+                            });
+
                             $('main > .mdl-grid').find('.timeago').each(function() {
                                 var result = moment($(this).attr('title')).add(timezone, 'hours');
                                 $(this).attr('title', result.format('LLLL'));

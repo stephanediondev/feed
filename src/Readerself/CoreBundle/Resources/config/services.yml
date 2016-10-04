@@ -93,7 +93,6 @@ services:
             - "@readerself_core_manager_member"
         calls:
             - [ "setFacebook", [ "%facebook_enabled%", "%facebook_id%", "%facebook_secret%" ] ]
-            - [ "setReadability", [ "%readability_parser_enabled%", "%readability_parser_key%" ] ]
 
     readerself_core_manager_migration:
         class: Readerself\CoreBundle\Manager\MigrationManager
@@ -125,8 +124,6 @@ services:
         public: true
         arguments:
             - "@readerself_core_manager_enclosure"
-        calls:
-            - [ "setReadability", [ "%readability_parser_enabled%", "%readability_parser_key%" ] ]
 
     readerself_core_manager_enclosure:
         class: Readerself\CoreBundle\Manager\EnclosureManager

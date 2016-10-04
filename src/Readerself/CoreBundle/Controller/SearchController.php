@@ -147,103 +147,99 @@ class SearchController extends AbstractController
             $from = ($size * $page) - 20;
             $path = '/'.$this->searchManager->getIndex().'/_search?size='.intval($size).'&type='.$type.'&from='.intval($from);
 
-            $body = array();
-            $body['sort'] = array(
-                $sortField => array(
+            $body = [];
+            $body['sort'] = [
+                $sortField => [
                     'order' => $sortDirection,
-                    ),
-            );
+                ],
+            ];
 
             if($type == 'feed') {
-                $body['query'] = array(
-                    'query_string' => array(
+                $body['query'] = [
+                    'query_string' => [
                         'fields' => ['title', 'description', 'website'],
                         'query' => $request->query->get('q'),
-                    ),
-                );
-                $body['highlight'] = array(
+                    ],
+                ];
+                $body['highlight'] = [
                     //'encoder' => 'html',
-                    'pre_tags' => array('<strong>'),
-                    'post_tags' => array('</strong>'),
-                    'fields' => array(
-                        'title' => array(
+                    'pre_tags' => ['<strong>'],
+                    'post_tags' => ['</strong>'],
+                    'fields' => [
+                        'title' => [
                             'fragment_size' => 255,
                             'number_of_fragments' => 1,
-                        ),
-                        'description' => array(
+                        ],
+                        'description' => [
                             'fragment_size' => 255,
                             'number_of_fragments' => 1,
-                        ),
-                    ),
-                );
+                        ],
+                    ],
+                ];
             }
 
             if($type == 'category') {
-                $body['query'] = array(
-                    'query_string' => array(
+                $body['query'] = [
+                    'query_string' => [
                         'fields' => ['title'],
                         'query' => $request->query->get('q'),
-                    ),
-                );
-                $body['highlight'] = array(
+                    ],
+                ];
+                $body['highlight'] = [
                     //'encoder' => 'html',
-                    'pre_tags' => array('<strong>'),
-                    'post_tags' => array('</strong>'),
-                    'fields' => array(
-                        'title' => array(
+                    'pre_tags' => ['<strong>'],
+                    'post_tags' => ['</strong>'],
+                    'fields' => [
+                        'title' => [
                             'fragment_size' => 255,
                             'number_of_fragments' => 1,
-                        ),
-                    ),
-                );
+                        ],
+                    ],
+                ];
             }
 
             if($type == 'author') {
-                $body['query'] = array(
-                    'query_string' => array(
+                $body['query'] = [
+                    'query_string' => [
                         'fields' => ['title'],
                         'query' => $request->query->get('q'),
-                    ),
-                );
-                $body['highlight'] = array(
+                    ],
+                ];
+                $body['highlight'] = [
                     //'encoder' => 'html',
-                    'pre_tags' => array('<strong>'),
-                    'post_tags' => array('</strong>'),
-                    'fields' => array(
-                        'title' => array(
+                    'pre_tags' => ['<strong>'],
+                    'post_tags' => ['</strong>'],
+                    'fields' => [
+                        'title' => [
                             'fragment_size' => 255,
                             'number_of_fragments' => 1,
-                        ),
-                    ),
-                );
+                        ],
+                    ],
+                ];
             }
 
             if($type == 'item') {
-                $body['query'] = array(
-                    'query_string' => array(
-                        'fields' => ['title', 'content', 'content_full', 'feed.title', 'author.title'],
+                $body['query'] = [
+                    'query_string' => [
+                        'fields' => ['title', 'content', 'feed.title', 'author.title'],
                         'query' => $request->query->get('q'),
-                    ),
-                );
-                $body['highlight'] = array(
+                    ],
+                ];
+                $body['highlight'] = [
                     //'encoder' => 'html',
-                    'pre_tags' => array('<strong>'),
-                    'post_tags' => array('</strong>'),
-                    'fields' => array(
-                        'title' => array(
+                    'pre_tags' => ['<strong>'],
+                    'post_tags' => ['</strong>'],
+                    'fields' => [
+                        'title' => [
                             'fragment_size' => 255,
                             'number_of_fragments' => 1,
-                        ),
-                        'content' => array(
+                        ],
+                        'content' => [
                             'fragment_size' => 255,
                             'number_of_fragments' => 1,
-                        ),
-                        'content_full' => array(
-                            'fragment_size' => 255,
-                            'number_of_fragments' => 1,
-                        ),
-                    ),
-                );
+                        ],
+                    ],
+                ];
             }
 
             /*if(!$parameters->get('page')->getAttribute('all_languages')) {
@@ -369,9 +365,6 @@ class SearchController extends AbstractController
                             }
                             if(isset($hit['highlight']['content']) == 1) {
                                 $data['entries'][$index]['content'] = $this->cleanContent($hit['highlight']['content'][0]);
-                            }
-                            if(isset($hit['highlight']['content_full']) == 1) {
-                                $data['entries'][$index]['content_full'] = $this->cleanContent($hit['highlight']['content_full'][0]);
                             }
                             $index++;
                         } else {

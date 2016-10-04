@@ -21,9 +21,6 @@ parameters:
     google_cloud_messaging_enabled: false
     google_cloud_messaging_key: ~
 
-    google_static_maps_enabled: false
-    google_static_maps_key: ~
-
     elasticsearch_enabled: false
     elasticsearch_index: readerself
     elasticsearch_url: http://127.0.0.1:9200
@@ -31,9 +28,6 @@ parameters:
     facebook_enabled: false
     facebook_id: ~
     facebook_secret: ~
-
-    readability_parser_enabled: false
-    readability_parser_key: ~
 
     evernote_enabled: false
     evernote_key: ~

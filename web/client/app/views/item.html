@@ -71,15 +71,11 @@
             </div>
         </div>
         <div class="mdl-card__supporting-text">
-            {{#if entry.content_full }}
-                {{{ entry.content_full }}}
-            {{else}}
-                {{{ entry.content }}}
-            {{/if}}
+            {{{ entry.content }}}
 
             {{#if entry.enclosures }}
                 {{#each entry.enclosures as |enclosure enclosure_index|}}
-                    <p><img src="{{ enclosure.link }}" alt=""></p>
+                    <p><img src="{{ enclosure.link }}" alt=""{{#if enclosure.proxy }} data-src="{{ enclosure.proxy }}"{{/if}}></p>
                 {{/each}}
             {{/if}}
         </div>

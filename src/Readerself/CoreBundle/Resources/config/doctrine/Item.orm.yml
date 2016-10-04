@@ -47,13 +47,6 @@ Readerself\CoreBundle\Entity\Item:
             length: null
             options:
                 fixed: false
-        contentFull:
-            type: text
-            nullable: true
-            length: null
-            options:
-                fixed: false
-            column: content_full
         latitude:
             type: float
             nullable: true

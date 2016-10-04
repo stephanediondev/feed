@@ -10,7 +10,7 @@ class ProxyController extends AbstractController
 {
     public function indexAction(Request $request, $token)
     {
-        $file = base64_decode($token);
+        $file = base64_decode(urldecode($token));
 
         $opts = array(
             'http' => array(
@@ -22,11 +22,11 @@ class ProxyController extends AbstractController
         $context = stream_context_create($opts);
 
         if($file != '' && (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://')) {
-            $imginfo = getimagesize($file);
+            $imginfo = @getimagesize($file);
             if($imginfo) {
                 header('Content-type: '.$imginfo['mime']);
             }
-            readfile($file, false, $context);
+            @readfile($file, false, $context);
         }
         exit(0);
     }

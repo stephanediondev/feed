@@ -33,11 +33,6 @@ class Item
     private $content;
 
     /**
-     * @var string
-     */
-    private $contentFull;
-
-    /**
      * @var float
      */
     private $latitude;
@@ -177,30 +172,6 @@ class Item
     public function getContent()
     {
         return $this->content;
-    }
-
-    /**
-     * Set contentFull
-     *
-     * @param string $contentFull
-     *
-     * @return Item
-     */
-    public function setContentFull($contentFull)
-    {
-        $this->contentFull = $contentFull;
-
-        return $this;
-    }
-
-    /**
-     * Get contentFull
-     *
-     * @return string
-     */
-    public function getContentFull()
-    {
-        return $this->contentFull;
     }
 
     /**
@@ -374,7 +345,6 @@ class Item
             'link' => $this->getLink(),
             'date' => $this->getDate()->format('Y-m-d H:i:s'),
             'content' => $this->getContent(),
-            'content_full' => $this->getContentFull(),
             'latitude' => $this->getLatitude(),
             'longitude' => $this->getLongitude(),
         ];

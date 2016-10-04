@@ -26,7 +26,6 @@ INSERT INTO `action` VALUES(5, 14, 'exclude', '2016-09-28 12:25:57');
 INSERT INTO `action` VALUES(6, NULL, 'evernote', '2016-09-28 12:25:57');
 INSERT INTO `action` VALUES(7, NULL, 'email', '2016-09-28 12:25:57');
 INSERT INTO `action` VALUES(8, NULL, 'purge', '2016-09-28 12:25:57');
-INSERT INTO `action` VALUES(9, NULL, 'readability', '2016-09-28 12:25:57');
 INSERT INTO `action` VALUES(11, NULL, 'elasticsearch', '2016-09-28 12:25:57');
 INSERT INTO `action` VALUES(12, 1, 'unread', '2016-09-28 12:25:57');
 INSERT INTO `action` VALUES(13, 2, 'unstar', '2016-09-28 00:00:00');

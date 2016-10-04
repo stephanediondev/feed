@@ -129,17 +129,24 @@ class ItemController extends AbstractController
             }
 
             $enclosures = [];
+            $index_enclosures = 0;
             foreach($this->itemManager->enclosureManager->getList(['item' => $item])->getResult() as $enclosure) {
-                $enclosures[] = $enclosure->toArray();
+                $enclosures[$index_enclosures] = $enclosure->toArray();
+                $src = $enclosure->getLink();
+                if(substr($src, 0, 5) == 'http:' && $request->server->get('HTTPS') == 'on') {
+                    $src = urlencode(base64_encode($src));
+                    $enclosures[$index_enclosures]['link'] = 'icon-32x32.png';
+                    $enclosures[$index_enclosures]['proxy'] = $this->generateUrl('readerself_api_proxy', ['token' => $src], 0);
+                }
+                $index_enclosures++;
             }
 
-            if(class_exists('DOMDocument') && $item->getContent() != '' && $request->server->get('HTTPS')) {
+
+            if(class_exists('DOMDocument') && $item->getContent() != '' && $request->server->get('HTTPS') == 'on') {
                 try {
                     libxml_use_internal_errors(true);
 
                     $content = mb_convert_encoding($item->getContent(), 'HTML-ENTITIES', 'UTF-8');
-
-                    $path = $_SERVER['DOCUMENT_ROOT'].$request->getBasePath();
 
                     $dom = new \DOMDocument();
                     $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
@@ -151,11 +158,12 @@ class ItemController extends AbstractController
                         if($node->tagName == 'img') {
                             $src = $node->getAttribute('src');
                             if(substr($src, 0, 5) == 'http:') {
-                                $key = base64_encode($src);
-
+                                $src = urlencode(base64_encode($src));
                                 $node->setAttribute('src', 'icon-32x32.png');
-                                $node->setAttribute('data-src', $this->generateUrl('readerself_api_proxy', ['token' => $key], 0));
+                                $node->setAttribute('data-src', $this->generateUrl('readerself_api_proxy', ['token' => $src], 0));
                             }
+
+                            $node->removeAttribute('srcset');
                         }
                     }
 

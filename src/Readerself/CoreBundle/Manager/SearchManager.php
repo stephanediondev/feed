@@ -51,12 +51,12 @@ class SearchManager extends AbstractManager
 
                 $path = '/'.$this->getIndex().'/feed/'.$result['id'];
 
-                $body = array(
+                $body = [
                     'title' => $result['title'],
                     'description' => $result['description'],
                     'website' => $result['website'],
                     'language' => $result['language'],
-                );
+                ];
                 $this->query($action, $path, $body);
 
                 /*$insertActionItem = [
@@ -81,9 +81,9 @@ class SearchManager extends AbstractManager
 
                 $path = '/'.$this->getIndex().'/category/'.$result['id'];
 
-                $body = array(
+                $body = [
                     'title' => $result['title'],
-                );
+                ];
                 $this->query($action, $path, $body);
 
                 $insertActionCategory = [
@@ -108,9 +108,9 @@ class SearchManager extends AbstractManager
 
                 $path = '/'.$this->getIndex().'/author/'.$result['id'];
 
-                $body = array(
+                $body = [
                     'title' => $result['title'],
-                );
+                ];
                 $this->query($action, $path, $body);
 
                 $insertActionCategory = [
@@ -137,22 +137,21 @@ class SearchManager extends AbstractManager
 
                 $path = '/'.$this->getIndex().'/item/'.$result['id'];
 
-                $body = array(
-                    'feed' => array(
+                $body = [
+                    'feed' => [
                         'id' => $result['feed_id'],
                         'title' => $result['feed_title'],
                         'language' => $result['feed_language'],
-                    ),
+                    ],
                     'title' => $result['title'],
                     'date' => $result['date'],
                     'content' => $result['content'],
-                    'content_full' => $result['content_full'],
-                );
+                ];
                 if($result['author_id']) {
-                    $body['author'] = array(
+                    $body['author'] = [
                         'id' => $result['author_id'],
                         'title' => $result['author_title'],
-                    );
+                    ];
                 }
                 $this->query($action, $path, $body);
 
@@ -201,107 +200,107 @@ class SearchManager extends AbstractManager
             $result = $this->query('POST', $path);
 
             $path = '/'.$this->getIndex().'/_settings';
-            $body = array(
-                'settings' => array(
-                    'index' => array(
-                        'analysis' => array(
-                            'analyzer' => array(
-                                'case_insensitive_sort' => array(
-                                    'filter' => array(
+            $body = [
+                'settings' => [
+                    'index' => [
+                        'analysis' => [
+                            'analyzer' => [
+                                'case_insensitive_sort' => [
+                                    'filter' => [
                                         'lowercase',
                                         'asciifolding',
-                                    ),
+                                    ],
                                     'tokenizer' => 'keyword',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
             $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'/_open';
             $result = $this->query('POST', $path);
 
             $path = '/'.$this->getIndex().'/_mapping/feed';
-            $body = array(
-                'feed' => array(
-                    'properties' => array( 
-                        'title' => array( 
+            $body = [
+                'feed' => [
+                    'properties' => [
+                        'title' => [
                             'type' => 'string',
-                            'fields' => array(
-                                'sort' => array( 
+                            'fields' => [
+                                'sort' => [
                                     'type' => 'string',
                                     'analyzer' => 'case_insensitive_sort',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
             $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'/_mapping/category';
-            $body = array(
-                'category' => array(
-                    'properties' => array( 
-                        'title' => array( 
+            $body = [
+                'category' => [
+                    'properties' => [
+                        'title' => [
                             'type' => 'string',
-                            'fields' => array(
-                                'sort' => array( 
+                            'fields' => [
+                                'sort' => [
                                     'type' => 'string',
                                     'analyzer' => 'case_insensitive_sort',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
             $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'/_mapping/author';
-            $body = array(
-                'author' => array(
-                    'properties' => array( 
-                        'title' => array( 
+            $body = [
+                'author' => [
+                    'properties' => [
+                        'title' => [
                             'type' => 'string',
-                            'fields' => array(
-                                'sort' => array( 
+                            'fields' => [
+                                'sort' => [
                                     'type' => 'string',
                                     'analyzer' => 'case_insensitive_sort',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
             $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'/_mapping/item';
-            $body = array(
-                'item' => array(
-                    'properties' => array( 
-                        'title' => array( 
+            $body = [
+                'item' => [
+                    'properties' => [
+                        'title' => [
                             'type' => 'string',
-                            'fields' => array(
-                                'sort' => array( 
+                            'fields' => [
+                                'sort' => [
                                     'type' => 'string',
                                     'analyzer' => 'case_insensitive_sort',
-                                ),
-                            ),
-                        ),
-                        'date' => array( 
+                                ],
+                            ],
+                        ],
+                        'date' => [
                             'type' => 'string',
-                            'fields' => array(
-                                'sort' => array( 
+                            'fields' => [
+                                'sort' => [
                                     'type' => 'string',
                                     'analyzer' => 'case_insensitive_sort',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ];
             $result = $this->query('PUT', $path, $body);
         }
     }
