@@ -57,7 +57,7 @@
             <div class="mdl-card__subtitle-text">
                 {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{score entry.score }}</span>{{/if}}
                 {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
                 {{#if entry.categories }}
                     {{#each entry.categories as |category category_index|}}
                         <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons">label</i>{{ category.title }}</a>
@@ -105,7 +105,7 @@
             </h1>
             <div class="mdl-card__subtitle-text">
                 {{#if entry.language }}<span class="mdl-navigation__link"><i class="material-icons">language</i>{{ entry.language }}</span>{{/if}}
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
                 {{#if entry.categories }}
                     {{#each entry.categories as |category category_index|}}
                         <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link"><i class="material-icons">label</i>{{ category.title }}</a>
@@ -169,7 +169,7 @@
                         {{ collection.error }}
                     </h1>
                     <div class="mdl-card__subtitle-text">
-                        <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ collection.date_created }}"></span></span>
+                        <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ collection.date_created }}"></span></span>
                     </div>
                 </div>
             </div>

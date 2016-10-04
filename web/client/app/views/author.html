@@ -35,7 +35,7 @@
             </h1>
             <div class="mdl-card__subtitle-text">
                 {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{score entry.score }}</span>{{/if}}
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
@@ -65,7 +65,7 @@
                 {{ entry.title }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">

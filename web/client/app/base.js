@@ -314,7 +314,7 @@ function loadRoute(key, parameters) {
                             });
 
                             $('main > .mdl-grid').find('.timeago').each(function() {
-                                var result = moment($(this).attr('title')).add(timezone, 'hours');
+                                var result = moment( $(this).data('date') ).add(timezone, 'hours');
                                 $(this).attr('title', result.format('LLLL'));
                                 $(this).text(result.fromNow());
                             });

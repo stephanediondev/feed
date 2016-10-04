@@ -28,7 +28,7 @@
                 {{ entry.email }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__supporting-text">
@@ -112,7 +112,7 @@
                 {{ entry.email }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
@@ -129,7 +129,7 @@
                     {{ connection.type }}
                 </h1>
                 <div class="mdl-card__subtitle-text">
-                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ connection.date_modified }}"></span></span>
+                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ connection.date_modified }}"></span></span>
                     <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{#if connection.currentIp }}<strong>{{ connection.ip }}</strong>{{else}}{{ connection.ip }}{{/if}}</span>
                 </div>
             </div>
@@ -158,7 +158,7 @@
                 {{ entry.email }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__actions mdl-card--border">
@@ -175,7 +175,7 @@
                     {{ notification.hostname }}
                 </h1>
                 <div class="mdl-card__subtitle-text">
-                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" title="{{ notification.date_modified }}"></span></span>
+                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ notification.date_modified }}"></span></span>
                     <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{#if notification.currentIp }}<strong>{{ notification.ip }}</strong>{{else}}{{ notification.ip }}{{/if}}</span>
                 </div>
             </div>
