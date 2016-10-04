@@ -37,6 +37,10 @@ services:
         arguments:
             - "@readerself_core_manager_search"
 
+    readerself_core_controller_proxy:
+        class: Readerself\CoreBundle\Controller\ProxyController
+        parent: "readerself_core_controller_abstract"
+
     readerself_core_controller_search:
         class: Readerself\CoreBundle\Controller\SearchController
         parent: "readerself_core_controller_abstract"

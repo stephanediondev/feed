@@ -9,6 +9,7 @@ var files = [
 
 var timezone = new Date();
 timezone = -timezone.getTimezoneOffset() / 60;
+
 var lastHistory = false;
 
 var language = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);

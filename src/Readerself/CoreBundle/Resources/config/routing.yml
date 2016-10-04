@@ -24,3 +24,9 @@ readerself_api_status:
     defaults:
         _controller: "readerself_core_controller_status:indexAction"
     methods: GET
+
+readerself_api_proxy:
+    path: /proxy/{token}
+    defaults:
+        _controller: "readerself_core_controller_proxy:indexAction"
+    methods: GET

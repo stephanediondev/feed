@@ -133,7 +133,7 @@ class ItemController extends AbstractController
                 $enclosures[] = $enclosure->toArray();
             }
 
-            /*if(class_exists('DOMDocument') && $item->getContent() != '') {
+            if(class_exists('DOMDocument') && $item->getContent() != '' && $request->server->get('HTTPS')) {
                 try {
                     libxml_use_internal_errors(true);
 
@@ -151,30 +151,10 @@ class ItemController extends AbstractController
                         if($node->tagName == 'img') {
                             $src = $node->getAttribute('src');
                             if(substr($src, 0, 5) == 'http:') {
-                                $key = sha1($src);
+                                $key = base64_encode($src);
 
-                                $replace = false;
-
-                                if(!file_exists($path.'/proxy/'.$key)) {
-                                    $opts = array(
-                                        'http' => array(
-                                            'method' => 'GET',
-                                            'user_agent'=> $_SERVER['HTTP_USER_AGENT']
-                                        )
-                                    );
-                                    $context = stream_context_create($opts);
-
-                                    $file = @file_get_contents($src, false, $context);
-                                    if($file){
-                                        $replace = true;
-                                        file_put_contents($path.'/proxy/'.$key, $file);
-                                    }
-                                } else {
-                                    $replace = true;
-                                }
-                                if($replace) {
-                                    $node->setAttribute('src', '../proxy/'.$key);
-                                }
+                                $node->setAttribute('src', 'icon-32x32.png');
+                                $node->setAttribute('data-src', $this->generateUrl('readerself_api_proxy', ['token' => $key], 0));
                             }
                         }
                     }
@@ -184,7 +164,7 @@ class ItemController extends AbstractController
                     libxml_clear_errors();
                 } catch (Exception $e) {
                 }
-            }*/
+            }
 
             $data['entries'][$index] = $item->toArray();
             foreach($actions as $action) {
@@ -193,9 +173,9 @@ class ItemController extends AbstractController
             $data['entries'][$index]['categories'] = $categories;
             $data['entries'][$index]['enclosures'] = $enclosures;
 
-            /*if(isset($content) == 1) {
+            if(isset($content) == 1) {
                 $data['entries'][$index]['content'] = $content;
-            }*/
+            }
 
             $index++;
         }
