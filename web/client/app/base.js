@@ -605,7 +605,7 @@ $(document).ready(function() {
             }
             
 
-        } else if(id.indexOf('form-search-') != -1) {
+        } else if(typeof id != 'undefined' && id.indexOf('form-search-') != -1) {
             loadRoute(form.attr('action'), {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
 
         } else if(form.data('query')) {
