@@ -596,6 +596,7 @@ $(document).ready(function() {
         event.preventDefault();
 
         var form = $(this);
+        var id = form.attr('id');
 
         if(form.hasClass('share-form')) {
             var choice = form.find('input[type="radio"]:checked').val();
@@ -604,17 +605,8 @@ $(document).ready(function() {
             }
             
 
-        } else if(form.attr('id') == 'form-search-feeds') {
-            loadRoute('#feeds/search/result', {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
-
-        } else if(form.attr('id') == 'form-search-categories') {
-            loadRoute('#categories/search/result', {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
-
-        } else if(form.attr('id') == 'form-search-authors') {
-            loadRoute('#authors/search/result', {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
-
-        } else if(form.attr('id') == 'form-search-items') {
-            loadRoute('#items/search/result', {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
+        } else if(id.indexOf('form-search-') != -1) {
+            loadRoute(form.attr('action'), {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
 
         } else if(form.data('query')) {
 
@@ -650,22 +642,11 @@ $(document).ready(function() {
                                 setSnackbar($.i18n._(form.attr('method')) + ' ' + data_return.entry.title);
                             }
                         }
+                        if(form.data('query') == '/login') {
+                            store.set('connection', data_return.entry);
+                            connectionData = explainConnection(data_return.entry);
 
-                        if(form.attr('method') == 'DELETE') {
-                            //store.remove(data_return.entry_entity + '_' + data_return.entry.id);
-                        }
-                        if(form.attr('method') == 'PUT') {
-                            //store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
-                        }
-                        if(form.attr('method') == 'POST') {
-                            if(form.data('query') == '/login') {
-                                store.set('connection', data_return.entry);
-                                connectionData = explainConnection(data_return.entry);
-
-                                setSnackbar($.i18n._('login'));
-                            } else {
-                                //store.set(data_return.entry_entity + '_' + data_return.entry.id, data_return.entry);
-                            }
+                            setSnackbar($.i18n._('login'));
                         }
                         loadRoute(form.attr('action'));
                     },
