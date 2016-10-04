@@ -333,23 +333,19 @@ class CollectionManager extends AbstractManager
 
                                 $xpath = new \DOMXPath($dom);
 
-                                $tags = $dom->getElementsByTagName('iframe');
-                                $u = 0;
-                                foreach($tags as $tag) {
-                                    $src = $tags->item($u)->getAttribute('src');
-                                    $parse_src = parse_url($src);
-                                    //keep iframes from youtube, vimeo and dailymotion (to improve)
-                                    if(isset($parse_src['host']) && (stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
-                                        $tags->item($u)->setAttribute('src', str_replace('http://', 'https://', $src));
-                                    } else {
-                                        $tags->item($u)->parentNode->removeChild($tags->item($u));
+                                $nodes = $xpath->query('//*[@src]');
+                                foreach($nodes as $node) {
+                                    $src = $node->getAttribute('src');
+
+                                    if($node->tagName == 'iframe') {
+                                        $parse_src = parse_url($src);
+                                        //keep iframes from youtube, vimeo and dailymotion
+                                        if(isset($parse_src['host']) && (stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
+                                            $node->setAttribute('src', str_replace('http://', 'https://', $src));
+                                        } else {
+                                            $node->parentNode->removeChild($node);
+                                        }
                                     }
-                                    /*$iframes[] = array(
-                                        'src'=>$tags->item($u)->getAttribute('src'),
-                                        'width'=>$tags->item($u)->getAttribute('width'),
-                                        'height'=>$tags->item($u)->getAttribute('height'),
-                                    );*/
-                                    $u++;
                                 }
 
                                 $disallowedAttributes = ['id', 'class', 'style', 'width', 'height', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];

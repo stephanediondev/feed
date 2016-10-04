@@ -526,7 +526,9 @@ $(document).ready(function() {
 
     $('.mdl-grid').on('click', '.item .mdl-card__title h1 a, .item .mdl-card__supporting-text a', function(event) {
         var ref = $(this).parents('.item');
-        ref.attr('target', '_blank');
+
+        $(this).attr('target', '_blank');
+
         if(ref.hasClass('collapse')) {
             event.preventDefault();
             if(ref.hasClass('collapse')) {

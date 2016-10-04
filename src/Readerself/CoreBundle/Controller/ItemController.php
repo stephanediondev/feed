@@ -153,34 +153,29 @@ class ItemController extends AbstractController
 
                     $xpath = new \DOMXPath($dom);
 
-                    if($request->server->get('HTTPS') == 'on') {
-                        $nodes = $xpath->query('//*[@src]');
-                        foreach($nodes as $node) {
-                            if($node->tagName == 'img') {
-                                $src = $node->getAttribute('src');
-                                if(substr($src, 0, 5) == 'http:') {
-                                    $src = urlencode(base64_encode($src));
-                                    $node->setAttribute('src', 'icon-32x32.png');
-                                    $node->setAttribute('data-src', $this->generateUrl('readerself_api_proxy', ['token' => $src], 0));
-                                }
-    
-                                $node->removeAttribute('srcset');
+                    $nodes = $xpath->query('//*[@src]');
+                    foreach($nodes as $node) {
+                        $src = $node->getAttribute('src');
+
+                        if($node->tagName == 'iframe') {
+                            $parse_src = parse_url($src);
+                            //keep iframes from youtube, vimeo and dailymotion
+                            if(isset($parse_src['host']) && (stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
+                                $node->setAttribute('src', str_replace('http://', 'https://', $src));
+                            } else {
+                                $node->parentNode->removeChild($node);
                             }
                         }
-                    }
 
-                    $tags = $dom->getElementsByTagName('iframe');
-                    $u = 0;
-                    foreach($tags as $tag) {
-                        $src = $tags->item($u)->getAttribute('src');
-                        $parse_src = parse_url($src);
-                        //keep iframes from youtube, vimeo and dailymotion (to improve)
-                        if(isset($parse_src['host']) && (stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
-                            $tags->item($u)->setAttribute('src', str_replace('http://', 'https://', $src));
-                        } else {
-                            $tags->item($u)->parentNode->removeChild($tags->item($u));
+                        if($node->tagName == 'img') {
+                            if(substr($src, 0, 5) == 'http:' && $request->server->get('HTTPS') == 'on') {
+                                $src = urlencode(base64_encode($src));
+                                $node->setAttribute('src', 'icon-32x32.png');
+                                $node->setAttribute('data-src', $this->generateUrl('readerself_api_proxy', ['token' => $src], 0));
+                            }
+
+                            $node->removeAttribute('srcset');
                         }
-                        $u++;
                     }
 
                     $content = html_entity_decode($dom->saveHTML(), ENT_HTML5);

@@ -58,13 +58,6 @@ class SearchManager extends AbstractManager
                     'language' => $result['language'],
                 ];
                 $this->query($action, $path, $body);
-
-                /*$insertActionItem = [
-                    'item_id' => $result['id'],
-                    'action_id' => 11,
-                    'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
-                ];
-                $this->insert('action_item', $insertActionItem);*/
             }
 
             //categories
@@ -127,7 +120,7 @@ class SearchManager extends AbstractManager
             LEFT JOIN author AS auh ON auh.id = itm.author_id
             LEFT JOIN feed AS fed ON fed.id = itm.feed_id
             WHERE itm.content IS NOT NULL AND itm.id NOT IN (SELECT act_itm.item_id FROM action_item AS act_itm WHERE act_itm.item_id = itm.id AND act_itm.action_id = 11)
-            LIMIT 0,1000';
+            LIMIT 0,2000';
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll();

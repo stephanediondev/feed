@@ -51,7 +51,7 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col item" id="item-{{ entry.id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                <a title="{{trans 'shortcut_v'}}" class="favicon" href="{{ entry.link }}" target="_blank"{{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
+                <a title="{{trans 'shortcut_v'}}" class="favicon" href="{{ entry.link }}" {{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
             </h1>
             <div class="mdl-card__subtitle-text">
                 {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{score entry.score }}</span>{{/if}}
