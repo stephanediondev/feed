@@ -360,7 +360,8 @@ class CollectionManager extends AbstractManager
                                         $node->removeAttribute($attribute);
                                     }
                                 }
-                                $content = html_entity_decode($dom->saveHTML(), ENT_HTML5);
+
+                                $content = $dom->saveHTML();
 
                                 libxml_clear_errors();
                             } catch (Exception $e) {

@@ -178,7 +178,7 @@ class ItemController extends AbstractController
                         }
                     }
 
-                    $content = html_entity_decode($dom->saveHTML(), ENT_HTML5);
+                    $content = $dom->saveHTML();
 
                     libxml_clear_errors();
                 } catch (Exception $e) {
