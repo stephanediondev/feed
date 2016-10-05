@@ -1,23 +1,23 @@
 version: '2'
 
 services:
-    readerself_nginx:
+    rs_nginx:
         command: nginx -c /nginx.conf
-        container_name: readerself_nginx
+        container_name: rs_nginx
         image: nginx
         links:
-            - readerself_php:readerself_php
+            - rs_php:rs_php
         ports:
-            - "80:80"
+            - 80:80
+        volumes_from:
+            - rs_php
         volumes:
-            - ./docker/logs/nginx:/var/log/nginx
             - ./docker/nginx/nginx.conf:/nginx.conf
-            - .:/var/www/html
 
-    readerself_php:
+    rs_php:
         build:
             context: ./docker/php
-        container_name: readerself_php
+        container_name: rs_php
         environment:
             - SYMFONY__ENV__DATABASE_DRIVER=pdo_mysql
             - SYMFONY__ENV__DATABASE_HOST=mysql
@@ -25,18 +25,17 @@ services:
             - SYMFONY__ENV__DATABASE_NAME=readerself
             - SYMFONY__ENV__DATABASE_USER=readerself
             - SYMFONY__ENV__DATABASE_PASSWORD=readerself
+        image: rs_php
         links:
-            - "readerself_mysql:readerself_mysql"
-            - "readerself_elasticsearch:readerself_elasticsearch"
-            - "readerself_redis:readerself_redis"
+            - rs_mysql:rs_mysql
+            - rs_elasticsearch:rs_elasticsearch
         ports:
-            - "9000:9000"
+            - 9000:9000
         volumes:
             - .:/var/www/html
 
-    readerself_mysql:
-        #command: mysqld --initialize
-        container_name: readerself_mysql
+    rs_mysql:
+        container_name: rs_mysql
         environment:
             - MYSQL_ROOT_PASSWORD=readerself
             - MYSQL_USER=readerself
@@ -44,26 +43,17 @@ services:
             - MYSQL_DATABASE=readerself
         image: mysql/mysql-server
         ports:
-            - "3306:3306"
+            - 3306:3306
         volumes:
-        #    - ./docker/logs/mysql:/var/log/mysql
-        #    - ./docker/data/mysql:/var/lib/mysql
             - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
 
-    readerself_elasticsearch:
+    rs_elasticsearch:
         build:
             context: ./docker/elasticsearch
-        container_name: readerself_elasticsearch
+        container_name: rs_elasticsearch
+        image: rs_elasticsearch
         ports:
-            - "9200:9200"
-            - "9300:9300"
+            - 9200:9200
+            - 9300:9300
         volumes:
-        #    - ./docker/logs/elasticsearch:/var/log/elasticsearch
-        #    - ./docker/data/elasticsearch:/usr/share/elasticsearch/data
             - ./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-
-    readerself_redis:
-        container_name: readerself_redis
-        image: redis
-        ports:
-            - "6379:6379"

@@ -1,4 +1,4 @@
-cluster.name: readerself_cluster
+cluster.name: rs_cluster
 node.name: docker
 node.master: true
 node.data: true
