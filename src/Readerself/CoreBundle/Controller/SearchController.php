@@ -79,7 +79,7 @@ class SearchController extends AbstractController
      * Search authors.
      *
      * @ApiDoc(
-     *     section="Category",
+     *     section="Author",
      *     headers={
      *         {"name"="X-CONNECTION-TOKEN","required"=true},
      *     },
