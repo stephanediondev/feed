@@ -194,7 +194,7 @@
 </script>
 
 <script type="text/template" id="view-status">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 Server
@@ -222,7 +222,7 @@
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 Webserver
@@ -238,17 +238,13 @@
                 {{ _server.DOCUMENT_ROOT }}
             </p>
             <p>
-                <span class="label">{{trans 'SCRIPT_FILENAME'}}</span>
-                {{ _server.SCRIPT_FILENAME }}
-            </p>
-            <p>
                 <span class="label">{{trans 'get_current_user'}}</span>
                 {{ function.get_current_user }}
             </p>
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 Language
@@ -267,31 +263,47 @@
                 <span class="label">{{trans 'symfony'}}</span>
                 {{ symfony }}
             </p>
-            {{#if test.apcu }}
-                <p>
-                    <span class="label">{{trans 'apcu'}}</span>
-                    {{ test.apcu }}
-                </p>
-            {{/if}}
-            {{#if test.tidy }}
-                <p>
-                    <span class="label">{{trans 'tidy'}}</span>
-                    {{ test.tidy }}
-                </p>
-            {{/if}}
-            {{#if test.mbstring }}
-                <p>
-                    <span class="label">{{trans 'mbstring'}}</span>
-                    {{ test.mbstring }}
-                </p>
-            {{/if}}
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Extensions
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <p>
+                <span class="label">{{trans 'gmp'}}</span>
+                {{ extension.gmp }}
+            </p>
+            <p>
+                <span class="label">{{trans 'mbstring'}}</span>
+                {{ extension.mbstring }}
+            </p>
+            <p>
+                <span class="label">{{trans 'iconv'}}</span>
+                {{ extension.iconv }}
+            </p>
+            <p>
+                <span class="label">{{trans 'apcu'}}</span>
+                {{ extension.apcu }}
+            </p>
+            <p>
+                <span class="label">{{trans 'tidy'}}</span>
+                {{ extension.tidy }}
+            </p>
+            <p>
+                <span class="label">{{trans 'dom'}}</span>
+                {{ extension.dom }}
+            </p>
         </div>
     </div>
 
     {{#if search.enabled }}
         {{#if search.stats.indices }}
             {{#each search.stats.indices as |indice indice_index|}}
-                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-node-{{ node.name }}">
+                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-node-{{ node.name }}">
                     <div class="mdl-card__title">
                         <h1 class="mdl-card__title-text">
                             Index (Elastic Search)
@@ -327,7 +339,7 @@
             {{/each}}
         {{/if}}
 
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-cluster">
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-cluster">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
                     Cluster (Elastic Search)
@@ -359,7 +371,7 @@
 
         {{#if search.nodes }}
             {{#each search.nodes.nodes as |node node_index|}}
-                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-node-{{ node.name }}">
+                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-node-{{ node.name }}">
                     <div class="mdl-card__title">
                         <h1 class="mdl-card__title-text">
                             Node (Elastic Search)

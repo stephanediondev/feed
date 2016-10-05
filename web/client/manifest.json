@@ -3,17 +3,17 @@
     "short_name": "Reader Self",
     "icons": [
         {
-            "src": "icon-32x32.png",
+            "src": "app/icons/icon-32x32.png",
             "sizes": "32x32",
             "type": "image/png"
         },
         {
-            "src": "icon-192x192.png",
+            "src": "app/icons/icon-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "icon-512x512.png",
+            "src": "app/icons/icon-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
         }

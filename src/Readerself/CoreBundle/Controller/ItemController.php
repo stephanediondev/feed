@@ -170,7 +170,7 @@ class ItemController extends AbstractController
                         if($node->tagName == 'img') {
                             if(substr($src, 0, 5) == 'http:' && $request->server->get('HTTPS') == 'on') {
                                 $src = urlencode(base64_encode($src));
-                                $node->setAttribute('src', 'icon-32x32.png');
+                                $node->setAttribute('src', 'app/icons/icon-32x32.png');
                                 $node->setAttribute('data-src', $this->generateUrl('readerself_api_proxy', ['token' => $src], 0));
                             }
 

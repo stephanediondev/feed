@@ -49,17 +49,17 @@ class StatusController extends AbstractController
 
         $data['ini_get'] = [];
         $data['ini_get']['file_uploads'] = ini_get('file_uploads');
-        $data['ini_get']['upload_tmp_dir'] = ini_get('upload_tmp_dir');
         $data['ini_get']['upload_max_filesize'] = ini_get('upload_max_filesize');
         $data['ini_get']['post_max_size'] = ini_get('post_max_size');
         $data['ini_get']['memory_limit'] = ini_get('memory_limit');
-        $data['ini_get']['safe_mode'] = ini_get('safe_mode');
-        $data['ini_get']['open_basedir'] = ini_get('open_basedir');
 
-        $data['test'] = [];
-        $data['test']['apcu'] = function_exists('apcu_clear_cache');
-        $data['test']['tidy'] = class_exists('Tidy');
-        $data['test']['mbstring'] = extension_loaded('mbstring');
+        $data['extension'] = [];
+        $data['extension']['gmp'] = extension_loaded('gmp');
+        $data['extension']['mbstring'] = extension_loaded('mbstring');
+        $data['extension']['iconv'] = extension_loaded('iconv');
+        $data['extension']['apcu'] = extension_loaded('apcu');
+        $data['extension']['tidy'] = extension_loaded('tidy');
+        $data['extension']['dom'] = extension_loaded('dom');
 
         //$data['connection'] = $this->get('doctrine')->getManager('default')->getConnection();
 

@@ -84,7 +84,7 @@
                 <p>Go to your <a href="https://pinboard.in/settings/password" target="_blank">settings page</a> on Pinboard to get your API Token.</p>
                 <p>
                     <label for="token" class="required">{{trans 'token'}}</label>
-                    <input type="text" id="token" name="token" required="required" value="">
+                    <input type="text" id="token" name="token" required="required" value="{{#if pinboard }}{{ pinboard.token }}{{/if}}">
                 </p>
                 <p>
                     {{#if pinboard }}

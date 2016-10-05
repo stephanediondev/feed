@@ -54,15 +54,14 @@ http://example.com/client
 ####Api documentation
 http://example.com/api/documentation
 
-####Docker (TODO)
+####Docker
 ```
 cd /path-to-installation
-docker-compose build --no-cache --force-rm
-docker-compose up -d
+docker-compose up --build
 ```
 
 ####Screenshots
 
-![Desktop](web/screenshot.png)
-![Add to home screen](web/add-to-homescreen.png)
-![Notification](web/notification.png)
+![Desktop](web/screenshots/desktop.png)
+![Add to home screen](web/screenshots/add-to-homescreen.png)
+![Notification](web/screenshots/notification.png)
