@@ -134,13 +134,20 @@ class SearchManager extends AbstractManager
                 $path = '/'.$this->getIndex().'/item/'.$result['id'];
 
                 $body = [
-                    'feed' => $result['feed_id'],
+                    'feed' => [
+                        'id' => $result['feed_id'],
+                        'title' => $result['feed_title'],
+                        'language' => $result['feed_language'],
+                    ],
                     'title' => $result['title'],
                     'content' => $result['content'],
                     'date' => $result['date'],
                 ];
                 if($result['author_id']) {
-                    $body['author'] = $result['author_id'];
+                    $body['author'] = [
+                        'id' => $result['author_id'],
+                        'title' => $result['author_title'],
+                    ];
                 }
                 $this->query($action, $path, $body);
 
@@ -170,11 +177,12 @@ class SearchManager extends AbstractManager
             if($action == 'HEAD') {
                 $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
             }
+            //echo $path."\r\n";echo json_encode($body)."\r\n\r\n";
             return $result;
         }
     }
 
-    private function init()
+    public function init()
     {
         if($this->getEnabled()) {
             $path = '/'.$this->getIndex();
@@ -185,31 +193,82 @@ class SearchManager extends AbstractManager
                 $result = $this->query('PUT', $path);
             }
 
-            $path = '/'.$this->getIndex().'/_close';
-            $result = $this->query('POST', $path);
-
-            $path = '/'.$this->getIndex().'/_settings';
+            $path = '/'.$this->getIndex().'/_mapping/category';
             $body = [
-                'settings' => [
-                    'index' => [
-                        'analysis' => [
-                            'analyzer' => [
-                                'case_insensitive_sort' => [
-                                    'filter' => [
-                                        'lowercase',
-                                        'asciifolding',
-                                    ],
-                                    'tokenizer' => 'keyword',
-                                ],
-                            ],
+                'category' => [
+                    'properties' => [
+                        'title' => [
+                            'type' => 'string',
+                        ],
+                        'date_created' => [
+                            'type' => 'date',
+                            'format' => 'yyyy-MM-dd HH:mm:ss',
                         ],
                     ],
                 ],
             ];
             $result = $this->query('PUT', $path, $body);
 
-            $path = '/'.$this->getIndex().'/_open';
-            $result = $this->query('POST', $path);
+            $path = '/'.$this->getIndex().'/_mapping/author';
+            $body = [
+                'author' => [
+                    'properties' => [
+                        'title' => [
+                            'type' => 'string',
+                        ],
+                        'date_created' => [
+                            'type' => 'date',
+                            'format' => 'yyyy-MM-dd HH:mm:ss',
+                        ],
+                    ],
+                ],
+            ];
+            $result = $this->query('PUT', $path, $body);
+
+            $path = '/'.$this->getIndex().'/_mapping/item';
+            $body = [
+                'item' => [
+                    'properties' => [
+                        'feed' => [
+                            'properties' => [
+                                'id' => [
+                                    'type' => 'integer',
+                                ],
+                                'title' => [
+                                    'type' => 'string',
+                                    'index' => 'not_analyzed',
+                                ],
+                                'language' => [
+                                    'type' => 'string',
+                                    'index' => 'not_analyzed',
+                                ],
+                            ],
+                        ],
+                        'author' => [
+                            'properties' => [
+                                'id' => [
+                                    'type' => 'integer',
+                                ],
+                                'title' => [
+                                    'type' => 'string',
+                                    'index' => 'not_analyzed',
+                                ],
+                            ],
+                        ],
+                        'title' => [
+                            'type' => 'string',
+                        ],
+                        'content' => [
+                            'type' => 'string',
+                        ],
+                        'date' => [
+                            'type' => 'date',
+                            'format' => 'yyyy-MM-dd HH:mm:ss',
+                        ],
+                    ],
+                ],
+            ];
+            $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'/_mapping/feed';
             $body = [
@@ -217,12 +276,6 @@ class SearchManager extends AbstractManager
                     'properties' => [
                         'title' => [
                             'type' => 'string',
-                            'fields' => [
-                                'sort' => [
-                                    'type' => 'string',
-                                    'analyzer' => 'case_insensitive_sort',
-                                ],
-                            ],
                         ],
                         'description' => [
                             'type' => 'string',
@@ -243,87 +296,14 @@ class SearchManager extends AbstractManager
                 ],
             ];
             $result = $this->query('PUT', $path, $body);
+        }
+    }
 
-            $path = '/'.$this->getIndex().'/_mapping/category';
-            $body = [
-                'category' => [
-                    'properties' => [
-                        'title' => [
-                            'type' => 'string',
-                            'fields' => [
-                                'sort' => [
-                                    'type' => 'string',
-                                    'analyzer' => 'case_insensitive_sort',
-                                ],
-                            ],
-                        ],
-                        'date_created' => [
-                            'type' => 'date',
-                            'format' => 'yyyy-MM-dd HH:mm:ss',
-                        ],
-                    ],
-                ],
-            ];
-            $result = $this->query('PUT', $path, $body);
-
-            $path = '/'.$this->getIndex().'/_mapping/author';
-            $body = [
-                'author' => [
-                    'properties' => [
-                        'title' => [
-                            'type' => 'string',
-                            'fields' => [
-                                'sort' => [
-                                    'type' => 'string',
-                                    'analyzer' => 'case_insensitive_sort',
-                                ],
-                            ],
-                        ],
-                        'date_created' => [
-                            'type' => 'date',
-                            'format' => 'yyyy-MM-dd HH:mm:ss',
-                        ],
-                    ],
-                ],
-            ];
-            $result = $this->query('PUT', $path, $body);
-
-            $path = '/'.$this->getIndex().'/_mapping/item';
-            $body = [
-                'item' => [
-                    'properties' => [
-                        'feed' => [
-                            'type' => 'number',
-                        ],
-                        'title' => [
-                            'type' => 'string',
-                            'fields' => [
-                                'sort' => [
-                                    'type' => 'string',
-                                    'analyzer' => 'case_insensitive_sort',
-                                ],
-                            ],
-                        ],
-                        'content' => [
-                            'type' => 'string',
-                        ],
-                        'date' => [
-                            'type' => 'date',
-                            'format' => 'yyyy-MM-dd HH:mm:ss',
-                            'fields' => [
-                                'sort' => [
-                                    'type' => 'string',
-                                    'analyzer' => 'case_insensitive_sort',
-                                ],
-                            ],
-                        ],
-                        'author' => [
-                            'type' => 'number',
-                        ],
-                    ],
-                ],
-            ];
-            $result = $this->query('PUT', $path, $body);
+    public function reset()
+    {
+        if($this->getEnabled()) {
+            $path = '/'.$this->getIndex();
+            $result = $this->query('DELETE', $path);
         }
     }
 }
