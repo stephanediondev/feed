@@ -56,6 +56,7 @@ class SearchManager extends AbstractManager
                     'description' => $result['description'],
                     'website' => $result['website'],
                     'language' => $result['language'],
+                    'date_created' => $result['date_created'],
                 ];
                 $this->query($action, $path, $body);
             }
@@ -76,6 +77,7 @@ class SearchManager extends AbstractManager
 
                 $body = [
                     'title' => $result['title'],
+                    'date_created' => $result['date_created'],
                 ];
                 $this->query($action, $path, $body);
 
@@ -103,6 +105,7 @@ class SearchManager extends AbstractManager
 
                 $body = [
                     'title' => $result['title'],
+                    'date_created' => $result['date_created'],
                 ];
                 $this->query($action, $path, $body);
 
@@ -131,20 +134,13 @@ class SearchManager extends AbstractManager
                 $path = '/'.$this->getIndex().'/item/'.$result['id'];
 
                 $body = [
-                    'feed' => [
-                        'id' => $result['feed_id'],
-                        'title' => $result['feed_title'],
-                        'language' => $result['feed_language'],
-                    ],
+                    'feed' => $result['feed_id'],
                     'title' => $result['title'],
-                    'date' => $result['date'],
                     'content' => $result['content'],
+                    'date' => $result['date'],
                 ];
                 if($result['author_id']) {
-                    $body['author'] = [
-                        'id' => $result['author_id'],
-                        'title' => $result['author_title'],
-                    ];
+                    $body['author'] = $result['author_id'];
                 }
                 $this->query($action, $path, $body);
 
@@ -228,6 +224,21 @@ class SearchManager extends AbstractManager
                                 ],
                             ],
                         ],
+                        'description' => [
+                            'type' => 'string',
+                        ],
+                        'website' => [
+                            'type' => 'string',
+                            'index' => 'not_analyzed',
+                        ],
+                        'language' => [
+                            'type' => 'string',
+                            'index' => 'not_analyzed',
+                        ],
+                        'date_created' => [
+                            'type' => 'date',
+                            'format' => 'yyyy-MM-dd HH:mm:ss',
+                        ],
                     ],
                 ],
             ];
@@ -245,6 +256,10 @@ class SearchManager extends AbstractManager
                                     'analyzer' => 'case_insensitive_sort',
                                 ],
                             ],
+                        ],
+                        'date_created' => [
+                            'type' => 'date',
+                            'format' => 'yyyy-MM-dd HH:mm:ss',
                         ],
                     ],
                 ],
@@ -264,6 +279,10 @@ class SearchManager extends AbstractManager
                                 ],
                             ],
                         ],
+                        'date_created' => [
+                            'type' => 'date',
+                            'format' => 'yyyy-MM-dd HH:mm:ss',
+                        ],
                     ],
                 ],
             ];
@@ -273,6 +292,9 @@ class SearchManager extends AbstractManager
             $body = [
                 'item' => [
                     'properties' => [
+                        'feed' => [
+                            'type' => 'number',
+                        ],
                         'title' => [
                             'type' => 'string',
                             'fields' => [
@@ -282,14 +304,21 @@ class SearchManager extends AbstractManager
                                 ],
                             ],
                         ],
-                        'date' => [
+                        'content' => [
                             'type' => 'string',
+                        ],
+                        'date' => [
+                            'type' => 'date',
+                            'format' => 'yyyy-MM-dd HH:mm:ss',
                             'fields' => [
                                 'sort' => [
                                     'type' => 'string',
                                     'analyzer' => 'case_insensitive_sort',
                                 ],
                             ],
+                        ],
+                        'author' => [
+                            'type' => 'number',
                         ],
                     ],
                 ],
