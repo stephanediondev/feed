@@ -1,14 +1,13 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/book/security.html
 security:
     encoders:
         Readerself\CoreBundle\Entity\Member:
             algorithm: "bcrypt"
 
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory: ~
+        readerself_core_provider:
+            entity:
+                class: Readerself\CoreBundle\Entity\Member
+                property: email
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -18,6 +17,7 @@ security:
 
         main:
             anonymous: ~
+            stateless: true
             # activate different ways to authenticate
 
             # http_basic: ~
