@@ -139,6 +139,14 @@
 .mdl-dialog__content {
     padding: 0px;
 }
+.mdl-navigation .mdl-button {
+    overflow: visible;
+}
+.mdl-navigation .mdl-badge[data-badge]:after {
+    font-size: 11px;
+    right: -5px;
+    top: -5px;
+}
 
 .favicon, a.favicon:link, a.favicon:visited {
     background-position: center left;

@@ -270,6 +270,20 @@ function loadRoute(key, parameters) {
                             }
                         }*/
 
+                        if(typeof data_return.unread != 'undefined') {
+                            if(data_return.unread > 0) {
+                                if(data_return.unread > 99) {
+                                    badge = '99+';
+                                } else {
+                                    badge = data_return.unread;
+                                }
+                                $('.action-refresh').attr('data-badge', badge);
+                                $('.action-refresh').addClass('mdl-badge');
+                            } else {
+                                $('.action-refresh').removeClass('mdl-badge');
+                            }
+                        }
+
                         if(route.view) {
                             if(typeof data_return.entry == 'object' && typeof data_return.entry_entity == 'string') {
                                 if(typeof data_return.entry.title == 'string') {

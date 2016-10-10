@@ -211,9 +211,13 @@ class ItemController extends AbstractController
             $data['entries_page_next'] = $pageNext;
         }
 
-        /*if($memberConnected) {
-            $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
-        }*/
+        if($memberConnected) {
+            if($request->query->get('unread')) {
+                $data['unread'] = $pagination->getTotalItemCount();
+            } else {
+                $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+            }
+        }
 
         return new JsonResponse($data);
     }
@@ -342,6 +346,10 @@ class ItemController extends AbstractController
         }
 
         $this->itemManager->readAll($parameters);
+
+        if($memberConnected) {
+            $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+        }
 
         return new JsonResponse($data);
     }
