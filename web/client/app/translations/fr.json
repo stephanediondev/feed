@@ -52,10 +52,6 @@
     "description": "Description",
     "language": "Langue",
 
-    "view_items": "Voir les items",
-    "view_feeds": "Voir les flux",
-    "view_authors": "Voir les auteurs",
-
     "author": "Auteur",
     "category": "Catégorie",
     "feed": "Flux",
