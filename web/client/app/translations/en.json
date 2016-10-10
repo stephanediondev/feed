@@ -60,6 +60,10 @@
     "category": "Category",
     "feed": "Feed",
 
+    "title.feeds": "Feeds",
+    "title.items": "Items",
+    "title.categories": "Categories",
+    "title.authors": "Authors",
 
     "title.all_feeds": "All feeds",
     "button.all_feeds": "All",
@@ -80,9 +84,6 @@
     "button.search_feeds": "Search",
 
 
-    "title.all_categories": "All categories",
-    "button.all_categories": "All",
-
     "title.recent_categories": "Recent categories",
     "button.recent_categories": "Recent",
 
@@ -96,8 +97,8 @@
     "button.search_categories": "Search",
 
 
-    "title.all_items": "All items",
-    "button.all_items": "All",
+    "title.recent_items": "Recent items",
+    "button.recent_items": "Recent",
 
     "title.unread_items": "Unread items",
     "button.unread_items": "Unread",
@@ -108,9 +109,6 @@
     "title.search_items": "Search items",
     "button.search_items": "Search",
 
-
-    "title.all_authors": "All authors",
-    "button.all_authors": "All",
 
     "title.recent_authors": "Recent authors",
     "button.recent_authors": "Recent",

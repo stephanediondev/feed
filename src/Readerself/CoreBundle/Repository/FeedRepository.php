@@ -67,6 +67,11 @@ class FeedRepository extends AbstractRepository
             $query->setParameter(':author', $parameters['author']);
         }
 
+        if(isset($parameters['days']) == 1) {
+            $query->andWhere('fed.dateCreated > :date');
+            $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
+        }
+
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('fed.id');
 

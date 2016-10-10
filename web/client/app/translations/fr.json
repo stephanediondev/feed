@@ -60,6 +60,10 @@
     "category": "Catégorie",
     "feed": "Flux",
 
+    "title.feeds": "Flux",
+    "title.items": "Items",
+    "title.categories": "Catégories",
+    "title.authors": "Auteurs",
 
     "title.all_feeds": "Tous les flux",
     "button.all_feeds": "Tous",
@@ -80,9 +84,6 @@
     "button.search_feeds": "Recherche",
 
 
-    "title.all_categories": "Toutes les catégories",
-    "button.all_categories": "Toutes",
-
     "title.recent_categories": "Catégories récentes",
     "button.recent_categories": "Récentes",
 
@@ -96,8 +97,8 @@
     "button.search_categories": "Recherche",
 
 
-    "title.all_items": "Tous les items",
-    "button.all_items": "Tous",
+    "title.recent_items": "Items récents",
+    "button.recent_items": "Récents",
 
     "title.unread_items": "Items non lus",
     "button.unread_items": "Non lus",
@@ -108,9 +109,6 @@
     "title.search_items": "Recherche d'items",
     "button.search_items": "Recherche",
 
-
-    "title.all_authors": "Tous les auteurs",
-    "button.all_authors": "Tous",
 
     "title.recent_authors": "Auteurs récents",
     "button.recent_authors": "Récents",

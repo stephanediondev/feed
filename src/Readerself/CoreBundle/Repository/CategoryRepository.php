@@ -50,6 +50,11 @@ class CategoryRepository extends AbstractRepository
             $query->andWhere('cat.id IN (SELECT IDENTITY(feed.category) FROM ReaderselfCoreBundle:FeedCategory AS feed)');
         }
 
+        if(isset($parameters['days']) == 1) {
+            $query->andWhere('cat.dateCreated > :date');
+            $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
+        }
+
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('cat.id');
 

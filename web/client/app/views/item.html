@@ -15,12 +15,12 @@
                 {{#if current_title }}
                     {{trans current_title}} (<span class="count">{{ entries_total }}</span>)
                 {{else}}
-                    {{trans 'title.all_items'}} ({{ entries_total }})
+                    {{trans 'title.items'}} ({{ entries_total }})
                 {{/if}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#items" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_items'}}</a>
+            <a href="#items/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_items'}}</a>
             <a href="#items/unread" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unread_items'}}</a>
             <a href="#items/starred" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.starred_items'}}</a>
             <a href="#items/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_items'}}</a>
@@ -34,7 +34,7 @@
                     {{#if current_title }}
                         {{trans current_title}} ({{ entries_total }})
                     {{else}}
-                        {{trans 'title.all_items'}} ({{ entries_total }})
+                        {{trans 'title.items'}} ({{ entries_total }})
                     {{/if}}
                     </p>
                 </div>

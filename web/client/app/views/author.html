@@ -15,12 +15,11 @@
                 {{#if current_title }}
                     {{trans current_title}} ({{ entries_total }})
                 {{else}}
-                    {{trans 'title.all_authors'}} ({{ entries_total }})
+                    {{trans 'title.authors'}} ({{ entries_total }})
                 {{/if}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#authors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_authors'}}</a>
             <a href="#authors/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_authors'}}</a>
             <a href="#authors/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_authors'}}</a>
         </div>
@@ -49,11 +48,10 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="authors">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                {{trans 'title.all_authors'}}
+                {{trans 'title.authors'}}
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#authors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.all_authors'}}</a>
             <a href="#authors/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_authors'}}</a>
             <a href="#authors/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_authors'}}</a>
         </div>

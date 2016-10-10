@@ -103,6 +103,10 @@ class FeedController extends AbstractController
             $data['entry_entity'] = 'author';
         }
 
+        if($request->query->get('days')) {
+            $parameters['days'] = (int) $request->query->get('days');
+        }
+
         $fields = ['title' => 'fed.title', 'date_created' => 'fed.dateCreated'];
         if($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
             $parameters['sortField'] = $fields[$request->query->get('sortField')];

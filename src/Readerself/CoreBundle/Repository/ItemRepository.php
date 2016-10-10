@@ -105,14 +105,14 @@ class ItemRepository extends AbstractRepository
             }
         }
 
-        if(isset($parameters['days']) == 1) {
-            $query->andWhere('itm.date > :date');
-            $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
-        }
-
         if(isset($parameters['geolocation']) == 1 && $parameters['geolocation']) {
              $query->andWhere('itm.latitude IS NOT NULL');
              $query->andWhere('itm.longitude IS NOT NULL');
+        }
+
+        if(isset($parameters['days']) == 1) {
+            $query->andWhere('itm.date > :date');
+            $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }
 
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);

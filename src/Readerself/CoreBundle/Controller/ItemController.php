@@ -63,10 +63,6 @@ class ItemController extends AbstractController
         $parameters = [];
         $parameters['member'] = $memberConnected;
 
-        if($request->query->get('days')) {
-            $parameters['days'] = (int) $request->query->get('days');
-        }
-
         if($request->query->get('starred')) {
             if(!$memberConnected) {
                 return new JsonResponse($data, 403);
@@ -107,6 +103,10 @@ class ItemController extends AbstractController
             $page = 1;
         } else {
             $page = $request->query->getInt('page', 1);
+        }
+
+        if($request->query->get('days')) {
+            $parameters['days'] = (int) $request->query->get('days');
         }
 
         $fields = ['title' => 'itm.title', 'date' => 'itm.date'];

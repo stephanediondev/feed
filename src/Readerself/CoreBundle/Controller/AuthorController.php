@@ -56,6 +56,10 @@ class AuthorController extends AbstractController
             $data['entry_entity'] = 'feed';
         }
 
+        if($request->query->get('days')) {
+            $parameters['days'] = (int) $request->query->get('days');
+        }
+
         $fields = ['title' => 'aut.title', 'date_created' => 'aut.dateCreated'];
         if($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
             $parameters['sortField'] = $fields[$request->query->get('sortField')];

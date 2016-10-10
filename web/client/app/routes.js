@@ -11,7 +11,6 @@ routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};
 routes['#status'] = {view: 'view-status', query: '/status', title: 'status'};
 
 //Feed
-routes['#feeds'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds', title: 'title.all_feeds'};
 routes['#feeds/recent'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?sortField=date_created&sortDirection=DESC', title: 'title.recent_feeds'};
 routes['#feeds/subscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?subscribed=1', title: 'title.subscribed_feeds'};
 routes['#feeds/unsubscribed'] = {view: 'view-feeds', view_unit: 'view-feeds-unit', query: '/feeds?unsubscribed=1', title: 'title.unsubscribed_feeds'};
@@ -32,7 +31,7 @@ routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}'};
 routes['#feeds/import'] = {view: 'view-feeds-import', query: false, title: 'import_feeds'};
 
 //Item
-routes['#items'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?days=7', title: 'title.all_items'};
+routes['#items/recent'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?days=7', title: 'title.recent_items'};
 routes['#items/unread'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?unread=1', title: 'title.unread_items'};
 routes['#items/starred'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?starred=1', title: 'title.starred_items'};
 
@@ -54,8 +53,7 @@ routes['#items/markallasread/author/{id}'] = {view: false, query: '/items/markal
 routes['#items/markallasread/category/{id}'] = {view: false, query: '/items/markallasread?category={id}'};
 
 //Category
-routes['#categories'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories', title: 'title.all_categories'};
-routes['#categories/recent'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?sortField=date_created&sortDirection=DESC', title: 'title.recent_categories'};
+routes['#categories/recent'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?sortField=date_created&sortDirection=DESC&days=7', title: 'title.recent_categories'};
 routes['#categories/excluded'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?excluded=1', title: 'title.excluded_categories'};
 routes['#categories/usedbyfeeds'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?usedbyfeeds=1', title: 'title.categories_usedbyfeeds'};
 
@@ -66,10 +64,8 @@ routes['#category/action/exclude/{id}'] = {view: false, query: '/category/action
 
 routes['#category/{id}'] = {view: 'view-category-read', query: '/category/{id}'};
 
-
 //Author
-routes['#authors'] = {view: 'view-authors', view_unit: 'view-authors-unit', query: '/authors', title: 'title.all_authors'};
-routes['#authors/recent'] = {view: 'view-authors', view_unit: 'view-authors-unit', query: '/authors?sortField=date_created&sortDirection=DESC', title: 'title.recent_authors'};
+routes['#authors/recent'] = {view: 'view-authors', view_unit: 'view-authors-unit', query: '/authors?sortField=date_created&sortDirection=DESC&days=7', title: 'title.recent_authors'};
 
 routes['#authors/search'] = {view: 'view-search-authors', query: false, title: 'title.search_authors'};
 routes['#authors/search/result'] = {view: 'view-search-authors', view_unit: 'view-authors-unit', query: '/authors/search', title: 'title.search_authors'};
