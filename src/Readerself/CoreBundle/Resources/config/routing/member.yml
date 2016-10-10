@@ -30,6 +30,12 @@ readerself_api_member_delete:
     methods: DELETE
 
 #extra
+readerself_api_member_test:
+    path: /test
+    defaults:
+        _controller: "readerself_core_controller_member:testAction"
+    methods: GET
+
 readerself_api_member_login:
     path: /login
     defaults:

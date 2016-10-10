@@ -350,6 +350,10 @@ function loadRoute(key, parameters) {
                             }*/
                         }
 
+                        if(route.query == '/test') {
+                            loadRoute('#items/unread');
+                        }
+
                         if(route.query == '/logout') {
                             store.remove('connection');
                             $('body').removeClass('connected');
@@ -359,7 +363,11 @@ function loadRoute(key, parameters) {
                         }
                     },
                     403: function() {
+                        store.remove('connection');
+                        $('body').removeClass('connected');
+                        $('body').addClass('anonymous');
                         loadRoute('#login');
+                        setSnackbar($.i18n._('logout'));
                     },
                     404: function() {
                         loadRoute('#404');
@@ -484,7 +492,9 @@ $(document).ready(function() {
     if(window.location.hash) {
         loadRoute(window.location.hash);
     } else {
-        loadRoute('#items/unread');
+        if(connectionData.token) {
+            loadRoute('#test');
+        }
     }
 
     $('.mdl-layout__drawer').on('click', '.mdl-list__item a', function() {

@@ -447,6 +447,10 @@ class ItemController extends AbstractController
         $data['entry'] = $item->toArray();
         $data['entry_entity'] = 'item';
 
+        if($case == 'read') {
+            $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+        }
+
         return new JsonResponse($data);
     }
 

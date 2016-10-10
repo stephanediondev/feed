@@ -168,6 +168,31 @@ class MemberController extends AbstractController
     }
 
     /**
+     * Test.
+     *
+     * @ApiDoc(
+     *     section="Member",
+     *     parameters={
+     *         {"name"="email", "dataType"="string", "format"="email", "required"=true},
+     *         {"name"="password", "dataType"="string", "format"="", "required"=true},
+     *     },
+     * )
+     */
+    public function testAction(Request $request)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $this->memberManager->syncUnread($memberConnected->getId());
+
+        $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+
+        return new JsonResponse($data);
+    }
+
+    /**
      * Login.
      *
      * @ApiDoc(

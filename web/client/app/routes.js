@@ -1,4 +1,5 @@
 var routes = [];
+routes['#test'] = {view: false, query: '/test', title: 'init'};
 routes['#login'] = {view: 'view-login', query: false, title: 'login'};
 routes['#logout'] = {view: 'view-logout', query: '/logout'};
 routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
