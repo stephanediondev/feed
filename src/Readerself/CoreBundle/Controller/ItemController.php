@@ -150,7 +150,7 @@ class ItemController extends AbstractController
                 $src = $enclosure->getLink();
                 if(substr($src, 0, 5) == 'http:' && $request->server->get('HTTPS') == 'on') {
                     $src = urlencode(base64_encode($src));
-                    $enclosures[$index_enclosures]['link'] = 'icon-32x32.png';
+                    $enclosures[$index_enclosures]['link'] = 'app/icons/icon-32x32.png';
                     $enclosures[$index_enclosures]['proxy'] = $this->generateUrl('readerself_api_proxy', ['token' => $src], 0);
                 }
                 $index_enclosures++;
