@@ -32,7 +32,7 @@ routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}'};
 routes['#feeds/import'] = {view: 'view-feeds-import', query: false, title: 'import_feeds'};
 
 //Item
-routes['#items'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items', title: 'title.all_items'};
+routes['#items'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?days=7', title: 'title.all_items'};
 routes['#items/unread'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?unread=1', title: 'title.unread_items'};
 routes['#items/starred'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?starred=1', title: 'title.starred_items'};
 

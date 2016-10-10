@@ -43,6 +43,7 @@ class ItemController extends AbstractController
      *         {"name"="feed", "dataType"="integer", "required"=false, "format"="feed ID", "description"="items by feed"},
      *         {"name"="author", "dataType"="integer", "required"=false, "format"="author ID", "description"="items by author"},
      *         {"name"="category", "dataType"="integer", "required"=false, "format"="category ID", "description"="items by category"},
+     *         {"name"="days", "dataType"="integer", "required"=false, "description"="Limit items to X days"},
      *     },
      *     statusCodes={
      *         200="Returned when successful",
@@ -62,8 +63,8 @@ class ItemController extends AbstractController
         $parameters = [];
         $parameters['member'] = $memberConnected;
 
-        if($request->query->get('order')) {
-            $parameters['order'] = (string) $request->query->get('order');
+        if($request->query->get('days')) {
+            $parameters['days'] = (int) $request->query->get('days');
         }
 
         if($request->query->get('starred')) {
@@ -106,6 +107,20 @@ class ItemController extends AbstractController
             $page = 1;
         } else {
             $page = $request->query->getInt('page', 1);
+        }
+
+        $fields = ['title' => 'itm.title', 'date' => 'itm.date'];
+        if($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
+            $parameters['sortField'] = $fields[$request->query->get('sortField')];
+        } else {
+            $parameters['sortField'] = 'itm.date';
+        }
+
+        $directions = ['ASC', 'DESC'];
+        if($request->query->get('sortDirection') && in_array($request->query->get('sortDirection'), $directions)) {
+            $parameters['sortDirection'] = $request->query->get('sortDirection');
+        } else {
+            $parameters['sortDirection'] = 'DESC';
         }
 
         $paginator= $this->get('knp_paginator');
@@ -162,6 +177,7 @@ class ItemController extends AbstractController
                             //keep iframes from youtube, vimeo and dailymotion
                             if(isset($parse_src['host']) && (stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
                                 $node->setAttribute('src', str_replace('http://', 'https://', $src));
+                                $node->setAttribute('src', str_replace('autoplay=1', 'autoplay=0', $src));
                             } else {
                                 $node->parentNode->removeChild($node);
                             }

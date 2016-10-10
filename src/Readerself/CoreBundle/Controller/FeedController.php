@@ -416,6 +416,10 @@ class FeedController extends AbstractController
         $data['entry'] = $feed->toArray();
         $data['entry_entity'] = 'feed';
 
+        if($case == 'subscribe') {
+            $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+        }
+
         return new JsonResponse($data);
     }
 
