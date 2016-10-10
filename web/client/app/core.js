@@ -271,17 +271,13 @@ function loadRoute(key, parameters) {
                         }*/
 
                         if(typeof data_return.unread != 'undefined') {
-                            if(data_return.unread > 0) {
-                                if(data_return.unread > 99) {
-                                    badge = '99+';
-                                } else {
-                                    badge = data_return.unread;
-                                }
-                                $('.action-refresh').attr('data-badge', badge);
-                                $('.action-refresh').addClass('mdl-badge');
+                            if(data_return.unread > 99) {
+                                badge = '99+';
                             } else {
-                                $('.action-refresh').removeClass('mdl-badge');
+                                badge = data_return.unread;
                             }
+                            $('.count-unread').attr('data-badge', badge);
+                            $('.count-unread').addClass('mdl-badge');
                         }
 
                         if(route.view) {
@@ -586,13 +582,6 @@ $(document).ready(function() {
         } else {
             ref.removeClass('expand');
             ref.addClass('collapse');
-        }
-    });
-
-    $(document).on('click', '.action-refresh', function(event) {
-        event.preventDefault();
-        if(window.location.hash) {
-            loadRoute(window.location.hash);
         }
     });
 

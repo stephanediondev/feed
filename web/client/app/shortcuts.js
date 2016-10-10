@@ -19,7 +19,7 @@ $(document).bind('keydown', function(event) {
     if($(event.target).parents('form').length === 0) {
         //g then a
         if(g_key && keycode == 65) {
-            loadRoute('#items');
+            loadRoute('#items/recent');
 
         //g then u
         } else if(g_key && keycode == 85) {
@@ -31,11 +31,11 @@ $(document).bind('keydown', function(event) {
 
         //g then f
         } else if(g_key && keycode == 70) {
-            loadRoute('#feeds');
+            loadRoute('#feeds/recent');
 
         //g then c
         } else if(g_key && keycode == 67) {
-            loadRoute('#categories');
+            loadRoute('#categories/recent');
 
         //t
         } else if(keycode == 84) {
@@ -121,7 +121,9 @@ $(document).bind('keydown', function(event) {
 
         //r
         } else if(keycode == 82) {
-            $('.mdl-layout__header-row').find('.action-refresh').trigger('click');
+            if(window.location.hash) {
+                loadRoute(window.location.hash);
+            }
         }
     }
 });

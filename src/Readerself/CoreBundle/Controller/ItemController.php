@@ -361,6 +361,10 @@ class ItemController extends AbstractController
             $parameters['category'] = (int) $request->query->get('category');
         }
 
+        $parameters['sortField'] = 'itm.id';
+
+        $parameters['sortDirection'] = 'DESC';
+
         $this->itemManager->readAll($parameters);
 
         if($memberConnected) {

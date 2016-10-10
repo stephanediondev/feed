@@ -1,7 +1,7 @@
 <script type="text/template" id="view-navigation">
     <a href="#login" class="load-route anonymous mdl-button mdl-color-text--white">{{trans 'login'}}</a>
 
-    <a href="#" class="action-refresh connected mdl-button mdl-color-text--white" title="r">{{trans 'refresh'}}</a>
+    <a href="#items/unread" class="load-route count-unread connected mdl-button mdl-color-text--white" title="{{trans 'shortcut_g_then_u'}}">{{trans 'button.unread_items'}}</a>
     <a href="#" class="action-up mdl-button mdl-color-text--white" title="k">{{trans 'up'}}</a>
     <a href="#" class="action-down mdl-button mdl-color-text--white" title="j">{{trans 'down'}}</a>
     <a href="#" class="action-top connected mdl-button mdl-color-text--white" title="k">{{trans 'top'}}</a>
@@ -10,7 +10,6 @@
 <script type="text/template" id="view-aside">
     <ul class="mdl-list">
         <li class="mdl-list__item"><a href="#items/recent" class="load-route" title="{{trans 'shortcut_g_then_a'}}">{{trans 'title.recent_items'}}</a></li>
-        <li class="mdl-list__item connected"><a href="#items/unread" class="load-route" title="{{trans 'shortcut_g_then_u'}}">{{trans 'title.unread_items'}}</a></li>
         <li class="mdl-list__item connected"><a href="#items/starred" class="load-route" title="{{trans 'shortcut_g_then_s'}}">{{trans 'title.starred_items'}}</a></li>
 
         <li class="mdl-list__item"><a href="#feeds/recent" class="load-route">{{trans 'title.recent_feeds'}}</a></li>
