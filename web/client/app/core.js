@@ -492,9 +492,7 @@ $(document).ready(function() {
     if(window.location.hash) {
         loadRoute(window.location.hash);
     } else {
-        if(connectionData.token) {
-            loadRoute('#test');
-        }
+        loadRoute('#test');
     }
 
     $('.mdl-layout__drawer').on('click', '.mdl-list__item a', function() {
