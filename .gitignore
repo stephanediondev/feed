@@ -1,7 +1,6 @@
 /app/config/parameters.yml
 
 /composer
-/composer.lock
 /composer.phar
 
 /phpunit.log
