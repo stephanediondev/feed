@@ -156,15 +156,15 @@ class ItemController extends AbstractController
                 $index_enclosures++;
             }
 
-
+            $cleanContent = false;
             if(class_exists('DOMDocument') && $item->getContent() != '') {
                 try {
                     libxml_use_internal_errors(true);
 
-                    $content = mb_convert_encoding($item->getContent(), 'HTML-ENTITIES', 'UTF-8');
+                    $cleanContent = mb_convert_encoding($item->getContent(), 'HTML-ENTITIES', 'UTF-8');
 
                     $dom = new \DOMDocument();
-                    $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
+                    $dom->loadHTML($cleanContent, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
 
                     $xpath = new \DOMXPath($dom);
 
@@ -174,8 +174,8 @@ class ItemController extends AbstractController
 
                         if($node->tagName == 'iframe') {
                             $parse_src = parse_url($src);
-                            //keep iframes from youtube, vimeo and dailymotion
-                            if(isset($parse_src['host']) && (stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
+                            //keep iframes from instagram, youtube, vimeo and dailymotion
+                            if(isset($parse_src['host']) && (stristr($parse_src['host'], 'instagram.com') || stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
                                 $node->setAttribute('src', str_replace('http://', 'https://', $src));
                                 $node->setAttribute('src', str_replace('autoplay=1', 'autoplay=0', $src));
                             } else {
@@ -205,7 +205,7 @@ class ItemController extends AbstractController
                         }
                     }
 
-                    $content = $dom->saveHTML();
+                    $cleanContent = $dom->saveHTML();
 
                     libxml_clear_errors();
                 } catch (Exception $e) {
@@ -219,8 +219,8 @@ class ItemController extends AbstractController
             $data['entries'][$index]['categories'] = $categories;
             $data['entries'][$index]['enclosures'] = $enclosures;
 
-            if(isset($content) == 1) {
-                $data['entries'][$index]['content'] = $content;
+            if($cleanContent) {
+                $data['entries'][$index]['content'] = $cleanContent;
             }
 
             $index++;
@@ -370,6 +370,10 @@ class ItemController extends AbstractController
 
         if($request->query->get('category')) {
             $parameters['category'] = (int) $request->query->get('category');
+        }
+
+        if($request->query->get('age')) {
+            $parameters['age'] = (int) $request->query->get('age');
         }
 
         $parameters['sortField'] = 'itm.id';

@@ -339,8 +339,8 @@ class CollectionManager extends AbstractManager
 
                                     if($node->tagName == 'iframe') {
                                         $parse_src = parse_url($src);
-                                        //keep iframes from youtube, vimeo and dailymotion
-                                        if(isset($parse_src['host']) && (stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
+                                        //keep iframes from instagram, youtube, vimeo and dailymotion
+                                        if(isset($parse_src['host']) && (stristr($parse_src['host'], 'instagram.com') || stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
                                             $node->setAttribute('src', str_replace('http://', 'https://', $src));
                                         } else {
                                             $node->parentNode->removeChild($node);

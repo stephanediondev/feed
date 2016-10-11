@@ -115,6 +115,11 @@ class ItemRepository extends AbstractRepository
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }
 
+        if(isset($parameters['age']) == 1) {
+            $query->andWhere('itm.date < :date');
+            $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
+        }
+
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('itm.id');
 
