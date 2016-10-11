@@ -194,6 +194,17 @@ class ItemController extends AbstractController
                         }
                     }
 
+                    $nodes = $xpath->query('//*[@class]');
+                    foreach($nodes as $node) {
+                        $class = $node->getAttribute('class');
+
+                        if($node->tagName == 'div') {
+                            if($class == 'feedflare') {
+                                $node->parentNode->removeChild($node);
+                            }
+                        }
+                    }
+
                     $content = $dom->saveHTML();
 
                     libxml_clear_errors();

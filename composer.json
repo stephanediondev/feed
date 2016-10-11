@@ -4,7 +4,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "Readerself\\": "src/Readerself/"
         },
         "classmap": [
             "app/AppKernel.php",
@@ -19,9 +19,9 @@
     "require": {
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "knplabs/knp-paginator-bundle": "^2.5",
-        "minishlink/web-push-bundle": "*",
-        "simplepie/simplepie": "*",
-        "nelmio/api-doc-bundle": "*",
+        "minishlink/web-push-bundle": "^1.0",
+        "simplepie/simplepie": "^1.4",
+        "nelmio/api-doc-bundle": "^2.0",
         "facebook/graph-sdk" : "~5.0",
         "php": ">=5.5.9",
         "symfony/symfony": "3.1.*",

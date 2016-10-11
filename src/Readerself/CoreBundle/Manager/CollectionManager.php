@@ -348,7 +348,7 @@ class CollectionManager extends AbstractManager
                                     }
                                 }
 
-                                $disallowedAttributes = ['id', 'class', 'style', 'width', 'height', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];
+                                $disallowedAttributes = ['id', 'style', 'width', 'height', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];
                                 foreach($disallowedAttributes as $attribute) {
                                     $nodes = $xpath->query('//*[@'.$attribute.']');
                                     foreach($nodes as $node) {
