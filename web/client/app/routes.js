@@ -26,10 +26,6 @@ routes['#feeds/author/{id}'] = {view: 'view-feeds', view_unit: 'view-feeds-unit'
 
 routes['#feed/{id}'] = {view: 'view-feed-read', query: '/feed/{id}'};
 
-routes['#feed/update/{id}'] = {view: 'view-feed-update', query: '/feed/{id}'};
-
-routes['#feeds/import'] = {view: 'view-feeds-import', query: false, title: 'import_feeds'};
-
 //Item
 routes['#items/recent'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?days=7', title: 'title.recent_items'};
 routes['#items/unread'] = {view: 'view-items', view_unit: 'view-items-unit', query: '/items?unread=1', title: 'title.unread_items'};

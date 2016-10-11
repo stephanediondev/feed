@@ -42,7 +42,21 @@
                 </form>
             </dialog>
 
-            <a href="#feeds/import" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'import'}}</a>
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog connected online" id="dialog-import_feed">{{trans 'import'}}</button>
+            <dialog class="mdl-dialog" for="dialog-import_feed">
+                <form action="#feeds/recent" data-query="/feeds/import" method="POST" enctype="multipart/form-data">
+                    <div class="mdl-dialog__content">
+                        <p>
+                            <label for="file" class="required">{{trans 'opml'}}</label>
+                            <input type="file" id="file" name="file" required="required">
+                        </p>
+                    </div>
+                    <div class="mdl-dialog__actions">
+                        <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white close_submit">{{trans 'import'}}</button>
+                        <a href="#" class="mdl-button close">{{trans 'cancel'}}</a>
+                    </div>
+                </form>
+            </dialog>
         </div>
     </div>
 </script>
@@ -142,10 +156,38 @@
             {{else}}
                 <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'subscribe'}}</a>
             {{/if}}
-            <a href="#feed/update/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online administrator">{{trans 'update'}}</a>
+
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog online administrator" id="dialog-update-{{ entry.id }}">{{trans 'update'}}</button>
+            <dialog class="mdl-dialog" for="dialog-update-{{ entry.id }}">
+                <form action="#feed/{{ entry.id }}" data-query="/feed/{{ entry.id }}" method="PUT">
+                    <div class="mdl-dialog__content">
+                        <p>
+                            <label for="title" class="required">{{trans 'title'}}</label>
+                            <input type="text" id="title" name="title" value="{{ entry.title }}">
+                        </p>
+                        <p>
+                            <label for="title" class="required">{{trans 'link'}}</label>
+                            <input type="url" id="link" name="link" required="required" value="{{ entry.link }}">
+                        </p>
+                        <p>
+                            <label for="website" class="required">{{trans 'website'}}</label>
+                            <input type="url" id="website" name="website" value="{{ entry.website }}">
+                        </p>
+                        <p>
+                            <label for="language">{{trans 'language'}}</label>
+                            <input type="text" id="language" name="language" value="{{ entry.language }}">
+                        </p>
+                    </div>
+                    <div class="mdl-dialog__actions">
+                        <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white close_submit">{{trans 'update'}}</button>
+                        <a href="#" class="mdl-button close">{{trans 'cancel'}}</a>
+                    </div>
+                </form>
+            </dialog>
+
             <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog online administrator" id="dialog-delete-{{ entry.id }}">{{trans 'delete'}}</button>
             <dialog class="mdl-dialog" for="dialog-delete-{{ entry.id }}">
-                <form action="#feeds" data-query="/feed/{{ entry.id }}" method="DELETE">
+                <form action="#feeds/recent" data-query="/feed/{{ entry.id }}" method="DELETE">
                     <div class="mdl-dialog__content">
                         <p>
                             {{ entry.title }} ({{trans 'feed'}})
@@ -174,88 +216,4 @@
             </div>
         {{/if}}
     {{/each}}
-</script>
-
-<script type="text/template" id="view-feed-update">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="feeds">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
-                {{trans 'title.feeds'}}
-            </h1>
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_feeds'}}</a>
-            <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.subscribed_feeds'}}</a>
-            <a href="#feeds/unsubscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unsubscribed_feeds'}}</a>
-            <a href="#feeds/witherrors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
-            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_feeds'}}</a>
-        </div>
-    </div>
-
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed">
-        <form action="#feed/{{ entry.id }}" data-query="/feed/{{ entry.id }}" method="PUT">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
-                    <a href="#feed/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>{{ entry.title }}</a>
-                </h1>
-            </div>
-            <div class="mdl-card__supporting-text">
-                <p>
-                    <label for="title" class="required">{{trans 'title'}}</label>
-                    <input type="text" id="title" name="title" value="{{ entry.title }}">
-                </p>
-                <p>
-                    <label for="title" class="required">{{trans 'link'}}</label>
-                    <input type="url" id="link" name="link" required="required" value="{{ entry.link }}">
-                </p>
-                <p>
-                    <label for="website" class="required">{{trans 'website'}}</label>
-                    <input type="url" id="website" name="website" value="{{ entry.website }}">
-                </p>
-                <p>
-                    <label for="language">{{trans 'language'}}</label>
-                    <input type="text" id="language" name="language" value="{{ entry.language }}">
-                </p>
-                <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
-                </p>
-            </div>
-        </form>
-    </div>
-</script>
-
-<script type="text/template" id="view-feeds-import">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="feeds">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
-                {{trans 'title.feeds'}}
-            </h1>
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a href="#feeds/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_feeds'}}</a>
-            <a href="#feeds/subscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.subscribed_feeds'}}</a>
-            <a href="#feeds/unsubscribed" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.unsubscribed_feeds'}}</a>
-            <a href="#feeds/witherrors" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.feeds_witherrors'}}</a>
-            <a href="#feeds/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_feeds'}}</a>
-        </div>
-    </div>
-
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feeds-import">
-        <form action="#feeds/recent" data-query="/feeds/import" method="POST" enctype="multipart/form-data">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
-                    {{trans 'import'}}
-                </h1>
-            </div>
-            <div class="mdl-card__supporting-text">
-                <p>
-                    <label for="file" class="required">{{trans 'opml'}}</label>
-                    <input type="file" id="file" name="file" required="required">
-                </p>
-                <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
-                </p>
-            </div>
-        </form>
-    </div>
 </script>

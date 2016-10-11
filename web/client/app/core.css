@@ -138,6 +138,7 @@
 }
 .mdl-dialog__content {
     padding: 0px;
+    text-align: left;
 }
 .mdl-navigation .mdl-button {
     overflow: visible;
