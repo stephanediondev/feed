@@ -203,6 +203,30 @@ class ItemController extends AbstractController
                                 $node->parentNode->removeChild($node);
                             }
                         }
+
+                        if($node->tagName == 'blockquote') {
+                            if($class == 'instagram-media') {
+                                $links = $node->getElementsByTagName('a');
+                                if($links) {
+                                    foreach($links as $link) {
+                                        $nodeReplace = $dom->createElement('a');
+                                        $domAttribute = $dom->createAttribute('href');
+                                        $domAttribute->value = $link->getAttribute('href');
+                                        $nodeReplace->appendChild($domAttribute);
+
+                                        $img = $dom->createElement('img');
+                                        $domAttribute = $dom->createAttribute('src');
+                                        $domAttribute->value = $link->getAttribute('href').'media/?size=m';
+                                        $img->appendChild($domAttribute);
+
+                                        $nodeReplace->appendChild($img);
+
+                                        $node->parentNode->replaceChild($nodeReplace, $node);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     $cleanContent = $dom->saveHTML();

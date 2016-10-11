@@ -342,6 +342,7 @@ class CollectionManager extends AbstractManager
                                         //keep iframes from instagram, youtube, vimeo and dailymotion
                                         if(isset($parse_src['host']) && (stristr($parse_src['host'], 'instagram.com') || stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
                                             $node->setAttribute('src', str_replace('http://', 'https://', $src));
+                                            $node->setAttribute('src', str_replace('autoplay=1', 'autoplay=0', $src));
                                         } else {
                                             $node->parentNode->removeChild($node);
                                         }
@@ -352,8 +353,8 @@ class CollectionManager extends AbstractManager
                                 foreach($disallowedAttributes as $attribute) {
                                     $nodes = $xpath->query('//*[@'.$attribute.']');
                                     foreach($nodes as $node) {
-                                        //don't remove width and height if iframe
-                                        if(($attribute == 'width' || $attribute == 'height') && $node->tagName == 'iframe') {
+                                        //don't remove style, width and height if iframe
+                                        if(($attribute == 'style' || $attribute == 'width' || $attribute == 'height') && $node->tagName == 'iframe') {
                                             continue;
                                         }
 
