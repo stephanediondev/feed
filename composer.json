@@ -1,5 +1,6 @@
 {
-    "name": "sdion/sdion1",
+    "name": "readerself/readerself",
+    "description": "Self-hosted rss reader (php / mysql or sqlite) - Google Reader alternative",
     "license": "proprietary",
     "type": "project",
     "autoload": {
