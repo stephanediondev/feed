@@ -32,7 +32,7 @@
 .mdl-card {
     min-height: inherit;
 }
-.mdl-card[direction="rtl"] {
+.mdl-card[dir="rtl"] {
     text-align: right;
 }
 .mdl-card__title {
@@ -44,7 +44,7 @@
     font-size: 16px;
     margin-bottom: 4px;
 }
-.mdl-card[direction="rtl"] .mdl-card__title .mdl-card__title-text {
+.mdl-card[dir="rtl"] .mdl-card__title .mdl-card__title-text {
     display: block;
     text-align: right;
 }
@@ -69,7 +69,7 @@
     margin: 4px 4px 4px 0px;
     white-space: nowrap;
 }
-.mdl-card[direction="rtl"] .mdl-navigation__link {
+.mdl-card[dir="rtl"] .mdl-navigation__link {
     float: right;
     margin: 4px 0px 4px 4px;
 }

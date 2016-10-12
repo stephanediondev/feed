@@ -57,6 +57,11 @@ class Feed
      */
     private $dateModified;
 
+    /**
+     * @var string
+     */
+    private $direction;
+
 
     /**
      * Get id
@@ -284,6 +289,17 @@ class Feed
         return $this->dateModified;
     }
 
+    public function getDirection()
+    {
+        $this->direction = 'ltr';
+
+        if($this->getLanguage() == 'ar') {
+            $this->direction = 'rtl';
+        }
+
+        return $this->direction;
+    }
+
     /**
      * @return array
      */
@@ -297,6 +313,7 @@ class Feed
             'hostname' => $this->getHostname(),
             'description' => $this->getDescription(),
             'language' => $this->getLanguage(),
+            'direction' => $this->getDirection(),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : '',
         ];
     }

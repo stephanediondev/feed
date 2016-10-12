@@ -48,7 +48,7 @@
 </script>
 
 <script type="text/template" id="view-items-unit">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col item" id="item-{{ entry.id }}">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col item" id="item-{{ entry.id }}" dir="{{ entry.feed.direction }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
                 <a title="{{trans 'shortcut_v'}}" class="favicon" href="{{ entry.link }}" {{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
