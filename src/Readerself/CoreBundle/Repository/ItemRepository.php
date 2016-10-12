@@ -106,8 +106,8 @@ class ItemRepository extends AbstractRepository
         }
 
         if(isset($parameters['geolocation']) == 1 && $parameters['geolocation']) {
-             $query->andWhere('itm.latitude IS NOT NULL');
-             $query->andWhere('itm.longitude IS NOT NULL');
+            $query->andWhere('itm.latitude IS NOT NULL');
+            $query->andWhere('itm.longitude IS NOT NULL');
         }
 
         if(isset($parameters['days']) == 1) {

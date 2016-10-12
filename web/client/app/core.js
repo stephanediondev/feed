@@ -557,10 +557,13 @@ $(document).ready(function() {
                 ref.addClass('collapse');
             }
         }
-        var action = ref.find('.action-read');
-        if(action.hasClass('read')) {
-        } else {
-            action.trigger('click');
+
+        if($('body').hasClass('connected') && $('body').hasClass('online')) {
+            var action = ref.find('.action-read');
+            if(action.hasClass('read')) {
+            } else {
+                action.trigger('click');
+            }
         }
     });
 
