@@ -602,6 +602,9 @@ $(document).ready(function() {
 
     $(document).on('click', '.more', function(event) {
         event.preventDefault();
+        $('main > .mdl-grid .card-selected').removeClass('card-selected');
+        $(this).parent().parent().prev().addClass('card-selected');
+
         $(this).parent().parent().remove();
     });
 

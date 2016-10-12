@@ -1,6 +1,7 @@
 {
     "name": "readerself/readerself",
     "description": "Self-hosted rss reader (php / mysql or sqlite) - Google Reader alternative",
+    "homepage": "https://readerself.com",
     "license": "proprietary",
     "type": "project",
     "autoload": {

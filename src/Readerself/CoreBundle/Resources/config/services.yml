@@ -124,6 +124,7 @@ services:
         public: true
         arguments:
             - "@readerself_core_manager_enclosure"
+            - "@router"
 
     readerself_core_manager_enclosure:
         class: Readerself\CoreBundle\Manager\EnclosureManager

@@ -162,17 +162,14 @@ class SearchController extends AbstractController
                     ],
                 ];
                 $body['highlight'] = [
-                    //'encoder' => 'html',
                     'pre_tags' => ['<strong>'],
                     'post_tags' => ['</strong>'],
                     'fields' => [
                         'title' => [
-                            'fragment_size' => 255,
-                            'number_of_fragments' => 1,
+                            'number_of_fragments' => 0,
                         ],
                         'description' => [
-                            'fragment_size' => 255,
-                            'number_of_fragments' => 1,
+                            'number_of_fragments' => 0,
                         ],
                     ],
                 ];
@@ -186,13 +183,11 @@ class SearchController extends AbstractController
                     ],
                 ];
                 $body['highlight'] = [
-                    //'encoder' => 'html',
                     'pre_tags' => ['<strong>'],
                     'post_tags' => ['</strong>'],
                     'fields' => [
                         'title' => [
-                            'fragment_size' => 255,
-                            'number_of_fragments' => 1,
+                            'number_of_fragments' => 0,
                         ],
                     ],
                 ];
@@ -206,13 +201,11 @@ class SearchController extends AbstractController
                     ],
                 ];
                 $body['highlight'] = [
-                    //'encoder' => 'html',
                     'pre_tags' => ['<strong>'],
                     'post_tags' => ['</strong>'],
                     'fields' => [
                         'title' => [
-                            'fragment_size' => 255,
-                            'number_of_fragments' => 1,
+                            'number_of_fragments' => 0,
                         ],
                     ],
                 ];
@@ -226,17 +219,14 @@ class SearchController extends AbstractController
                     ],
                 ];
                 $body['highlight'] = [
-                    //'encoder' => 'html',
                     'pre_tags' => ['<strong>'],
                     'post_tags' => ['</strong>'],
                     'fields' => [
                         'title' => [
-                            'fragment_size' => 255,
-                            'number_of_fragments' => 1,
+                            'number_of_fragments' => 0,
                         ],
                         'content' => [
-                            'fragment_size' => 255,
-                            'number_of_fragments' => 1,
+                            'number_of_fragments' => 0,
                         ],
                     ],
                 ];
@@ -266,7 +256,7 @@ class SearchController extends AbstractController
 
             $data['entries'] = [];
 
-            if(isset($result->error) == 0) {
+            if(isset($result['hits']['hits']) == 1) {
                 $index = 0;
                 foreach($result['hits']['hits'] as $hit) {
                     if($type == 'feed') {
@@ -420,7 +410,7 @@ class SearchController extends AbstractController
                 $tidy = new \tidy();
                 $tidy->parseString($content, $options, 'utf8');
                 $tidy->cleanRepair();
-                $content = $tidy->value;
+                $content = $this->itemManager->cleanContent($tidy->value);
             } catch (Exception $e) {
             }
         }

@@ -156,86 +156,6 @@ class ItemController extends AbstractController
                 $index_enclosures++;
             }
 
-            $cleanContent = false;
-            if(class_exists('DOMDocument') && $item->getContent() != '') {
-                try {
-                    libxml_use_internal_errors(true);
-
-                    $cleanContent = mb_convert_encoding($item->getContent(), 'HTML-ENTITIES', 'UTF-8');
-
-                    $dom = new \DOMDocument();
-                    $dom->loadHTML($cleanContent, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
-
-                    $xpath = new \DOMXPath($dom);
-
-                    $nodes = $xpath->query('//*[@src]');
-                    foreach($nodes as $node) {
-                        $src = $node->getAttribute('src');
-
-                        if($node->tagName == 'iframe') {
-                            $parse_src = parse_url($src);
-                            //keep iframes from instagram, youtube, vimeo and dailymotion
-                            if(isset($parse_src['host']) && (stristr($parse_src['host'], 'instagram.com') || stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
-                                $node->setAttribute('src', str_replace('http://', 'https://', $src));
-                                $node->setAttribute('src', str_replace('autoplay=1', 'autoplay=0', $src));
-                            } else {
-                                $node->parentNode->removeChild($node);
-                            }
-                        }
-
-                        if($node->tagName == 'img') {
-                            if(substr($src, 0, 5) == 'http:' && $request->server->get('HTTPS') == 'on') {
-                                $src = urlencode(base64_encode($src));
-                                $node->setAttribute('src', 'app/icons/icon-32x32.png');
-                                $node->setAttribute('data-src', $this->generateUrl('readerself_api_proxy', ['token' => $src], 0));
-                            }
-
-                            $node->removeAttribute('srcset');
-                        }
-                    }
-
-                    $nodes = $xpath->query('//*[@class]');
-                    foreach($nodes as $node) {
-                        $class = $node->getAttribute('class');
-
-                        if($node->tagName == 'div') {
-                            if($class == 'feedflare') {
-                                $node->parentNode->removeChild($node);
-                            }
-                        }
-
-                        if($node->tagName == 'blockquote') {
-                            if($class == 'instagram-media') {
-                                $links = $node->getElementsByTagName('a');
-                                if($links) {
-                                    foreach($links as $link) {
-                                        $nodeReplace = $dom->createElement('a');
-                                        $domAttribute = $dom->createAttribute('href');
-                                        $domAttribute->value = $link->getAttribute('href');
-                                        $nodeReplace->appendChild($domAttribute);
-
-                                        $img = $dom->createElement('img');
-                                        $domAttribute = $dom->createAttribute('src');
-                                        $domAttribute->value = $link->getAttribute('href').'media/?size=m';
-                                        $img->appendChild($domAttribute);
-
-                                        $nodeReplace->appendChild($img);
-
-                                        $node->parentNode->replaceChild($nodeReplace, $node);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    $cleanContent = $dom->saveHTML();
-
-                    libxml_clear_errors();
-                } catch (Exception $e) {
-                }
-            }
-
             $data['entries'][$index] = $item->toArray();
             foreach($actions as $action) {
                 $data['entries'][$index][$action->getAction()->getTitle()] = true;
@@ -243,9 +163,7 @@ class ItemController extends AbstractController
             $data['entries'][$index]['categories'] = $categories;
             $data['entries'][$index]['enclosures'] = $enclosures;
 
-            if($cleanContent) {
-                $data['entries'][$index]['content'] = $cleanContent;
-            }
+            $data['entries'][$index]['content'] = $this->itemManager->cleanContent($item->getContent());
 
             $index++;
         }
