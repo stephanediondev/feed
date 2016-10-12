@@ -354,7 +354,7 @@ class SearchController extends AbstractController
                                 $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
                             }
                             if(isset($hit['highlight']['content']) == 1) {
-                                $data['entries'][$index]['content'] = $this->cleanContent($hit['highlight']['content'][0]);
+                                $data['entries'][$index]['content'] = $this->itemManager->cleanContent($hit['highlight']['content'][0]);
                             }
                             $index++;
                         } else {
@@ -394,26 +394,5 @@ class SearchController extends AbstractController
         }
 
         return new JsonResponse($data);
-    }
-
-    private function cleanContent($content) {
-        if(class_exists('Tidy')) {
-            try {
-                $options = [
-                    'output-xhtml' => true,
-                    'clean' => true,
-                    'wrap-php' => true,
-                    'doctype' => 'omit',
-                    'show-body-only' => true,
-                    'drop-proprietary-attributes' => true,
-                ];
-                $tidy = new \tidy();
-                $tidy->parseString($content, $options, 'utf8');
-                $tidy->cleanRepair();
-                $content = $this->itemManager->cleanContent($tidy->value);
-            } catch (Exception $e) {
-            }
-        }
-        return $content;
     }
 }
