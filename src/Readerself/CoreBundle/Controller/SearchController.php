@@ -280,8 +280,9 @@ class SearchController extends AbstractController
                                 $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
                             }
                             if(isset($hit['highlight']['description']) == 1) {
-                                $data['entries'][$index]['description'] = $this->cleanContent($hit['highlight']['description'][0]);
+                                $data['entries'][$index]['description'] = $hit['highlight']['description'][0];
                             }
+
                             $index++;
                         } else {
                             $action = 'DELETE';
@@ -305,6 +306,7 @@ class SearchController extends AbstractController
                             if(isset($hit['highlight']['title']) == 1) {
                                 $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
                             }
+
                             $index++;
                         } else {
                             $action = 'DELETE';
@@ -323,6 +325,7 @@ class SearchController extends AbstractController
                             if(isset($hit['highlight']['title']) == 1) {
                                 $data['entries'][$index]['title'] = $hit['highlight']['title'][0];
                             }
+
                             $index++;
                         } else {
                             $action = 'DELETE';
@@ -355,7 +358,10 @@ class SearchController extends AbstractController
                             }
                             if(isset($hit['highlight']['content']) == 1) {
                                 $data['entries'][$index]['content'] = $this->itemManager->cleanContent($hit['highlight']['content'][0]);
+                            } else {
+                                $data['entries'][$index]['content'] = $this->itemManager->cleanContent($item->getContent());
                             }
+
                             $index++;
                         } else {
                             $action = 'DELETE';
