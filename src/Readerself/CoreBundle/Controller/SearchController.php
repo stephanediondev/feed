@@ -161,18 +161,6 @@ class SearchController extends AbstractController
                         'query' => $request->query->get('q'),
                     ],
                 ];
-                $body['highlight'] = [
-                    'pre_tags' => ['<strong>'],
-                    'post_tags' => ['</strong>'],
-                    'fields' => [
-                        'title' => [
-                            'number_of_fragments' => 0,
-                        ],
-                        'description' => [
-                            'number_of_fragments' => 0,
-                        ],
-                    ],
-                ];
             }
 
             if($type == 'category') {
@@ -180,15 +168,6 @@ class SearchController extends AbstractController
                     'query_string' => [
                         'fields' => ['title'],
                         'query' => $request->query->get('q'),
-                    ],
-                ];
-                $body['highlight'] = [
-                    'pre_tags' => ['<strong>'],
-                    'post_tags' => ['</strong>'],
-                    'fields' => [
-                        'title' => [
-                            'number_of_fragments' => 0,
-                        ],
                     ],
                 ];
             }
@@ -200,15 +179,6 @@ class SearchController extends AbstractController
                         'query' => $request->query->get('q'),
                     ],
                 ];
-                $body['highlight'] = [
-                    'pre_tags' => ['<strong>'],
-                    'post_tags' => ['</strong>'],
-                    'fields' => [
-                        'title' => [
-                            'number_of_fragments' => 0,
-                        ],
-                    ],
-                ];
             }
 
             if($type == 'item') {
@@ -218,24 +188,12 @@ class SearchController extends AbstractController
                         'query' => $request->query->get('q'),
                     ],
                 ];
-                $body['highlight'] = [
-                    'pre_tags' => ['<strong>'],
-                    'post_tags' => ['</strong>'],
-                    'fields' => [
-                        'title' => [
-                            'number_of_fragments' => 0,
-                        ],
-                        'content' => [
-                            'number_of_fragments' => 0,
-                        ],
-                    ],
-                ];
             }
 
             /*if(!$parameters->get('page')->getAttribute('all_languages')) {
                 $body['filter'] = array(
                     'term' => array(
-                        'language.code' => $parameters->get('page')->getLanguage()->getCode(),
+                        'feed.language' => 'en',
                     ),
                 );
             }*/

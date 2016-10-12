@@ -293,7 +293,7 @@ class Feed
     {
         $this->direction = 'ltr';
 
-        if($this->getLanguage() == 'ar') {
+        if($this->getLanguage() == 'ar' || $this->getLanguage() == 'he') {
             $this->direction = 'rtl';
         }
 

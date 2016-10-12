@@ -85,6 +85,10 @@
     font-size: 16px;
     margin-right: 2px;
 }
+.mdl-card[dir="rtl"] .mdl-card__subtitle-text .material-icons {
+    margin-left: 2px;
+    margin-right: 0px;
+}
 .mdl-card__supporting-text h1 {
     font-size: 17px;
     line-height: 1;
@@ -155,9 +159,18 @@
     background-size: 13px 13px;
     padding-left: 16px;
 }
+.mdl-card[dir="rtl"] .favicon, .mdl-card[dir="rtl"] a.favicon:link, .mdl-card[dir="rtl"] a.favicon:visited {
+    background-position: center right;
+    padding-left: 0px;
+    padding-right: 16px;
+}
 h1 .favicon, h1.favicon, h1 a.favicon:link, h1 a.favicon:visited {
     background-size: 16px 16px;
     padding-left: 19px;
+}
+.mdl-card[dir="rtl"] h1 .favicon, .mdl-card[dir="rtl"] h1.favicon, .mdl-card[dir="rtl"] h1 a.favicon:link, .mdl-card[dir="rtl"] h1 a.favicon:visited {
+    padding-left: 0px;
+    padding-right: 19px;
 }
 
 .material-icons {
