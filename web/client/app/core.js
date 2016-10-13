@@ -271,13 +271,18 @@ function loadRoute(key, parameters) {
                         }*/
 
                         if(typeof data_return.unread != 'undefined') {
-                            if(data_return.unread > 99) {
-                                badge = '99+';
+                            if(data_return.unread > 0) {
+                                if(data_return.unread > 99) {
+                                    badge = '99+';
+                                } else {
+                                    badge = data_return.unread;
+                                }
+                                $('.count-unread').attr('data-badge', badge);
+                                $('.count-unread').addClass('mdl-badge');
                             } else {
-                                badge = data_return.unread;
+                                $('.count-unread').removeAttr('data-badge');
+                                $('.count-unread').removeClass('mdl-badge');
                             }
-                            $('.count-unread').attr('data-badge', badge);
-                            $('.count-unread').addClass('mdl-badge');
                         }
 
                         if(route.view) {
@@ -313,6 +318,12 @@ function loadRoute(key, parameters) {
                                     var template_more = Handlebars.compile(source_more);
                                     $('main > .mdl-grid').append(template_more(data_return));
                                 }
+                            }
+
+                            if(Object.prototype.toString.call( data_return.entries ) === '[object Array]') {
+                                $('body').removeClass('no_entries');
+                            } else {
+                                $('body').addClass('no_entries');
                             }
 
                             $('main > .mdl-grid').find('img').each(function() {
