@@ -83,6 +83,7 @@ services:
         calls:
             - [ "setDoctrine", [ "@doctrine" ] ]
             - [ "setEventDispatcher", [ "@event_dispatcher" ] ]
+            - [ "setRouter", [ "@router" ] ]
 
     readerself_core_manager_collection:
         class: Readerself\CoreBundle\Manager\CollectionManager
@@ -124,7 +125,6 @@ services:
         public: true
         arguments:
             - "@readerself_core_manager_enclosure"
-            - "@router"
 
     readerself_core_manager_enclosure:
         class: Readerself\CoreBundle\Manager\EnclosureManager
