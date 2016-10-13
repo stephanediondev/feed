@@ -230,6 +230,9 @@ class ItemController extends AbstractController
         }
         $data['entry']['categories'] = $categories;
         $data['entry']['enclosures'] = $enclosures;
+
+        $data['entry']['content'] = $this->itemManager->cleanContent($item->getContent());
+
         $data['entry_entity'] = 'item';
 
         return new JsonResponse($data);
