@@ -320,18 +320,6 @@ class SearchController extends AbstractController
                 if($pageNext <= $pages) {
                     $data['entries_page_next'] = $pageNext;
                 }
-
-                $pagination = [];
-                if($result['hits']['total'] > $size) {
-                    $total = $result['hits']['total'] - 1;
-                    $start = 1;
-                    for($i=0;$i<=$total;$i = $i + $size) {
-                        $pagination[$start] = $i;
-                        $start++;
-                    }
-                    $data['current_from'] = intval($from);
-                }
-                $data['pagination'] =  $pagination;
             }
         }
 
