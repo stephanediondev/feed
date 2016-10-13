@@ -43,7 +43,7 @@ routes['#items/category/{id}'] = {view: 'view-items', view_unit: 'view-items-uni
 
 routes['#items/markallasread/all'] = {view: false, query: '/items/markallasread'};
 routes['#items/markallasread/unread'] = {view: false, query: '/items/markallasread?unread=1'};
-routes['#items/markallasread/starred'] = {view: false, query: '/item/markallasread?starred=1'};
+routes['#items/markallasread/starred'] = {view: false, query: '/items/markallasread?starred=1'};
 routes['#items/markallasread/feed/{id}'] = {view: false, query: '/items/markallasread?feed={id}'};
 routes['#items/markallasread/author/{id}'] = {view: false, query: '/items/markallasread?author={id}'};
 routes['#items/markallasread/category/{id}'] = {view: false, query: '/items/markallasread?category={id}'};
