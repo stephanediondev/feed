@@ -212,9 +212,22 @@ class SearchController extends AbstractController
 
             $result = $this->searchManager->query('GET', $path, $body);
 
-            $data['entries'] = [];
-
             if(isset($result['hits']['hits']) == 1) {
+                $data['entries_entity'] = $type;
+                $data['entries_total'] = $result['hits']['total'];
+                $data['entries_pages'] = $pages = ceil($result['hits']['total']/20);
+                $data['entries_page_current'] = $page;
+                $pagePrevious = $page - 1;
+                if($pagePrevious >= 1) {
+                    $data['entries_page_previous'] = $pagePrevious;
+                }
+                $pageNext = $page + 1;
+                if($pageNext <= $pages) {
+                    $data['entries_page_next'] = $pageNext;
+                }
+
+                $data['entries'] = [];
+
                 $index = 0;
                 foreach($result['hits']['hits'] as $hit) {
                     if($type == 'feed') {
@@ -306,19 +319,6 @@ class SearchController extends AbstractController
                             $this->searchManager->query($action, $path, $body);
                         }
                     }
-                }
-
-                $data['entries_entity'] = $type;
-                $data['entries_total'] = $result['hits']['total'];
-                $data['entries_pages'] = $pages = ceil($result['hits']['total']/20);
-                $data['entries_page_current'] = $page;
-                $pagePrevious = $page - 1;
-                if($pagePrevious >= 1) {
-                    $data['entries_page_previous'] = $pagePrevious;
-                }
-                $pageNext = $page + 1;
-                if($pageNext <= $pages) {
-                    $data['entries_page_next'] = $pageNext;
                 }
             }
         }

@@ -131,7 +131,29 @@ class ItemController extends AbstractController
             $request->query->getInt('perPage', 20)
         );
 
+        $data['entries_entity'] = 'item';
+        $data['entries_total'] = $pagination->getTotalItemCount();
+        $data['entries_pages'] = $pages = $pagination->getPageCount();
+        $data['entries_page_current'] = $page;
+        $pagePrevious = $page - 1;
+        if($pagePrevious >= 1) {
+            $data['entries_page_previous'] = $pagePrevious;
+        }
+        $pageNext = $page + 1;
+        if($pageNext <= $pages) {
+            $data['entries_page_next'] = $pageNext;
+        }
+
+        if($memberConnected) {
+            if($request->query->get('unread')) {
+                $data['unread'] = $pagination->getTotalItemCount();
+            } else {
+                $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+            }
+        }
+
         $data['entries'] = [];
+
         $index = 0;
         foreach($pagination as $result) {
             $item = $this->itemManager->getOne(['id' => $result['id']]);
@@ -166,26 +188,6 @@ class ItemController extends AbstractController
             $data['entries'][$index]['content'] = $this->itemManager->cleanContent($item->getContent());
 
             $index++;
-        }
-        $data['entries_entity'] = 'item';
-        $data['entries_total'] = $pagination->getTotalItemCount();
-        $data['entries_pages'] = $pages = $pagination->getPageCount();
-        $data['entries_page_current'] = $page;
-        $pagePrevious = $page - 1;
-        if($pagePrevious >= 1) {
-            $data['entries_page_previous'] = $pagePrevious;
-        }
-        $pageNext = $page + 1;
-        if($pageNext <= $pages) {
-            $data['entries_page_next'] = $pageNext;
-        }
-
-        if($memberConnected) {
-            if($request->query->get('unread')) {
-                $data['unread'] = $pagination->getTotalItemCount();
-            } else {
-                $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
-            }
         }
 
         return new JsonResponse($data);

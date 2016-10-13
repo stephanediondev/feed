@@ -84,18 +84,6 @@ class CategoryController extends AbstractController
             $request->query->getInt('perPage', 100)
         );
 
-        $data['entries'] = [];
-        $index = 0;
-        foreach($pagination as $result) {
-            $category = $this->categoryManager->getOne(['id' => $result['id']]);
-            $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
-
-            $data['entries'][$index] = $category->toArray();
-            foreach($actions as $action) {
-                $data['entries'][$index][$action->getAction()->getTitle()] = true;
-            }
-            $index++;
-        }
         $data['entries_entity'] = 'category';
         $data['entries_total'] = $pagination->getTotalItemCount();
         $data['entries_pages'] = $pages = $pagination->getPageCount();
@@ -108,6 +96,21 @@ class CategoryController extends AbstractController
         if($pageNext <= $pages) {
             $data['entries_page_next'] = $pageNext;
         }
+
+        $data['entries'] = [];
+
+        $index = 0;
+        foreach($pagination as $result) {
+            $category = $this->categoryManager->getOne(['id' => $result['id']]);
+            $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
+
+            $data['entries'][$index] = $category->toArray();
+            foreach($actions as $action) {
+                $data['entries'][$index][$action->getAction()->getTitle()] = true;
+            }
+            $index++;
+        }
+
         return new JsonResponse($data);
     }
 

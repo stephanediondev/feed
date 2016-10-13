@@ -82,14 +82,6 @@ class AuthorController extends AbstractController
             $request->query->getInt('perPage', 100)
         );
 
-        $data['entries'] = [];
-        $index = 0;
-        foreach($pagination as $result) {
-            $author = $this->authorManager->getOne(['id' => $result['id']]);
-
-            $data['entries'][$index] = $author->toArray();
-            $index++;
-        }
         $data['entries_entity'] = 'author';
         $data['entries_total'] = $pagination->getTotalItemCount();
         $data['entries_pages'] = $pages = $pagination->getPageCount();
@@ -102,6 +94,17 @@ class AuthorController extends AbstractController
         if($pageNext <= $pages) {
             $data['entries_page_next'] = $pageNext;
         }
+
+        $data['entries'] = [];
+
+        $index = 0;
+        foreach($pagination as $result) {
+            $author = $this->authorManager->getOne(['id' => $result['id']]);
+
+            $data['entries'][$index] = $author->toArray();
+            $index++;
+        }
+
         return new JsonResponse($data);
     }
 

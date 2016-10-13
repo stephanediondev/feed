@@ -129,7 +129,21 @@ class FeedController extends AbstractController
             $request->query->getInt('perPage', 100)
         );
 
+        $data['entries_entity'] = 'feed';
+        $data['entries_total'] = $pagination->getTotalItemCount();
+        $data['entries_pages'] = $pages = $pagination->getPageCount();
+        $data['entries_page_current'] = $page;
+        $pagePrevious = $page - 1;
+        if($pagePrevious >= 1) {
+            $data['entries_page_previous'] = $pagePrevious;
+        }
+        $pageNext = $page + 1;
+        if($pageNext <= $pages) {
+            $data['entries_page_next'] = $pageNext;
+        }
+
         $data['entries'] = [];
+
         $index = 0;
         foreach($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
@@ -147,18 +161,7 @@ class FeedController extends AbstractController
             $data['entries'][$index]['categories'] = $categories;
             $index++;
         }
-        $data['entries_entity'] = 'feed';
-        $data['entries_total'] = $pagination->getTotalItemCount();
-        $data['entries_pages'] = $pages = $pagination->getPageCount();
-        $data['entries_page_current'] = $page;
-        $pagePrevious = $page - 1;
-        if($pagePrevious >= 1) {
-            $data['entries_page_previous'] = $pagePrevious;
-        }
-        $pageNext = $page + 1;
-        if($pageNext <= $pages) {
-            $data['entries_page_next'] = $pageNext;
-        }
+
         return new JsonResponse($data);
     }
 
