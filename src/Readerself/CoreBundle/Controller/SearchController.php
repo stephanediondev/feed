@@ -301,15 +301,30 @@ class SearchController extends AbstractController
                                 $categories[] = $itemCategory->toArray();
                             }
 
+                            $enclosures = [];
+                            $index_enclosures = 0;
+                            foreach($this->itemManager->enclosureManager->getList(['item' => $item])->getResult() as $enclosure) {
+                                $src = $enclosure->getLink();
+                                if(!strstr($item->getContent(), $src)) {
+                                    $enclosures[$index_enclosures] = $enclosure->toArray();
+                                    if(substr($src, 0, 5) == 'http:' && $request->server->get('HTTPS') == 'on' && $enclosure->getTypeGroup() == 'image') {
+                                        $token = urlencode(base64_encode($src));
+                                        $enclosures[$index_enclosures]['link'] = 'app/icons/icon-32x32.png';
+                                        $enclosures[$index_enclosures]['proxy'] = $this->generateUrl('readerself_api_proxy', ['token' => $token], 0);
+                                    }
+                                    $index_enclosures++;
+                                }
+                            }
+
                             $data['entries'][$index] = $item->toArray();
                             $data['entries'][$index]['score'] = $hit['_score'];
                             foreach($actions as $action) {
                                 $data['entries'][$index][$action->getAction()->getTitle()] = true;
                             }
                             $data['entries'][$index]['categories'] = $categories;
-                            $data['entries'][$index]['enclosures'] = [];
+                            $data['entries'][$index]['enclosures'] = $enclosures;
 
-                            $data['entries'][$index]['content'] = $this->itemManager->cleanContent($item->getContent());
+                            $data['entries'][$index]['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
 
                             $index++;
                         } else {

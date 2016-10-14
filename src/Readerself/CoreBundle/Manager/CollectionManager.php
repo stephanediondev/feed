@@ -320,54 +320,8 @@ class CollectionManager extends AbstractManager
                         $tidy = new \tidy();
                         $tidy->parseString($content, $options, 'utf8');
                         $tidy->cleanRepair();
-                        $content = $tidy;
 
-                        if(class_exists('DOMDocument') && $content != '') {
-                            try {
-                                libxml_use_internal_errors(true);
-
-                                $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
-
-                                $dom = new \DOMDocument();
-                                $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
-
-                                $xpath = new \DOMXPath($dom);
-
-                                $nodes = $xpath->query('//*[@src]');
-                                foreach($nodes as $node) {
-                                    $src = $node->getAttribute('src');
-
-                                    if($node->tagName == 'iframe') {
-                                        $parse_src = parse_url($src);
-                                        //keep iframes from instagram, youtube, vimeo and dailymotion
-                                        if(isset($parse_src['host']) && (stristr($parse_src['host'], 'instagram.com') || stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com') )) {
-                                            $node->setAttribute('src', str_replace('http://', 'https://', $src));
-                                            $node->setAttribute('src', str_replace('autoplay=1', 'autoplay=0', $src));
-                                        } else {
-                                            $node->parentNode->removeChild($node);
-                                        }
-                                    }
-                                }
-
-                                $disallowedAttributes = ['id', 'style', 'width', 'height', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];
-                                foreach($disallowedAttributes as $attribute) {
-                                    $nodes = $xpath->query('//*[@'.$attribute.']');
-                                    foreach($nodes as $node) {
-                                        //don't remove style, width and height if iframe
-                                        if(($attribute == 'style' || $attribute == 'width' || $attribute == 'height') && $node->tagName == 'iframe') {
-                                            continue;
-                                        }
-
-                                        $node->removeAttribute($attribute);
-                                    }
-                                }
-
-                                $content = $dom->saveHTML();
-
-                                libxml_clear_errors();
-                            } catch (Exception $e) {
-                            }
-                        }
+                        $content = $this->cleanContent($tidy, 'store');
                     } catch (Exception $e) {
                     }
                 } else {

@@ -120,6 +120,9 @@ class ItemRepository extends AbstractRepository
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }
 
+        //$query->leftJoin('itm.enclosures', 'enr');
+        //$query->andWhere('(enr.type LIKE \'video%\' OR enr.type LIKE \'audio%\' OR enr.type LIKE \'image%\')');
+
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('itm.id');
 

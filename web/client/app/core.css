@@ -81,14 +81,6 @@
 .mdl-menu__item a:link, .mdl-menu__item a:visited {
     text-decoration: none;
 }
-.mdl-card__subtitle-text .material-icons {
-    font-size: 16px;
-    margin-right: 2px;
-}
-.mdl-card[dir="rtl"] .mdl-card__subtitle-text .material-icons {
-    margin-left: 2px;
-    margin-right: 0px;
-}
 .mdl-card__supporting-text h1 {
     font-size: 17px;
     line-height: 1;
@@ -175,8 +167,14 @@ h1 .favicon, h1.favicon, h1 a.favicon:link, h1 a.favicon:visited {
 
 .material-icons {
     font-feature-settings: 'liga';
+    font-size: 16px;
+    margin-right: 2px;
     text-rendering: optimizeLegibility;
     vertical-align: middle;
+}
+.mdl-card[dir="rtl"] .material-icons {
+    margin-left: 2px;
+    margin-right: 0px;
 }
 
 a:link, a:visited {

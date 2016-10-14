@@ -47,6 +47,10 @@ class Enclosure
      */
     private $item;
 
+    /**
+     * @var string
+     */
+    private $typeGroup;
 
     /**
      * Get id
@@ -226,6 +230,18 @@ class Enclosure
         return $this->item;
     }
 
+    public function getTypeGroup()
+    {
+        $this->typeGroup = '';
+
+        if(strstr($this->getType(), '/')) {
+            $parts = explode('/', $this->getType());
+            $this->typeGroup = $parts[0];
+        }
+
+        return $this->typeGroup;
+    }
+
     /**
      * @return array
      */
@@ -235,6 +251,7 @@ class Enclosure
             'id' => $this->getId(),
             'link' => $this->getLink(),
             'type' => $this->getType(),
+            $this->getTypeGroup() => true,
         ];
     }
 }
