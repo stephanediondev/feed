@@ -65,7 +65,7 @@ class SearchManager extends AbstractManager
             $sql = 'SELECT cat.*
             FROM category AS cat
             WHERE cat.id NOT IN (SELECT act_cat.category_id FROM action_category AS act_cat WHERE act_cat.category_id = cat.id AND act_cat.action_id = 11)
-            LIMIT 0,2000';
+            ORDER BY cat.id DESC LIMIT 0,3000';
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll();
@@ -93,7 +93,7 @@ class SearchManager extends AbstractManager
             $sql = 'SELECT aut.*
             FROM author AS aut
             WHERE aut.id NOT IN (SELECT act_aut.author_id FROM action_author AS act_aut WHERE act_aut.author_id = aut.id AND act_aut.action_id = 11)
-            LIMIT 0,2000';
+            ORDER BY aut.id DESC LIMIT 0,3000';
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll();
@@ -123,7 +123,7 @@ class SearchManager extends AbstractManager
             LEFT JOIN author AS auh ON auh.id = itm.author_id
             LEFT JOIN feed AS fed ON fed.id = itm.feed_id
             WHERE itm.content IS NOT NULL AND itm.id NOT IN (SELECT act_itm.item_id FROM action_item AS act_itm WHERE act_itm.item_id = itm.id AND act_itm.action_id = 11)
-            LIMIT 0,2000';
+            ORDER BY itm.id DESC LIMIT 0,3000';
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll();
