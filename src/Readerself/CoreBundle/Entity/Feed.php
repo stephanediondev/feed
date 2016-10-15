@@ -300,6 +300,16 @@ class Feed
         return $this->direction;
     }
 
+    public function isLinkSecure()
+    {
+        return substr($this->getLink(), 0, 6) == 'https:';
+    }
+
+    public function isWebsiteSecure()
+    {
+        return substr($this->getWebsite(), 0, 6) == 'https:';
+    }
+
     /**
      * @return array
      */
@@ -315,6 +325,8 @@ class Feed
             'language' => $this->getLanguage(),
             'direction' => $this->getDirection(),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : '',
+            'link_secure' => $this->isLinkSecure(),
+            'website_secure' => $this->isWebsiteSecure(),
         ];
     }
 }

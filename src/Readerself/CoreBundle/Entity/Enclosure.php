@@ -242,6 +242,11 @@ class Enclosure
         return $this->typeGroup;
     }
 
+    public function isLinkSecure()
+    {
+        return substr($this->getLink(), 0, 6) == 'https:';
+    }
+
     /**
      * @return array
      */
@@ -252,6 +257,7 @@ class Enclosure
             'link' => $this->getLink(),
             'type' => $this->getType(),
             $this->getTypeGroup() => true,
+            'link_secure' => $this->isLinkSecure(),
         ];
     }
 }

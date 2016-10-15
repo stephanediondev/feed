@@ -326,6 +326,11 @@ class Item
         return $this->enclosures;
     }
 
+    public function isLinkSecure()
+    {
+        return substr($this->getLink(), 0, 6) == 'https:';
+    }
+
     /**
      * @return array
      */
@@ -348,6 +353,7 @@ class Item
             'latitude' => $this->getLatitude(),
             'longitude' => $this->getLongitude(),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : '',
+            'link_secure' => $this->isLinkSecure(),
         ];
     }
 }

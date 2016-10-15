@@ -84,6 +84,25 @@ abstract class AbstractManager
         return $category_id;
     }
 
+    /*function prepareEnclosures($item, $request) {
+        $enclosures = [];
+        $index_enclosures = 0;
+        foreach($this->itemManager->enclosureManager->getList(['item' => $item])->getResult() as $enclosure) {
+            $src = $enclosure->getLink();
+            if(!strstr($item->getContent(), $src)) {
+                $enclosures[$index_enclosures] = $enclosure->toArray();
+                if(!$enclosure->isLinkSecure() && $request->server->get('HTTPS') == 'on' && $enclosure->getTypeGroup() == 'image') {
+                    $token = urlencode(base64_encode($src));
+                    $enclosures[$index_enclosures]['link'] = 'app/icons/icon-32x32.png';
+                    $enclosures[$index_enclosures]['link_origin'] = $src;
+                    $enclosures[$index_enclosures]['proxy'] = $this->router->generate('readerself_api_proxy', ['token' => $token], 0);
+                }
+                $index_enclosures++;
+            }
+        }
+        return $enclosures;
+    }*/
+
     public function cleanWebsite($website)
     {
         $website = str_replace('&amp;', '&', $website);
@@ -159,6 +178,7 @@ abstract class AbstractManager
                             $node->setAttribute('src', 'app/icons/icon-32x32.png');
                             $node->setAttribute('data-src', $this->router->generate('readerself_api_proxy', ['token' => $token], 0));
                             $node->setAttribute('data-src-origin', $src);
+                            $node->setAttribute('class', 'proxy');
                         }
 
                         $node->removeAttribute('srcset');

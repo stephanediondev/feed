@@ -91,6 +91,9 @@ class CollectionManager extends AbstractManager
 
     public function start($feed_id = false)
     {
+        $feed_id = 79;
+
+
         $startTime = microtime(1);
 
         if($this->facebookEnabled) {

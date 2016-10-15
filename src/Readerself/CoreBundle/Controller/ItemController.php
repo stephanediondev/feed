@@ -171,9 +171,10 @@ class ItemController extends AbstractController
                 $src = $enclosure->getLink();
                 if(!strstr($item->getContent(), $src)) {
                     $enclosures[$index_enclosures] = $enclosure->toArray();
-                    if(substr($src, 0, 5) == 'http:' && $request->server->get('HTTPS') == 'on' && $enclosure->getTypeGroup() == 'image') {
+                    if(!$enclosure->isLinkSecure() && $request->server->get('HTTPS') == 'on' && $enclosure->getTypeGroup() == 'image') {
                         $token = urlencode(base64_encode($src));
                         $enclosures[$index_enclosures]['link'] = 'app/icons/icon-32x32.png';
+                        $enclosures[$index_enclosures]['link_origin'] = $src;
                         $enclosures[$index_enclosures]['proxy'] = $this->generateUrl('readerself_api_proxy', ['token' => $token], 0);
                     }
                     $index_enclosures++;
@@ -229,9 +230,10 @@ class ItemController extends AbstractController
             $src = $enclosure->getLink();
             if(!strstr($item->getContent(), $src)) {
                 $enclosures[$index_enclosures] = $enclosure->toArray();
-                if(substr($src, 0, 5) == 'http:' && $request->server->get('HTTPS') == 'on' && $enclosure->getTypeGroup() == 'image') {
+                if(!$enclosure->isLinkSecure() && $request->server->get('HTTPS') == 'on' && $enclosure->getTypeGroup() == 'image') {
                     $token = urlencode(base64_encode($src));
                     $enclosures[$index_enclosures]['link'] = 'app/icons/icon-32x32.png';
+                    $enclosures[$index_enclosures]['link_origin'] = $src;
                     $enclosures[$index_enclosures]['proxy'] = $this->generateUrl('readerself_api_proxy', ['token' => $token], 0);
                 }
                 $index_enclosures++;

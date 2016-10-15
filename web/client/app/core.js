@@ -326,11 +326,12 @@ function loadRoute(key, parameters) {
                                 $('body').addClass('no_entries');
                             }
 
-                            $('main > .mdl-grid').find('img').each(function() {
+                            $('main > .mdl-grid').find('img.proxy').each(function() {
                                 var img = $(this);
                                 if(img.data('src')) {
                                     $(this).attr('src', $(this).attr('data-src'));
                                     $(this).removeAttr('data-src');
+                                    $(this).removeClass('proxy');
                                 }
                             });
 

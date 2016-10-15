@@ -77,15 +77,23 @@
                 {{#if entry.enclosures }}
                     {{#each entry.enclosures as |enclosure enclosure_index|}}
                         {{#if enclosure.image }}
-                            <p><i class="material-icons">photo_camera</i><img src="{{ enclosure.link }}" alt=""{{#if enclosure.proxy }} data-src="{{ enclosure.proxy }}"{{/if}}></p>
+                            <p><img src="{{ enclosure.link }}" alt=""{{#if enclosure.proxy }} data-src="{{ enclosure.proxy }}" data-src-origin="{{ enclosure.link_origin }}" class="proxy"{{/if}}></p>
                         {{/if}}
 
                         {{#if enclosure.video }}
-                            <p><a href="{{ enclosure.link }}" target="_blank"><i class="material-icons">videocam</i>{{ enclosure.link }}</a>
+                            {{#if enclosure.link_secure }}
+                                <p><video controls src="{{ enclosure.link }}"></video></p>
+                            {{else}}
+                                <p><a href="{{ enclosure.link }}" target="_blank"><i class="material-icons">videocam</i>{{ enclosure.link }}</a>
+                            {{/if}}
                         {{/if}}
 
                         {{#if enclosure.audio }}
-                            <p><a href="{{ enclosure.link }}" target="_blank"><i class="material-icons">audiotrack</i>{{ enclosure.link }}</a>
+                            {{#if enclosure.link_secure }}
+                                <p><audio controls src="{{ enclosure.link }}"></audio></p>
+                            {{else}}
+                                <p><a href="{{ enclosure.link }}" target="_blank"><i class="material-icons">audiotrack</i>{{ enclosure.link }}</a>
+                            {{/if}}
                         {{/if}}
                     {{/each}}
                 {{/if}}
