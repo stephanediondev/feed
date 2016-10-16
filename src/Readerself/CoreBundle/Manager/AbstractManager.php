@@ -84,10 +84,10 @@ abstract class AbstractManager
         return $category_id;
     }
 
-    /*function prepareEnclosures($item, $request) {
+    function prepareEnclosures($item, $request) {
         $enclosures = [];
         $index_enclosures = 0;
-        foreach($this->itemManager->enclosureManager->getList(['item' => $item])->getResult() as $enclosure) {
+        foreach($this->em->getRepository('ReaderselfCoreBundle:Enclosure')->getList(['item' => $item])->getResult() as $enclosure) {
             $src = $enclosure->getLink();
             if(!strstr($item->getContent(), $src)) {
                 $enclosures[$index_enclosures] = $enclosure->toArray();
@@ -101,7 +101,7 @@ abstract class AbstractManager
             }
         }
         return $enclosures;
-    }*/
+    }
 
     public function cleanWebsite($website)
     {
