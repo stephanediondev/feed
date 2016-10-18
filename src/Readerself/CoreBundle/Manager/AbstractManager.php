@@ -167,6 +167,7 @@ abstract class AbstractManager
                             $src = str_replace('autoplay=1', 'autoplay=0', $src);
                             $node->setAttribute('src', $src);
                             $node->setAttribute('frameborder', 0);
+                            $node->removeAttribute('sandbox');
                         } else {
                             $node->parentNode->removeChild($node);
                         }
