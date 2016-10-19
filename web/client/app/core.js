@@ -63,6 +63,10 @@ $.ajax({
     }
 });
 
+function getTemplate(key) {
+    return Handlebars.compile( $('#' + key).text() );
+}
+
 function loadFile(url) {
     $.ajax({
         async: false,
@@ -238,8 +242,7 @@ function loadRoute(key, parameters) {
             data_return = {};
             data_return.connectionData = connectionData;
 
-            var source = $('#' + route.view).text();
-            var template = Handlebars.compile(source);
+            var template = getTemplate(route.view);
             $('main > .mdl-grid').html(template(data_return));
 
         } else if(route.query) {
@@ -293,14 +296,12 @@ function loadRoute(key, parameters) {
                             }
 
                             if(!parameters.page || parameters.page == 1) {
-                                var source = $('#' + route.view).text();
-                                var template = Handlebars.compile(source);
+                                var template = getTemplate(route.view);
                                 $('main > .mdl-grid').html(template(data_return));
                             }
 
                             if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.view_unit == 'string') {
-                                var source_unit = $('#' + route.view_unit).text();
-                                var template_unit = Handlebars.compile(source_unit);
+                                var template_unit = getTemplate(route.view_unit);
 
                                 for(i in data_return.entries) {
                                     if(data_return.entries.hasOwnProperty(i)) {
@@ -314,8 +315,7 @@ function loadRoute(key, parameters) {
                                 $('.count').text(data_return.entries_total);
 
                                 if(data_return.entries_page_next) {
-                                    var source_more = $('#view-more').text();
-                                    var template_more = Handlebars.compile(source_more);
+                                    var template_more = getTemplate('view-more');
                                     $('main > .mdl-grid').append(template_more(data_return));
                                 }
                             }
@@ -477,12 +477,10 @@ $(document).ready(function() {
     window.addEventListener('online',  updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
 
-    var sourceNavigation = $('#view-navigation').text();
-    var templateNavigation = Handlebars.compile(sourceNavigation);
+    var templateNavigation = getTemplate('view-navigation');
     $('.mdl-navigation').html(templateNavigation());
 
-    var sourceAside = $('#view-aside').text();
-    var templateAside = Handlebars.compile(sourceAside);
+    var templateAside = getTemplate('view-aside');
     $('.mdl-layout__drawer').html(templateAside());
 
     setPositions();

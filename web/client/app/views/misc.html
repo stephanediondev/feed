@@ -296,6 +296,31 @@
         </div>
     </div>
 
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="status">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Database
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            {{# if connection.databasePlatform }}
+                {{ connection.databasePlatform.name }}
+            {{/if}}
+            {{# if connection.driver }}
+                {{ connection.driver.name }}
+            {{/if}}
+            {{# if connection.host }}
+                {{ connection.host }}
+            {{/if}}
+            {{# if connection.database }}
+                {{ connection.database }}
+            {{/if}}
+            {{# if connection.userName }}
+                {{ connection.userName }}
+            {{/if}}
+        </div>
+    </div>
+
     {{#if search.enabled }}
         {{#if search.stats.indices }}
             {{#each search.stats.indices as |indice indice_index|}}
