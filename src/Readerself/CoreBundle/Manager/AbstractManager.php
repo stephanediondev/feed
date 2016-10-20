@@ -41,6 +41,15 @@ abstract class AbstractManager
         }
     }
 
+    public function count($table)
+    {
+        $sql = 'SELECT COUNT(id) AS count FROM '.$table;
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result['count'];
+    }
+
     public function insert($table, $fields)
     {
         $sql = 'INSERT INTO '.$table.' ('.implode(', ', array_keys($fields)).') VALUES ('.implode(', ', array_map(function($n) {return ':'.$n;}, array_keys($fields))).')';

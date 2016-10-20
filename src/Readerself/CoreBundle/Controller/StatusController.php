@@ -40,6 +40,15 @@ class StatusController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
+        $types = ['author', 'category', 'feed', 'item'];
+        foreach($types as $type) {
+            $data['types'][$type] = [];
+        }
+
+        foreach($types as $type) {
+            $data['types'][$type]['database'] = $this->searchManager->count($type);
+        }
+
         $data['_server'] = $_SERVER;
 
         $data['function'] = [];
@@ -72,6 +81,14 @@ class StatusController extends AbstractController
 
         if($this->searchManager->getEnabled()) {
             $data['search']['enabled'] = true;
+
+            foreach($types as $type) {
+                $path = '/'.$this->searchManager->getIndex().'/'.$type.'/_count';
+                $result = $this->searchManager->query('GET', $path);
+                if(isset($result->error) == 0) {
+                    $data['types'][$type]['elastic_search'] = $result['count'];
+                }
+            }
 
             $path = '/'.$this->searchManager->getIndex().'/_stats';
             $result = $this->searchManager->query('GET', $path);
