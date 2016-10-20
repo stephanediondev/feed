@@ -303,20 +303,35 @@
             </h1>
         </div>
         <div class="mdl-card__supporting-text">
-            {{# if connection.databasePlatform }}
-                {{ connection.databasePlatform.name }}
+            {{# if connection.database }}
+                <p>
+                    <span class="label">name</span>
+                    {{ connection.database }}
+                </p>
+            {{/if}}
+            {{# if connection.platform }}
+                <p>
+                    <span class="label">platform</span>
+                    {{ connection.platform }}
+                </p>
             {{/if}}
             {{# if connection.driver }}
-                {{ connection.driver.name }}
+                <p>
+                    <span class="label">driver</span>
+                    {{ connection.driver }}
+                </p>
             {{/if}}
             {{# if connection.host }}
-                {{ connection.host }}
+                <p>
+                    <span class="label">host</span>
+                    {{ connection.host }}
+                </p>
             {{/if}}
-            {{# if connection.database }}
-                {{ connection.database }}
-            {{/if}}
-            {{# if connection.userName }}
-                {{ connection.userName }}
+            {{# if connection.user }}
+                <p>
+                    <span class="label">user</span>
+                    {{ connection.user }}
+                </p>
             {{/if}}
         </div>
     </div>

@@ -61,7 +61,12 @@ class StatusController extends AbstractController
         $data['extension']['tidy'] = extension_loaded('tidy');
         $data['extension']['dom'] = extension_loaded('dom');
 
-        //$data['connection'] = $this->get('doctrine')->getManager('default')->getConnection();
+        $connection = $this->get('doctrine')->getConnection();
+        $data['connection']['platform'] = $connection->getDatabasePlatform()->getName();
+        $data['connection']['driver'] = $connection->getDriver()->getName();
+        $data['connection']['host'] = $connection->getHost();
+        $data['connection']['database'] = $connection->getDatabase();
+        $data['connection']['user'] = $connection->getUsername();
 
         $data['symfony'] = \Symfony\Component\HttpKernel\Kernel::VERSION;
 
