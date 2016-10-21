@@ -107,6 +107,22 @@ function explainConnection(connection) {
         $('body').removeClass('not_administrator');
         $('body').addClass('administrator');
 
+        $.ajax({
+            headers: {
+                'X-CONNECTION-TOKEN': connection.token
+            },
+            async: true,
+            cache: false,
+            dataType: 'json',
+            statusCode: {
+                200: function(data_return) {
+                    store.set('connection', data_return.entry);
+                }
+            },
+            type: 'PUT',
+            url: apiUrl + '/connection/' + connection.id
+        });
+
         if('serviceWorker' in navigator && window.location.protocol == 'https:') {
             navigator.serviceWorker.register('serviceworker.js').then(function(reg) {
 

@@ -109,6 +109,12 @@ class PushController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
+        $push->setPublicKey($request->request->get('public_key'));
+        $push->setAuthenticationSecret($request->request->get('authentication_secret'));
+        $push->setIp($request->getClientIp());
+        $push->setAgent($request->server->get('HTTP_USER_AGENT'));
+        $push_id = $this->memberManager->pushManager->persist($push);
+
         $data['entry'] = $push->toArray();
         $data['entry_entity'] = 'push';
 
