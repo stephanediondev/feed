@@ -3,7 +3,9 @@
         <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="title-entry">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">
-                    <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a>
+                    <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">
+                        {{ entry.title }} ({{trans entry_entity}})
+                    </a>
                 </h1>
             </div>
         </div>
@@ -65,7 +67,9 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="feed-{{ entry.id }}" dir="{{ entry.direction }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                <a href="#feed/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>{{{ entry.title }}}</a>
+                <a href="#feed/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>
+                    {{ entry.title }}
+                </a>
             </h1>
             <div class="mdl-card__subtitle-text">
                 {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{score entry.score }}</span>{{/if}}
@@ -80,7 +84,7 @@
         </div>
         {{#if entry.description }}
         <div class="mdl-card__supporting-text">
-            {{{ entry.description }}}
+            {{ entry.description }}
         </div>
         {{/if}}
         <div class="mdl-card__actions mdl-card--border">

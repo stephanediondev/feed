@@ -30,7 +30,9 @@
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="author-{{ entry.id }}">
         <div class="mdl-card__title">
             <h1 class="mdl-card__title-text">
-                <a href="#author/{{ entry.id }}" class="load-route">{{{ entry.title }}}</a>
+                <a href="#author/{{ entry.id }}" class="load-route">
+                    {{ entry.title }}
+                </a>
             </h1>
             <div class="mdl-card__subtitle-text">
                 {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{score entry.score }}</span>{{/if}}
