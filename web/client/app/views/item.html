@@ -59,7 +59,7 @@
             </h1>
             <div class="mdl-card__subtitle-text">
                 {{#if entry.score }}<span class="load-route mdl-navigation__link"><i class="material-icons">show_chart</i>{{score entry.score }}</span>{{/if}}
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date }}"></span></span>
+                <a href="#item/{{ entry.id }}" class="load-route mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date }}"></span></a>
                 {{#if entry.latitude }}
                     {{#if entry.longitude }}
                         <a class="mdl-navigation__link" target="_blank" href="https://www.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><i class="material-icons md-18">place</i>{{ entry.latitude }},{{ entry.longitude }}</a>
@@ -80,25 +80,29 @@
             <div class="enclosures">
                 {{#if entry.enclosures }}
                     {{#each entry.enclosures as |enclosure enclosure_index|}}
-                        {{#if enclosure.image }}
+                        {{#equal enclosure.type_group 'image' }}
                             <p><img src="{{ enclosure.link }}" alt=""{{#if enclosure.proxy }} data-src="{{ enclosure.proxy }}" data-src-origin="{{ enclosure.link_origin }}" class="proxy"{{/if}}></p>
-                        {{/if}}
+                        {{/equal}}
 
-                        {{#if enclosure.video }}
+                        {{#equal enclosure.type_group 'video' }}
                             {{#if enclosure.link_secure }}
                                 <p><video controls src="{{ enclosure.link }}"></video></p>
                             {{else}}
                                 <p><a href="{{ enclosure.link }}" target="_blank"><i class="material-icons">videocam</i>{{ enclosure.link }}</a>
                             {{/if}}
-                        {{/if}}
+                        {{/equal}}
 
-                        {{#if enclosure.audio }}
+                        {{#equal enclosure.type_group 'audio' }}
                             {{#if enclosure.link_secure }}
                                 <p><audio controls src="{{ enclosure.link }}"></audio></p>
                             {{else}}
                                 <p><a href="{{ enclosure.link }}" target="_blank"><i class="material-icons">audiotrack</i>{{ enclosure.link }}</a>
                             {{/if}}
-                        {{/if}}
+                        {{/equal}}
+
+                        {{#equal enclosure.type 'application/pdf' }}
+                            <p><a href="{{ enclosure.link }}" target="_blank"><i class="material-icons">attachment</i>{{ enclosure.link }}</a>
+                        {{/equal}}
                     {{/each}}
                 {{/if}}
             </div>

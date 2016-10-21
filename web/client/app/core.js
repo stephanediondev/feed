@@ -60,6 +60,14 @@ $.ajax({
             key = key * 100;
             return Math.round(key) / 100;
         });
+
+        Handlebars.registerHelper('equal', function(a, b, options) {
+            if(a == b) {
+                return options.fn(this);
+            } else {
+                return options.inverse(this);
+            }
+        });
     }
 });
 

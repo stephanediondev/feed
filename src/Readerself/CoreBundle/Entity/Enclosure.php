@@ -256,7 +256,7 @@ class Enclosure
             'id' => $this->getId(),
             'link' => $this->getLink(),
             'type' => $this->getType(),
-            $this->getTypeGroup() => true,
+            'type_group' => $this->getTypeGroup(),
             'link_secure' => $this->isLinkSecure(),
         ];
     }

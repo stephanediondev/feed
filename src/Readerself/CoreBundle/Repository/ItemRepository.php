@@ -121,6 +121,7 @@ class ItemRepository extends AbstractRepository
         }
 
         //$query->leftJoin('itm.enclosures', 'enr');
+        //$query->andWhere('enr.type = \'application/pdf\'');
         //$query->andWhere('(enr.type LIKE \'video%\' OR enr.type LIKE \'audio%\' OR enr.type LIKE \'image%\')');
 
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
