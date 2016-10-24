@@ -219,6 +219,7 @@ services:
         class: Readerself\CoreBundle\EventListener\SearchListener
         arguments:
             - "@readerself_core_manager_search"
+            - "@readerself_core_manager_item"
         tags:
             - { name: "kernel.event_listener", event: "Author.before_remove", method: "removeAuthor" }
             - { name: "kernel.event_listener", event: "Category.before_remove", method: "removeCategory" }
