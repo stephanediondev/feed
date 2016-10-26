@@ -7,18 +7,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
-use Readerself\CoreBundle\Manager\SearchManager;
-
 class StatusController extends AbstractController
 {
-    protected $searchManager;
-
-    public function __construct(
-        SearchManager $searchManager
-    ) {
-        $this->searchManager = $searchManager;
-    }
-
     /**
      * Get status.
      *

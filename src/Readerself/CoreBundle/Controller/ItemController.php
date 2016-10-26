@@ -7,23 +7,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
-use Readerself\CoreBundle\Manager\ItemManager;
-use Readerself\CoreBundle\Manager\CategoryManager;
-
 class ItemController extends AbstractController
 {
-    protected $itemManager;
-
-    protected $categoryManager;
-
-    public function __construct(
-        ItemManager $itemManager,
-        CategoryManager $categoryManager
-    ) {
-        $this->itemManager = $itemManager;
-        $this->categoryManager = $categoryManager;
-    }
-
     /**
      * Retrieve all items.
      *
@@ -83,13 +68,13 @@ class ItemController extends AbstractController
 
         if($request->query->get('feed')) {
             $parameters['feed'] = (int) $request->query->get('feed');
-            $data['entry'] = $this->get('readerself_core_manager_feed')->getOne(['id' => (int) $request->query->get('feed')])->toArray();
+            $data['entry'] = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])->toArray();
             $data['entry_entity'] = 'feed';
         }
 
         if($request->query->get('author')) {
             $parameters['author'] = (int) $request->query->get('author');
-            $data['entry'] = $this->get('readerself_core_manager_author')->getOne(['id' => (int) $request->query->get('author')])->toArray();
+            $data['entry'] = $this->authorManager->getOne(['id' => (int) $request->query->get('author')])->toArray();
             $data['entry_entity'] = 'author';
         }
 

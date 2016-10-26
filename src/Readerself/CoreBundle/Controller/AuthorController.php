@@ -6,25 +6,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
-use Readerself\CoreBundle\Manager\AuthorManager;
-use Readerself\CoreBundle\Manager\FeedManager;
 
 use Readerself\CoreBundle\Form\Type\AuthorType;
 
 class AuthorController extends AbstractController
 {
-    protected $authorManager;
-
-    protected $feedManager;
-
-    public function __construct(
-        AuthorManager $authorManager,
-        FeedManager $feedManager
-    ) {
-        $this->authorManager = $authorManager;
-        $this->feedManager = $feedManager;
-    }
-
     /**
      * Retrieve all authors.
      *
@@ -52,7 +38,7 @@ class AuthorController extends AbstractController
 
         if($request->query->get('feed')) {
             $parameters['feed'] = (int) $request->query->get('feed');
-            $data['entry'] = $this->get('readerself_core_manager_feed')->getOne(['id' => (int) $request->query->get('feed')])->toArray();
+            $data['entry'] = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])->toArray();
             $data['entry_entity'] = 'feed';
         }
 

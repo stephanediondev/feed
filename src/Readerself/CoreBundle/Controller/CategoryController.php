@@ -6,20 +6,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
-use Readerself\CoreBundle\Manager\CategoryManager;
 
 use Readerself\CoreBundle\Form\Type\CategoryType;
 
 class CategoryController extends AbstractController
 {
-    protected $categoryManager;
-
-    public function __construct(
-        CategoryManager $categoryManager
-    ) {
-        $this->categoryManager = $categoryManager;
-    }
-
     /**
      * Retrieve all categories.
      *
@@ -176,7 +167,7 @@ class CategoryController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
+        $actions = $this->actionManager->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
 
         $data['entry'] = $category->toArray();
         foreach($actions as $action) {

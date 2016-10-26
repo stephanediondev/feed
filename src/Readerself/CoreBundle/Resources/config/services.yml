@@ -18,24 +18,26 @@ services:
     readerself_core_controller_feed:
         class: Readerself\CoreBundle\Controller\FeedController
         parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_feed"
-            - "@readerself_core_manager_category"
-            - "@readerself_core_manager_author"
-            - "@readerself_core_manager_collection"
+        calls:
+            - [ "setAuthorManager", [ "@readerself_core_manager_author" ] ]
+            - [ "setCategoryManager", [ "@readerself_core_manager_category" ] ]
+            - [ "setCollectionManager", [ "@readerself_core_manager_collection" ] ]
+            - [ "setFeedManager", [ "@readerself_core_manager_feed" ] ]
 
     readerself_core_controller_item:
         class: Readerself\CoreBundle\Controller\ItemController
         parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_item"
-            - "@readerself_core_manager_category"
+        calls:
+            - [ "setAuthorManager", [ "@readerself_core_manager_author" ] ]
+            - [ "setCategoryManager", [ "@readerself_core_manager_category" ] ]
+            - [ "setFeedManager", [ "@readerself_core_manager_feed" ] ]
+            - [ "setItemManager", [ "@readerself_core_manager_item" ] ]
 
     readerself_core_controller_status:
         class: Readerself\CoreBundle\Controller\StatusController
         parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_search"
+        calls:
+            - [ "setSearchManager", [ "@readerself_core_manager_search" ] ]
 
     readerself_core_controller_proxy:
         class: Readerself\CoreBundle\Controller\ProxyController
@@ -44,29 +46,29 @@ services:
     readerself_core_controller_search:
         class: Readerself\CoreBundle\Controller\SearchController
         parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_item"
-            - "@readerself_core_manager_category"
-            - "@readerself_core_manager_search"
+        calls:
+            - [ "setAuthorManager", [ "@readerself_core_manager_author" ] ]
+            - [ "setCategoryManager", [ "@readerself_core_manager_category" ] ]
+            - [ "setFeedManager", [ "@readerself_core_manager_feed" ] ]
+            - [ "setItemManager", [ "@readerself_core_manager_item" ] ]
+            - [ "setSearchManager", [ "@readerself_core_manager_search" ] ]
 
     readerself_core_controller_category:
         class: Readerself\CoreBundle\Controller\CategoryController
         parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_category"
+        calls:
+            - [ "setCategoryManager", [ "@readerself_core_manager_category" ] ]
 
     readerself_core_controller_author:
         class: Readerself\CoreBundle\Controller\AuthorController
         parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_author"
-            - "@readerself_core_manager_feed"
+        calls:
+            - [ "setAuthorManager", [ "@readerself_core_manager_author" ] ]
+            - [ "setFeedManager", [ "@readerself_core_manager_feed" ] ]
 
     readerself_core_controller_push:
         class: Readerself\CoreBundle\Controller\PushController
         parent: "readerself_core_controller_abstract"
-        arguments:
-            - "@readerself_core_manager_push"
 
     readerself_core_controller_connection:
         class: Readerself\CoreBundle\Controller\ConnectionController

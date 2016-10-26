@@ -7,30 +7,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
-use Readerself\CoreBundle\Manager\ItemManager;
-use Readerself\CoreBundle\Manager\CategoryManager;
-use Readerself\CoreBundle\Manager\SearchManager;
-
 class SearchController extends AbstractController
 {
-    protected $itemManager;
-
-    protected $categoryManager;
-
-    protected $actionManager;
-
-    protected $searchManager;
-
-    public function __construct(
-        ItemManager $itemManager,
-        CategoryManager $categoryManager,
-        SearchManager $searchManager
-    ) {
-        $this->itemManager = $itemManager;
-        $this->categoryManager = $categoryManager;
-        $this->searchManager = $searchManager;
-    }
-
     /**
      * Search feeds.
      *
@@ -231,9 +209,9 @@ class SearchController extends AbstractController
                 $index = 0;
                 foreach($result['hits']['hits'] as $hit) {
                     if($type == 'feed') {
-                        $feed = $this->get('readerself_core_manager_feed')->getOne(['id' => $hit['_id']]);
+                        $feed = $this->feedManager->getOne(['id' => $hit['_id']]);
                         if($feed) {
-                            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+                            $actions = $this->actionManager->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
                             $categories = [];
                             foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
@@ -257,9 +235,9 @@ class SearchController extends AbstractController
                     }
 
                     if($type == 'category') {
-                        $category = $this->get('readerself_core_manager_category')->getOne(['id' => $hit['_id']]);
+                        $category = $this->categoryManager->getOne(['id' => $hit['_id']]);
                         if($category) {
-                            $actions = $this->get('readerself_core_manager_action')->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
+                            $actions = $this->actionManager->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
 
                             $data['entries'][$index] = $category->toArray();
                             $data['entries'][$index]['score'] = $hit['_score'];
@@ -277,7 +255,7 @@ class SearchController extends AbstractController
                     }
 
                     if($type == 'author') {
-                        $author = $this->get('readerself_core_manager_author')->getOne(['id' => $hit['_id']]);
+                        $author = $this->authorManager->getOne(['id' => $hit['_id']]);
                         if($author) {
                             $data['entries'][$index] = $author->toArray();
                             $data['entries'][$index]['score'] = $hit['_score'];
