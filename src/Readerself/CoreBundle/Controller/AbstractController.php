@@ -33,6 +33,8 @@ abstract class AbstractController extends Controller
 
     protected $searchManager;
 
+    protected $applicationServerKey;
+
     public function setMemberManager(
         MemberManager $memberManager
     ) {
@@ -79,6 +81,12 @@ abstract class AbstractController extends Controller
         SearchManager $searchManager
     ) {
         $this->searchManager = $searchManager;
+    }
+
+    public function setApplicationServerKey(
+        $applicationServerKey
+    ) {
+        $this->applicationServerKey = $applicationServerKey;
     }
 
     public function validateToken(Request $request, $type = 'login') {

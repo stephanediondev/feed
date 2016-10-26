@@ -9,12 +9,24 @@ use Minishlink\WebPush\WebPush;
 
 class PushManager extends AbstractManager
 {
-    protected $gcm;
+    protected $notification_gcm_api_key;
+
+    protected $notification_vapid_subject;
+
+    protected $notification_vapid_public_key;
+
+    protected $notification_vapid_private_key;
 
     public function __construct(
-        $gcm
+        $notification_gcm_api_key,
+        $notification_vapid_subject,
+        $notification_vapid_public_key,
+        $notification_vapid_private_key
     ) {
-        $this->gcm = $gcm;
+        $this->notification_gcm_api_key = $notification_gcm_api_key;
+        $this->notification_vapid_subject = $notification_vapid_subject;
+        $this->notification_vapid_public_key = $notification_vapid_public_key;
+        $this->notification_vapid_private_key = $notification_vapid_private_key;
     }
 
     public function getOne($paremeters = [])
@@ -102,7 +114,7 @@ class PushManager extends AbstractManager
                     $u++;
                 }
 
-                if($result['item_id'] != $last_item_id) {
+                //if($result['item_id'] != $last_item_id) {
                     $updatePush = [];
                     $updatePush['item_id'] = $last_item_id;
                     $updatePush['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
@@ -113,7 +125,7 @@ class PushManager extends AbstractManager
                         'body' => implode("\r\n", $body),
                     ]);
                     $this->send($result['id'], $payload);
-                }
+                //}
             }
         }
     }
@@ -123,7 +135,12 @@ class PushManager extends AbstractManager
         $push = $this->getOne(['id' => $push_id]);
 
         $apiKeys = array(
-            'GCM' => $this->gcm,
+            'GCM' => $this->notification_gcm_api_key,
+            'VAPID' => array(
+                'subject' => $this->notification_vapid_subject,
+                'publicKey' => $this->notification_vapid_public_key,
+                'privateKey' => $this->notification_vapid_private_key,
+            ),
         );
 
         $webPush = new WebPush($apiKeys);

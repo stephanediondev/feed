@@ -10,6 +10,7 @@ services:
             - [ "setContainer", [ "@service_container" ] ]
             - [ "setMemberManager", [ "@readerself_core_manager_member" ] ]
             - [ "setActionManager", [ "@readerself_core_manager_action" ] ]
+            - [ "setApplicationServerKey", [ %notification_vapid_public_key% ] ]
 
     readerself_core_controller_content:
         class: Readerself\CoreBundle\Controller\ContentController
@@ -174,7 +175,10 @@ services:
         parent: "readerself_core_manager_abstract"
         public: true
         arguments:
-            - "%google_cloud_messaging_key%"
+            - "%notification_gcm_api_key%"
+            - "%notification_vapid_subject%"
+            - "%notification_vapid_public_key%"
+            - "%notification_vapid_private_key%"
 
     readerself_core_manager_action:
         class: Readerself\CoreBundle\Manager\ActionManager

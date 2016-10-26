@@ -89,6 +89,8 @@ class ConnectionController extends AbstractController
         $data['entry'] = $connection->toArray();
         $data['entry_entity'] = 'connection';
 
+        $data['applicationServerKey'] = $this->applicationServerKey;
+
         return new JsonResponse($data);
     }
 

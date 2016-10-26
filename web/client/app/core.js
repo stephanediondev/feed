@@ -1,3 +1,5 @@
+var applicationServerKey;
+
 var files = [
     'app/views/misc.html',
     'app/views/member.html',
@@ -90,6 +92,21 @@ function loadFile(url) {
     });
 }
 
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 function explainConnection(connection) {
     if(typeof connection === 'undefined') {
         connection = {id: false, token: false, member: {id: false, administrator: false, member: false, demo: false}};
@@ -111,11 +128,12 @@ function explainConnection(connection) {
             headers: {
                 'X-CONNECTION-TOKEN': connection.token
             },
-            async: true,
+            async: false,
             cache: false,
             dataType: 'json',
             statusCode: {
                 200: function(data_return) {
+                    applicationServerKey = data_return.applicationServerKey;
                     store.set('connection', data_return.entry);
                 }
             },
@@ -147,7 +165,7 @@ function explainConnection(connection) {
                     }
 
                     if(status == 'prompt' || status == 'granted') {
-                        reg.pushManager.subscribe({userVisibleOnly: true}).then(function(pushSubscription) {
+                        reg.pushManager.subscribe({applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true}).then(function(pushSubscription) {
                             var toJSON = pushSubscription.toJSON();
                             $.ajax({
                                 headers: {

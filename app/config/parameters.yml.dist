@@ -18,8 +18,11 @@ parameters:
 
     secret: ThisTokenIsNotSoSecretChangeIt
 
-    google_cloud_messaging_enabled: false
-    google_cloud_messaging_key: ~
+    notification_enabled: false
+    notification_gcm_api_key: ~
+    notification_vapid_subject: ~
+    notification_vapid_public_key: ~
+    notification_vapid_private_key: ~
 
     elasticsearch_enabled: false
     elasticsearch_index: readerself
