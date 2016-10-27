@@ -131,50 +131,62 @@
                             {{ entry.title }}
                         </p>
                         <p>
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-email">
+                                <input type="radio" id="share-{{ entry.id }}-email" class="mdl-radio__button" name="share-{{ entry.id }}" value="mailto:?subject={{ encode entry.title }}&body={{ encode entry.link }}">
+                                <span class="mdl-radio__label">Email</a>
+                            </label>
+                        </p>
+                        <p>
                             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-evernote">
-                                <input type="radio" id="share-{{ entry.id }}-evernote" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.evernote.com/clip.action?url={{ entry.link }}&amp;title={{ entry.title }}">
+                                <input type="radio" id="share-{{ entry.id }}-evernote" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.evernote.com/clip.action?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
                                 <span class="mdl-radio__label">Evernote (clip)</a>
                             </label>
                         </p>
                         <p>
                             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-facebook">
-                                <input type="radio" id="share-{{ entry.id }}-facebook" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.facebook.com/sharer.php?u={{ entry.link }}">
+                                <input type="radio" id="share-{{ entry.id }}-facebook" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.facebook.com/sharer.php?u={{ encode entry.link }}">
                                 <span class="mdl-radio__label">Facebook</a>
                             </label>
                         </p>
                         <p>
+                            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-gmail">
+                                <input type="radio" id="share-{{ entry.id }}-gmail" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to&su={{ encode entry.title }}&body={{ encode entry.link }}">
+                                <span class="mdl-radio__label">Gmail</a>
+                            </label>
+                        </p>
+                        <p>
                             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-googleplus">
-                                <input type="radio" id="share-{{ entry.id }}-googleplus" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://plus.google.com/share?url={{ entry.link }}">
+                                <input type="radio" id="share-{{ entry.id }}-googleplus" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://plus.google.com/share?url={{ encode entry.link }}">
                                 <span class="mdl-radio__label">Google+</a>
                             </label>
                         </p>
                         <p>
                             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-instapaper">
-                                <input type="radio" id="share-{{ entry.id }}-instapaper" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.instapaper.com/e2?url={{ entry.link }}&amp;title={{ entry.title }}">
+                                <input type="radio" id="share-{{ entry.id }}-instapaper" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.instapaper.com/e2?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
                                 <span class="mdl-radio__label">Instapaper</a>
                             </label>
                         </p>
                         <p>
                             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-linkedin">
-                                <input type="radio" id="share-{{ entry.id }}-linkedin" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ entry.link }}">
+                                <input type="radio" id="share-{{ entry.id }}-linkedin" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ encode entry.link }}">
                                 <span class="mdl-radio__label">LinkedIn</a>
                             </label>
                         </p>
                         <p>
                             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-pocket">
-                                <input type="radio" id="share-{{ entry.id }}-pocket" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://getpocket.com/edit?url={{ entry.link }}&amp;title={{ entry.title }}">
+                                <input type="radio" id="share-{{ entry.id }}-pocket" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://getpocket.com/edit?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
                                 <span class="mdl-radio__label">Pocket</a>
                             </label>
                         </p>
                         <p>
                             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-tumblr">
-                                <input type="radio" id="share-{{ entry.id }}-tumblr" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&amp;url={{ entry.link }}&amp;title={{ entry.title }}">
+                                <input type="radio" id="share-{{ entry.id }}-tumblr" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&amp;url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
                                 <span class="mdl-radio__label">Tumblr</a>
                             </label>
                         </p>
                         <p>
                             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-twitter">
-                                <input type="radio" id="share-{{ entry.id }}-twitter" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://twitter.com/intent/tweet?source=webclient&amp;text={{ entry.title }}+{{ entry.link }}">
+                                <input type="radio" id="share-{{ entry.id }}-twitter" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://twitter.com/intent/tweet?source=webclient&amp;text={{ encode entry.title }}+{{ encode entry.link }}">
                                 <span class="mdl-radio__label">Twitter</a>
                             </label>
                         </p>

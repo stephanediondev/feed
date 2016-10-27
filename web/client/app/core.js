@@ -58,6 +58,10 @@ $.ajax({
             return new Handlebars.SafeString(result);
         });
 
+        Handlebars.registerHelper('encode', function(key) {
+            return encodeURIComponent(key);
+        });
+
         Handlebars.registerHelper('score', function(key) {
             key = key * 100;
             return Math.round(key) / 100;
@@ -672,7 +676,11 @@ $(document).ready(function() {
         if(form.hasClass('share-form')) {
             var choice = form.find('input[type="radio"]:checked').val();
             if(choice) {
-                window.open(choice, 'share');
+                if(choice.indexOf('mailto:') != -1) {
+                    window.location.href = choice;
+                } else {
+                    window.open(choice, 'share');
+                }
             }
             
 
