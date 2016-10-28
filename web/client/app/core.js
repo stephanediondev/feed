@@ -148,52 +148,54 @@ function explainConnection(connection) {
         if('serviceWorker' in navigator && window.location.protocol == 'https:') {
             navigator.serviceWorker.register('serviceworker.js').then(function(reg) {
 
-                reg.pushManager.permissionState({userVisibleOnly: true}).then(function(status) {
-                    var pushData = store.get('push');
-                    if(status == 'denied' && pushData) {
-                        $.ajax({
-                            headers: {
-                                'X-CONNECTION-TOKEN': connection.token
-                            },
-                            async: true,
-                            cache: false,
-                            dataType: 'json',
-                            statusCode: {
-                                200: function() {
-                                    store.remove('push');
-                                }
-                            },
-                            type: 'DELETE',
-                            url: apiUrl + '/push/' + pushData.id
-                        });
-                    }
-
-                    if(status == 'prompt' || status == 'granted') {
-                        reg.pushManager.subscribe({applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true}).then(function(pushSubscription) {
-                            var toJSON = pushSubscription.toJSON();
+                if(applicationServerKey !== null && applicationServerKey !== '') {
+                    reg.pushManager.permissionState({userVisibleOnly: true}).then(function(status) {
+                        var pushData = store.get('push');
+                        if(status == 'denied' && pushData) {
                             $.ajax({
                                 headers: {
                                     'X-CONNECTION-TOKEN': connection.token
                                 },
                                 async: true,
                                 cache: false,
-                                data: {
-                                    endpoint: pushSubscription.endpoint,
-                                    public_key: toJSON.keys.p256dh,
-                                    authentication_secret: toJSON.keys.auth
-                                },
                                 dataType: 'json',
                                 statusCode: {
-                                    200: function(data_return) {
-                                        store.set('push', data_return.entry);
+                                    200: function() {
+                                        store.remove('push');
                                     }
                                 },
-                                type: 'POST',
-                                url: apiUrl + '/push'
+                                type: 'DELETE',
+                                url: apiUrl + '/push/' + pushData.id
                             });
-                        });
-                    }
-                });
+                        }
+
+                        if(status == 'prompt' || status == 'granted') {
+                            reg.pushManager.subscribe({applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true}).then(function(pushSubscription) {
+                                var toJSON = pushSubscription.toJSON();
+                                $.ajax({
+                                    headers: {
+                                        'X-CONNECTION-TOKEN': connection.token
+                                    },
+                                    async: true,
+                                    cache: false,
+                                    data: {
+                                        endpoint: pushSubscription.endpoint,
+                                        public_key: toJSON.keys.p256dh,
+                                        authentication_secret: toJSON.keys.auth
+                                    },
+                                    dataType: 'json',
+                                    statusCode: {
+                                        200: function(data_return) {
+                                            store.set('push', data_return.entry);
+                                        }
+                                    },
+                                    type: 'POST',
+                                    url: apiUrl + '/push'
+                                });
+                            });
+                        }
+                    });
+                }
             }).catch(function() {
             });
         }
