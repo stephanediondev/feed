@@ -170,7 +170,8 @@ function explainConnection(connection) {
                         }
 
                         if(status == 'prompt' || status == 'granted') {
-                            reg.pushManager.subscribe({applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true}).then(function(pushSubscription) {
+                            //urlBase64ToUint8Array(applicationServerKey)
+                            reg.pushManager.subscribe({applicationServerKey: urlBase64ToUint8Array('oo'), userVisibleOnly: true}).then(function(pushSubscription) {
                                 var toJSON = pushSubscription.toJSON();
                                 $.ajax({
                                     headers: {

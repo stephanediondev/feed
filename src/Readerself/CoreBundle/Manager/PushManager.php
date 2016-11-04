@@ -114,7 +114,7 @@ class PushManager extends AbstractManager
                     $u++;
                 }
 
-                //if($result['item_id'] != $last_item_id) {
+                if($result['item_id'] != $last_item_id) {
                     $updatePush = [];
                     $updatePush['item_id'] = $last_item_id;
                     $updatePush['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
@@ -125,7 +125,7 @@ class PushManager extends AbstractManager
                         'body' => implode("\r\n", $body),
                     ]);
                     $this->send($result['id'], $payload);
-                //}
+                }
             }
         }
     }
@@ -143,14 +143,37 @@ class PushManager extends AbstractManager
             ),
         );
 
-        $webPush = new WebPush($apiKeys);
-
         $endPoint = $push->getEndpoint();
         $userPublicKey = $push->getPublicKey();
         $userAuthToken = $push->getAuthenticationSecret();
 
-        $webPush->sendNotification($endPoint, $payload, $userPublicKey, $userAuthToken, true);
+        /*$pushManager    = new \Sly\NotificationPusher\PushManager();
+        $webPushAdapter = new \Openpp\WebPushAdapter\Adapter\Web(array(
+            'publicKey'  => 'public_key.pem',  // ECDSA public key path for the VAPID
+            'privateKey' => 'private_key.pem', // ECDSA private key path for the VAPID
+        ));
 
+        $device = new \Sly\NotificationPusher\Model\Device($userAuthToken);
+        $device->setToken($endPoint) // endpoint for chrome
+        ->setParameters(array(
+            'publicKey' => $userPublicKey,
+            'authToken' => $userAuthToken
+        ));
+
+        $devices = new \Sly\NotificationPusher\Collection\DeviceCollection(array(
+            $device,
+        ));
+
+        $message = new \Sly\NotificationPusher\Model\Message('This is an example.', array(
+            'title' => 'Web Push Test',
+        ));
+
+        $push = new \Sly\NotificationPusher\Model\Push($webPushAdapter, $devices, $message);
+        $pushManager->add($push);
+        $pushManager->push();*/
+
+        $webPush = new WebPush($apiKeys);
+        $webPush->sendNotification($endPoint, $payload, $userPublicKey, $userAuthToken, true);
         $webPush->flush();
     }
 }

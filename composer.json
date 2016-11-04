@@ -22,9 +22,6 @@
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "knplabs/knp-paginator-bundle": "^2.5",
         "minishlink/web-push-bundle": "*",
-
-        "spomky-labs/jose": "^6.0",
-
         "simplepie/simplepie": "^1.4",
         "nelmio/api-doc-bundle": "^2.0",
         "facebook/graph-sdk" : "~5.0",
