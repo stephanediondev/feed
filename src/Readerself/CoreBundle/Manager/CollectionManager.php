@@ -192,6 +192,10 @@ class CollectionManager extends AbstractManager
                     $sp_feed->force_feed(true);
                     $sp_feed->init();
                     $sp_feed->handle_content_type();
+                    $sp_feed->set_curl_options([
+                        CURLOPT_SSL_VERIFYHOST => false,
+                        CURLOPT_SSL_VERIFYPEER => false
+                    ]);
 
                     if($sp_feed->error()) {
                         $errors++;
