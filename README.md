@@ -71,3 +71,4 @@ docker-compose up --build
 ![Web application](web/screenshots/Screenshot_20170108-102209.png)
 ![Notification preview](web/screenshots/Screenshot_20170108-102420.png)
 ![Full notification](web/screenshots/Screenshot_20170108-102440.png)
+![Menu](web/screenshots/Screenshot_20170108-103142.png)
