@@ -62,6 +62,12 @@ docker-compose up --build
 
 ####Screenshots
 
-![Desktop](web/screenshots/desktop.png)
-![Add to home screen](web/screenshots/add-to-homescreen.png)
-![Notification](web/screenshots/notification.png)
+![Login](web/screenshots/Screenshot_20170108-101851.png)
+![Notifications dialog](web/screenshots/Screenshot_20170108-101954.png)
+![Add to home screen dialog](web/screenshots/Screenshot_20170108-102110.png)
+![Added to home screen](web/screenshots/Screenshot_20170108-102131.png)
+![Splash screen](web/screenshots/Screenshot_20170108-102139.png)
+![Web application](web/screenshots/Screenshot_20170108-102154.png)
+![Web application](web/screenshots/Screenshot_20170108-102209.png)
+![Notification preview](web/screenshots/Screenshot_20170108-102420.png)
+![Full notification](web/screenshots/Screenshot_20170108-102440.png)
