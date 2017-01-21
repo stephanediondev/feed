@@ -36,3 +36,13 @@ parameters:
     evernote_key: ~
     evernote_secret: ~
     evernote_sandbox: true
+
+    ldap_enabled: false
+    ldap_server: 'ldap://localhost'
+    ldap_port: 389
+    ldap_protocol: 3
+    ldap_rootdn: 'cn=Manager,dc=my-domain,dc=com'
+    ldap_rootpw: 'secret'
+    ldap_basedn: 'dc=my-domain,dc=com'
+    ldap_search_user: 'mail=[email]'
+    ldap_search_group_admin: 'cn=admingroup'

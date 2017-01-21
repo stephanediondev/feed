@@ -125,9 +125,6 @@ function explainConnection(connection) {
         $('body').removeClass('anonymous');
         $('body').addClass('connected');
 
-        $('body').removeClass('not_administrator');
-        $('body').addClass('administrator');
-
         $.ajax({
             headers: {
                 'X-CONNECTION-TOKEN': connection.token
@@ -137,6 +134,11 @@ function explainConnection(connection) {
             dataType: 'json',
             statusCode: {
                 200: function(data_return) {
+                    if(data_return.entry.member.administrator) {
+                        $('body').removeClass('not_administrator');
+                        $('body').addClass('administrator');
+                    }
+
                     applicationServerKey = data_return.applicationServerKey;
                     store.set('connection', data_return.entry);
                 }
@@ -684,7 +686,7 @@ $(document).ready(function() {
                     window.open(choice, 'share');
                 }
             }
-            
+
 
         } else if(typeof id != 'undefined' && id.indexOf('form-search-') != -1) {
             loadRoute(form.attr('action'), {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});

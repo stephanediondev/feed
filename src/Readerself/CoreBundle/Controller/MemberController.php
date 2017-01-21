@@ -20,6 +20,37 @@ use Readerself\CoreBundle\Form\Type\PinboardType;
 
 class MemberController extends AbstractController
 {
+    protected $ldapEnabled = false;
+
+    protected $ldapServer = 'ldap://localhost';
+
+    protected $ldapPort = 389;
+
+    protected $ldapProtocol = 3;
+
+    protected $ldapRootDn = 'cn=Manager,dc=my-domain,dc=com';
+
+    protected $ldapRootPw = 'secret';
+
+    protected $ldapBaseDn = 'dc=my-domain,dc=com';
+
+    protected $ldapSearchUser = 'mail=[email]';
+
+    protected $ldapSearchGroupAdmin = 'cn=admingroup';
+
+    public function setLdap($enabled, $server, $port, $protocol, $rootDn, $rootPw, $baseDn, $searchUser, $searchGroupAdmin)
+    {
+        $this->ldapEnabled = $enabled;
+        $this->ldapServer = $server;
+        $this->ldapPort = $port;
+        $this->ldapProtocol = $protocol;
+        $this->ldapRootDn = $rootDn;
+        $this->ldapRootPw = $rootPw;
+        $this->ldapBaseDn = $baseDn;
+        $this->ldapSearchUser = $searchUser;
+        $this->ldapSearchGroupAdmin = $searchGroupAdmin;
+    }
+
     /**
      * Create a member.
      *
@@ -215,6 +246,52 @@ class MemberController extends AbstractController
         $form->submit($request->request->all());
 
         if($form->isValid()) {
+            if($this->ldapEnabled) {
+                $ldapConnect = ldap_connect($this->ldapServer, $this->ldapPort);
+                if($ldapConnect) {
+                    ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, $this->ldapProtocol);
+                    ldap_set_option($ldapConnect, LDAP_OPT_REFERRALS, 0);
+                    if(ldap_bind($ldapConnect, $this->ldapRootDn, $this->ldapRootPw)) {
+                        $ldapSearch = ldap_search($ldapConnect, $this->ldapBaseDn, str_replace('[email]', $login->getEmail(), $this->ldapSearchUser), ['uid']);
+                        if($ldapSearch) {
+                            $ldapGetEntries = ldap_get_entries($ldapConnect, $ldapSearch);
+                            if($ldapGetEntries['count'] > 0) {
+                                try {
+
+                                    $ldapSearch2 = ldap_search($ldapConnect, $this->ldapBaseDn, $this->ldapSearchGroupAdmin, []);
+                                    if($ldapSearch2) {
+                                        $ldapGetEntries2 = ldap_get_entries($ldapConnect, $ldapSearch2);
+                                    }
+
+                                    if(ldap_bind($ldapConnect, $ldapGetEntries[0]['dn'], $login->getPassword())) {
+                                        $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
+
+                                        if(!$member) {
+                                            $member = $this->memberManager->init();
+                                            $member->setEmail($login->getEmail());
+                                        }
+                                        $encoder = $this->get('security.password_encoder');
+                                        $encoded = $encoder->encodePassword($member, $login->getPassword());
+                                        $member->setPassword($encoded);
+
+                                        $administrator = false;
+                                        if(isset($ldapGetEntries2)) {
+                                            if(in_array($ldapGetEntries[0]['uid'][0], $ldapGetEntries2[0]['memberuid'])) {
+                                                $administrator = true;
+                                            }
+                                        }
+                                        $member->setAdministrator($administrator);
+                                        $this->memberManager->persist($member);
+                                    }
+                                } catch(Exception $e) {
+                                }
+                            }
+                        }
+                    }
+                    ldap_unbind($ldapConnect);
+                }
+            }
+
             $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
 
             if($member) {
