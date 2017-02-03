@@ -123,6 +123,7 @@ class PushManager extends AbstractManager
                     $payload = json_encode([
                         'title' => $title,
                         'body' => implode("\r\n", $body),
+                        'unread' => $result['unread'].' unread items',
                     ]);
                     $this->send($result['id'], $payload);
                 }

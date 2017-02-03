@@ -31,6 +31,12 @@ if(window.location.hostname == 'localhost') {
     apiUrl = apiUrl.replace('client/', 'api');
 }
 
+if('serviceWorker' in navigator && window.location.protocol == 'https:') {
+    navigator.serviceWorker.register('serviceworker.js').then(function() {
+    }).catch(function() {
+    });
+}
+
 var connectionData = explainConnection(store.get('connection'));
 
 var snackbarContainer = document.querySelector('.mdl-snackbar');
@@ -129,7 +135,7 @@ function explainConnection(connection) {
             headers: {
                 'X-CONNECTION-TOKEN': connection.token
             },
-            async: false,
+            async: true,
             cache: false,
             dataType: 'json',
             statusCode: {
@@ -139,68 +145,70 @@ function explainConnection(connection) {
                         $('body').addClass('administrator');
                     }
 
-                    applicationServerKey = data_return.applicationServerKey;
                     store.set('connection', data_return.entry);
+
+                    if('serviceWorker' in navigator && window.location.protocol == 'https:') {
+                        navigator.serviceWorker.ready.then(function(ServiceWorkerRegistration) {
+
+                            applicationServerKey = data_return.applicationServerKey;
+                            if(applicationServerKey !== null && applicationServerKey !== '') {
+                                ServiceWorkerRegistration.pushManager.permissionState({userVisibleOnly: true}).then(function(status) {
+                                    var pushData = store.get('push');
+                                    if(status == 'denied' && pushData) {
+                                        $.ajax({
+                                            headers: {
+                                                'X-CONNECTION-TOKEN': connection.token
+                                            },
+                                            async: true,
+                                            cache: false,
+                                            dataType: 'json',
+                                            statusCode: {
+                                                200: function() {
+                                                    store.remove('push');
+                                                }
+                                            },
+                                            type: 'DELETE',
+                                            url: apiUrl + '/push/' + pushData.id
+                                        });
+                                    }
+
+                                    if(status == 'prompt' || status == 'granted') {
+                                        ServiceWorkerRegistration.pushManager.subscribe(
+                                            {applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true}
+                                        ).then(function(pushSubscription) {
+                                            var toJSON = pushSubscription.toJSON();
+                                            $.ajax({
+                                                headers: {
+                                                    'X-CONNECTION-TOKEN': connection.token
+                                                },
+                                                async: true,
+                                                cache: false,
+                                                data: {
+                                                    endpoint: pushSubscription.endpoint,
+                                                    public_key: toJSON.keys.p256dh,
+                                                    authentication_secret: toJSON.keys.auth
+                                                },
+                                                dataType: 'json',
+                                                statusCode: {
+                                                    200: function(data_return) {
+                                                        store.set('push', data_return.entry);
+                                                    }
+                                                },
+                                                type: 'POST',
+                                                url: apiUrl + '/push'
+                                            });
+                                        });
+                                    }
+                                });
+                            }
+                        }).catch(function() {
+                        });
+                    }
                 }
             },
             type: 'PUT',
             url: apiUrl + '/connection/' + connection.id
         });
-
-        if('serviceWorker' in navigator && window.location.protocol == 'https:') {
-            navigator.serviceWorker.register('serviceworker.js').then(function(reg) {
-
-                if(applicationServerKey !== null && applicationServerKey !== '') {
-                    reg.pushManager.permissionState({userVisibleOnly: true}).then(function(status) {
-                        var pushData = store.get('push');
-                        if(status == 'denied' && pushData) {
-                            $.ajax({
-                                headers: {
-                                    'X-CONNECTION-TOKEN': connection.token
-                                },
-                                async: true,
-                                cache: false,
-                                dataType: 'json',
-                                statusCode: {
-                                    200: function() {
-                                        store.remove('push');
-                                    }
-                                },
-                                type: 'DELETE',
-                                url: apiUrl + '/push/' + pushData.id
-                            });
-                        }
-
-                        if(status == 'prompt' || status == 'granted') {
-                            reg.pushManager.subscribe({applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true}).then(function(pushSubscription) {
-                                var toJSON = pushSubscription.toJSON();
-                                $.ajax({
-                                    headers: {
-                                        'X-CONNECTION-TOKEN': connection.token
-                                    },
-                                    async: true,
-                                    cache: false,
-                                    data: {
-                                        endpoint: pushSubscription.endpoint,
-                                        public_key: toJSON.keys.p256dh,
-                                        authentication_secret: toJSON.keys.auth
-                                    },
-                                    dataType: 'json',
-                                    statusCode: {
-                                        200: function(data_return) {
-                                            store.set('push', data_return.entry);
-                                        }
-                                    },
-                                    type: 'POST',
-                                    url: apiUrl + '/push'
-                                });
-                            });
-                        }
-                    });
-                }
-            }).catch(function() {
-            });
-        }
     }
     return connection;
 }

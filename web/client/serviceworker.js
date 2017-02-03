@@ -53,7 +53,10 @@ self.addEventListener('push', function(event) {
             self.registration.showNotification(data.title, {
                 body: data.body,
                 icon: 'app/icons/icon-192x192.png',
-                tag: 'readerself'
+                tag: 'readerself',
+                actions: [
+                    { action: 'unread', title: data.unread }
+                ]
             })
         );
     }
