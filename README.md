@@ -57,6 +57,7 @@ http://example.com/api/documentation
 ####Docker
 ```
 cd /path-to-installation
+cp .env.dist .env
 docker-compose up --build
 ```
 

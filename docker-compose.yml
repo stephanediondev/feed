@@ -22,9 +22,9 @@ services:
             - SYMFONY__ENV__DATABASE_DRIVER=pdo_mysql
             - SYMFONY__ENV__DATABASE_HOST=mysql
             - SYMFONY__ENV__DATABASE_PORT=3306
-            - SYMFONY__ENV__DATABASE_NAME=readerself
-            - SYMFONY__ENV__DATABASE_USER=readerself
-            - SYMFONY__ENV__DATABASE_PASSWORD=readerself
+            - SYMFONY__ENV__DATABASE_NAME=${MYSQL_DATABASE}
+            - SYMFONY__ENV__DATABASE_USER=${MYSQL_USER}
+            - SYMFONY__ENV__DATABASE_PASSWORD=${MYSQL_PASSWORD}
         image: rs_php
         links:
             - rs_mysql:rs_mysql
@@ -37,10 +37,10 @@ services:
     rs_mysql:
         container_name: rs_mysql
         environment:
-            - MYSQL_ROOT_PASSWORD=readerself
-            - MYSQL_USER=readerself
-            - MYSQL_PASSWORD=readerself
-            - MYSQL_DATABASE=readerself
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
         image: mysql/mysql-server
         ports:
             - 3306:3306

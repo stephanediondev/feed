@@ -24,7 +24,7 @@ self.addEventListener('install', event => {
                 'vendor/jquery/dist/jquery.min.js',
                 'vendor/dialog-polyfill/dialog-polyfill.js',
                 'vendor/material-design-lite/material.min.js',
-                'vendor/store.js/store.min.js',
+                'vendor/store.js/dist/store.modern.min.js',
                 'vendor/jquery-i18n/jquery.i18n.min.js',
                 'vendor/moment/min/moment.min.js',
                 'vendor/jquery.scrollTo/jquery.scrollTo.min.js',

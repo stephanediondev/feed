@@ -13,3 +13,5 @@
 
 /web/bundles/
 /web/client/vendor/
+
+.env
