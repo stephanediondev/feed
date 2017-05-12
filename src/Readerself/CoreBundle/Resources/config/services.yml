@@ -222,6 +222,11 @@ services:
         parent: "readerself_core_manager_abstract"
         public: true
 
+    readerself_core_manager_aol:
+        class: Readerself\CoreBundle\Manager\AolManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
     #Listener
     readerself_core_eventlistener_search:
         class: Readerself\CoreBundle\EventListener\SearchListener
