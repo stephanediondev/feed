@@ -6,13 +6,42 @@
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#categories/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_categories'}}</a>
+            <a href="#categories/trendy" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.trendy_categories'}}</a>
             <a href="#categories/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_categories'}}</a>
             <a href="#categories/usedbyfeeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.categories_usedbyfeeds'}}</a>
             <a href="#categories/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_categories'}}</a>
         </div>
     </div>
 </script>
+
+<script type="text/template" id="view-categories-trendy">
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="title-entries">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                {{trans current_title}}
+            </h1>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <a href="#categories/trendy" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.trendy_categories'}}</a>
+            <a href="#categories/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_categories'}}</a>
+            <a href="#categories/usedbyfeeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.categories_usedbyfeeds'}}</a>
+            <a href="#categories/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_categories'}}</a>
+        </div>
+    </div>
+
+    {{#each entries as |entry entry_index|}}
+        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+            <div class="mdl-card__title">
+                <h1 class="mdl-card__title-text">
+                    <a href="#items/category/{{ entry.id }}" class="load-route" style="font-size:{{ entry.percent }}%;">
+                        {{ entry_index }}
+                    </a>
+                </h1>
+            </div>
+        </div>
+    {{/each}}
+</script>
+
 
 <script type="text/template" id="view-categories-unit">
     <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="category-{{ entry.id }}">
@@ -47,7 +76,7 @@
             </h1>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <a href="#categories/recent" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.recent_categories'}}</a>
+            <a href="#categories/trendy" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.trendy_categories'}}</a>
             <a href="#categories/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_categories'}}</a>
             <a href="#categories/usedbyfeeds" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.categories_usedbyfeeds'}}</a>
             <a href="#categories/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_categories'}}</a>

@@ -80,8 +80,8 @@
     "button.search_feeds": "Recherche",
 
 
-    "title.recent_categories": "Catégories récentes",
-    "button.recent_categories": "Récentes",
+    "title.trendy_categories": "Catégories à la mode",
+    "button.trendy_categories": "Tendances",
 
     "title.excluded_categories": "Catégories exclues",
     "button.excluded_categories": "Exclues",
@@ -106,8 +106,8 @@
     "button.search_items": "Recherche",
 
 
-    "title.recent_authors": "Auteurs récents",
-    "button.recent_authors": "Récents",
+    "title.trendy_authors": "Auteurs à la mode",
+    "button.trendy_authors": "Tendances",
 
     "title.search_authors": "Recherche d'auteurs",
     "button.search_authors": "Recherche"

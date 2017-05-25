@@ -36,59 +36,88 @@ class AuthorController extends AbstractController
 
         $parameters = [];
 
-        if($request->query->get('feed')) {
-            $parameters['feed'] = (int) $request->query->get('feed');
-            $data['entry'] = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])->toArray();
-            $data['entry_entity'] = 'feed';
-        }
+        if($request->query->get('trendy')) {
+            $parameters['trendy'] = true;
 
-        if($request->query->get('days')) {
-            $parameters['days'] = (int) $request->query->get('days');
-        }
+            if($memberConnected) {
+                $parameters['member'] = $memberConnected;
+            }
 
-        $fields = ['title' => 'aut.title', 'date_created' => 'aut.dateCreated'];
-        if($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
-            $parameters['sortField'] = $fields[$request->query->get('sortField')];
+            $results = $this->authorManager->getList($parameters);
+
+            $data['entries'] = [];
+
+            $max = false;
+            foreach($results as $row) {
+                if(!$max) {
+                    $max = $row['count'];
+                }
+                $data['entries'][$row['ref']] = ['count' => $row['count'], 'id' => $row['id']];
+            }
+            //ksort($data['entries']);
+
+            foreach($data['entries'] as $k => $v) {
+                $percent = ($v['count'] * 100) / $max;
+                $percent = $percent - ($percent % 10);
+                $percent = intval($percent) + 100;
+                $data['entries'][$k]['percent'] = $percent;
+            }
+
         } else {
-            $parameters['sortField'] = 'aut.title';
-        }
+            if($request->query->get('feed')) {
+                $parameters['feed'] = (int) $request->query->get('feed');
+                $data['entry'] = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])->toArray();
+                $data['entry_entity'] = 'feed';
+            }
 
-        $directions = ['ASC', 'DESC'];
-        if($request->query->get('sortDirection') && in_array($request->query->get('sortDirection'), $directions)) {
-            $parameters['sortDirection'] = $request->query->get('sortDirection');
-        } else {
-            $parameters['sortDirection'] = 'ASC';
-        }
+            if($request->query->get('days')) {
+                $parameters['days'] = (int) $request->query->get('days');
+            }
 
-        $paginator= $this->get('knp_paginator');
-        $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
-        $pagination = $paginator->paginate(
-            $this->authorManager->getList($parameters),
-            $page = $request->query->getInt('page', 1),
-            $request->query->getInt('perPage', 100)
-        );
+            $fields = ['title' => 'aut.title', 'date_created' => 'aut.dateCreated'];
+            if($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
+                $parameters['sortField'] = $fields[$request->query->get('sortField')];
+            } else {
+                $parameters['sortField'] = 'aut.title';
+            }
 
-        $data['entries_entity'] = 'author';
-        $data['entries_total'] = $pagination->getTotalItemCount();
-        $data['entries_pages'] = $pages = $pagination->getPageCount();
-        $data['entries_page_current'] = $page;
-        $pagePrevious = $page - 1;
-        if($pagePrevious >= 1) {
-            $data['entries_page_previous'] = $pagePrevious;
-        }
-        $pageNext = $page + 1;
-        if($pageNext <= $pages) {
-            $data['entries_page_next'] = $pageNext;
-        }
+            $directions = ['ASC', 'DESC'];
+            if($request->query->get('sortDirection') && in_array($request->query->get('sortDirection'), $directions)) {
+                $parameters['sortDirection'] = $request->query->get('sortDirection');
+            } else {
+                $parameters['sortDirection'] = 'ASC';
+            }
 
-        $data['entries'] = [];
+            $paginator= $this->get('knp_paginator');
+            $paginator->setDefaultPaginatorOptions(['widgetParameterName' => 'page']);
+            $pagination = $paginator->paginate(
+                $this->authorManager->getList($parameters),
+                $page = $request->query->getInt('page', 1),
+                $request->query->getInt('perPage', 100)
+            );
 
-        $index = 0;
-        foreach($pagination as $result) {
-            $author = $this->authorManager->getOne(['id' => $result['id']]);
+            $data['entries_entity'] = 'author';
+            $data['entries_total'] = $pagination->getTotalItemCount();
+            $data['entries_pages'] = $pages = $pagination->getPageCount();
+            $data['entries_page_current'] = $page;
+            $pagePrevious = $page - 1;
+            if($pagePrevious >= 1) {
+                $data['entries_page_previous'] = $pagePrevious;
+            }
+            $pageNext = $page + 1;
+            if($pageNext <= $pages) {
+                $data['entries_page_next'] = $pageNext;
+            }
 
-            $data['entries'][$index] = $author->toArray();
-            $index++;
+            $data['entries'] = [];
+
+            $index = 0;
+            foreach($pagination as $result) {
+                $author = $this->authorManager->getOne(['id' => $result['id']]);
+
+                $data['entries'][$index] = $author->toArray();
+                $index++;
+            }
         }
 
         return new JsonResponse($data);

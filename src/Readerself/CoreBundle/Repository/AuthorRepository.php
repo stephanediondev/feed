@@ -37,6 +37,27 @@ class AuthorRepository extends AbstractRepository
     public function getList($parameters = []) {
         $em = $this->getEntityManager();
 
+        if(isset($parameters['trendy']) == 1 && $parameters['trendy']) {
+$sql = <<<SQL
+SELECT LOWER(aut.title) AS ref, aut.id AS id, COUNT(DISTINCT(itm.id)) AS count
+FROM item AS itm
+LEFT JOIN author AS aut ON aut.id = itm.author_id
+WHERE itm.date >= :date_ref AND aut.title != ''
+GROUP BY ref
+ORDER BY count DESC
+LIMIT 0,100
+SQL;
+
+            $date_ref = date('Y-m-d H:i:s', time() - 3600 * 24 * 30);
+
+            $stmt = $em->getConnection()->prepare($sql);
+            $stmt->bindValue('date_ref', $date_ref);
+            $stmt->execute();
+            $results = $stmt->fetchAll();
+
+            return $results;
+        }
+
         $query = $em->createQueryBuilder();
         $query->addSelect('aut.id');
         $query->from('ReaderselfCoreBundle:Author', 'aut');

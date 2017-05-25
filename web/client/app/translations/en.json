@@ -80,8 +80,8 @@
     "button.search_feeds": "Search",
 
 
-    "title.recent_categories": "Recent categories",
-    "button.recent_categories": "Recent",
+    "title.trendy_categories": "Trendy categories",
+    "button.trendy_categories": "Trendy",
 
     "title.excluded_categories": "Excluded categories",
     "button.excluded_categories": "Excluded",
@@ -106,8 +106,8 @@
     "button.search_items": "Search",
 
 
-    "title.recent_authors": "Recent authors",
-    "button.recent_authors": "Recent",
+    "title.trendy_authors": "Trendy authors",
+    "button.trendy_authors": "Trendy",
 
     "title.search_authors": "Search authors",
     "button.search_authors": "Search"

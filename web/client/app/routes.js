@@ -51,7 +51,7 @@ routes['#items/markallasread/author/{id}'] = {view: false, query: '/items/markal
 routes['#items/markallasread/category/{id}'] = {view: false, query: '/items/markallasread?category={id}'};
 
 //Category
-routes['#categories/recent'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?sortField=date_created&sortDirection=DESC&days=7', title: 'title.recent_categories'};
+routes['#categories/trendy'] = {view: 'view-categories-trendy', query: '/categories?trendy=1', title: 'title.trendy_categories'};
 routes['#categories/excluded'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?excluded=1', title: 'title.excluded_categories'};
 routes['#categories/usedbyfeeds'] = {view: 'view-categories', view_unit: 'view-categories-unit', query: '/categories?usedbyfeeds=1', title: 'title.categories_usedbyfeeds'};
 
@@ -63,7 +63,7 @@ routes['#category/action/exclude/{id}'] = {view: false, query: '/category/action
 routes['#category/{id}'] = {view: 'view-category-read', query: '/category/{id}'};
 
 //Author
-routes['#authors/recent'] = {view: 'view-authors', view_unit: 'view-authors-unit', query: '/authors?sortField=date_created&sortDirection=DESC&days=7', title: 'title.recent_authors'};
+routes['#authors/trendy'] = {view: 'view-authors-trendy', query: '/authors?trendy=1', title: 'title.trendy_authors'};
 
 routes['#authors/search'] = {view: 'view-search-authors', query: false, title: 'title.search_authors'};
 routes['#authors/search/result'] = {view: 'view-search-authors', view_unit: 'view-authors-unit', query: '/authors/search', title: 'title.search_authors'};
