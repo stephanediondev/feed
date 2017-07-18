@@ -1,6 +1,8 @@
 <?php
 namespace Readerself\CoreBundle\Manager;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
+
 use Readerself\CoreBundle\Manager\AbstractManager;
 use Readerself\CoreBundle\Entity\Collection;
 use Readerself\CoreBundle\Event\CollectionEvent;
@@ -228,7 +230,7 @@ class CollectionManager extends AbstractManager
                     }
                     $sp_feed->__destruct();
                     unset($sp_feed);
-                } catch (Symfony\Component\Config\Definition\Exception\Exception $e) {
+                } catch (Exception $e) {
                     $errors++;
                     $insertCollectionFeed['error'] = $e->getMessage();
                 }
@@ -326,7 +328,7 @@ class CollectionManager extends AbstractManager
                         $tidy->cleanRepair();
 
                         $content = $this->cleanContent($tidy, 'store');
-                    } catch (Symfony\Component\Config\Definition\Exception\Exception $e) {
+                    } catch (Exception $e) {
                     }
                 } else {
                     $content = str_replace('<div', '<p', $content);

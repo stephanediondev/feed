@@ -2,6 +2,8 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Entity\Item;
+
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -237,7 +239,7 @@ abstract class AbstractManager
                 $content = $dom->saveHTML();
 
                 libxml_clear_errors();
-            } catch (Symfony\Component\Config\Definition\Exception\Exception $e) {
+            } catch (Exception $e) {
             }
         }
         return $content;

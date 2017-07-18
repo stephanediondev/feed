@@ -1,6 +1,7 @@
 <?php
 namespace Readerself\CoreBundle\Controller;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -283,7 +284,7 @@ class MemberController extends AbstractController
                                         $member->setAdministrator($administrator);
                                         $this->memberManager->persist($member);
                                     }
-                                } catch(Symfony\Component\Config\Definition\Exception\Exception $e) {
+                                } catch(Exception $e) {
                                 }
                             }
                         }
