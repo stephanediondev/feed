@@ -422,7 +422,7 @@ class ItemController extends AbstractController
     public function actionEmailAction(Request $request, $id)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
+        if(!$this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -431,8 +431,6 @@ class ItemController extends AbstractController
         if(!$item) {
             return new JsonResponse($data, 404);
         }
-
-        $action = $this->actionManager->getOne(['title' => 'email']);
 
         return new JsonResponse($data);
     }

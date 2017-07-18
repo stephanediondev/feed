@@ -148,7 +148,7 @@ class CategoryController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
+        if(!$this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -185,6 +185,7 @@ class CategoryController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
+        $memberConnected = $this->validateToken($request);
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
@@ -216,7 +217,7 @@ class CategoryController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
+        if(!$this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 

@@ -302,7 +302,7 @@ class SearchManager extends AbstractManager
     {
         if($this->getEnabled()) {
             $path = '/'.$this->getIndex();
-            $result = $this->query('DELETE', $path);
+            $this->query('DELETE', $path);
         }
     }
 }

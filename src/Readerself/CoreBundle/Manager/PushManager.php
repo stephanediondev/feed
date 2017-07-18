@@ -46,7 +46,7 @@ class PushManager extends AbstractManager
 
     public function persist($data)
     {
-        if($data->getDateCreated() == null) {
+        if($data->getDateCreated() === null) {
             $mode = 'insert';
             $data->setDateCreated(new \Datetime());
         } else {

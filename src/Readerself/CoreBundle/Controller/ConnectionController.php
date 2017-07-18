@@ -23,7 +23,7 @@ class ConnectionController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
+        if(!$this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 

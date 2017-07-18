@@ -54,7 +54,7 @@ class CollectionManager extends AbstractManager
 
     public function persist($data)
     {
-        if($data->getDateCreated() == null) {
+        if($data->getDateCreated() === null) {
             $mode = 'insert';
             $data->setDateCreated(new \Datetime());
         } else {
@@ -106,8 +106,6 @@ class CollectionManager extends AbstractManager
 
         $feeds = 0;
         $errors = 0;
-        $time = 0;
-        $memory = 0;
 
         if($feed_id) {
             $sql = 'SELECT id, link FROM feed WHERE id = :feed_id';

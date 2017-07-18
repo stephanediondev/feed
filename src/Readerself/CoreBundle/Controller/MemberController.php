@@ -94,7 +94,7 @@ class MemberController extends AbstractController
                 $encoded = $encoder->encodePassword($member, $member->getPlainPassword());
                 $member->setPassword($encoded);
 
-                $member_id = $this->memberManager->persist($member);
+                $this->memberManager->persist($member);
 
                 $data[] = $form->getData()->getEmail();
             } else {
