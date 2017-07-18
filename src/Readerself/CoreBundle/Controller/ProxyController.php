@@ -2,7 +2,7 @@
 namespace Readerself\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 use Readerself\CoreBundle\Controller\AbstractController;
 
@@ -12,22 +12,28 @@ class ProxyController extends AbstractController
     {
         $file = base64_decode(urldecode($token));
 
-        $opts = array(
-            'http' => array(
+        $opts = [
+            'http' => [
                 'method' => 'GET',
-                'user_agent'=> $_SERVER['HTTP_USER_AGENT']
-            )
-        );
+                'user_agent'=> $request->server->get('HTTP_USER_AGENT'),
+            ],
+        ];
 
         $context = stream_context_create($opts);
 
         if($file != '' && (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://')) {
+            $response = new StreamedResponse();
+
             $imginfo = @getimagesize($file);
             if($imginfo) {
-                header('Content-type: '.$imginfo['mime']);
+                $response->headers->set('Content-Type', $imginfo['mime']);
             }
-            @readfile($file, false, $context);
+
+            $response->setCallback(function () use ($file, $context) {
+                @readfile($file, false, $context);
+            });
+
+            return $response;
         }
-        exit(0);
     }
 }
