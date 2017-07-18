@@ -47,7 +47,7 @@ abstract class AbstractManager
 
     public function count($table)
     {
-        $sql = 'SELECT COUNT(id) AS count FROM '.$table;
+        $sql = 'SELECT COUNT(id) AS count FROM `'.$table.'`';
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch();
@@ -56,7 +56,7 @@ abstract class AbstractManager
 
     public function insert($table, $fields)
     {
-        $sql = 'INSERT INTO '.$table.' ('.implode(', ', array_keys($fields)).') VALUES ('.implode(', ', array_map(function($n) {return ':'.$n;}, array_keys($fields))).')';
+        $sql = 'INSERT INTO `'.$table.'` ('.implode(', ', array_keys($fields)).') VALUES ('.implode(', ', array_map(function($n) {return ':'.$n;}, array_keys($fields))).')';
         $stmt = $this->connection->prepare($sql);
         foreach($fields as $k => $v) {
             $stmt->bindValue($k, $v);
@@ -67,7 +67,7 @@ abstract class AbstractManager
 
     public function update($table, $fields, $id)
     {
-        $sql = 'UPDATE '.$table.' SET '.implode(', ', array_map(function($n) {return $n.' = :'.$n;}, array_keys($fields))).' WHERE id = :id';
+        $sql = 'UPDATE `'.$table.'` SET '.implode(', ', array_map(function($n) {return $n.' = :'.$n;}, array_keys($fields))).' WHERE id = :id';
         $stmt = $this->connection->prepare($sql);
         foreach($fields as $k => $v) {
             $stmt->bindValue($k, $v);
