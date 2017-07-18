@@ -177,7 +177,6 @@ class SearchManager extends AbstractManager
             if($action == 'HEAD') {
                 $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
             }
-            //echo $path."\r\n";echo json_encode($body)."\r\n\r\n";
             return $result;
         }
     }

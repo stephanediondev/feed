@@ -19,7 +19,7 @@ class CollectionFeedManager extends AbstractManager
 
     public function init()
     {
-        return new ActionItem();
+        return new CollectionFeed();
     }
 
     public function persist($data)

@@ -1,6 +1,8 @@
 <?php
 namespace Readerself\CoreBundle\Manager;
 
+use Readerself\CoreBundle\Entity\Item;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -93,7 +95,7 @@ abstract class AbstractManager
         return $category_id;
     }
 
-    function prepareEnclosures($item, $request) {
+    public function prepareEnclosures(Item $item, Request $request) {
         $enclosures = [];
         $index_enclosures = 0;
         foreach($this->em->getRepository('ReaderselfCoreBundle:Enclosure')->getList(['item' => $item])->getResult() as $enclosure) {
@@ -235,7 +237,7 @@ abstract class AbstractManager
                 $content = $dom->saveHTML();
 
                 libxml_clear_errors();
-            } catch (Exception $e) {
+            } catch (Symfony\Component\Config\Definition\Exception\Exception $e) {
             }
         }
         return $content;

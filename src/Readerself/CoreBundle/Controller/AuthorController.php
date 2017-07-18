@@ -54,7 +54,6 @@ class AuthorController extends AbstractController
                 }
                 $data['entries'][$row['ref']] = ['count' => $row['count'], 'id' => $row['id']];
             }
-            //ksort($data['entries']);
 
             foreach($data['entries'] as $k => $v) {
                 $percent = ($v['count'] * 100) / $max;
@@ -175,9 +174,6 @@ class AuthorController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, 403);
-        }
 
         $author = $this->authorManager->getOne(['id' => $id]);
 

@@ -283,7 +283,7 @@ class MemberController extends AbstractController
                                         $member->setAdministrator($administrator);
                                         $this->memberManager->persist($member);
                                     }
-                                } catch(Exception $e) {
+                                } catch(Symfony\Component\Config\Definition\Exception\Exception $e) {
                                 }
                             }
                         }

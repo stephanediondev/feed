@@ -228,7 +228,7 @@ class CollectionManager extends AbstractManager
                     }
                     $sp_feed->__destruct();
                     unset($sp_feed);
-                } catch (Exception $e) {
+                } catch (Symfony\Component\Config\Definition\Exception\Exception $e) {
                     $errors++;
                     $insertCollectionFeed['error'] = $e->getMessage();
                 }
@@ -326,7 +326,7 @@ class CollectionManager extends AbstractManager
                         $tidy->cleanRepair();
 
                         $content = $this->cleanContent($tidy, 'store');
-                    } catch (Exception $e) {
+                    } catch (Symfony\Component\Config\Definition\Exception\Exception $e) {
                     }
                 } else {
                     $content = str_replace('<div', '<p', $content);
