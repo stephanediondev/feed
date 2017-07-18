@@ -68,7 +68,7 @@ class PushController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
-        if(!$validateToken = $this->validateToken($request)) {
+        if(!$this->validateToken($request)) {
             $data['error'] = true;
             return new JsonResponse($data, 403);
         }

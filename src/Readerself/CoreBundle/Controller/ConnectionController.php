@@ -84,7 +84,8 @@ class ConnectionController extends AbstractController
 
         $connection->setIp($request->getClientIp());
         $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
-        $connection_id = $this->memberManager->connectionManager->persist($connection);
+
+        $this->memberManager->connectionManager->persist($connection);
 
         $data['entry'] = $connection->toArray();
         $data['entry_entity'] = 'connection';
