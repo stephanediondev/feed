@@ -158,10 +158,10 @@ class CollectionManager extends AbstractManager
                     $updateFeed['title'] = $this->cleanTitle($result['name']);
                     $updateFeed['website'] = $this->cleanWebsite($result['link']);
                     $updateFeed['link'] = $this->cleanLink($result['link']);
-                    if(isset($parse_url['host']) == 1) {
-                        $updateFeed['hostname'] = $parse_url['host'];
-                    }
+                    $updateFeed['hostname'] = isset($parse_url['host']) ? $parse_url['host'] : null;
                     $updateFeed['description'] = $result['about'];
+
+                    $updateFeed['language'] = null;
 
                     $updateFeed['next_collection'] = $this->setNextCollection($feed);
 
@@ -213,14 +213,10 @@ class CollectionManager extends AbstractManager
                         $updateFeed['title'] = $sp_feed->get_title() != '' ? $this->cleanTitle($sp_feed->get_title()) : '-';
                         $updateFeed['website'] = $this->cleanWebsite($sp_feed->get_link());
                         $updateFeed['link'] = $this->cleanLink($sp_feed->subscribe_url());
-                        if(isset($parse_url['host']) == 1) {
-                            $updateFeed['hostname'] = $parse_url['host'];
-                        }
+                        $updateFeed['hostname'] = isset($parse_url['host']) ? $parse_url['host'] : null;
                         $updateFeed['description'] = $sp_feed->get_description();
 
-                        if($language = $sp_feed->get_language()) {
-                            $updateFeed['language'] = substr($language, 0, 2);
-                        }
+                        $updateFeed['language'] = $sp_feed->get_language() ? substr($sp_feed->get_language(), 0, 2) : null;
 
                         $updateFeed['next_collection'] = $this->setNextCollection($feed);
 

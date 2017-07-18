@@ -82,13 +82,12 @@ abstract class AbstractManager
 
     public function update($table, $fields, $id)
     {
-        $fieldsImplode = implode(', ', array_map(function($n) {return $n.' = :'.$n;}, array_keys($fields)));
         switch($table) {
             case 'feed':
-                $sql = 'UPDATE feed SET '.$fieldsImplode.' WHERE id = :id';
+                $sql = 'UPDATE feed SET title = :title, website= :website, link = :link, hostname = :hostname, description = :description, language = :language, next_collection = :next_collection, date_modified = :date_modified WHERE id = :id';
                 break;
             case 'push':
-                $sql = 'UPDATE push SET '.$fieldsImplode.' WHERE id = :id';
+                $sql = 'UPDATE push SET item_id = :item_id, date_modified = :date_modified WHERE id = :id';
                 break;
             default:
                 return false;
