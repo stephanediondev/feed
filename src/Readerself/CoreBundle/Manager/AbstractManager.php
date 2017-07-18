@@ -47,7 +47,22 @@ abstract class AbstractManager
 
     public function count($table)
     {
-        $sql = 'SELECT COUNT(id) AS count FROM `'.$table.'`';
+        switch($table) {
+            case 'author':
+                $sql = 'SELECT COUNT(id) AS count FROM author';
+                break;
+            case 'category':
+                $sql = 'SELECT COUNT(id) AS count FROM category';
+                break;
+            case 'feed':
+                $sql = 'SELECT COUNT(id) AS count FROM feed';
+                break;
+            case 'item':
+                $sql = 'SELECT COUNT(id) AS count FROM item';
+                break;
+            default:
+                return false;
+        }
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch();
@@ -67,7 +82,16 @@ abstract class AbstractManager
 
     public function update($table, $fields, $id)
     {
-        $sql = 'UPDATE `'.$table.'` SET '.implode(', ', array_map(function($n) {return $n.' = :'.$n;}, array_keys($fields))).' WHERE id = :id';
+        switch($table) {
+            case 'feed':
+                $sql = 'UPDATE feed SET '.implode(', ', array_map(function($n) {return $n.' = :'.$n;}, array_keys($fields))).' WHERE id = :id';
+                break;
+            case 'push':
+                $sql = 'UPDATE push SET '.implode(', ', array_map(function($n) {return $n.' = :'.$n;}, array_keys($fields))).' WHERE id = :id';
+                break;
+            default:
+                return false;
+        }
         $stmt = $this->connection->prepare($sql);
         foreach($fields as $k => $v) {
             $stmt->bindValue($k, $v);
