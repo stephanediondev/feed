@@ -1,4 +1,0 @@
-pre_composer_script: |
-    #!/bin/bash
-    cp app/config/parameters.yml.dist app/config/parameters.yml
-    sed -i -e "s/secret:.*/secret: `date +'%s'`" app/config/parameters.yml
