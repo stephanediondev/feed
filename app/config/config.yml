@@ -39,11 +39,11 @@ twig:
 # Doctrine Configuration
 doctrine:
     dbal:
-        server_version: 5.7
         default_connection: default
         connections:
             default:
                 driver:   pdo_mysql
+                server_version: 5.7
                 host:     "%database_host%"
                 port:     "%database_port%"
                 dbname:   "%database_name%"
@@ -56,6 +56,7 @@ doctrine:
 
             old:
                 driver:   pdo_mysql
+                server_version: 5.7
                 host:     "%database_host_old%"
                 port:     "%database_port_old%"
                 dbname:   "%database_name_old%"
