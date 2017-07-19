@@ -1,0 +1,168 @@
+{% extends 'ReaderselfCoreBundle::base.html.twig' %}
+
+{% block grid %}
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="intro">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Reader Self - Self-hosted rss reader
+            </h1>
+            <div class="mdl-card__subtitle-text">
+                Import OPML - Responsive desktop, tablet and mobile - Main keyboard shortcuts from Google Reader - <a href="https://getmdl.io/">Material Design Lite</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="features">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Features
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <ul>
+                <li><a href="api/documentation">API server (Symfony)</a>, with provided html5 client</li>
+                <li>Built-in authentication</li>
+                <li>Support https (proxy to get http images)</li>
+                <li>Responsive desktop, tablet and mobile</li>
+                <li>Multilingual (English and French)</li>
+                <li>Get feed from Facebook Pages</li>
+                <li>List items by feed</li>
+                <li>List items by category</li>
+                <li>List items by author</li>
+                <li>Main keyboard shortcuts from Google Reader</li>
+                <li>Get enclosures (image, audio and video)</li>
+                <li>Keep only iframes from Instagram, Dailymotion, Vimeo and Youtube</li>
+                <li>Starred items</li>
+                <li>Sync starred items with Pinboard</li>
+                <li>Multi-users</li>
+                <li>Share on Facebook, Google+, LinkedIn, Twitter ...</li>
+                <li>Elastic search integration (feeds, items, authors and categories)</li>
+                <li>Adaptive crawl by feed (older than 96 hours, next crawl in 12 hours / older than 48 hours, next crawl in 6 hours / older than 24 hours, next crawl in 3 hours)</li>
+                <li>Text direction according to feed language (left to right / right to left)</li>
+                <li>Add a feed dialog</li>
+                <li>Import OPML dialog</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="shortcuts">
+        <div class="mdl-card__title">
+            <h1 class="mdl-card__title-text">
+                Shortcuts
+            </h1>
+        </div>
+        <div class="mdl-card__supporting-text">
+            <ul>
+                <li>r: reload</li>
+                <li>t: back to top</li>
+                <li>a: add a feed dialog</li>
+                <li>k or p or shift + space: up / previous item</li>
+                <li>j or n or space: down / next item</li>
+                <li>g then a: go to recent items</li>
+                <li>g then u: go to unread items</li>
+                <li>g then s: go to starred items</li>
+                <li>g then f: go to recent feeds</li>
+                <li>shift + a: mark all as read dialog</li>
+                <li>v: view original from selected item</li>
+                <li>m: read / unread selected item</li>
+                <li>s: star / unstar selected item</li>
+                <li>shift + m: share dialog</li>
+                <li>o or enter: expand / collapse selected item</li>
+                <li>slash: focus in search field</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/desktop.png" alt="">
+            </p>
+        </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-101851.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-101954.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-102110.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-102131.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-102139.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-102154.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-102209.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-102420.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-102440.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-103142.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-110909.png" alt="">
+            </p>
+        </div>
+    </div>
+    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col">
+        <div class="mdl-card__supporting-text">
+            <p>
+                <img src="screenshots/Screenshot_20170108-110931.png" alt="">
+            </p>
+        </div>
+    </div>
+{% endblock %}

@@ -11,6 +11,6 @@ class ContentController extends AbstractController
     public function indexAction(Request $request)
     {
         $data = [];
-        return $this->render('ReaderselfCoreBundle::base.html.twig', $data);
+        return $this->render('ReaderselfCoreBundle::index.html.twig', $data);
     }
 }
