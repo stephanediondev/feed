@@ -39,6 +39,7 @@ twig:
 # Doctrine Configuration
 doctrine:
     dbal:
+        server_version: 5.7
         default_connection: default
         connections:
             default:
