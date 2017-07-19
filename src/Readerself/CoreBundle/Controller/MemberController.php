@@ -21,37 +21,6 @@ use Readerself\CoreBundle\Form\Type\PinboardType;
 
 class MemberController extends AbstractController
 {
-    protected $ldapEnabled = false;
-
-    protected $ldapServer = 'ldap://localhost';
-
-    protected $ldapPort = 389;
-
-    protected $ldapProtocol = 3;
-
-    protected $ldapRootDn = 'cn=Manager,dc=my-domain,dc=com';
-
-    protected $ldapRootPw = 'secret';
-
-    protected $ldapBaseDn = 'dc=my-domain,dc=com';
-
-    protected $ldapSearchUser = 'mail=[email]';
-
-    protected $ldapSearchGroupAdmin = 'cn=admingroup';
-
-    public function setLdap($enabled, $server, $port, $protocol, $rootDn, $rootPw, $baseDn, $searchUser, $searchGroupAdmin)
-    {
-        $this->ldapEnabled = $enabled;
-        $this->ldapServer = $server;
-        $this->ldapPort = $port;
-        $this->ldapProtocol = $protocol;
-        $this->ldapRootDn = $rootDn;
-        $this->ldapRootPw = $rootPw;
-        $this->ldapBaseDn = $baseDn;
-        $this->ldapSearchUser = $searchUser;
-        $this->ldapSearchGroupAdmin = $searchGroupAdmin;
-    }
-
     /**
      * Create a member.
      *
