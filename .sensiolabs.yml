@@ -1,8 +1,8 @@
 rules:
   symfony.version.latest_stable:
-    enabled: true
+    enabled: false
   symfony.controller.get_action_mutates_resource:
-    enabled: true
+    enabled: false
 
 pre_composer_script: |
     #!/bin/bash

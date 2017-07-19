@@ -326,7 +326,6 @@ class MemberExtraController extends AbstractController
 
         $this->memberManager->connectionManager->remove($connection);
 
-
         return new JsonResponse($data);
     }
 
