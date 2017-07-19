@@ -4,6 +4,9 @@ namespace Readerself\CoreBundle\Manager;
 use Readerself\CoreBundle\Manager\AbstractManager;
 use Readerself\CoreBundle\Entity\Connection;
 use Readerself\CoreBundle\Event\ConnectionEvent;
+use Readerself\CoreBundle\Entity\Member;
+
+use Symfony\Component\HttpFoundation\Request;
 
 class ConnectionManager extends AbstractManager
 {
@@ -52,5 +55,21 @@ class ConnectionManager extends AbstractManager
         $this->em->flush();
 
         $this->clearCache();
+    }
+
+    public function getConnections(Member $memberConnected, Request $request) {
+        $connections = [];
+        $index = 0;
+        foreach($this->getList(['member' => $memberConnected])->getResult() as $connection) {
+            $connections[$index] = $connection->toArray();
+            if($connection->getIp() == $request->getClientIp()) {
+                $connections[$index]['currentIp'] = true;
+            }
+            if($connection->getAgent() == $request->server->get('HTTP_USER_AGENT')) {
+                $connections[$index]['currentAgent'] = true;
+            }
+            $index++;
+        }
+        return $connections;
     }
 }

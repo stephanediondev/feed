@@ -218,23 +218,10 @@ class MemberExtraController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $connections = [];
-        $index = 0;
-        foreach($this->memberManager->connectionManager->getList(['member' => $memberConnected])->getResult() as $connection) {
-            $connections[$index] = $connection->toArray();
-            if($connection->getIp() == $request->getClientIp()) {
-                $connections[$index]['currentIp'] = true;
-            }
-            if($connection->getAgent() == $request->server->get('HTTP_USER_AGENT')) {
-                $connections[$index]['currentAgent'] = true;
-            }
-            $index++;
-        }
-
         $data['entry'] = $memberConnected->toArray();
         $data['entry_entity'] = 'member';
 
-        $data['entries'] = $connections;
+        $data['entries'] = $this->memberManager->connectionManager->getConnections($memberConnected, $request);
         $data['entries_entity'] = 'connection';
 
         return new JsonResponse($data);
@@ -257,23 +244,10 @@ class MemberExtraController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $notifications = [];
-        $index = 0;
-        foreach($this->memberManager->pushManager->getList(['member' => $memberConnected])->getResult() as $notification) {
-            $notifications[$index] = $notification->toArray();
-            if($notification->getIp() == $request->getClientIp()) {
-                $notifications[$index]['currentIp'] = true;
-            }
-            if($notification->getAgent() == $request->server->get('HTTP_USER_AGENT')) {
-                $notifications[$index]['currentAgent'] = true;
-            }
-            $index++;
-        }
-
         $data['entry'] = $memberConnected->toArray();
         $data['entry_entity'] = 'member';
 
-        $data['entries'] = $notifications;
+        $data['entries'] = $this->memberManager->pushManager->getNotifications($memberConnected, $request);
         $data['entries_entity'] = 'push';
 
         return new JsonResponse($data);

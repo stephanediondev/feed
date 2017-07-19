@@ -4,7 +4,9 @@ namespace Readerself\CoreBundle\Manager;
 use Readerself\CoreBundle\Manager\AbstractManager;
 use Readerself\CoreBundle\Entity\Push;
 use Readerself\CoreBundle\Event\PushEvent;
+use Readerself\CoreBundle\Entity\Member;
 
+use Symfony\Component\HttpFoundation\Request;
 use Minishlink\WebPush\WebPush;
 
 class PushManager extends AbstractManager
@@ -176,5 +178,21 @@ class PushManager extends AbstractManager
         $webPush = new WebPush($apiKeys);
         $webPush->sendNotification($endPoint, $payload, $userPublicKey, $userAuthToken, true);
         $webPush->flush();
+    }
+
+    public function getNotifications(Member $memberConnected, Request $request) {
+        $notifications = [];
+        $index = 0;
+        foreach($this->getList(['member' => $memberConnected])->getResult() as $notification) {
+            $notifications[$index] = $notification->toArray();
+            if($notification->getIp() == $request->getClientIp()) {
+                $notifications[$index]['currentIp'] = true;
+            }
+            if($notification->getAgent() == $request->server->get('HTTP_USER_AGENT')) {
+                $notifications[$index]['currentAgent'] = true;
+            }
+            $index++;
+        }
+        return $notifications;
     }
 }
