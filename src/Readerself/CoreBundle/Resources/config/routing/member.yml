@@ -33,59 +33,59 @@ readerself_api_member_delete:
 readerself_api_member_test:
     path: /test
     defaults:
-        _controller: "readerself_core_controller_member:testAction"
+        _controller: "readerself_core_controller_member_extra:testAction"
     methods: GET
 
 readerself_api_member_login:
     path: /login
     defaults:
-        _controller: "readerself_core_controller_member:loginAction"
+        _controller: "readerself_core_controller_member_extra:loginAction"
     methods: POST
 
 readerself_api_member_profile:
     path: /profile
     defaults:
-        _controller: "readerself_core_controller_member:profileAction"
+        _controller: "readerself_core_controller_member_extra:profileAction"
     methods: GET
 
 readerself_api_member_profile_connections:
     path: /profile/connections
     defaults:
-        _controller: "readerself_core_controller_member:profileConnectionsAction"
+        _controller: "readerself_core_controller_member_extra:profileConnectionsAction"
     methods: GET
 
 readerself_api_member_profile_notifications:
     path: /profile/notifications
     defaults:
-        _controller: "readerself_core_controller_member:profileNotificationsAction"
+        _controller: "readerself_core_controller_member_extra:profileNotificationsAction"
     methods: GET
 
 readerself_api_member_profile_update:
     path: /profile/update
     defaults:
-        _controller: "readerself_core_controller_member:profileUpdateAction"
+        _controller: "readerself_core_controller_member_extra:profileUpdateAction"
     methods: PUT
 
 readerself_api_member_logout:
     path: /logout
     defaults:
-        _controller: "readerself_core_controller_member:logoutAction"
+        _controller: "readerself_core_controller_member_extra:logoutAction"
     methods: GET
 
 readerself_api_member_pinboard:
     path: /pinboard
     defaults:
-        _controller: "readerself_core_controller_member:pinboardAction"
+        _controller: "readerself_core_controller_member_extra:pinboardAction"
     methods: POST
 
 readerself_api_member_notifier_set:
     path: /notifier/set
     defaults:
-        _controller: "readerself_core_controller_member:notifierAction"
+        _controller: "readerself_core_controller_member_extra:notifierAction"
     methods: POST
 
 readerself_api_member_notifier_unread:
     path: /notifier/unread
     defaults:
-        _controller: "readerself_core_controller_member:unreadAction"
+        _controller: "readerself_core_controller_member_extra:unreadAction"
     methods: GET

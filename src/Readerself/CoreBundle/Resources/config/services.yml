@@ -81,6 +81,12 @@ services:
         calls:
             - [ "setLdap", [ "%ldap_enabled%", "%ldap_server%", "%ldap_port%", "%ldap_protocol%", "%ldap_rootdn%", "%ldap_rootpw%", "%ldap_basedn%", "%ldap_search_user%", "%ldap_search_group_admin%" ] ]
 
+    readerself_core_controller_member_extra:
+        class: Readerself\CoreBundle\Controller\MemberExtraController
+        parent: "readerself_core_controller_abstract"
+        calls:
+            - [ "setLdap", [ "%ldap_enabled%", "%ldap_server%", "%ldap_port%", "%ldap_protocol%", "%ldap_rootdn%", "%ldap_rootpw%", "%ldap_basedn%", "%ldap_search_user%", "%ldap_search_group_admin%" ] ]
+
     #Manager
     readerself_core_manager_abstract:
         class: Readerself\CoreBundle\Manager\AbstractManager
