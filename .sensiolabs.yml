@@ -1,8 +1,10 @@
 rules:
-  symfony.version.latest_stable:
-    enabled: false
-  symfony.controller.get_action_mutates_resource:
-    enabled: false
+    symfony.version.latest_stable:
+        enabled: false
+    symfony.controller.get_action_mutates_resource:
+        enabled: false
+    symfony.controller.action_method_too_long:
+        enabled: false
 
 pre_composer_script: |
     #!/bin/bash
