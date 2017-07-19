@@ -1,0 +1,48 @@
+parameters:
+    database_host: 127.0.0.1
+    database_port: ~
+    database_name: readerself
+    database_user: root
+    database_password: ~
+
+    database_host_old: 127.0.0.1
+    database_port_old: ~
+    database_name_old: readerself
+    database_user_old: root
+    database_password_old: ~
+
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: ~
+    mailer_password: ~
+
+    secret: 28e892049ed9716fd18ab4137c2e2c509248d80d
+
+    notification_enabled: false
+    notification_gcm_api_key: ~
+    notification_vapid_subject: ~
+    notification_vapid_public_key: ~
+    notification_vapid_private_key: ~
+
+    elasticsearch_enabled: false
+    elasticsearch_index: readerself
+    elasticsearch_url: http://127.0.0.1:9200
+
+    facebook_enabled: false
+    facebook_id: ~
+    facebook_secret: ~
+
+    evernote_enabled: false
+    evernote_key: ~
+    evernote_secret: ~
+    evernote_sandbox: true
+
+    ldap_enabled: false
+    ldap_server: 'ldap://localhost'
+    ldap_port: 389
+    ldap_protocol: 3
+    ldap_rootdn: 'cn=Manager,dc=my-domain,dc=com'
+    ldap_rootpw: 'secret'
+    ldap_basedn: 'dc=my-domain,dc=com'
+    ldap_search_user: 'mail=[email]'
+    ldap_search_group_admin: 'cn=admingroup'

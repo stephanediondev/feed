@@ -1,0 +1,4 @@
+pre_composer_script: |
+    #!/bin/bash
+    cp app/config/parameters.yml.dist app/config/parameters.yml
+    sed -i -- "s/ThisTokenIsNotSoSecretChangeIt/28e892049ed9716fd18ab4137c2e2c509248d80d/g" app/config/parameters.yml
