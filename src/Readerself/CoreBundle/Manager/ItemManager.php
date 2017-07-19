@@ -3,7 +3,10 @@ namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
 use Readerself\CoreBundle\Entity\Item;
+use Readerself\CoreBundle\Entity\Member;
 use Readerself\CoreBundle\Event\ItemEvent;
+
+use Symfony\Component\HttpFoundation\Request;
 
 class ItemManager extends AbstractManager
 {
@@ -60,6 +63,39 @@ class ItemManager extends AbstractManager
         $this->em->flush();
 
         $this->clearCache();
+    }
+
+    public function parametersMarkallasread(Member $memberConnected, Request $request) {
+        $parameters = [];
+        $parameters['member'] = $memberConnected;
+
+        $parameters['unread'] = (bool) $request->query->get('unread');
+
+        if($request->query->get('starred')) {
+            $parameters['starred'] = $request->query->get('starred');
+        }
+
+        if($request->query->get('feed')) {
+            $parameters['feed'] = (int) $request->query->get('feed');
+        }
+
+        if($request->query->get('author')) {
+            $parameters['author'] = (int) $request->query->get('author');
+        }
+
+        if($request->query->get('category')) {
+            $parameters['category'] = (int) $request->query->get('category');
+        }
+
+        if($request->query->get('age')) {
+            $parameters['age'] = (int) $request->query->get('age');
+        }
+
+        $parameters['sortField'] = 'itm.id';
+
+        $parameters['sortDirection'] = 'DESC';
+
+        return $parameters;
     }
 
     public function readAll($parameters = [])

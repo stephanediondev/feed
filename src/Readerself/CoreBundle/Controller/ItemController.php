@@ -265,34 +265,7 @@ class ItemController extends AbstractController
             return new JsonResponse($data, 403);
         }
 
-        $parameters = [];
-        $parameters['member'] = $memberConnected;
-
-        $parameters['unread'] = (bool) $request->query->get('unread');
-
-        if($request->query->get('starred')) {
-            $parameters['starred'] = $request->query->get('starred');
-        }
-
-        if($request->query->get('feed')) {
-            $parameters['feed'] = (int) $request->query->get('feed');
-        }
-
-        if($request->query->get('author')) {
-            $parameters['author'] = (int) $request->query->get('author');
-        }
-
-        if($request->query->get('category')) {
-            $parameters['category'] = (int) $request->query->get('category');
-        }
-
-        if($request->query->get('age')) {
-            $parameters['age'] = (int) $request->query->get('age');
-        }
-
-        $parameters['sortField'] = 'itm.id';
-
-        $parameters['sortDirection'] = 'DESC';
+        $parameters = $this->itemManager->parametersMarkallasread($memberConnected, $request);
 
         $this->itemManager->readAll($parameters);
 
