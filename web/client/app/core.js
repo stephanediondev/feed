@@ -25,13 +25,13 @@ if(window.location.port) {
     var apiUrl = '//' + window.location.hostname + window.location.pathname;
 }
 apiUrl = apiUrl.replace('index.html', '');
-if(window.location.hostname == 'localhost') {
+if(window.location.hostname === 'localhost') {
     apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
 } else {
     apiUrl = apiUrl.replace('client/', 'api');
 }
 
-if('serviceWorker' in navigator && window.location.protocol == 'https:') {
+if('serviceWorker' in navigator && window.location.protocol === 'https:') {
     navigator.serviceWorker.register('serviceworker.js').then(function() {
     }).catch(function() {
     });
@@ -48,7 +48,7 @@ if($.inArray(language, languages)) {
     languageFinal = 'en';
 }
 
-if(languageFinal != 'en') {
+if(languageFinal !== 'en') {
     $.get('vendor/moment/locale/' + languageFinal + '.js', function() {
     });
 }
@@ -74,7 +74,7 @@ $.ajax({
         });
 
         Handlebars.registerHelper('equal', function(a, b, options) {
-            if(a == b) {
+            if(a === b) {
                 return options.fn(this);
             } else {
                 return options.inverse(this);
@@ -147,14 +147,14 @@ function explainConnection(connection) {
 
                     store.set('connection', data_return.entry);
 
-                    if('serviceWorker' in navigator && window.location.protocol == 'https:') {
+                    if('serviceWorker' in navigator && window.location.protocol === 'https:') {
                         navigator.serviceWorker.ready.then(function(ServiceWorkerRegistration) {
 
                             applicationServerKey = data_return.applicationServerKey;
                             if(applicationServerKey !== null && applicationServerKey !== '') {
                                 ServiceWorkerRegistration.pushManager.permissionState({userVisibleOnly: true}).then(function(status) {
                                     var pushData = store.get('push');
-                                    if(status == 'denied' && pushData) {
+                                    if(status === 'denied' && pushData) {
                                         $.ajax({
                                             headers: {
                                                 'X-CONNECTION-TOKEN': connection.token
@@ -172,7 +172,7 @@ function explainConnection(connection) {
                                         });
                                     }
 
-                                    if(status == 'prompt' || status == 'granted') {
+                                    if(status === 'prompt' || status === 'granted') {
                                         ServiceWorkerRegistration.pushManager.subscribe(
                                             {applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true}
                                         ).then(function(pushSubscription) {
@@ -258,14 +258,14 @@ function loadRoute(key, parameters) {
         if(route.query) {
             url = apiUrl + route.query;
             if(parameters.page) {
-                if(url.indexOf('?') != -1) {
+                if(url.indexOf('?') !== -1) {
                     url = url + '&page=' + parameters.page;
                 } else {
                     url = url + '?page=' + parameters.page;
                 }
             }
             if(parameters.q) {
-                if(url.indexOf('?') != -1) {
+                if(url.indexOf('?') !== -1) {
                     url = url + '&q=' + parameters.q;
                 } else {
                     url = url + '?q=' + parameters.q;
@@ -278,14 +278,14 @@ function loadRoute(key, parameters) {
         }
 
         if(route.view) {
-            if(!parameters.page || parameters.page == 1) {
+            if(!parameters.page || parameters.page === 1) {
                 scrollTo('#top');
                 $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
                 componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
             }
 
-            if(key != '#401' && key != '#404' && key != '#500') {
-                if(key != window.location.hash) {
+            if(key !== '#401' && key !== '#404' && key !== '#500') {
+                if(key !== window.location.hash) {
                     history.pushState({key: key}, null, key);
                     lastHistory = window.location.hash;
                 }
@@ -323,7 +323,7 @@ function loadRoute(key, parameters) {
                             data_return.current_title = route.title;
                         }
 
-                        /*if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store == 'boolean' && route.store) {
+                        /*if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store === 'boolean' && route.store) {
                             for(i in data_return.entries) {
                                 if(data_return.entries.hasOwnProperty(i)) {
                                     store.set(data_return.entries_entity + '_' + data_return.entries[i].id, data_return.entries[i]);
@@ -331,7 +331,7 @@ function loadRoute(key, parameters) {
                             }
                         }*/
 
-                        if(typeof data_return.unread != 'undefined') {
+                        if(typeof data_return.unread !== 'undefined') {
                             if(data_return.unread > 0) {
                                 if(data_return.unread > 99) {
                                     badge = '99+';
@@ -347,18 +347,18 @@ function loadRoute(key, parameters) {
                         }
 
                         if(route.view) {
-                            if(typeof data_return.entry == 'object' && typeof data_return.entry_entity == 'string') {
-                                if(typeof data_return.entry.title == 'string') {
+                            if(typeof data_return.entry === 'object' && typeof data_return.entry_entity === 'string') {
+                                if(typeof data_return.entry.title === 'string') {
                                     window.document.title = data_return.entry.title + ' (' + $.i18n._(data_return.entry_entity) + ')';
                                 }
                             }
 
-                            if(!parameters.page || parameters.page == 1) {
+                            if(!parameters.page || parameters.page === 1) {
                                 var template = getTemplate(route.view);
                                 $('main > .mdl-grid').html(template(data_return));
                             }
 
-                            if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.view_unit == 'string') {
+                            if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.view_unit === 'string') {
                                 var template_unit = getTemplate(route.view_unit);
 
                                 for(i in data_return.entries) {
@@ -406,21 +406,21 @@ function loadRoute(key, parameters) {
                                 parameters.link.addClass(data_return.action);
                                 parameters.link.removeClass(data_return.action_reverse);
                             }
-                            if(typeof data_return.entry == 'object' && typeof data_return.action == 'string') {
+                            if(typeof data_return.entry === 'object' && typeof data_return.action === 'string') {
                                 if(parameters.snackbar) {
                                     setSnackbar($.i18n._(data_return.action) + ' ' + data_return.entry.title);
                                 }
                             }
-                            /*if(data_return.entry_entity == 'Item' && data_return.action == 'read') {
+                            /*if(data_return.entry_entity === 'Item' && data_return.action === 'read') {
                                 store.remove(data_return.entry_entity + '_' + data_return.entry.id);
                             }*/
                         }
 
-                        if(route.query == '/test') {
+                        if(route.query === '/test') {
                             loadRoute('#items/unread');
                         }
 
-                        if(route.query == '/logout') {
+                        if(route.query === '/logout') {
                             store.remove('connection');
                             $('body').removeClass('connected');
                             $('body').addClass('anonymous');
@@ -548,7 +548,7 @@ $(document).ready(function() {
     });
 
     window.addEventListener('popstate', function() {
-        if(lastHistory != window.location.hash) {
+        if(lastHistory !== window.location.hash) {
             loadRoute(window.location.hash);
         }
     });
@@ -593,7 +593,7 @@ $(document).ready(function() {
 
     $(document).on('click', 'dialog .close', function(event) {
         if($(this).hasClass('load-route')) {
-        } else if($(this).attr('target') == '_blank') {
+        } else if($(this).attr('target') === '_blank') {
         } else {
             event.preventDefault();
         }
@@ -688,7 +688,7 @@ $(document).ready(function() {
         if(form.hasClass('share-form')) {
             var choice = form.find('input[type="radio"]:checked').val();
             if(choice) {
-                if(choice.indexOf('mailto:') != -1) {
+                if(choice.indexOf('mailto:') !== -1) {
                     window.location.href = choice;
                 } else {
                     window.open(choice, 'share');
@@ -696,12 +696,12 @@ $(document).ready(function() {
             }
 
 
-        } else if(typeof id != 'undefined' && id.indexOf('form-search-') != -1) {
+        } else if(typeof id !== 'undefined' && id.indexOf('form-search-') !== -1) {
             loadRoute(form.attr('action'), {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
 
         } else if(form.data('query')) {
 
-            if(window.FormData && form.attr('enctype') == 'multipart/form-data') {
+            if(window.FormData && form.attr('enctype') === 'multipart/form-data') {
                 contentType = false;
                 data = new FormData();
                 var file = document.getElementById('file');
@@ -733,7 +733,7 @@ $(document).ready(function() {
                                 setSnackbar($.i18n._(form.attr('method')) + ' ' + data_return.entry.title);
                             }
                         }
-                        if(form.data('query') == '/login') {
+                        if(form.data('query') === '/login') {
                             store.set('connection', data_return.entry);
                             connectionData = explainConnection(data_return.entry);
 
@@ -771,7 +771,7 @@ $(document).ready(function() {
 
                 /*if($(this).hasClass('item')) {
                     var last = $('main > .mdl-grid').find('.item:last').attr('id');
-                    if(last == itm_id) {
+                    if(last === itm_id) {
                         add_items( $('.mdl-navigation').find('li.active').find('a.mdl-navigation__link').attr('href') );
                     }
                 }*/
@@ -782,7 +782,7 @@ $(document).ready(function() {
                         actionMore(ref.find('.more'));
                     }
 
-                    if($(this).hasClass('item') && $('body').hasClass('connected')) {// && items_display == 'expand'
+                    if($(this).hasClass('item') && $('body').hasClass('connected')) {// && items_display === 'expand'
                         actionRead(ref.find('.action-read'));
                     }
                     return true;
