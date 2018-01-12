@@ -27,7 +27,7 @@ class PushController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -68,7 +68,7 @@ class PushController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
-        if(!$this->validateToken($request)) {
+        if(!$validateToken = $this->validateToken($request)) {
             $data['error'] = true;
             return new JsonResponse($data, 403);
         }
@@ -98,7 +98,7 @@ class PushController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
-        if(!$this->validateToken($request)) {
+        if(!$validateToken = $this->validateToken($request)) {
             $data['error'] = true;
             return new JsonResponse($data, 403);
         }
@@ -113,8 +113,7 @@ class PushController extends AbstractController
         $push->setAuthenticationSecret($request->request->get('authentication_secret'));
         $push->setIp($request->getClientIp());
         $push->setAgent($request->server->get('HTTP_USER_AGENT'));
-
-        $this->memberManager->pushManager->persist($push);
+        $push_id = $this->memberManager->pushManager->persist($push);
 
         $data['entry'] = $push->toArray();
         $data['entry_entity'] = 'push';
@@ -135,7 +134,7 @@ class PushController extends AbstractController
     public function deleteAction(Request $request, $id)
     {
         $data = [];
-        if(!$this->validateToken($request)) {
+        if(!$validateToken = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 

@@ -55,6 +55,7 @@ class CategoryController extends AbstractController
                 }
                 $data['entries'][$row['ref']] = ['count' => $row['count'], 'id' => $row['id']];
             }
+            //ksort($data['entries']);
 
             foreach($data['entries'] as $k => $v) {
                 $percent = ($v['count'] * 100) / $max;
@@ -148,7 +149,7 @@ class CategoryController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -185,7 +186,9 @@ class CategoryController extends AbstractController
     public function readAction(Request $request, $id)
     {
         $data = [];
-        $memberConnected = $this->validateToken($request);
+        if(!$memberConnected = $this->validateToken($request)) {
+            //return new JsonResponse($data, 403);
+        }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
@@ -217,7 +220,7 @@ class CategoryController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
-        if(!$this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 

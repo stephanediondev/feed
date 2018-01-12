@@ -158,7 +158,7 @@ class FeedController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -254,7 +254,7 @@ class FeedController extends AbstractController
     public function updateAction(Request $request, $id)
     {
         $data = [];
-        if(!$this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 

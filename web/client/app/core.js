@@ -25,7 +25,7 @@ if(window.location.port) {
     var apiUrl = '//' + window.location.hostname + window.location.pathname;
 }
 apiUrl = apiUrl.replace('index.html', '');
-if(window.location.hostname === 'localhost') {
+if(window.location.hostname === 'local.sdion.net') {
     apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
 } else {
     apiUrl = apiUrl.replace('client/', 'api');

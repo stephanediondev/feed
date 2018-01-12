@@ -23,7 +23,7 @@ class ConnectionController extends AbstractController
     public function createAction(Request $request)
     {
         $data = [];
-        if(!$this->validateToken($request)) {
+        if(!$memberConnected = $this->validateToken($request)) {
             return new JsonResponse($data, 403);
         }
 
@@ -84,8 +84,7 @@ class ConnectionController extends AbstractController
 
         $connection->setIp($request->getClientIp());
         $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
-
-        $this->memberManager->connectionManager->persist($connection);
+        $connection_id = $this->memberManager->connectionManager->persist($connection);
 
         $data['entry'] = $connection->toArray();
         $data['entry_entity'] = 'connection';

@@ -1,10 +1,6 @@
 <?php
 namespace Readerself\CoreBundle\Manager;
 
-use Readerself\CoreBundle\Entity\Item;
-
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -47,22 +43,7 @@ abstract class AbstractManager
 
     public function count($table)
     {
-        switch($table) {
-            case 'author':
-                $sql = 'SELECT COUNT(id) AS count FROM author';
-                break;
-            case 'category':
-                $sql = 'SELECT COUNT(id) AS count FROM category';
-                break;
-            case 'feed':
-                $sql = 'SELECT COUNT(id) AS count FROM feed';
-                break;
-            case 'item':
-                $sql = 'SELECT COUNT(id) AS count FROM item';
-                break;
-            default:
-                return false;
-        }
+        $sql = 'SELECT COUNT(id) AS count FROM '.$table;
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch();
@@ -71,7 +52,7 @@ abstract class AbstractManager
 
     public function insert($table, $fields)
     {
-        $sql = 'INSERT INTO `'.$table.'` ('.implode(', ', array_keys($fields)).') VALUES ('.implode(', ', array_map(function($n) {return ':'.$n;}, array_keys($fields))).')';
+        $sql = 'INSERT INTO '.$table.' ('.implode(', ', array_keys($fields)).') VALUES ('.implode(', ', array_map(function($n) {return ':'.$n;}, array_keys($fields))).')';
         $stmt = $this->connection->prepare($sql);
         foreach($fields as $k => $v) {
             $stmt->bindValue($k, $v);
@@ -82,16 +63,7 @@ abstract class AbstractManager
 
     public function update($table, $fields, $id)
     {
-        switch($table) {
-            case 'feed':
-                $sql = 'UPDATE feed SET title = :title, website= :website, link = :link, hostname = :hostname, description = :description, language = :language, next_collection = :next_collection, date_modified = :date_modified WHERE id = :id';
-                break;
-            case 'push':
-                $sql = 'UPDATE push SET item_id = :item_id, date_modified = :date_modified WHERE id = :id';
-                break;
-            default:
-                return false;
-        }
+        $sql = 'UPDATE '.$table.' SET '.implode(', ', array_map(function($n) {return $n.' = :'.$n;}, array_keys($fields))).' WHERE id = :id';
         $stmt = $this->connection->prepare($sql);
         foreach($fields as $k => $v) {
             $stmt->bindValue($k, $v);
@@ -121,7 +93,7 @@ abstract class AbstractManager
         return $category_id;
     }
 
-    public function prepareEnclosures(Item $item, Request $request) {
+    function prepareEnclosures($item, $request) {
         $enclosures = [];
         $index_enclosures = 0;
         foreach($this->em->getRepository('ReaderselfCoreBundle:Enclosure')->getList(['item' => $item])->getResult() as $enclosure) {

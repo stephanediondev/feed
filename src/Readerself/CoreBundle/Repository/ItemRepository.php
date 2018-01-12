@@ -81,6 +81,12 @@ class ItemRepository extends AbstractRepository
                     $query->setParameter(':member', $parameters['member']);
                     $memberSet = true;
                 }
+
+                /*$query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItemMember AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
+                if(!$memberSet) {
+                    $query->setParameter(':member', $parameters['member']);
+                    $memberSet = true;
+                }*/
             }
 
             if(isset($parameters['starred']) == 1 && $parameters['starred']) {
@@ -90,6 +96,12 @@ class ItemRepository extends AbstractRepository
                     $query->setParameter(':member', $parameters['member']);
                     $memberSet = true;
                 }
+
+                /*$query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM ReaderselfCoreBundle:ActionItemMember AS starred WHERE starred.member = :member AND starred.action = 2)');
+                if(!$memberSet) {
+                    $query->setParameter(':member', $parameters['member']);
+                    $memberSet = true;
+                }*/
             }
         }
 
@@ -107,6 +119,10 @@ class ItemRepository extends AbstractRepository
             $query->andWhere('itm.date < :date');
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }
+
+        //$query->leftJoin('itm.enclosures', 'enr');
+        //$query->andWhere('enr.type = \'application/pdf\'');
+        //$query->andWhere('(enr.type LIKE \'video%\' OR enr.type LIKE \'audio%\' OR enr.type LIKE \'image%\')');
 
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('itm.id');

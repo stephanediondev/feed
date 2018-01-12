@@ -19,12 +19,12 @@ class CollectionFeedManager extends AbstractManager
 
     public function init()
     {
-        return new CollectionFeed();
+        return new ActionItem();
     }
 
     public function persist($data)
     {
-        if($data->getDateCreated() === null) {
+        if($data->getDateCreated() == null) {
             $mode = 'insert';
             $data->setDateCreated(new \Datetime());
         } else {

@@ -100,6 +100,9 @@ class SearchController extends AbstractController
     private function getResults(Request $request, $type)
     {
         $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            //return new JsonResponse($data, 403);
+        }
 
         $sortFields = ['date.sort', '_score', 'title.sort'];
         $sortDirection = ['asc', 'desc'];
@@ -164,6 +167,26 @@ class SearchController extends AbstractController
                     ],
                 ];
             }
+
+            /*if(!$parameters->get('page')->getAttribute('all_languages')) {
+                $body['filter'] = array(
+                    'term' => array(
+                        'feed.language' => 'en',
+                    ),
+                );
+            }*/
+
+            /*if($request->query->get('date_from') && $request->query->get('date_to')) {
+                $body['filter'] = array(
+                    'range' => array(
+                        'date.sort' => array(
+                            'gte' => $request->query->get('date_from'),
+                            'lte' => $request->query->get('date_to'),
+                            'format' => 'YYYY-MM-DD',
+                        ),
+                    ),
+                );
+            }*/
 
             $result = $this->searchManager->query('GET', $path, $body);
 

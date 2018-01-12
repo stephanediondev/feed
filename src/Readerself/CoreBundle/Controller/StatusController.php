@@ -39,14 +39,7 @@ class StatusController extends AbstractController
             $data['types'][$type]['database'] = $this->searchManager->count($type);
         }
 
-        $data['_server'] = [
-            'SERVER_ADDR' => $request->server->get('SERVER_ADDR'),
-            'HTTP_HOST' => $request->server->get('HTTP_HOST'),
-            'HTTPS' => $request->server->get('HTTPS'),
-            'SERVER_ADDR' => $request->server->get('SERVER_ADDR'),
-            'SERVER_SOFTWARE' => $request->server->get('SERVER_SOFTWARE'),
-            'DOCUMENT_ROOT' => $request->server->get('DOCUMENT_ROOT'),
-        ];
+        $data['_server'] = $_SERVER;
 
         $data['function'] = [];
         $data['function']['phpversion'] = phpversion();

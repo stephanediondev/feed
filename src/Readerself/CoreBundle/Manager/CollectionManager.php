@@ -281,6 +281,7 @@ class CollectionManager extends AbstractManager
     {
         foreach($items as $sp_item) {
             $link = $this->cleanLink($sp_item->get_link());
+            $link = str_replace('http://www.lesnumeriques.com', 'https://www.lesnumeriques.com', $link);
 
             $sql = 'SELECT id FROM item WHERE link = :link';
             $stmt = $this->connection->prepare($sql);
