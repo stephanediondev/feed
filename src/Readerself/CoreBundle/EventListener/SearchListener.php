@@ -26,14 +26,14 @@ class SearchListener
     public function removeAuthor(AuthorEvent $authorEvent)
     {
         $action = 'DELETE';
-        $path = '/'.$this->searchManager->getIndex().'_author/'.$authorEvent->getdata()->getId();
+        $path = '/'.$this->searchManager->getIndex().'_author/doc/'.$authorEvent->getdata()->getId();
         $this->searchManager->query($action, $path);
     }
 
     public function removeCategory(CategoryEvent $categoryEvent)
     {
         $action = 'DELETE';
-        $path = '/'.$this->searchManager->getIndex().'_category/'.$categoryEvent->getdata()->getId();
+        $path = '/'.$this->searchManager->getIndex().'_category/doc/'.$categoryEvent->getdata()->getId();
         $this->searchManager->query($action, $path);
     }
 
@@ -45,19 +45,19 @@ class SearchListener
         $parameters['sortDirection'] = 'ASC';
         foreach($this->itemManager->getList($parameters)->getResult() as $item) {
             $action = 'DELETE';
-            $path = '/'.$this->searchManager->getIndex().'_item/'.$item['id'];
+            $path = '/'.$this->searchManager->getIndex().'_item/doc/'.$item['id'];
             $this->searchManager->query($action, $path);
         }
 
         $action = 'DELETE';
-        $path = '/'.$this->searchManager->getIndex().'_feed/'.$feedEvent->getdata()->getId();
+        $path = '/'.$this->searchManager->getIndex().'_feed/doc/'.$feedEvent->getdata()->getId();
         $this->searchManager->query($action, $path);
     }
 
     public function removeItem(ItemEvent $itemEvent)
     {
         $action = 'DELETE';
-        $path = '/'.$this->searchManager->getIndex().'_item/'.$itemEvent->getdata()->getId();
+        $path = '/'.$this->searchManager->getIndex().'_item/doc/'.$itemEvent->getdata()->getId();
         $this->searchManager->query($action, $path);
     }
 }

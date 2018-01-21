@@ -311,17 +311,18 @@ class SearchManager extends AbstractManager
             $path = '/'.$this->getIndex();
             $result = $this->query('DELETE', $path);
 
-            $path = '/'.$this->getIndex().'_feed';
-            $result = $this->query('DELETE', $path);
+            $types = ['author', 'category', 'feed', 'item'];
+            foreach($types as $type) {
+                $path = '/'.$this->getIndex().'_'.$type;
+                $result = $this->query('DELETE', $path);
 
-            $path = '/'.$this->getIndex().'_category';
-            $result = $this->query('DELETE', $path);
-
-            $path = '/'.$this->getIndex().'_author';
-            $result = $this->query('DELETE', $path);
-
-            $path = '/'.$this->getIndex().'_item';
-            $result = $this->query('DELETE', $path);
+                if('feed' !== $type) {
+                    $sql = 'DELETE FROM action_'.$type.' WHERE action_id = :action_id';
+                    $stmt = $this->connection->prepare($sql);
+                    $stmt->bindValue('action_id', 11);
+                    $stmt->execute();
+                }
+            }
         }
     }
 }
