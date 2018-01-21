@@ -575,20 +575,29 @@ $(document).ready(function() {
     $(document).on('click', '.dialog', function(event) {
         event.preventDefault();
 
-        var id = $(this).attr('id');
+        if($(this).hasClass('action-share') && 'share' in navigator) {
+            navigator.share({
+                title: decodeURIComponent($(this).data('title')),
+                url: decodeURIComponent($(this).data('url'))
+            }).then(function() {
+            });
 
-        if($('body > dialog[for="' + id + '"]').length === 0) {
-            var html = $('dialog[for="' + id + '"]')[0].outerHTML;
-            $('dialog[for="' + id + '"]').remove();
-            $('body').append(html);
+        } else {
+            var id = $(this).attr('id');
+
+            if($('body > dialog[for="' + id + '"]').length === 0) {
+                var html = $('dialog[for="' + id + '"]')[0].outerHTML;
+                $('dialog[for="' + id + '"]').remove();
+                $('body').append(html);
+            }
+
+            var dialog = document.querySelector('dialog[for="' + id + '"]');
+
+            if(!dialog.showModal) {
+                dialogPolyfill.registerDialog(dialog);
+            }
+            dialog.showModal();
         }
-
-        var dialog = document.querySelector('dialog[for="' + id + '"]');
-
-        if(!dialog.showModal) {
-            dialogPolyfill.registerDialog(dialog);
-        }
-        dialog.showModal();
     });
 
     $(document).on('click', 'dialog .close', function(event) {
@@ -664,11 +673,6 @@ $(document).ready(function() {
     $(document).on('click', '.action-down', function(event) {
         event.preventDefault();
         item_down();
-    });
-
-    $(document).on('click', '.action-top', function(event) {
-        event.preventDefault();
-        scrollTo('#top');
     });
 
     $(document).on('click', '.more', function(event) {

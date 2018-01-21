@@ -157,7 +157,7 @@ class CollectionManager extends AbstractManager
                     $updateFeed['website'] = $this->cleanWebsite($result['link']);
                     $updateFeed['link'] = $this->cleanLink($result['link']);
                     $updateFeed['hostname'] = isset($parse_url['host']) ? $parse_url['host'] : null;
-                    $updateFeed['description'] = $result['about'];
+                    $updateFeed['description'] = isset($result['about']) ? $result['about'] : null;
 
                     $updateFeed['language'] = null;
 
@@ -408,7 +408,7 @@ class CollectionManager extends AbstractManager
                 $insertItem['content'] = '-';
             }
 
-            if(isset($sp_item['place'])) {
+            if(isset($sp_item['place']) && isset($sp_item['place']['location'])) {
                 if($sp_item['place']['location']['latitude'] && $sp_item['place']['location']['longitude']) {
                     $insertItem['latitude'] = $sp_item['place']['location']['latitude'];
                     $insertItem['longitude'] = $sp_item['place']['location']['longitude'];

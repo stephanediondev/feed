@@ -1,3 +1,9 @@
+body {
+    overscroll-behavior-y: none;
+}
+.mdl-layout__content, .mdl-layout__drawer {
+    overscroll-behavior: contain;
+}
 .mdl-layout__header {
     min-height: inherit;
 }

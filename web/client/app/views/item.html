@@ -123,7 +123,7 @@
                 <a href="#item/action/star/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect action-star connected" title="s">{{trans 'star'}}</a>
             {{/if}}
 
-            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog action-share" id="dialog-share-{{ entry.id }}" title="{{trans 'shortcut_shift_s'}}">{{trans 'share'}}</button>
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog action-share" data-title="{{ encode entry.title }}" data-url="{{ encode entry.link }}" id="dialog-share-{{ entry.id }}" title="{{trans 'shortcut_shift_s'}}">{{trans 'share'}}</button>
             <dialog class="mdl-dialog" for="dialog-share-{{ entry.id }}">
                 <form action="" method="GET" class="share-form">
                     <div class="mdl-dialog__content">
@@ -139,7 +139,7 @@
                         <p>
                             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="share-{{ entry.id }}-evernote">
                                 <input type="radio" id="share-{{ entry.id }}-evernote" class="mdl-radio__button" name="share-{{ entry.id }}" value="https://www.evernote.com/clip.action?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
-                                <span class="mdl-radio__label">Evernote (clip)</a>
+                                <span class="mdl-radio__label">Evernote</a>
                             </label>
                         </p>
                         <p>
