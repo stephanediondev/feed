@@ -38,7 +38,7 @@ class SearchManager extends AbstractManager
     public function start()
     {
         if($this->getEnabled()) {
-            $this->init();
+            //$this->init();
 
             //feeds
             $sql = 'SELECT fed.* FROM feed AS fed';
@@ -47,9 +47,9 @@ class SearchManager extends AbstractManager
             $results = $stmt->fetchAll();
 
             foreach($results as $result) {
-                $action = 'PUT';
+                $action = 'POST';
 
-                $path = '/'.$this->getIndex().'/feed/'.$result['id'];
+                $path = '/'.$this->getIndex().'_feed/doc/'.$result['id'];
 
                 $body = [
                     'title' => $result['title'],
@@ -71,9 +71,9 @@ class SearchManager extends AbstractManager
             $results = $stmt->fetchAll();
 
             foreach($results as $result) {
-                $action = 'PUT';
+                $action = 'POST';
 
-                $path = '/'.$this->getIndex().'/category/'.$result['id'];
+                $path = '/'.$this->getIndex().'_category/doc/'.$result['id'];
 
                 $body = [
                     'title' => $result['title'],
@@ -99,9 +99,9 @@ class SearchManager extends AbstractManager
             $results = $stmt->fetchAll();
 
             foreach($results as $result) {
-                $action = 'PUT';
+                $action = 'POST';
 
-                $path = '/'.$this->getIndex().'/author/'.$result['id'];
+                $path = '/'.$this->getIndex().'_author/doc/'.$result['id'];
 
                 $body = [
                     'title' => $result['title'],
@@ -129,9 +129,9 @@ class SearchManager extends AbstractManager
             $results = $stmt->fetchAll();
 
             foreach($results as $result) {
-                $action = 'PUT';
+                $action = 'POST';
 
-                $path = '/'.$this->getIndex().'/item/'.$result['id'];
+                $path = '/'.$this->getIndex().'_item/doc/'.$result['id'];
 
                 $body = [
                     'feed' => [
@@ -167,38 +167,49 @@ class SearchManager extends AbstractManager
             $path = $this->getUrl().$path;
 
             $ci = curl_init();
+            curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 5);
             curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ci, CURLOPT_CUSTOMREQUEST, $action);
             curl_setopt($ci, CURLOPT_URL, $path);
+            curl_setopt($ci, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
             if($body) {
                 curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($body));
             }
-            $result = json_decode(curl_exec($ci), true);
-            if($action == 'HEAD') {
-                $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
+            $exec = curl_exec($ci);
+            if(false === $exec) {
+                return curl_error($ci);
+            } else {
+                $result = json_decode($exec, true);
+                if($action == 'HEAD') {
+                    $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
+                }
+                //print_r($result);
+                return $result;
             }
-            //echo $path."\r\n";echo json_encode($body)."\r\n\r\n";
-            return $result;
         }
     }
 
     public function init()
     {
         if($this->getEnabled()) {
-            $path = '/'.$this->getIndex();
-            $result = $this->query('HEAD', $path);
+            $path = '/'.$this->getIndex().'_feed';
+            $result = $this->query('PUT', $path);
 
-            if($result == 404) {
-                $path = '/'.$this->getIndex();
-                $result = $this->query('PUT', $path);
-            }
+            $path = '/'.$this->getIndex().'_category';
+            $result = $this->query('PUT', $path);
 
-            $path = '/'.$this->getIndex().'/_mapping/category';
+            $path = '/'.$this->getIndex().'_author';
+            $result = $this->query('PUT', $path);
+
+            $path = '/'.$this->getIndex().'_item';
+            $result = $this->query('PUT', $path);
+
+            $path = '/'.$this->getIndex().'_category/_mapping/doc';
             $body = [
-                'category' => [
+                'doc' => [
                     'properties' => [
                         'title' => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         'date_created' => [
                             'type' => 'date',
@@ -209,12 +220,12 @@ class SearchManager extends AbstractManager
             ];
             $result = $this->query('PUT', $path, $body);
 
-            $path = '/'.$this->getIndex().'/_mapping/author';
+            $path = '/'.$this->getIndex().'_author/_mapping/doc';
             $body = [
-                'author' => [
+                'doc' => [
                     'properties' => [
                         'title' => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         'date_created' => [
                             'type' => 'date',
@@ -225,9 +236,9 @@ class SearchManager extends AbstractManager
             ];
             $result = $this->query('PUT', $path, $body);
 
-            $path = '/'.$this->getIndex().'/_mapping/item';
+            $path = '/'.$this->getIndex().'_item/_mapping/doc';
             $body = [
-                'item' => [
+                'doc' => [
                     'properties' => [
                         'feed' => [
                             'properties' => [
@@ -235,12 +246,10 @@ class SearchManager extends AbstractManager
                                     'type' => 'integer',
                                 ],
                                 'title' => [
-                                    'type' => 'string',
-                                    'index' => 'not_analyzed',
+                                    'type' => 'text',
                                 ],
                                 'language' => [
-                                    'type' => 'string',
-                                    'index' => 'not_analyzed',
+                                    'type' => 'text',
                                 ],
                             ],
                         ],
@@ -250,16 +259,15 @@ class SearchManager extends AbstractManager
                                     'type' => 'integer',
                                 ],
                                 'title' => [
-                                    'type' => 'string',
-                                    'index' => 'not_analyzed',
+                                    'type' => 'text',
                                 ],
                             ],
                         ],
                         'title' => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         'content' => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         'date' => [
                             'type' => 'date',
@@ -270,23 +278,21 @@ class SearchManager extends AbstractManager
             ];
             $result = $this->query('PUT', $path, $body);
 
-            $path = '/'.$this->getIndex().'/_mapping/feed';
+            $path = '/'.$this->getIndex().'_feed/_mapping/doc';
             $body = [
-                'feed' => [
+                'doc' => [
                     'properties' => [
                         'title' => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         'description' => [
-                            'type' => 'string',
+                            'type' => 'text',
                         ],
                         'website' => [
-                            'type' => 'string',
-                            'index' => 'not_analyzed',
+                            'type' => 'text',
                         ],
                         'language' => [
-                            'type' => 'string',
-                            'index' => 'not_analyzed',
+                            'type' => 'text',
                         ],
                         'date_created' => [
                             'type' => 'date',
@@ -303,6 +309,18 @@ class SearchManager extends AbstractManager
     {
         if($this->getEnabled()) {
             $path = '/'.$this->getIndex();
+            $result = $this->query('DELETE', $path);
+
+            $path = '/'.$this->getIndex().'_feed';
+            $result = $this->query('DELETE', $path);
+
+            $path = '/'.$this->getIndex().'_category';
+            $result = $this->query('DELETE', $path);
+
+            $path = '/'.$this->getIndex().'_author';
+            $result = $this->query('DELETE', $path);
+
+            $path = '/'.$this->getIndex().'_item';
             $result = $this->query('DELETE', $path);
         }
     }

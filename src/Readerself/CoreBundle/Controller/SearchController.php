@@ -123,7 +123,7 @@ class SearchController extends AbstractController
 
             $size = 20;
             $from = ($size * $page) - 20;
-            $path = '/'.$this->searchManager->getIndex().'/_search?size='.intval($size).'&type='.$type.'&from='.intval($from);
+            $path = '/'.$this->searchManager->getIndex().'_'.$type.'/_search?size='.intval($size).'&type=doc&from='.intval($from);
 
             $body = [];
             $body['sort'] = [

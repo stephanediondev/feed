@@ -336,44 +336,6 @@
     </div>
 
     {{#if search.enabled }}
-        {{#if search.stats.indices }}
-            {{#each search.stats.indices as |indice indice_index|}}
-                <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-node-{{ node.name }}">
-                    <div class="mdl-card__title">
-                        <h1 class="mdl-card__title-text">
-                            Index (Elastic Search)
-                        </h1>
-                    </div>
-                    <div class="mdl-card__supporting-text">
-                        <p>
-                            <span class="label">name</span>
-                            {{ indice_index }}
-                        </p>
-                        <p>
-                            <span class="label">total.store.size_in_bytes</span>
-                            {{ indice.total.store.size_in_bytes }}
-                        </p>
-                        <p>
-                            <span class="label">total.docs.count</span>
-                            {{ indice.total.docs.count }}
-                        </p>
-                        <p>
-                            <span class="label">total.docs.deleted</span>
-                            {{ indice.total.docs.deleted }}
-                        </p>
-                        <p>
-                            <span class="label">total.search.query_total</span>
-                            {{ indice.total.search.query_total }}
-                        </p>
-                        <p>
-                            <span class="label">total.search.fetch_total</span>
-                            {{ indice.total.search.fetch_total }}
-                        </p>
-                    </div>
-                </div>
-            {{/each}}
-        {{/if}}
-
         <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="search-cluster">
             <div class="mdl-card__title">
                 <h1 class="mdl-card__title-text">

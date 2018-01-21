@@ -73,17 +73,11 @@ class StatusController extends AbstractController
             $data['search']['enabled'] = true;
 
             foreach($types as $type) {
-                $path = '/'.$this->searchManager->getIndex().'/'.$type.'/_count';
+                $path = '/'.$this->searchManager->getIndex().'_'.$type.'/_count';
                 $result = $this->searchManager->query('GET', $path);
                 if(isset($result->error) == 0) {
                     $data['types'][$type]['elastic_search'] = $result['count'];
                 }
-            }
-
-            $path = '/'.$this->searchManager->getIndex().'/_stats';
-            $result = $this->searchManager->query('GET', $path);
-            if(isset($result->error) == 0) {
-                $data['search']['stats'] = $result;
             }
 
             $path = '/_cluster/health';
