@@ -25,6 +25,7 @@ class AuthorController extends AbstractController
      *         {"name"="page", "dataType"="integer", "required"=false, "format"="default ""1""", "description"="page number"},
      *         {"name"="perPage", "dataType"="integer", "required"=false, "format"="default ""100""", "description"="authors per page"},
      *         {"name"="recent", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="recent authors"},
+     *         {"name"="excluded", "dataType"="integer", "required"=false, "format"="1 or 0", "description"="excluded authors"},
      *         {"name"="feed", "dataType"="integer", "required"=false, "format"="feed ID", "description"="authors by feed"},
      *     },
      * )
@@ -64,6 +65,14 @@ class AuthorController extends AbstractController
             }
 
         } else {
+            if($request->query->get('excluded')) {
+                if(!$memberConnected) {
+                    return new JsonResponse($data, 403);
+                }
+                $parameters['excluded'] = true;
+                $parameters['member'] = $memberConnected;
+            }
+
             if($request->query->get('feed')) {
                 $parameters['feed'] = (int) $request->query->get('feed');
                 $data['entry'] = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])->toArray();
@@ -114,8 +123,12 @@ class AuthorController extends AbstractController
             $index = 0;
             foreach($pagination as $result) {
                 $author = $this->authorManager->getOne(['id' => $result['id']]);
+                $actions = $this->get('readerself_core_manager_action')->actionAuthorMemberManager->getList(['member' => $memberConnected, 'author' => $author])->getResult();
 
                 $data['entries'][$index] = $author->toArray();
+                foreach($actions as $action) {
+                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                }
                 $index++;
             }
         }
@@ -251,6 +264,88 @@ class AuthorController extends AbstractController
         $data['entry_entity'] = 'author';
 
         $this->authorManager->remove($author);
+
+        return new JsonResponse($data);
+    }
+
+    /**
+     * Set "exclude" action / Remove "exclude" action.
+     *
+     * @ApiDoc(
+     *     section="Author",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"=true},
+     *     },
+     * )
+     */
+    public function actionExcludeAction(Request $request, $id)
+    {
+        return $this->setAction('exclude', $request, $id);
+    }
+
+    private function setAction($case, Request $request, $id)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $author = $this->authorManager->getOne(['id' => $id]);
+
+        if(!$author) {
+            return new JsonResponse($data, 404);
+        }
+
+        $action = $this->actionManager->getOne(['title' => $case]);
+
+        if($actionAuthorMember = $this->actionManager->actionAuthorMemberManager->getOne([
+            'action' => $action,
+            'author' => $author,
+            'member' => $memberConnected,
+        ])) {
+            $this->actionManager->actionAuthorMemberManager->remove($actionAuthorMember);
+
+            $data['action'] = $action->getReverse()->getTitle();
+            $data['action_reverse'] = $action->getTitle();
+
+            if($action->getReverse()) {
+                if($actionAuthorMemberReverse = $this->actionManager->actionAuthorMemberManager->getOne([
+                    'action' => $action->getReverse(),
+                    'author' => $author,
+                    'member' => $memberConnected,
+                ])) {
+                } else {
+                    $actionAuthorMemberReverse = $this->actionManager->actionAuthorMemberManager->init();
+                    $actionAuthorMemberReverse->setAction($action->getReverse());
+                    $actionAuthorMemberReverse->setAuthor($author);
+                    $actionAuthorMemberReverse->setMember($memberConnected);
+                    $this->actionManager->actionAuthorMemberManager->persist($actionAuthorMemberReverse);
+                }
+            }
+
+        } else {
+            $actionAuthorMember = $this->actionManager->actionAuthorMemberManager->init();
+            $actionAuthorMember->setAction($action);
+            $actionAuthorMember->setAuthor($author);
+            $actionAuthorMember->setMember($memberConnected);
+            $this->actionManager->actionAuthorMemberManager->persist($actionAuthorMember);
+
+            $data['action'] = $action->getTitle();
+            $data['action_reverse'] = $action->getReverse()->getTitle();
+
+            if($action->getReverse()) {
+                if($actionAuthorMemberReverse = $this->actionManager->actionAuthorMemberManager->getOne([
+                    'action' => $action->getReverse(),
+                    'author' => $author,
+                    'member' => $memberConnected,
+                ])) {
+                    $this->actionManager->actionAuthorMemberManager->remove($actionAuthorMemberReverse);
+                }
+            }
+        }
+
+        $data['entry'] = $author->toArray();
+        $data['entry_entity'] = 'author';
 
         return new JsonResponse($data);
     }

@@ -49,7 +49,7 @@ SELECT LOWER(cat.title) AS ref, cat.id AS id, COUNT(DISTINCT(cat_itm.item_id)) A
 FROM item AS itm
 LEFT JOIN item_category AS cat_itm ON cat_itm.item_id = itm.id
 LEFT JOIN category AS cat ON cat.id = cat_itm.category_id
-WHERE itm.date >= :date_ref $exclude
+WHERE itm.date >= :date_ref AND cat.title != '' $exclude
 GROUP BY ref
 ORDER BY count DESC
 LIMIT 0,100

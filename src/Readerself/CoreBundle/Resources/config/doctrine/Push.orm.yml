@@ -9,10 +9,6 @@ Readerself\CoreBundle\Entity\Push:
         item_id:
             columns:
                 - item_id
-    uniqueConstraints:
-        endpoint:
-            columns:
-                - endpoint
     id:
         id:
             type: integer
@@ -24,9 +20,9 @@ Readerself\CoreBundle\Entity\Push:
                 strategy: IDENTITY
     fields:
         endpoint:
-            type: string
+            type: text
             nullable: false
-            length: 255
+            length: 65535
             options:
                 fixed: false
         publicKey:

@@ -36,6 +36,14 @@ readerself_api_authors:
         _controller: "readerself_core_controller_author:indexAction"
     methods: GET
 
+readerself_api_author_action_exclude:
+    path: /author/action/exclude/{id}
+    defaults:
+        _controller: "readerself_core_controller_author:actionExcludeAction"
+    requirements:
+        id: '\d+'
+    methods: GET
+
 readerself_api_search_authors:
     path: /authors/search
     defaults:

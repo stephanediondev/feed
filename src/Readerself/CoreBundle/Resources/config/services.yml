@@ -191,6 +191,7 @@ services:
             - "@readerself_core_manager_action_item_member"
             - "@readerself_core_manager_action_feed_member"
             - "@readerself_core_manager_action_category_member"
+            - "@readerself_core_manager_action_author_member"
 
     readerself_core_manager_action_item:
         class: Readerself\CoreBundle\Manager\ActionItemManager
@@ -209,6 +210,11 @@ services:
 
     readerself_core_manager_action_category_member:
         class: Readerself\CoreBundle\Manager\ActionCategoryMemberManager
+        parent: "readerself_core_manager_abstract"
+        public: true
+
+    readerself_core_manager_action_author_member:
+        class: Readerself\CoreBundle\Manager\ActionAuthorMemberManager
         parent: "readerself_core_manager_abstract"
         public: true
 

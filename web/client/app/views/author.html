@@ -21,6 +21,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#authors/trendy" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.trendy_authors'}}</a>
+            <a href="#authors/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_authors'}}</a>
             <a href="#authors/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_authors'}}</a>
         </div>
     </div>
@@ -35,6 +36,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#authors/trendy" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.trendy_authors'}}</a>
+            <a href="#authors/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_authors'}}</a>
             <a href="#authors/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_authors'}}</a>
         </div>
     </div>
@@ -68,6 +70,11 @@
         <div class="mdl-card__actions mdl-card--border">
             <a href="#items/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'title.items'}}</a>
             <a href="#feeds/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'title.feeds'}}</a>
+            {{#if entry.exclude }}
+                <a href="#author/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'include'}}</a>
+            {{else}}
+                <a href="#author/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'exclude'}}</a>
+            {{/if}}
         </div>
     </div>
 </script>
@@ -81,6 +88,7 @@
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <a href="#authors/trendy" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'button.trendy_authors'}}</a>
+            <a href="#authors/excluded" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected">{{trans 'button.excluded_authors'}}</a>
             <a href="#authors/search" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect online">{{trans 'button.search_authors'}}</a>
         </div>
     </div>
@@ -97,6 +105,11 @@
         <div class="mdl-card__actions mdl-card--border">
             <a href="#items/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'title.items'}}</a>
             <a href="#feeds/author/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'title.feeds'}}</a>
+            {{#if entry.exclude }}
+                <a href="#author/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'include'}}</a>
+            {{else}}
+                <a href="#author/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'exclude'}}</a>
+            {{/if}}
         </div>
     </div>
 </script>

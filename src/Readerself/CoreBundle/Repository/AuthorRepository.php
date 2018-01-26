@@ -38,11 +38,17 @@ class AuthorRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         if(isset($parameters['trendy']) == 1 && $parameters['trendy']) {
+            if(isset($parameters['member'])) {
+                $exclude = 'AND aut.id NOT IN( SELECT author_id FROM action_author_member WHERE member_id = :member_id AND action_id = :action_id )';
+            } else {
+                $exclude = '';
+            }
+
 $sql = <<<SQL
 SELECT LOWER(aut.title) AS ref, aut.id AS id, COUNT(DISTINCT(itm.id)) AS count
 FROM item AS itm
 LEFT JOIN author AS aut ON aut.id = itm.author_id
-WHERE itm.date >= :date_ref AND aut.title != ''
+WHERE itm.date >= :date_ref AND aut.title != '' $exclude
 GROUP BY ref
 ORDER BY count DESC
 LIMIT 0,100
@@ -52,6 +58,10 @@ SQL;
 
             $stmt = $em->getConnection()->prepare($sql);
             $stmt->bindValue('date_ref', $date_ref);
+            if(isset($parameters['member'])) {
+                $stmt->bindValue('member_id', $parameters['member']->getId());
+                $stmt->bindValue('action_id', 5);
+            }
             $stmt->execute();
             $results = $stmt->fetchAll();
 
@@ -61,6 +71,11 @@ SQL;
         $query = $em->createQueryBuilder();
         $query->addSelect('aut.id');
         $query->from('ReaderselfCoreBundle:Author', 'aut');
+
+        if(isset($parameters['excluded']) == 1 && $parameters['excluded']) {
+            $query->andWhere('aut.id IN (SELECT IDENTITY(excluded.author) FROM ReaderselfCoreBundle:ActionAuthorMember AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
+            $query->setParameter(':member', $parameters['member']);
+        }
 
         if(isset($parameters['feed']) == 1) {
             $query->andWhere('aut.id IN (SELECT IDENTITY(item.author) FROM ReaderselfCoreBundle:Item AS item WHERE item.feed = :feed)');

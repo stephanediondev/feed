@@ -109,6 +109,9 @@
     "title.trendy_authors": "Auteurs à la mode",
     "button.trendy_authors": "Tendances",
 
+    "title.excluded_authors": "Auteurs exclus",
+    "button.excluded_authors": "Exclus",
+
     "title.search_authors": "Recherche d'auteurs",
     "button.search_authors": "Recherche"
 }

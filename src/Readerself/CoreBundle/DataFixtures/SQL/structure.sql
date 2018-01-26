@@ -46,6 +46,21 @@ CREATE TABLE `action_author` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `action_author_member`
+--
+
+DROP TABLE IF EXISTS `action_author_member`;
+CREATE TABLE `action_author_member` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `action_id` int(10) UNSIGNED NOT NULL,
+  `author_id` int(10) UNSIGNED NOT NULL,
+  `member_id` int(10) UNSIGNED NOT NULL,
+  `date_created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `action_category`
 --
 
@@ -304,7 +319,7 @@ CREATE TABLE `push` (
   `id` int(10) UNSIGNED NOT NULL,
   `member_id` int(10) UNSIGNED NOT NULL,
   `item_id` int(10) UNSIGNED DEFAULT NULL,
-  `endpoint` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `endpoint` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `public_key` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `authentication_secret` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -333,6 +348,16 @@ ALTER TABLE `action_author`
   ADD UNIQUE KEY `action_id_author_id` (`action_id`,`author_id`),
   ADD KEY `author_id` (`author_id`),
   ADD KEY `action_id` (`action_id`);
+
+  --
+  -- Indexes for table `action_author_member`
+  --
+  ALTER TABLE `action_author_member`
+    ADD PRIMARY KEY (`id`),
+    ADD UNIQUE KEY `action_id_author_id_member_id` (`action_id`,`author_id`,`member_id`) USING BTREE,
+    ADD KEY `member_id` (`member_id`),
+    ADD KEY `author_id` (`author_id`),
+    ADD KEY `action_id` (`action_id`);
 
 --
 -- Indexes for table `action_category`
@@ -475,7 +500,6 @@ ALTER TABLE `member`
 --
 ALTER TABLE `push`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `endpoint` (`endpoint`),
   ADD KEY `member_id` (`member_id`),
   ADD KEY `item_id` (`item_id`);
 
@@ -492,6 +516,11 @@ ALTER TABLE `action`
 -- AUTO_INCREMENT for table `action_author`
 --
 ALTER TABLE `action_author`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `action_author_member`
+--
+ALTER TABLE `action_author_member`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `action_category`
@@ -594,6 +623,14 @@ ALTER TABLE `action`
 ALTER TABLE `action_author`
   ADD CONSTRAINT `FK_7F9FE9A39D32F035` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_7F9FE9A3F675F31B` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `action_author_member`
+--
+ALTER TABLE `action_author_member`
+  ADD CONSTRAINT `FK_1C1E667412469DE3` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_1C1E66747597D3FF` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_1C1E66749D32F036` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `action_category`

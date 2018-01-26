@@ -64,9 +64,12 @@ routes['#category/{id}'] = {view: 'view-category-read', query: '/category/{id}'}
 
 //Author
 routes['#authors/trendy'] = {view: 'view-authors-trendy', query: '/authors?trendy=1', title: 'title.trendy_authors'};
+routes['#authors/excluded'] = {view: 'view-authors', view_unit: 'view-authors-unit', query: '/authors?excluded=1', title: 'title.excluded_authors'};
 
 routes['#authors/search'] = {view: 'view-search-authors', query: false, title: 'title.search_authors'};
 routes['#authors/search/result'] = {view: 'view-search-authors', view_unit: 'view-authors-unit', query: '/authors/search', title: 'title.search_authors'};
+
+routes['#author/action/exclude/{id}'] = {view: false, query: '/author/action/exclude/{id}'};
 
 routes['#authors/feed/{id}'] = {view: 'view-authors', view_unit: 'view-authors-unit', query: '/authors?feed={id}'};
 
