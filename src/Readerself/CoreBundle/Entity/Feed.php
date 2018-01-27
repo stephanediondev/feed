@@ -270,7 +270,7 @@ class Feed
      *
      * @param \DateTime $dateModified
      *
-     * @return Push
+     * @return Feed
      */
     public function setDateModified($dateModified)
     {

@@ -154,7 +154,7 @@ class Member implements AdvancedUserInterface, \Serializable
      *
      * @param \DateTime $dateModified
      *
-     * @return Push
+     * @return Member
      */
     public function setDateModified($dateModified)
     {

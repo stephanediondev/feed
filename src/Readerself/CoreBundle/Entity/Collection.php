@@ -178,7 +178,7 @@ class Collection
      *
      * @param \DateTime $dateModified
      *
-     * @return Push
+     * @return Collection
      */
     public function setDateModified($dateModified)
     {

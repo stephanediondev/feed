@@ -184,7 +184,7 @@ class Connection
      *
      * @param \DateTime $dateModified
      *
-     * @return Push
+     * @return Connection
      */
     public function setDateModified($dateModified)
     {

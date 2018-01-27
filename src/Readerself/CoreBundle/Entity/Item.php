@@ -251,7 +251,7 @@ class Item
      *
      * @param \DateTime $dateModified
      *
-     * @return Push
+     * @return Item
      */
     public function setDateModified($dateModified)
     {
