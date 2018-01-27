@@ -3,10 +3,11 @@
 ##### Language
 * PHP 5.5 or greater
 * php-curl
+* php-json
 * php-iconv
 * php-mbstring
 * php-gmp
-* php-tidy (recommended, to cleanup and repair html from feeds)
+* php-xml and php-tidy (recommended, to cleanup, repair and sanitize html from feeds)
 
 ##### Database
 * MySQL 5.5.3 or greater (utf8mb4 character set)
