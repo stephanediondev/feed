@@ -18,12 +18,6 @@ parameters:
 
     secret: ThisTokenIsNotSoSecretChangeIt
 
-    notification_enabled: false
-    notification_gcm_api_key: ~
-    notification_vapid_subject: ~
-    notification_vapid_public_key: ~
-    notification_vapid_private_key: ~
-
     elasticsearch_enabled: false
     elasticsearch_index: readerself
     elasticsearch_url: http://127.0.0.1:9200

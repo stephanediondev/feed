@@ -16,9 +16,6 @@ ReaderselfCoreBundle_member:
 ReaderselfCoreBundle_connection:
     resource: "@ReaderselfCoreBundle/Resources/config/routing/connection.yml"
 
-ReaderselfCoreBundle_push:
-    resource: "@ReaderselfCoreBundle/Resources/config/routing/push.yml"
-
 readerself_api_status:
     path: /status
     defaults:

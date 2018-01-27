@@ -38,6 +38,13 @@
                     </a>
                 </h1>
             </div>
+            <div class="mdl-card__actions mdl-card--border">
+                {{#if entry.exclude }}
+                    <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'include'}}</a>
+                {{else}}
+                    <a href="#category/action/exclude/{{ entry.id }}" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect connected online">{{trans 'exclude'}}</a>
+                {{/if}}
+            </div>
         </div>
     {{/each}}
 </script>

@@ -42,7 +42,6 @@
         <div class="mdl-card__actions mdl-card--border">
             <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'profile'}}</a>
             <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
-            <a href="#profile/notifications" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'notifications'}}</a>
         </div>
     </div>
 
@@ -118,7 +117,6 @@
         <div class="mdl-card__actions mdl-card--border">
             <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'profile'}}</a>
             <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
-            <a href="#profile/notifications" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'notifications'}}</a>
         </div>
     </div>
 
@@ -144,52 +142,6 @@
             </div>
             <div class="mdl-card__actions mdl-card--border online">
                 <form action="#profile/connections" data-query="/connection/{{ connection.id }}" method="DELETE">
-                    <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</button>
-                </form>
-            </div>
-        </div>
-    {{/each}}
-</script>
-
-<script type="text/template" id="view-profile-notifications">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="profile-notifications">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
-                {{ entry.email }}
-            </h1>
-            <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
-            </div>
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'profile'}}</a>
-            <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
-            <a href="#profile/notifications" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'notifications'}}</a>
-        </div>
-    </div>
-
-    {{#each entries as |notification notification_index|}}
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="notification-{{ connection.id }}">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
-                    {{ notification.hostname }}
-                </h1>
-                <div class="mdl-card__subtitle-text">
-                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ notification.date_modified }}"></span></span>
-                    <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{#if notification.currentIp }}<strong>{{ notification.ip }}</strong>{{else}}{{ notification.ip }}{{/if}}</span>
-                </div>
-            </div>
-            <div class="mdl-card__supporting-text">
-                <p>
-                    {{#if notification.currentAgent }}
-                        <strong>{{ notification.agent }}</strong>
-                    {{else}}
-                        {{ notification.agent }}
-                    {{/if}}
-                </p>
-            </div>
-            <div class="mdl-card__actions mdl-card--border online">
-                <form action="#profile/notifications" data-query="/push/{{ notification.id }}" method="DELETE">
                     <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</button>
                 </form>
             </div>

@@ -1,4 +1,4 @@
-var VERSION = '1.0';
+var VERSION = '1.1';
 var CACHE_KEY = 'readerself-v' + VERSION;
 var CACHE_FILES = [
     'manifest.json',
@@ -67,41 +67,6 @@ self.addEventListener('fetch', function(FetchEvent) {
                 return response;
             }
             return fetch(request);
-        })
-    );
-});
-
-self.addEventListener('push', function(event) {
-    if(event.data) {
-        var data = event.data.json();
-        event.waitUntil(
-            self.registration.showNotification(data.title, {
-                body: data.body,
-                icon: 'app/icons/icon-192x192.png',
-                tag: 'readerself',
-                actions: [
-                    { action: 'unread', title: data.unread }
-                ]
-            })
-        );
-    }
-});
-
-self.addEventListener('notificationclick', function (event) {
-    event.notification.close();
-
-    event.waitUntil(
-        clients.matchAll({
-            type: "window"
-        }).then(function(clientList) {
-            for(var i=0;i<clientList.length;i++) {
-                var client = clientList[i];
-                return client.focus();
-            }
-
-            if(clients.openWindow) {
-                return clients.openWindow('./#items/unread');
-            }
         })
     );
 });

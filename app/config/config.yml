@@ -87,13 +87,6 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-minishlink_web_push:
-    api_keys: # you should put api keys in your "app/config/parameters.yml" file
-        GCM: %notification_gcm_api_key%
-    ttl: 2419200 # Time to Live of notifications in seconds
-    timeout: 30 # Timeout of each request in seconds
-    automatic_padding: true # pad messages automatically for better security (against more bandwith usage)
-
 nelmio_api_doc:
     sandbox:
         enabled: false

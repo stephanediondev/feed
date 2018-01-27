@@ -11,14 +11,10 @@ class MemberManager extends AbstractManager
 {
     public $connectionManager;
 
-    public $pushManager;
-
     public function __construct(
-        ConnectionManager $connectionManager,
-        PushManager $pushManager
+        ConnectionManager $connectionManager
     ) {
         $this->connectionManager = $connectionManager;
-        $this->pushManager = $pushManager;
     }
 
     public function getOne($paremeters = [])

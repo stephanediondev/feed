@@ -228,32 +228,6 @@ class MemberExtraController extends AbstractController
     }
 
     /**
-     * Profile notifications.
-     *
-     * @ApiDoc(
-     *     section="Member",
-     *     headers={
-     *         {"name"="X-CONNECTION-TOKEN","required"=true},
-     *     },
-     * )
-     */
-    public function profileNotificationsAction(Request $request)
-    {
-        $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
-        }
-
-        $data['entry'] = $memberConnected->toArray();
-        $data['entry_entity'] = 'member';
-
-        $data['entries'] = $this->memberManager->pushManager->getNotifications($memberConnected, $request);
-        $data['entries_entity'] = 'push';
-
-        return new JsonResponse($data);
-    }
-
-    /**
      * Profile update.
      *
      * @ApiDoc(

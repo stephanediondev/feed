@@ -149,58 +149,6 @@ function explainConnection(connection) {
 
                     if('serviceWorker' in navigator && window.location.protocol === 'https:') {
                         navigator.serviceWorker.ready.then(function(ServiceWorkerRegistration) {
-
-                            applicationServerKey = data_return.applicationServerKey;
-                            if(applicationServerKey !== null && applicationServerKey !== '') {
-                                ServiceWorkerRegistration.pushManager.permissionState({userVisibleOnly: true}).then(function(status) {
-                                    var pushData = store.get('push');
-                                    if(status === 'denied' && pushData) {
-                                        $.ajax({
-                                            headers: {
-                                                'X-CONNECTION-TOKEN': connection.token
-                                            },
-                                            async: true,
-                                            cache: false,
-                                            dataType: 'json',
-                                            statusCode: {
-                                                200: function() {
-                                                    store.remove('push');
-                                                }
-                                            },
-                                            type: 'DELETE',
-                                            url: apiUrl + '/push/' + pushData.id
-                                        });
-                                    }
-
-                                    if(status === 'prompt' || status === 'granted') {
-                                        ServiceWorkerRegistration.pushManager.subscribe(
-                                            {applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true}
-                                        ).then(function(pushSubscription) {
-                                            var toJSON = pushSubscription.toJSON();
-                                            $.ajax({
-                                                headers: {
-                                                    'X-CONNECTION-TOKEN': connection.token
-                                                },
-                                                async: true,
-                                                cache: false,
-                                                data: {
-                                                    endpoint: pushSubscription.endpoint,
-                                                    public_key: toJSON.keys.p256dh,
-                                                    authentication_secret: toJSON.keys.auth
-                                                },
-                                                dataType: 'json',
-                                                statusCode: {
-                                                    200: function(data_return) {
-                                                        store.set('push', data_return.entry);
-                                                    }
-                                                },
-                                                type: 'POST',
-                                                url: apiUrl + '/push'
-                                            });
-                                        });
-                                    }
-                                });
-                            }
                         }).catch(function() {
                         });
                     }

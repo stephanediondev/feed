@@ -387,45 +387,6 @@ class MemberController extends AbstractController
     }
 
     /**
-     * Profile notifications.
-     *
-     * @ApiDoc(
-     *     section="Member",
-     *     headers={
-     *         {"name"="X-CONNECTION-TOKEN","required"=true},
-     *     },
-     * )
-     */
-    public function profileNotificationsAction(Request $request)
-    {
-        $data = [];
-        if(!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
-        }
-
-        $notifications = [];
-        $index = 0;
-        foreach($this->memberManager->pushManager->getList(['member' => $memberConnected])->getResult() as $notification) {
-            $notifications[$index] = $notification->toArray();
-            if($notification->getIp() == $request->getClientIp()) {
-                $notifications[$index]['currentIp'] = true;
-            }
-            if($notification->getAgent() == $request->server->get('HTTP_USER_AGENT')) {
-                $notifications[$index]['currentAgent'] = true;
-            }
-            $index++;
-        }
-
-        $data['entry'] = $memberConnected->toArray();
-        $data['entry_entity'] = 'member';
-
-        $data['entries'] = $notifications;
-        $data['entries_entity'] = 'push';
-
-        return new JsonResponse($data);
-    }
-
-    /**
      * Profile update.
      *
      * @ApiDoc(

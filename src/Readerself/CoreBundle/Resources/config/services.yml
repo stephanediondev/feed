@@ -10,7 +10,6 @@ services:
             - [ "setContainer", [ "@service_container" ] ]
             - [ "setMemberManager", [ "@readerself_core_manager_member" ] ]
             - [ "setActionManager", [ "@readerself_core_manager_action" ] ]
-            - [ "setApplicationServerKey", [ %notification_vapid_public_key% ] ]
 
     readerself_core_controller_content:
         class: Readerself\CoreBundle\Controller\ContentController
@@ -66,10 +65,6 @@ services:
         calls:
             - [ "setAuthorManager", [ "@readerself_core_manager_author" ] ]
             - [ "setFeedManager", [ "@readerself_core_manager_feed" ] ]
-
-    readerself_core_controller_push:
-        class: Readerself\CoreBundle\Controller\PushController
-        parent: "readerself_core_controller_abstract"
 
     readerself_core_controller_connection:
         class: Readerself\CoreBundle\Controller\ConnectionController
@@ -165,22 +160,11 @@ services:
         public: true
         arguments:
             - "@readerself_core_manager_connection"
-            - "@readerself_core_manager_push"
 
     readerself_core_manager_connection:
         class: Readerself\CoreBundle\Manager\ConnectionManager
         parent: "readerself_core_manager_abstract"
         public: true
-
-    readerself_core_manager_push:
-        class: Readerself\CoreBundle\Manager\PushManager
-        parent: "readerself_core_manager_abstract"
-        public: true
-        arguments:
-            - "%notification_gcm_api_key%"
-            - "%notification_vapid_subject%"
-            - "%notification_vapid_public_key%"
-            - "%notification_vapid_private_key%"
 
     readerself_core_manager_action:
         class: Readerself\CoreBundle\Manager\ActionManager
