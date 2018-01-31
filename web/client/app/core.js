@@ -240,7 +240,7 @@ function loadRoute(key, parameters) {
         if(route.view) {
             if(!parameters.page || parameters.page === 1) {
                 scrollTo('#top');
-                $('main > .mdl-grid').html('<div class="mdl-spinner mdl-js-spinner is-active"></div>');
+                document.querySelector('main > .mdl-grid').innerHTML = '<div class="mdl-spinner mdl-js-spinner is-active"></div>';
                 componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
             }
 
@@ -261,7 +261,7 @@ function loadRoute(key, parameters) {
             data_return.connectionData = connectionData;
 
             var template = getTemplate(route.view);
-            $('main > .mdl-grid').html(template(data_return));
+            document.querySelector('main > .mdl-grid').innerHTML = template(data_return);
 
         } else if(route.query) {
             fetch(url, {
@@ -316,7 +316,7 @@ function loadRoute(key, parameters) {
 
                             if(!parameters.page || parameters.page === 1) {
                                 var template = getTemplate(route.view);
-                                $('main > .mdl-grid').html(template(data_return));
+                                document.querySelector('main > .mdl-grid').innerHTML = template(data_return);
                             }
 
                             if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.view_unit === 'string') {
@@ -324,7 +324,7 @@ function loadRoute(key, parameters) {
 
                                 for(i in data_return.entries) {
                                     if(data_return.entries.hasOwnProperty(i)) {
-                                        $('main > .mdl-grid').append(template_unit({connectionData: connectionData, entry: data_return.entries[i]}));
+                                        document.querySelector('main > .mdl-grid').innerHTML += template_unit({connectionData: connectionData, entry: data_return.entries[i]});
                                     }
                                 }
 
@@ -335,7 +335,7 @@ function loadRoute(key, parameters) {
 
                                 if(data_return.entries_page_next) {
                                     var template_more = getTemplate('view-more');
-                                    $('main > .mdl-grid').append(template_more(data_return));
+                                    document.querySelector('main > .mdl-grid').innerHTML += template_more(data_return);
                                 }
                             }
 
@@ -497,10 +497,10 @@ $(document).ready(function() {
         window.addEventListener('offline', updateOnlineStatus);
 
         var templateNavigation = getTemplate('view-navigation');
-        $('.mdl-navigation').html(templateNavigation());
+        document.querySelector('.mdl-navigation').innerHTML = templateNavigation();
 
         var templateAside = getTemplate('view-aside');
-        $('.mdl-layout__drawer').html(templateAside());
+        document.querySelector('.mdl-layout__drawer').innerHTML = templateAside();
 
         setPositions();
 
