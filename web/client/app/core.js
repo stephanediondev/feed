@@ -1,66 +1,3 @@
-var readyPromises = [];
-
-var applicationServerKey;
-
-var files = [
-    'app/views/misc.html',
-    'app/views/member.html',
-    'app/views/item.html',
-    'app/views/feed.html',
-    'app/views/category.html',
-    'app/views/author.html',
-];
-
-var timezone = new Date();
-timezone = -timezone.getTimezoneOffset() / 60;
-
-var lastHistory = false;
-
-var language = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
-if(language) {
-    language = language.substr(0, 2);
-}
-
-if(window.location.port) {
-    var apiUrl = '//' + window.location.hostname + ':' + window.location.port + window.location.pathname;
-} else {
-    var apiUrl = '//' + window.location.hostname + window.location.pathname;
-}
-apiUrl = apiUrl.replace('index.html', '');
-if(window.location.hostname === 'local.sdion.net') {
-    apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
-} else {
-    apiUrl = apiUrl.replace('client/', 'api');
-}
-
-if('serviceWorker' in navigator && window.location.protocol === 'https:') {
-    navigator.serviceWorker.register('serviceworker.js').then(function() {
-    }).catch(function() {
-    });
-}
-
-var connectionData = explainConnection(JSON.parse(localStorage.getItem('connection')));
-
-var snackbarContainer = document.querySelector('.mdl-snackbar');
-
-var languages = ['en', 'fr'];
-var languageFinal = 'en';
-if($.inArray(language, languages)) {
-    languageFinal = language;
-}
-
-if(languageFinal !== 'en') {
-    readyPromises.push(getMomentLocale());
-}
-
-readyPromises.push(getTranslation());
-
-for(var i in files) {
-    if(files.hasOwnProperty(i)) {
-        readyPromises.push(loadFile(files[i]));
-    }
-}
-
 function getMomentLocale() {
     return fetch('vendor/moment/locale/' + languageFinal + '.js').then(function(response) {
     }).catch(function(err) {
@@ -319,11 +256,11 @@ function loadRoute(key, parameters) {
                             }
 
                             if(Object.prototype.toString.call( dataReturn.entries ) === '[object Array]' && typeof route.viewUnit === 'string') {
-                                var template_unit = getTemplate(route.viewUnit);
+                                var templateUnit = getTemplate(route.viewUnit);
 
                                 for(i in dataReturn.entries) {
                                     if(dataReturn.entries.hasOwnProperty(i)) {
-                                        document.querySelector('main > .mdl-grid').innerHTML += template_unit({connectionData: connectionData, entry: dataReturn.entries[i]});
+                                        document.querySelector('main > .mdl-grid').innerHTML += templateUnit({connectionData: connectionData, entry: dataReturn.entries[i]});
                                     }
                                 }
 
@@ -487,6 +424,71 @@ function updateOnlineStatus() {
     } else {
         $('body').removeClass('online');
         $('body').addClass('offline');
+    }
+}
+
+var readyPromises = [];
+
+var applicationServerKey;
+
+var files = [
+    'app/views/misc.html',
+    'app/views/member.html',
+    'app/views/item.html',
+    'app/views/feed.html',
+    'app/views/category.html',
+    'app/views/author.html',
+];
+
+var timezone = new Date();
+timezone = -timezone.getTimezoneOffset() / 60;
+
+var lastHistory = false;
+
+var language = navigator.languages ? navigator.languages[0] : (navigator.language || navigator.userLanguage);
+if(language) {
+    language = language.substr(0, 2);
+}
+
+var hostName = window.location.hostname;
+var apiUrl = '//' + hostName;
+if(window.location.port) {
+    apiUrl += ':' + window.location.port;
+}
+apiUrl += window.location.pathname;
+
+apiUrl = apiUrl.replace('index.html', '');
+if(hostName.indexOf('local') !== -1) {
+    apiUrl = apiUrl.replace('client/', 'app_dev.php/api');
+} else {
+    apiUrl = apiUrl.replace('client/', 'api');
+}
+
+if('serviceWorker' in navigator && window.location.protocol === 'https:') {
+    navigator.serviceWorker.register('serviceworker.js').then(function() {
+    }).catch(function() {
+    });
+}
+
+var connectionData = explainConnection(JSON.parse(localStorage.getItem('connection')));
+
+var snackbarContainer = document.querySelector('.mdl-snackbar');
+
+var languages = ['en', 'fr'];
+var languageFinal = 'en';
+if($.inArray(language, languages)) {
+    languageFinal = language;
+}
+
+if(languageFinal !== 'en') {
+    readyPromises.push(getMomentLocale());
+}
+
+readyPromises.push(getTranslation());
+
+for(var i in files) {
+    if(files.hasOwnProperty(i)) {
+        readyPromises.push(loadFile(files[i]));
     }
 }
 
