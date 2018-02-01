@@ -39,7 +39,7 @@ if('serviceWorker' in navigator && window.location.protocol === 'https:') {
     });
 }
 
-var connectionData = explainConnection(store.get('connection'));
+var connectionData = explainConnection(JSON.parse(localStorage.getItem('connection')));
 
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
@@ -136,7 +136,7 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 function explainConnection(connection) {
-    if(typeof connection === 'undefined') {
+    if(typeof connection === 'undefined' || null === connection) {
         connection = {id: false, token: false, member: {id: false, administrator: false, member: false, demo: false}};
 
         $('body').removeClass('connected');
@@ -157,14 +157,14 @@ function explainConnection(connection) {
                 'Content-Type': 'application/json'
             })
     	}).then(function(response) {
-            response.json().then(function(data_return) {
+            response.json().then(function(dataReturn) {
                 if(response.ok) {
-                    if(data_return.entry.member.administrator) {
+                    if(dataReturn.entry.member.administrator) {
                         $('body').removeClass('not_administrator');
                         $('body').addClass('administrator');
                     }
 
-                    store.set('connection', data_return.entry);
+                    localStorage.setItem('connection', JSON.stringify(dataReturn.entry));
 
                     if('serviceWorker' in navigator && window.location.protocol === 'https:') {
                         navigator.serviceWorker.ready.then(function(ServiceWorkerRegistration) {
@@ -257,11 +257,11 @@ function loadRoute(key, parameters) {
         }
 
         if(!route.query && route.view) {
-            data_return = {};
-            data_return.connectionData = connectionData;
+            dataReturn = {};
+            dataReturn.connectionData = connectionData;
 
             var template = getTemplate(route.view);
-            document.querySelector('main > .mdl-grid').innerHTML = template(data_return);
+            document.querySelector('main > .mdl-grid').innerHTML = template(dataReturn);
 
         } else if(route.query) {
             fetch(url, {
@@ -273,73 +273,73 @@ function loadRoute(key, parameters) {
                 })
         	}).then(function(response) {
                 if(response.ok && 200 === response.status) {
-                    response.json().then(function(data_return) {
-                        data_return.connectionData = connectionData;
+                    response.json().then(function(dataReturn) {
+                        dataReturn.connectionData = connectionData;
 
-                        data_return.current_key = key;
-                        data_return.current_key_markallasread = key.replace('#items', '#items/markallasread');
-                        data_return.current_q = parameters.q ? decodeURIComponent(parameters.q) : '';
+                        dataReturn.current_key = key;
+                        dataReturn.current_key_markallasread = key.replace('#items', '#items/markallasread');
+                        dataReturn.current_q = parameters.q ? decodeURIComponent(parameters.q) : '';
 
                         if(route.title) {
-                            data_return.current_title = route.title;
+                            dataReturn.current_title = route.title;
                         }
 
-                        /*if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.store === 'boolean' && route.store) {
-                            for(i in data_return.entries) {
-                                if(data_return.entries.hasOwnProperty(i)) {
-                                    store.set(data_return.entries_entity + '_' + data_return.entries[i].id, data_return.entries[i]);
+                        /*if(Object.prototype.toString.call( dataReturn.entries ) === '[object Array]' && typeof route.store === 'boolean' && route.store) {
+                            for(i in dataReturn.entries) {
+                                if(dataReturn.entries.hasOwnProperty(i)) {
+                                    localStorage.setItem(dataReturn.entries_entity + '_' + dataReturn.entries[i].id, JSON.stringify(dataReturn.entries[i]));
                                 }
                             }
                         }*/
 
-                        if(typeof data_return.unread !== 'undefined') {
-                            if(data_return.unread > 0) {
-                                if(data_return.unread > 99) {
+                        if(typeof dataReturn.unread !== 'undefined') {
+                            if(dataReturn.unread > 0) {
+                                if(dataReturn.unread > 99) {
                                     badge = '99+';
                                 } else {
-                                    badge = data_return.unread;
+                                    badge = dataReturn.unread;
                                 }
-                                $('.count-unread').attr('data-badge', badge);
+                                document.querySelector('.count-unread').setAttribute('data-badge', badge);
                                 $('.count-unread').addClass('mdl-badge');
                             } else {
-                                $('.count-unread').removeAttr('data-badge');
+                                document.querySelector('.count-unread').removeAttribute('data-badge');
                                 $('.count-unread').removeClass('mdl-badge');
                             }
                         }
 
                         if(route.view) {
-                            if(typeof data_return.entry === 'object' && typeof data_return.entry_entity === 'string') {
-                                if(typeof data_return.entry.title === 'string') {
-                                    window.document.title = data_return.entry.title + ' (' + $.i18n._(data_return.entry_entity) + ')';
+                            if(typeof dataReturn.entry === 'object' && typeof dataReturn.entry_entity === 'string') {
+                                if(typeof dataReturn.entry.title === 'string') {
+                                    window.document.title = dataReturn.entry.title + ' (' + $.i18n._(dataReturn.entry_entity) + ')';
                                 }
                             }
 
                             if(!parameters.page || parameters.page === 1) {
                                 var template = getTemplate(route.view);
-                                document.querySelector('main > .mdl-grid').innerHTML = template(data_return);
+                                document.querySelector('main > .mdl-grid').innerHTML = template(dataReturn);
                             }
 
-                            if(Object.prototype.toString.call( data_return.entries ) === '[object Array]' && typeof route.view_unit === 'string') {
+                            if(Object.prototype.toString.call( dataReturn.entries ) === '[object Array]' && typeof route.view_unit === 'string') {
                                 var template_unit = getTemplate(route.view_unit);
 
-                                for(i in data_return.entries) {
-                                    if(data_return.entries.hasOwnProperty(i)) {
-                                        document.querySelector('main > .mdl-grid').innerHTML += template_unit({connectionData: connectionData, entry: data_return.entries[i]});
+                                for(i in dataReturn.entries) {
+                                    if(dataReturn.entries.hasOwnProperty(i)) {
+                                        document.querySelector('main > .mdl-grid').innerHTML += template_unit({connectionData: connectionData, entry: dataReturn.entries[i]});
                                     }
                                 }
 
                                 if(route.title) {
-                                    window.document.title = $.i18n._(route.title) + ' (' + data_return.entries_total + ')';
+                                    window.document.title = $.i18n._(route.title) + ' (' + dataReturn.entries_total + ')';
                                 }
-                                $('.count').text(data_return.entries_total);
+                                $('.count').text(dataReturn.entries_total);
 
-                                if(data_return.entries_page_next) {
+                                if(dataReturn.entries_page_next) {
                                     var template_more = getTemplate('view-more');
-                                    document.querySelector('main > .mdl-grid').innerHTML += template_more(data_return);
+                                    document.querySelector('main > .mdl-grid').innerHTML += template_more(dataReturn);
                                 }
                             }
 
-                            if(Object.prototype.toString.call( data_return.entries ) === '[object Array]') {
+                            if(Object.prototype.toString.call( dataReturn.entries ) === '[object Array]') {
                                 $('body').removeClass('no_entries');
                             } else {
                                 $('body').addClass('no_entries');
@@ -363,17 +363,17 @@ function loadRoute(key, parameters) {
                             componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
                             if(parameters.link) {
-                                parameters.link.text($.i18n._(data_return.action_reverse));
-                                parameters.link.addClass(data_return.action);
-                                parameters.link.removeClass(data_return.action_reverse);
+                                parameters.link.text($.i18n._(dataReturn.action_reverse));
+                                parameters.link.addClass(dataReturn.action);
+                                parameters.link.removeClass(dataReturn.action_reverse);
                             }
-                            if(typeof data_return.entry === 'object' && typeof data_return.action === 'string') {
+                            if(typeof dataReturn.entry === 'object' && typeof dataReturn.action === 'string') {
                                 if(parameters.snackbar) {
-                                    setSnackbar($.i18n._(data_return.action) + ' ' + data_return.entry.title);
+                                    setSnackbar($.i18n._(dataReturn.action) + ' ' + dataReturn.entry.title);
                                 }
                             }
-                            /*if(data_return.entry_entity === 'Item' && data_return.action === 'read') {
-                                store.remove(data_return.entry_entity + '_' + data_return.entry.id);
+                            /*if(dataReturn.entry_entity === 'Item' && dataReturn.action === 'read') {
+                                localStorage.removeItem(dataReturn.entry_entity + '_' + dataReturn.entry.id);
                             }*/
                         }
 
@@ -382,7 +382,7 @@ function loadRoute(key, parameters) {
                         }
 
                         if(route.query === '/logout') {
-                            store.remove('connection');
+                            localStorage.removeItem('connection');
                             $('body').removeClass('connected');
                             $('body').addClass('anonymous');
                             loadRoute('#login');
@@ -391,7 +391,7 @@ function loadRoute(key, parameters) {
                     });
                 }
                 if(403 === response.status) {
-                    store.remove('connection');
+                    localStorage.removeItem('connection');
                     $('body').removeClass('connected');
                     $('body').addClass('anonymous');
                     loadRoute('#login');
@@ -430,10 +430,12 @@ function scrollTo(anchor) {
 }
 
 function item_up() {
-    var itm_id = $('.mdl-grid .card-selected').attr('id');
-    var prev = $('#' + itm_id).prev().attr('id');
-    if(prev) {
-        scrollTo('#' + prev);
+    var item = document.querySelector('.mdl-grid .card-selected');
+    if(null !== item) {
+        var prev = document.querySelector('#' + item.getAttribute('id')).previousElementSibling;
+        if(null !== prev) {
+            scrollTo('#' + prev.getAttribute('id'));
+        }
     }
 }
 function item_down() {
@@ -444,7 +446,7 @@ function item_down() {
         next = $('#' + itm_id).attr('id');
         $('#' + itm_id).addClass('card-selected');
     } else {
-        itm_id = $('.mdl-grid .card-selected').attr('id');
+        itm_id = document.querySelector('.mdl-grid .card-selected').getAttribute('id');
         next = $('#' + itm_id).next().attr('id');
     }
     if(next) {
@@ -454,7 +456,7 @@ function item_down() {
             actionMore($('#' + next).find('.more'));
         }
 
-        if($('#' + next).hasClass('item') && $('body').hasClass('connected')) {
+        if($('#' + next).hasClass('item') && document.querySelector('body').classList.contains('connected')) {
             actionRead($('#' + next).find('.action-read'));
         }
     }
@@ -521,7 +523,7 @@ $(document).ready(function() {
         }
 
         $('.mdl-layout__drawer').on('click', '.mdl-list__item a', function() {
-            if($('.mdl-layout__drawer').hasClass('is-visible')) {
+            if(document.querySelector('.mdl-layout__drawer').classList.contains('is-visible')) {
                 var d = document.querySelector('.mdl-layout');
                 d.MaterialLayout.toggleDrawer();
             }
@@ -596,7 +598,7 @@ $(document).ready(function() {
                 }
             }
 
-            if($('body').hasClass('connected') && $('body').hasClass('online')) {
+            if(document.querySelector('body').classList.contains('connected') && document.querySelector('body').classList.contains('online')) {
                 var action = ref.find('.action-read');
                 if(action.hasClass('read')) {
                 } else {
@@ -607,7 +609,7 @@ $(document).ready(function() {
 
         $(document).on('click', '.action-toggle', function(event) {
             event.preventDefault();
-            if($('body').hasClass('collapse')) {
+            if(document.querySelector('body').classList.contains('collapse')) {
                 $('body').removeClass('collapse');
             } else {
                 $('body').addClass('collapse');
@@ -638,7 +640,7 @@ $(document).ready(function() {
 
         $(document).on('click', '.more', function(event) {
             event.preventDefault();
-            $('main > .mdl-grid .card-selected').removeClass('card-selected');
+            document.querySelector('main > .mdl-grid .card-selected').classList.remove('card-selected');
             $(this).parent().parent().prev().addClass('card-selected');
 
             $(this).parent().parent().remove();
@@ -688,15 +690,15 @@ $(document).ready(function() {
                     body: body
             	}).then(function(response) {
                     if(response.ok && 200 === response.status) {
-                        response.json().then(function(data_return) {
-                            if(typeof data_return.entry !== 'undefined') {
-                                if(data_return.entry.title) {
-                                    setSnackbar($.i18n._(form.attr('method')) + ' ' + data_return.entry.title);
+                        response.json().then(function(dataReturn) {
+                            if(typeof dataReturn.entry !== 'undefined') {
+                                if(dataReturn.entry.title) {
+                                    setSnackbar($.i18n._(form.attr('method')) + ' ' + dataReturn.entry.title);
                                 }
                             }
                             if(form.data('query') === '/login') {
-                                store.set('connection', data_return.entry);
-                                connectionData = explainConnection(data_return.entry);
+                                localStorage.setItem('connection', JSON.stringify(dataReturn.entry));
+                                connectionData = explainConnection(dataReturn.entry);
 
                                 setSnackbar($.i18n._('login'));
                             }
@@ -742,7 +744,7 @@ $(document).ready(function() {
                             actionMore(ref.find('.more'));
                         }
 
-                        if($(this).hasClass('item') && $('body').hasClass('connected')) {// && items_display === 'expand'
+                        if($(this).hasClass('item') && document.querySelector('body').classList.contains('connected')) {// && items_display === 'expand'
                             actionRead(ref.find('.action-read'));
                         }
                         return true;

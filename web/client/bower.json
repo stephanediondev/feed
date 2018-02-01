@@ -5,7 +5,6 @@
         "jquery": "*",
         "material-design-lite": "*",
         "dialog-polyfill": "*",
-        "store.js": "*",
         "jquery-i18n": "*",
         "moment": "*",
         "jquery.scrollTo": "*",
