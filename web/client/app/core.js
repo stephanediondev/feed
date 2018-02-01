@@ -44,10 +44,9 @@ var connectionData = explainConnection(JSON.parse(localStorage.getItem('connecti
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 
 var languages = ['en', 'fr'];
+var languageFinal = 'en';
 if($.inArray(language, languages)) {
     languageFinal = language;
-} else {
-    languageFinal = 'en';
 }
 
 if(languageFinal !== 'en') {
@@ -257,7 +256,7 @@ function loadRoute(key, parameters) {
         }
 
         if(!route.query && route.view) {
-            dataReturn = {};
+            var dataReturn = {};
             dataReturn.connectionData = connectionData;
 
             var template = getTemplate(route.view);
@@ -319,8 +318,8 @@ function loadRoute(key, parameters) {
                                 document.querySelector('main > .mdl-grid').innerHTML = template(dataReturn);
                             }
 
-                            if(Object.prototype.toString.call( dataReturn.entries ) === '[object Array]' && typeof route.view_unit === 'string') {
-                                var template_unit = getTemplate(route.view_unit);
+                            if(Object.prototype.toString.call( dataReturn.entries ) === '[object Array]' && typeof route.viewUnit === 'string') {
+                                var template_unit = getTemplate(route.viewUnit);
 
                                 for(i in dataReturn.entries) {
                                     if(dataReturn.entries.hasOwnProperty(i)) {
