@@ -428,7 +428,7 @@ function scrollTo(anchor) {
     $('.mdl-layout__content').scrollTo(anchor);
 }
 
-function item_up() {
+function itemUp() {
     var item = document.querySelector('.mdl-grid .card-selected');
     if(null !== item) {
         var prev = document.querySelector('#' + item.getAttribute('id')).previousElementSibling;
@@ -437,7 +437,7 @@ function item_up() {
         }
     }
 }
-function item_down() {
+function itemDown() {
     var itm_id = false;
     var next = false;
     if($('.mdl-grid .card-selected').length === 0) {
@@ -629,12 +629,12 @@ $(document).ready(function() {
 
         $(document).on('click', '.action-up', function(event) {
             event.preventDefault();
-            item_up();
+            itemUp();
         });
 
         $(document).on('click', '.action-down', function(event) {
             event.preventDefault();
-            item_down();
+            itemDown();
         });
 
         $(document).on('click', '.more', function(event) {
@@ -743,7 +743,7 @@ $(document).ready(function() {
                             actionMore(ref.find('.more'));
                         }
 
-                        if($(this).hasClass('item') && document.querySelector('body').classList.contains('connected')) {// && items_display === 'expand'
+                        if($(this).hasClass('item') && document.querySelector('body').classList.contains('connected')) {// && itemsDisplay === 'expand'
                             actionRead(ref.find('.action-read'));
                         }
                         return true;

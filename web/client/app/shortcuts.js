@@ -1,4 +1,4 @@
-var g_key = false;
+var gKey = false;
 
 $(document).bind('keyup', function(event) {
     var keycode = event.which || event.keyCode;
@@ -6,9 +6,9 @@ $(document).bind('keyup', function(event) {
     if($(event.target).parents('form').length === 0) {
         //g
         if(keycode === 71) {
-            g_key = true;
+            gKey = true;
         } else {
-            g_key = false;
+            gKey = false;
         }
     }
 });
@@ -18,23 +18,23 @@ $(document).bind('keydown', function(event) {
 
     if($(event.target).parents('form').length === 0) {
         //g then a
-        if(g_key && keycode === 65) {
+        if(gKey && keycode === 65) {
             loadRoute('#items/recent');
 
         //g then u
-        } else if(g_key && keycode === 85) {
+        } else if(gKey && keycode === 85) {
             loadRoute('#items/unread');
 
         //g then s
-        } else if(g_key && keycode === 83) {
+        } else if(gKey && keycode === 83) {
             loadRoute('#items/starred');
 
         //g then f
-        } else if(g_key && keycode === 70) {
+        } else if(gKey && keycode === 70) {
             loadRoute('#feeds/recent');
 
         //g then c
-        } else if(g_key && keycode === 67) {
+        } else if(gKey && keycode === 67) {
             loadRoute('#categories/recent');
 
         //t
@@ -45,8 +45,8 @@ $(document).bind('keydown', function(event) {
         //2
         } else if(keycode === 50) {
             event.preventDefault();
-            if(items_display === 'collapse') {
-                items_expand();
+            if(itemsDisplay === 'collapse') {
+                itemsExpand();
             }
 
         //v
@@ -113,11 +113,11 @@ $(document).bind('keydown', function(event) {
 
         //k or p or shift + space
         } else if(keycode === 75 || keycode === 80 || (keycode === 32 && event.shiftKey)) {
-            item_up();
+            itemUp();
 
         //j or n or space
         } else if(keycode === 74 || keycode === 78|| keycode === 32) {
-            item_down();
+            itemDown();
 
         //r
         } else if(keycode === 82) {
