@@ -1,9 +1,11 @@
 var VERSION = '1.1';
 var CACHE_KEY = 'readerself-v' + VERSION;
 var CACHE_FILES = [
+    '.',
     'manifest.json',
     'index.html',
     'app/core.css',
+    'app/functions.js',
     'app/core.js',
     'app/routes.js',
     'app/shortcuts.js',
@@ -32,11 +34,11 @@ var CACHE_FILES = [
 self.addEventListener('install', function(InstallEvent) {
     if('waitUntil' in InstallEvent) {
         InstallEvent.waitUntil(
-            cacheAddAll()
+            caches.open(CACHE_KEY).then(function(cache) {
+                cache.addAll(CACHE_FILES);
+            })
         );
     }
-
-    self.skipWaiting();
 });
 
 self.addEventListener('activate', function(ExtendableEvent) {
@@ -58,21 +60,16 @@ self.addEventListener('activate', function(ExtendableEvent) {
 });
 
 self.addEventListener('fetch', function(FetchEvent) {
-    var request = FetchEvent.request;
-
-    FetchEvent.respondWith(
-        caches.match(request).then(function(response) {
-            if(response) {
-                return response;
-            }
-            return fetch(request);
-        })
-    );
+    if(FetchEvent.request.url.indexOf('/api/') === -1) {
+        FetchEvent.respondWith(
+            caches.match(FetchEvent.request).then(function(response) {
+                if(response) {
+                    return response;
+                }
+                return fetch(FetchEvent.request).then(function(response) {
+                    return response;
+                });
+            })
+        );
+    }
 });
-
-function cacheAddAll() {
-    caches.delete(CACHE_KEY);
-    caches.open(CACHE_KEY).then(function(cache) {
-        return cache.addAll(CACHE_FILES);
-    });
-}
