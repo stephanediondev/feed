@@ -302,8 +302,7 @@ $(document).ready(function() {
         $('.mdl-layout__content').bind('scroll', function() {
             $('main > .mdl-grid').find('.mdl-card').each(function() {
                 if($(this).attr('id')) {
-                    var id_loop = $(this).attr('id');
-                    var ref = $('#' + id_loop);
+                    var ref = $('#' + $(this).attr('id'));
 
                     $('main > .mdl-grid .card-selected').removeClass('card-selected');
                     ref.addClass('card-selected');

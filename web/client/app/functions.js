@@ -58,7 +58,7 @@ function loadFile(url) {
 
 function explainConnection(connection) {
     if(typeof connection === 'undefined' || null === connection) {
-connection = {id: false, token: false, member: {id: false, administrator: false, member: false, demo: false}};
+        connection = {id: false, token: false, member: {id: false, administrator: false, member: false}};
 
         $('body').removeClass('connected');
         $('body').addClass('anonymous');
