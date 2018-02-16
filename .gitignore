@@ -12,6 +12,4 @@
 /vendor/
 
 /web/bundles/
-/web/client/vendor/
-
-.env
+/web/client/node_modules/

@@ -20,15 +20,15 @@ var CACHE_FILES = [
     'app/views/item.html',
     'app/views/member.html',
     'app/views/misc.html',
-    'vendor/dialog-polyfill/dialog-polyfill.css',
-    'vendor/material-design-lite/material.min.css',
-    'vendor/jquery/dist/jquery.min.js',
-    'vendor/dialog-polyfill/dialog-polyfill.js',
-    'vendor/material-design-lite/material.min.js',
-    'vendor/jquery-i18n/jquery.i18n.min.js',
-    'vendor/moment/min/moment.min.js',
-    'vendor/jquery.scrollTo/jquery.scrollTo.min.js',
-    'vendor/handlebars/handlebars.min.js'
+    'node_modules/dialog-polyfill/dialog-polyfill.css',
+    'node_modules/material-design-lite/material.min.css',
+    'node_modules/jquery/dist/jquery.min.js',
+    'node_modules/dialog-polyfill/dialog-polyfill.js',
+    'node_modules/material-design-lite/material.min.js',
+    'node_modules/i18next/i18next.min.js',
+    'node_modules/moment/min/moment.min.js',
+    'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
+    'node_modules/handlebars/dist/handlebars.min.js'
 ];
 
 self.addEventListener('install', function(InstallEvent) {

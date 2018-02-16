@@ -21,9 +21,10 @@ innodb_file_format = BARRACUDA
 
 ##### Web server
 * Apache 2.2 or greater with mod_rewrite module enabled (and "Allowoverride All" in VirtualHost / Directory configuration to allow .htaccess file)
-* Nginx (see [/docker/nginx/nginx.conf](/docker/nginx/nginx.conf))
 
 #### Installation
+
+You need to install Yarn https://yarnpkg.com/en/docs/install
 
 ```text
 cd /path-to-installation
@@ -54,13 +55,6 @@ http://example.com/client
 
 #### Api documentation
 http://example.com/api/documentation
-
-#### Docker
-```
-cd /path-to-installation
-cp .env.dist .env
-docker-compose up --build
-```
 
 #### Screenshots
 

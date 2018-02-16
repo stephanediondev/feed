@@ -5,9 +5,9 @@
         "jquery": "*",
         "material-design-lite": "*",
         "dialog-polyfill": "*",
-        "jquery-i18n": "*",
+        "i18next": "*",
         "moment": "*",
-        "jquery.scrollTo": "*",
+        "jquery.scrollto": "*",
         "handlebars": "*"
     }
 }

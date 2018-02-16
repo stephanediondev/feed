@@ -8,10 +8,18 @@ function getTranslation(languageFinal) {
     return fetch('app/translations/' + languageFinal + '.json').then(function(response) {
         if(response.ok) {
             return response.json().then(function(json) {
-                $.i18n.load(json);
+                i18next.init({
+                    debug: false,
+                    lng: 'en',
+                    resources: {
+                        en: {
+                            translation: json
+                        },
+                      }
+                });
 
                 Handlebars.registerHelper('trans', function(key) {
-                    var result = $.i18n._(key);
+                    var result = i18next.t(key);
                     return new Handlebars.SafeString(result);
                 });
 
@@ -173,7 +181,7 @@ function loadRoute(key, parameters) {
             }
 
             if(route.title) {
-                window.document.title = $.i18n._(route.title);
+                window.document.title = i18next.t(route.title);
             }
         }
 
@@ -232,7 +240,7 @@ function loadRoute(key, parameters) {
                         if(route.view) {
                             if(typeof dataReturn.entry === 'object' && typeof dataReturn.entry_entity === 'string') {
                                 if(typeof dataReturn.entry.title === 'string') {
-                                    window.document.title = dataReturn.entry.title + ' (' + $.i18n._(dataReturn.entry_entity) + ')';
+                                    window.document.title = dataReturn.entry.title + ' (' + i18next.t(dataReturn.entry_entity) + ')';
                                 }
                             }
 
@@ -251,7 +259,7 @@ function loadRoute(key, parameters) {
                                 }
 
                                 if(route.title) {
-                                    window.document.title = $.i18n._(route.title) + ' (' + dataReturn.entries_total + ')';
+                                    window.document.title = i18next.t(route.title) + ' (' + dataReturn.entries_total + ')';
                                 }
                                 $('.count').text(dataReturn.entries_total);
 
@@ -285,13 +293,13 @@ function loadRoute(key, parameters) {
                             componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
                             if(parameters.link) {
-                                parameters.link.text($.i18n._(dataReturn.action_reverse));
+                                parameters.link.text(i18next.t(dataReturn.action_reverse));
                                 parameters.link.addClass(dataReturn.action);
                                 parameters.link.removeClass(dataReturn.action_reverse);
                             }
                             if(typeof dataReturn.entry === 'object' && typeof dataReturn.action === 'string') {
                                 if(parameters.snackbar) {
-                                    setSnackbar($.i18n._(dataReturn.action) + ' ' + dataReturn.entry.title);
+                                    setSnackbar(i18next.t(dataReturn.action) + ' ' + dataReturn.entry.title);
                                 }
                             }
                             /*if(dataReturn.entry_entity === 'Item' && dataReturn.action === 'read') {
@@ -308,7 +316,7 @@ function loadRoute(key, parameters) {
                             $('body').removeClass('connected');
                             $('body').addClass('anonymous');
                             loadRoute('#login');
-                            setSnackbar($.i18n._('logout'));
+                            setSnackbar(i18next.t('logout'));
                         }
                     });
                 }
@@ -317,7 +325,7 @@ function loadRoute(key, parameters) {
                     $('body').removeClass('connected');
                     $('body').addClass('anonymous');
                     loadRoute('#login');
-                    setSnackbar($.i18n._('logout'));
+                    setSnackbar(i18next.t('logout'));
                 }
                 if(404 === response.status) {
                     loadRoute('#404');

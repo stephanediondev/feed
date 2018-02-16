@@ -56,62 +56,47 @@
     "category": "Category",
     "feed": "Feed",
 
-    "title.feeds": "Feeds",
-    "title.items": "Items",
-    "title.categories": "Categories",
-    "title.authors": "Authors",
+    "title": {
+        "feeds": "Feeds",
+        "items": "Items",
+        "categories": "Categories",
+        "authors": "Authors",
+        "all_feeds": "All feeds",
+        "recent_feeds": "Recent feeds",
+        "subscribed_feeds": "Subscribed feeds",
+        "unsubscribed_feeds": "Unsubscribed feeds",
+        "feeds_witherrors": "Feeds with errors",
+        "search_feeds": "Search feeds",
+        "trendy_categories": "Trendy categories",
+        "excluded_categories": "Excluded categories",
+        "categories_usedbyfeeds": "Categories used by feeds",
+        "search_categories": "Search categories",
+        "recent_items": "Recent items",
+        "unread_items": "Unread items",
+        "starred_items": "Starred items",
+        "search_items": "Search items",
+        "trendy_authors": "Trendy authors",
+        "excluded_authors": "Excluded authors",
+        "search_authors": "Search authors"
+    },
 
-    "title.all_feeds": "All feeds",
-    "button.all_feeds": "All",
-
-    "title.recent_feeds": "Recent feeds",
-    "button.recent_feeds": "Recent",
-
-    "title.subscribed_feeds": "Subscribed feeds",
-    "button.subscribed_feeds": "Subscribed",
-
-    "title.unsubscribed_feeds": "Unsubscribed feeds",
-    "button.unsubscribed_feeds": "Unsubscribed",
-
-    "title.feeds_witherrors": "Feeds with errors",
-    "button.feeds_witherrors": "With errors",
-
-    "title.search_feeds": "Search feeds",
-    "button.search_feeds": "Search",
-
-
-    "title.trendy_categories": "Trendy categories",
-    "button.trendy_categories": "Trendy",
-
-    "title.excluded_categories": "Excluded categories",
-    "button.excluded_categories": "Excluded",
-
-    "title.categories_usedbyfeeds": "Categories used by feeds",
-    "button.categories_usedbyfeeds": "Used by feeds",
-
-    "title.search_categories": "Search categories",
-    "button.search_categories": "Search",
-
-
-    "title.recent_items": "Recent items",
-    "button.recent_items": "Recent",
-
-    "title.unread_items": "Unread items",
-    "button.unread_items": "Unread",
-
-    "title.starred_items": "Starred items",
-    "button.starred_items": "Starred",
-
-    "title.search_items": "Search items",
-    "button.search_items": "Search",
-
-
-    "title.trendy_authors": "Trendy authors",
-    "button.trendy_authors": "Trendy",
-
-    "title.excluded_authors": "Excluded authors",
-    "button.excluded_authors": "Excluded",
-
-    "title.search_authors": "Search authors",
-    "button.search_authors": "Search"
+    "button": {
+        "all_feeds": "All",
+        "recent_feeds": "Recent",
+        "subscribed_feeds": "Subscribed",
+        "unsubscribed_feeds": "Unsubscribed",
+        "feeds_witherrors": "With errors",
+        "search_feeds": "Search",
+        "trendy_categories": "Trendy",
+        "excluded_categories": "Excluded",
+        "categories_usedbyfeeds": "Used by feeds",
+        "search_categories": "Search",
+        "recent_items": "Recent",
+        "unread_items": "Unread",
+        "starred_items": "Starred",
+        "search_items": "Search",
+        "trendy_authors": "Trendy",
+        "excluded_authors": "Excluded",
+        "search_authors": "Search"
+    }
 }

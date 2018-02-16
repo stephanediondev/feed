@@ -270,29 +270,29 @@ $(document).ready(function() {
                         response.json().then(function(dataReturn) {
                             if(typeof dataReturn.entry !== 'undefined') {
                                 if(dataReturn.entry.title) {
-                                    setSnackbar($.i18n._(form.attr('method')) + ' ' + dataReturn.entry.title);
+                                    setSnackbar(i18next.t(form.attr('method')) + ' ' + dataReturn.entry.title);
                                 }
                             }
                             if(form.data('query') === '/login') {
                                 localStorage.setItem('connection', JSON.stringify(dataReturn.entry));
                                 connectionData = explainConnection(dataReturn.entry);
 
-                                setSnackbar($.i18n._('login'));
+                                setSnackbar(i18next.t('login'));
                             }
                             loadRoute(form.attr('action'));
                         });
                     }
                     if(401 === response.status) {
-                        setSnackbar($.i18n._('error_401'));
+                        setSnackbar(i18next.t('error_401'));
                     }
                     if(403 === response.status) {
                         loadRoute('#login');
                     }
                     if(404 === response.status) {
-                        setSnackbar($.i18n._('error_404'));
+                        setSnackbar(i18next.t('error_404'));
                     }
                     if(500 === response.status) {
-                        setSnackbar($.i18n._('error_500'));
+                        setSnackbar(i18next.t('error_500'));
                     }
                 }).catch(function(err) {
                 });

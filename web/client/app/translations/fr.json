@@ -56,62 +56,47 @@
     "category": "Catégorie",
     "feed": "Flux",
 
-    "title.feeds": "Flux",
-    "title.items": "Items",
-    "title.categories": "Catégories",
-    "title.authors": "Auteurs",
+    "title": {
+        "feeds": "Flux",
+        "items": "Items",
+        "categories": "Catégories",
+        "authors": "Auteurs",
+        "all_feeds": "Tous les flux",
+        "recent_feeds": "Flux récents",
+        "subscribed_feeds": "Flux souscrits",
+        "unsubscribed_feeds": "Flux non souscrits",
+        "feeds_witherrors": "Flux avec erreurs",
+        "search_feeds": "Recherche de flux",
+        "trendy_categories": "Catégories à la mode",
+        "excluded_categories": "Catégories exclues",
+        "categories_usedbyfeeds": "Catégories utilisées par des flux",
+        "search_categories": "Recherche de catégories",
+        "recent_items": "Items récents",
+        "unread_items": "Items non lus",
+        "starred_items": "Items favoris",
+        "search_items": "Recherche d'items",
+        "trendy_authors": "Auteurs à la mode",
+        "excluded_authors": "Auteurs exclus",
+        "search_authors": "Recherche d'auteurs"
+    },
 
-    "title.all_feeds": "Tous les flux",
-    "button.all_feeds": "Tous",
-
-    "title.recent_feeds": "Flux récents",
-    "button.recent_feeds": "Récents",
-
-    "title.subscribed_feeds": "Flux souscrits",
-    "button.subscribed_feeds": "Souscrits",
-
-    "title.unsubscribed_feeds": "Flux non souscrits",
-    "button.unsubscribed_feeds": "Non souscrits",
-
-    "title.feeds_witherrors": "Flux avec erreurs",
-    "button.feeds_witherrors": "Avec erreurs",
-
-    "title.search_feeds": "Recherche de flux",
-    "button.search_feeds": "Recherche",
-
-
-    "title.trendy_categories": "Catégories à la mode",
-    "button.trendy_categories": "Tendances",
-
-    "title.excluded_categories": "Catégories exclues",
-    "button.excluded_categories": "Exclues",
-
-    "title.categories_usedbyfeeds": "Catégories utilisées par des flux",
-    "button.categories_usedbyfeeds": "utilisées par des flux",
-
-    "title.search_categories": "Recherche de catégories",
-    "button.search_categories": "Recherche",
-
-
-    "title.recent_items": "Items récents",
-    "button.recent_items": "Récents",
-
-    "title.unread_items": "Items non lus",
-    "button.unread_items": "Non lus",
-
-    "title.starred_items": "Items favoris",
-    "button.starred_items": "Favoris",
-
-    "title.search_items": "Recherche d'items",
-    "button.search_items": "Recherche",
-
-
-    "title.trendy_authors": "Auteurs à la mode",
-    "button.trendy_authors": "Tendances",
-
-    "title.excluded_authors": "Auteurs exclus",
-    "button.excluded_authors": "Exclus",
-
-    "title.search_authors": "Recherche d'auteurs",
-    "button.search_authors": "Recherche"
+    "button": {
+        "all_feeds": "Tous",
+        "recent_feeds": "Récents",
+        "subscribed_feeds": "Souscrits",
+        "unsubscribed_feeds": "Non souscrits",
+        "feeds_witherrors": "Avec erreurs",
+        "search_feeds": "Recherche",
+        "trendy_categories": "Tendances",
+        "excluded_categories": "Exclues",
+        "categories_usedbyfeeds": "utilisées par des flux",
+        "search_categories": "Recherche",
+        "recent_items": "Récents",
+        "unread_items": "Non lus",
+        "starred_items": "Favoris",
+        "search_items": "Recherche",
+        "trendy_authors": "Tendances",
+        "excluded_authors": "Exclus",
+        "search_authors": "Recherche"
+    }
 }
