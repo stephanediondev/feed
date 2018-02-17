@@ -95,11 +95,6 @@ services:
         calls:
             - [ "setFacebook", [ "%facebook_enabled%", "%facebook_id%", "%facebook_secret%" ] ]
 
-    readerself_core_manager_migration:
-        class: Readerself\CoreBundle\Manager\MigrationManager
-        parent: "readerself_core_manager_abstract"
-        public: true
-
     readerself_core_manager_search:
         class: Readerself\CoreBundle\Manager\SearchManager
         parent: "readerself_core_manager_abstract"

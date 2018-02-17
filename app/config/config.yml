@@ -54,20 +54,6 @@ doctrine:
                 default_table_options:
                     charset: utf8mb4
                     collate: utf8mb4_unicode_ci
-
-            old:
-                driver:   pdo_mysql
-                server_version: 5.7
-                host:     "%database_host_old%"
-                port:     "%database_port_old%"
-                dbname:   "%database_name_old%"
-                user:     "%database_user_old%"
-                password: "%database_password_old%"
-                charset: utf8
-                default_table_options:
-                    charset: utf8
-                    collate: utf8_general_ci
-
     orm:
         default_entity_manager: default
         entity_managers:
@@ -75,8 +61,6 @@ doctrine:
                 connection: default
                 naming_strategy: doctrine.orm.naming_strategy.underscore
                 auto_mapping: true
-            old:
-                connection: old
         auto_generate_proxy_classes: "%kernel.debug%"
 
 # Swiftmailer Configuration

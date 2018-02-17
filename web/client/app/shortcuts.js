@@ -1,6 +1,6 @@
 var gKey = false;
 
-$(document).bind('keyup', function(event) {
+document.addEventListener('keyup', function(event) {
     var keycode = event.which || event.keyCode;
 
     if($(event.target).parents('form').length === 0) {
@@ -13,7 +13,7 @@ $(document).bind('keyup', function(event) {
     }
 });
 
-$(document).bind('keydown', function(event) {
+document.addEventListener('keydown', function(event) {
     var keycode = event.which || event.keyCode;
 
     if($(event.target).parents('form').length === 0) {

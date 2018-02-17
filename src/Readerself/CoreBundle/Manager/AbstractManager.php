@@ -11,8 +11,6 @@ abstract class AbstractManager
 
     protected $connection;
 
-    protected $connectionOld;
-
     protected $eventDispatcher;
 
     protected $router;
@@ -21,7 +19,6 @@ abstract class AbstractManager
     {
         $this->em = $doctrine->getManager('default');
         $this->connection = $this->em->getConnection();
-        $this->connectionOld = $doctrine->getManager('old')->getConnection();
     }
 
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
