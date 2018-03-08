@@ -1,3 +1,8 @@
+var LOG_ENABLED = true;
+var FETCH_IN_CACHE = false;
+var FETCH_EXCLUDE = [
+    '/api/',
+];
 var VERSION = '1.1';
 var CACHE_KEY = 'readerself-v' + VERSION;
 var CACHE_FILES = [
@@ -32,12 +37,14 @@ var CACHE_FILES = [
 ];
 
 self.addEventListener('install', function(InstallEvent) {
+    sendLog(InstallEvent);
+
+    self.skipWaiting();
+
     if('waitUntil' in InstallEvent) {
-        InstallEvent.waitUntil(
-            caches.open(CACHE_KEY).then(function(cache) {
-                cache.addAll(CACHE_FILES);
-            })
-        );
+        InstallEvent.waitUntil(function() {
+            cacheAddAll();
+        });
     }
 });
 
@@ -60,16 +67,45 @@ self.addEventListener('activate', function(ExtendableEvent) {
 });
 
 self.addEventListener('fetch', function(FetchEvent) {
-    if(FetchEvent.request.url.indexOf('/api/') === -1) {
+    sendLog(FetchEvent);
+
+    var fetchAllowed = true;
+    FETCH_EXCLUDE.forEach(function(item, i) {
+        if(FetchEvent.request.url.indexOf(item) !== -1) {
+            fetchAllowed = false;
+        }
+    });
+
+    if(fetchAllowed) {
         FetchEvent.respondWith(
-            caches.match(FetchEvent.request).then(function(response) {
-                if(response) {
-                    return response;
-                }
-                return fetch(FetchEvent.request).then(function(response) {
-                    return response;
+            caches.open(CACHE_KEY).then(function(cache) {
+                return cache.match(FetchEvent.request).then(function(Response) {
+                    if(Response) {
+                        sendLog(Response);
+                        return Response;
+                    }
+                    return fetch(FetchEvent.request).then(function(Response) {
+                        sendLog(Response);
+                        if(FETCH_IN_CACHE) {
+                            cache.put(FetchEvent.request, Response.clone());
+                        }
+                        return Response;
+                    });
                 });
             })
         );
     }
 });
+
+function cacheAddAll() {
+    caches.delete(CACHE_KEY);
+    return caches.open(CACHE_KEY).then(function(cache) {
+        return cache.addAll(CACHE_FILES);
+    });
+}
+
+function sendLog(log) {
+    if(LOG_ENABLED) {
+        console.log(log);
+    }
+}

@@ -9,6 +9,7 @@
 /var/*
 !var/SymfonyRequirements.php
 
+/node_modules
 /vendor/
 
 /web/bundles/
