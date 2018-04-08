@@ -2,6 +2,7 @@
 namespace Readerself\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
@@ -444,5 +445,76 @@ class FeedController extends AbstractController
         }
 
         return new JsonResponse($data);
+    }
+
+    /**
+     * Export an opml file.
+     *
+     * @ApiDoc(
+     *     section="Feed",
+     *     headers={
+     *         {"name"="X-CONNECTION-TOKEN","required"="true"},
+     *     },
+     *     parameters={
+     *         {"name"="choice", "dataType"="string", "required"=true},
+     *     },
+     * )
+     */
+    public function exportAction(Request $request)
+    {
+        $data = [];
+        if(!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $parameters = [];
+        if('your_subscriptions' == $request->request->get('choice')) {
+            $parameters['subscribed'] = true;
+            $parameters['member'] = $memberConnected;
+        }
+        $parameters['sortField'] = 'fed.dateCreated';
+        $parameters['sortDirection'] = 'ASC';
+
+        $feeds = $this->feedManager->getList($parameters)->getResult();
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?><opml version="2.0">';
+        $xml .= "\r\n";
+        $xml .= '<head>';
+        $xml .= "\r\n";
+        $xml .= '<title>Subscriptions from Reader Self</title>';
+        $xml .= "\r\n";
+        $xml .= '<docs>http://dev.opml.org/spec2.html</docs>';
+        $xml .= "\r\n";
+        $xml .= '<ownerEmail>'.$memberConnected->getEmail().'</ownerEmail>';
+        $xml .= "\r\n";
+        $xml .= '</head>';
+        $xml .= "\r\n";
+        $xml .= '<body>';
+        $xml .= "\r\n";
+
+        foreach($feeds as $feed) {
+            $feed = $this->feedManager->getOne(['id' => $feed['id']]);
+
+            $title = $feed->getTitle();
+            $title = str_replace('&', '&amp;', $title);
+            $title = str_replace('""', '&quot;', $title);
+
+            $link = $feed->getLink();
+            $link = str_replace('&', '&amp;', $link);
+
+            $website = $feed->getWebsite();
+            $website = str_replace('&', '&amp;', $website);
+
+            $xml .= '<outline text="'.$title.'" title="'.$title.'" type="rss" xmlUrl="'.$link.'" htmlUrl="'.$website.'"/>';
+            $xml .= "\r\n";
+        }
+        $xml .= '</body>';
+        $xml .= "\r\n";
+        $xml .= '</opml>';
+        $xml .= "\r\n";
+
+        $response = new Response($xml);
+        $response->headers->set('Content-Type', 'application/xml');
+        return $response;
     }
 }

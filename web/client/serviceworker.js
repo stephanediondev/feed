@@ -3,7 +3,7 @@ var FETCH_IN_CACHE = false;
 var FETCH_EXCLUDE = [
     '/api/',
 ];
-var VERSION = '1.1';
+var VERSION = '1.2';
 var CACHE_KEY = 'readerself-v' + VERSION;
 var CACHE_FILES = [
     '.',
@@ -33,7 +33,8 @@ var CACHE_FILES = [
     'node_modules/i18next/i18next.min.js',
     'node_modules/moment/min/moment.min.js',
     'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
-    'node_modules/handlebars/dist/handlebars.min.js'
+    'node_modules/handlebars/dist/handlebars.min.js',
+    'node_modules/file-saver/FileSaver.min.js'
 ];
 
 self.addEventListener('install', function(InstallEvent) {

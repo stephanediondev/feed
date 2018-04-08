@@ -55,3 +55,9 @@ readerself_api_feeds_import:
     defaults:
         _controller: "readerself_core_controller_feed:importAction"
     methods: POST
+
+readerself_api_feeds_export:
+    path: /feeds/export
+    defaults:
+        _controller: "readerself_core_controller_feed:exportAction"
+    methods: POST

@@ -38,6 +38,11 @@
 
     "share": "Partager",
 
+    "import_opml": "Import OPML",
+    "export_opml": "Export OPML",
+    "your_subscriptions": "vos abonnements",
+    "all_feeds": "tous les flux",
+
     "POST": "Ajouter",
     "PUT": "Modifier",
     "DELETE": "Supprimer",

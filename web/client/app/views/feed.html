@@ -49,12 +49,31 @@
                 <form action="#feeds/recent" data-query="/feeds/import" method="POST" enctype="multipart/form-data">
                     <div class="mdl-dialog__content">
                         <p>
-                            <label for="file" class="required">{{trans 'opml'}}</label>
+                            <label for="file" class="required">{{trans 'import_opml'}}</label>
                             <input type="file" id="file" name="file" required="required">
                         </p>
                     </div>
                     <div class="mdl-dialog__actions">
                         <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white close_submit">{{trans 'import'}}</button>
+                        <a href="#" class="mdl-button close">{{trans 'cancel'}}</a>
+                    </div>
+                </form>
+            </dialog>
+
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect dialog connected online" id="dialog-export_feed">{{trans 'export'}}</button>
+            <dialog class="mdl-dialog" for="dialog-export_feed">
+                <form action="#feeds/recent" data-query="/feeds/export" method="POST">
+                    <div class="mdl-dialog__content">
+                        <p>
+                            <label for="choice" class="required">{{trans 'export_opml'}}</label>
+                            <select id="choice" name="choice" required="required">
+                                <option value="your_subscriptions">{{trans 'your_subscriptions'}}</option>
+                                <option value="all_feeds">{{trans 'all_feeds'}}</option>
+                            </select>
+                        </p>
+                    </div>
+                    <div class="mdl-dialog__actions">
+                        <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white close_submit">{{trans 'export'}}</button>
                         <a href="#" class="mdl-button close">{{trans 'cancel'}}</a>
                     </div>
                 </form>

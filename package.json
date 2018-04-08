@@ -8,6 +8,7 @@
         "i18next": "*",
         "moment": "*",
         "jquery.scrollto": "*",
-        "handlebars": "*"
+        "handlebars": "*",
+        "file-saver": "*"
     }
 }

@@ -200,22 +200,30 @@ function ready() {
                     mode: 'cors',
                     headers: headers,
                     body: body
-            	}).then(function(response) {
+                }).then(function(response) {
                     if(response.ok && 200 === response.status) {
-                        response.json().then(function(dataReturn) {
-                            if(typeof dataReturn.entry !== 'undefined') {
-                                if(dataReturn.entry.title) {
-                                    setSnackbar(i18next.t(form.attr('method')) + ' ' + dataReturn.entry.title);
-                                }
-                            }
-                            if(form.data('query') === '/login') {
-                                localStorage.setItem('connection', JSON.stringify(dataReturn.entry));
-                                connectionData = explainConnection(dataReturn.entry);
+                        if(form.data('query') === '/feeds/export') {
+                            response.text().then(function(dataReturn) {
+                                var blob = new Blob([dataReturn], {type: 'application/xml;charset=utf-8'});
+                                saveAs(blob, form.find('#choice').val() + '-' + getDate() + '.opml');
+                            });
 
-                                setSnackbar(i18next.t('login'));
-                            }
-                            loadRoute(form.attr('action'));
-                        });
+                        } else {
+                            response.json().then(function(dataReturn) {
+                                  if(typeof dataReturn.entry !== 'undefined') {
+                                      if(dataReturn.entry.title) {
+                                          setSnackbar(i18next.t(form.attr('method')) + ' ' + dataReturn.entry.title);
+                                      }
+                                  }
+                                  if(form.data('query') === '/login') {
+                                      localStorage.setItem('connection', JSON.stringify(dataReturn.entry));
+                                      connectionData = explainConnection(dataReturn.entry);
+
+                                      setSnackbar(i18next.t('login'));
+                                  }
+                                  loadRoute(form.attr('action'));
+                              });
+                          }
                     }
                     if(401 === response.status) {
                         setSnackbar(i18next.t('error_401'));
@@ -689,5 +697,18 @@ function updateOnlineStatus() {
     } else {
         $('body').removeClass('online');
         $('body').addClass('offline');
+    }
+}
+
+function getDate() {
+    var d = new Date();
+    var utc = d.getFullYear() + '-' + addZero(d.getMonth() + 1) + '-' + addZero(d.getDate());
+    return utc;
+
+    function addZero(i) {
+        if(i < 10) {
+            i = '0' + i;
+        }
+        return i;
     }
 }
