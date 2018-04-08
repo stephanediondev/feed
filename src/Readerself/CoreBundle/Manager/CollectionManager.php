@@ -198,8 +198,16 @@ class CollectionManager extends AbstractManager
                     ]);
 
                     if($sp_feed->error()) {
-                        $errors++;
-                        $insertCollectionFeed['error'] = $sp_feed->error();
+                        $string = file_get_contents($this->toAscii($feed['link']));
+                        $json = json_decode($string, true);
+
+                        if(json_last_error() == JSON_ERROR_NONE) {
+                            $this->manageJsonFeed($feed, $json);
+
+                        } else {
+                            $errors++;
+                            $insertCollectionFeed['error'] = $sp_feed->error();
+                        }
                     }
 
                     if(!$sp_feed->error()) {
@@ -247,6 +255,25 @@ class CollectionManager extends AbstractManager
         foreach($members_result as $member) {
             $this->memberManager->syncUnread($member['id']);
         }
+    }
+
+    private function manageJsonFeed($feed, $json) {
+        $this->setItemsJson($feed, $json);
+
+        $parse_url = parse_url($json['home_page_url']);
+
+        $updateFeed = [];
+        $updateFeed['title'] = $json['title'];
+        $updateFeed['website'] = $this->cleanWebsite($json['home_page_url']);
+        $updateFeed['link'] = $this->cleanLink($json['feed_url']);
+        $updateFeed['hostname'] = isset($parse_url['host']) ? $parse_url['host'] : null;
+        $updateFeed['description'] = isset($json['description']) ? $json['description'] : null;
+
+        $updateFeed['next_collection'] = $this->setNextCollection($feed);
+
+        $updateFeed['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
+
+        $this->update('feed', $updateFeed, $feed['id']);
     }
 
     public function setNextCollection($feed)
@@ -303,7 +330,7 @@ class CollectionManager extends AbstractManager
                 $insertItem['title'] = '-';
             }
 
-            $insertItem['author_id'] = $this->setAuthor($sp_item);
+            $insertItem['author_id'] = $this->setAuthorSimplePie($sp_item);
 
             $insertItem['link'] = $link;
 
@@ -442,40 +469,105 @@ class CollectionManager extends AbstractManager
         }
     }
 
-    public function setAuthor($sp_item)
+    public function setItemsJson($feed, $json)
+    {
+        foreach($json['items'] as $sp_item) {
+            if(isset($sp_item['url']) == 0) {
+                continue;
+            }
+
+            $link = $this->cleanLink($sp_item['url']);
+
+            $sql = 'SELECT id FROM item WHERE link = :link';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindValue('link', $link);
+            $stmt->execute();
+            $result = $stmt->fetch();
+
+            if($result) {
+                break;
+            }
+
+            $insertItem = [];
+
+            $insertItem['feed_id'] = $feed['id'];
+
+            if('' != $sp_item['title']) {
+                $insertItem['title'] = $this->cleanTitle($sp_item['title']);
+            } else {
+                $insertItem['title'] = '-';
+            }
+
+            $insertItem['link'] = $link;
+
+            $insertItem['content']  = $sp_item['content_html'];
+
+            if(isset($sp_item['author']) && isset($sp_item['author']['name'])) {
+                $insertItem['author_id'] = $this->setAuthor($sp_item['author']['name']);
+
+            } else if(isset($json['author']) && isset($json['author']['name'])) {
+                $insertItem['author_id'] = $this->setAuthor($json['author']['name']);
+            }
+
+            $dateReference = (new \Datetime())->format('Y-m-d H:i:s');
+
+            if($date = $sp_item['date_published']) {
+                $insertItem['date'] = (new \Datetime($date))->format('Y-m-d H:i:s');;
+            } else {
+                $insertItem['date'] = $dateReference;
+            }
+
+            $insertItem['date_created'] = $dateReference;
+            $insertItem['date_modified'] = $dateReference;
+
+            $item_id = $this->insert('item', $insertItem);
+
+            unset($sp_item);
+        }
+    }
+
+    public function setAuthorSimplePie($sp_item)
     {
         $author_id = null;
 
         if($sp_author = $sp_item->get_author()) {
-            if($sp_author->get_name() != '') {
-                $title = $this->cleanTitle($sp_author->get_name());
+            $author_id = $this->setAuthor($sp_author->get_name());
+        }
 
-                $cache_id = 'readerself.author_title.'.$title;
+        return $author_id;
+    }
 
-                if($this->cacheDriver->contains($cache_id)) {
-                    $author_id = $this->cacheDriver->fetch($cache_id);
+    public function setAuthor($name)
+    {
+        $author_id = null;
 
+        if($name != '') {
+            $title = $this->cleanTitle($name);
+
+            $cache_id = 'readerself.author_title.'.$title;
+
+            if($this->cacheDriver->contains($cache_id)) {
+                $author_id = $this->cacheDriver->fetch($cache_id);
+
+            } else {
+                $sql = 'SELECT id FROM author WHERE title = :title';
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue('title', $title);
+                $stmt->execute();
+                $result = $stmt->fetch();
+
+                if($result) {
+                    $author_id = $result['id'];
                 } else {
-                    $sql = 'SELECT id FROM author WHERE title = :title';
-                    $stmt = $this->connection->prepare($sql);
-                    $stmt->bindValue('title', $title);
-                    $stmt->execute();
-                    $result = $stmt->fetch();
-
-                    if($result) {
-                        $author_id = $result['id'];
-                    } else {
-                        $insertAuthor = [
-                            'title' => $title,
-                            'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
-                        ];
-                        $author_id = $this->insert('author', $insertAuthor);
-                    }
-                    $this->cacheDriver->save($cache_id, $author_id);
+                    $insertAuthor = [
+                        'title' => $title,
+                        'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                    ];
+                    $author_id = $this->insert('author', $insertAuthor);
                 }
+                $this->cacheDriver->save($cache_id, $author_id);
             }
         }
-        unset($sp_item);
 
         return $author_id;
     }
