@@ -70,6 +70,10 @@ self.addEventListener('activate', function(ExtendableEvent) {
 self.addEventListener('fetch', function(FetchEvent) {
     sendLog(FetchEvent);
 
+    if('only-if-cached' === FetchEvent.request.cache && 'same-origin' !== FetchEvent.request.mode) {
+        return;
+    }
+
     var fetchAllowed = true;
     FETCH_EXCLUDE.forEach(function(item, i) {
         if(FetchEvent.request.url.indexOf(item) !== -1) {

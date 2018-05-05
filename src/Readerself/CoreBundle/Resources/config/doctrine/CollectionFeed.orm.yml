@@ -25,9 +25,9 @@ Readerself\CoreBundle\Entity\CollectionFeed:
                 strategy: IDENTITY
     fields:
         error:
-            type: string
+            type: text
             nullable: true
-            length: 255
+            length: 65535
             options:
                 fixed: false
         dateCreated:

@@ -492,7 +492,7 @@ class CollectionManager extends AbstractManager
 
             $insertItem['feed_id'] = $feed['id'];
 
-            if('' != $sp_item['title']) {
+            if(isset($sp_item['title']) && '' != $sp_item['title']) {
                 $insertItem['title'] = $this->cleanTitle($sp_item['title']);
             } else {
                 $insertItem['title'] = '-';

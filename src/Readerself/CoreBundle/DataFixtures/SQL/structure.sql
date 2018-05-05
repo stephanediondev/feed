@@ -185,7 +185,7 @@ CREATE TABLE `collection_feed` (
   `id` int(10) UNSIGNED NOT NULL,
   `collection_id` int(10) UNSIGNED NOT NULL,
   `feed_id` int(10) UNSIGNED NOT NULL,
-  `error` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `error` text COLLATE utf8mb4_unicode_ci,
   `date_created` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
