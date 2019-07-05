@@ -14,6 +14,7 @@ services:
     readerself_core_controller_content:
         class: Readerself\CoreBundle\Controller\ContentController
         parent: "readerself_core_controller_abstract"
+        public: true
 
     readerself_core_controller_feed:
         class: Readerself\CoreBundle\Controller\FeedController
@@ -23,6 +24,7 @@ services:
             - [ "setCategoryManager", [ "@readerself_core_manager_category" ] ]
             - [ "setCollectionManager", [ "@readerself_core_manager_collection" ] ]
             - [ "setFeedManager", [ "@readerself_core_manager_feed" ] ]
+        public: true
 
     readerself_core_controller_item:
         class: Readerself\CoreBundle\Controller\ItemController
@@ -32,16 +34,19 @@ services:
             - [ "setCategoryManager", [ "@readerself_core_manager_category" ] ]
             - [ "setFeedManager", [ "@readerself_core_manager_feed" ] ]
             - [ "setItemManager", [ "@readerself_core_manager_item" ] ]
+        public: true
 
     readerself_core_controller_status:
         class: Readerself\CoreBundle\Controller\StatusController
         parent: "readerself_core_controller_abstract"
         calls:
             - [ "setSearchManager", [ "@readerself_core_manager_search" ] ]
+        public: true
 
     readerself_core_controller_proxy:
         class: Readerself\CoreBundle\Controller\ProxyController
         parent: "readerself_core_controller_abstract"
+        public: true
 
     readerself_core_controller_search:
         class: Readerself\CoreBundle\Controller\SearchController
@@ -52,12 +57,14 @@ services:
             - [ "setFeedManager", [ "@readerself_core_manager_feed" ] ]
             - [ "setItemManager", [ "@readerself_core_manager_item" ] ]
             - [ "setSearchManager", [ "@readerself_core_manager_search" ] ]
+        public: true
 
     readerself_core_controller_category:
         class: Readerself\CoreBundle\Controller\CategoryController
         parent: "readerself_core_controller_abstract"
         calls:
             - [ "setCategoryManager", [ "@readerself_core_manager_category" ] ]
+        public: true
 
     readerself_core_controller_author:
         class: Readerself\CoreBundle\Controller\AuthorController
@@ -65,16 +72,19 @@ services:
         calls:
             - [ "setAuthorManager", [ "@readerself_core_manager_author" ] ]
             - [ "setFeedManager", [ "@readerself_core_manager_feed" ] ]
+        public: true
 
     readerself_core_controller_connection:
         class: Readerself\CoreBundle\Controller\ConnectionController
         parent: "readerself_core_controller_abstract"
+        public: true
 
     readerself_core_controller_member:
         class: Readerself\CoreBundle\Controller\MemberController
         parent: "readerself_core_controller_abstract"
         calls:
             - [ "setLdap", [ "%ldap_enabled%", "%ldap_server%", "%ldap_port%", "%ldap_protocol%", "%ldap_rootdn%", "%ldap_rootpw%", "%ldap_basedn%", "%ldap_search_user%", "%ldap_search_group_admin%" ] ]
+        public: true
 
     #Manager
     readerself_core_manager_abstract:
@@ -84,6 +94,7 @@ services:
             - [ "setDoctrine", [ "@doctrine" ] ]
             - [ "setEventDispatcher", [ "@event_dispatcher" ] ]
             - [ "setRouter", [ "@router" ] ]
+        public: true
 
     readerself_core_manager_collection:
         class: Readerself\CoreBundle\Manager\CollectionManager
