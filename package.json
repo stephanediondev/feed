@@ -2,13 +2,13 @@
     "name": "reader-self",
     "license": "GPL-3.0",
     "dependencies": {
-        "jquery": "*",
-        "material-design-lite": "*",
         "dialog-polyfill": "*",
-        "i18next": "*",
-        "moment": "*",
-        "jquery.scrollto": "*",
+        "file-saver": "*",
         "handlebars": "*",
-        "file-saver": "*"
+        "i18next": "*",
+        "jquery": "*",
+        "jquery.scrollto": "*",
+        "material-design-lite": "*",
+        "moment": "*"
     }
 }
