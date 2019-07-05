@@ -3,7 +3,7 @@ var FETCH_IN_CACHE = false;
 var FETCH_EXCLUDE = [
     '/api/',
 ];
-var VERSION = '1.2';
+var VERSION = '1.3';
 var CACHE_KEY = 'readerself-v' + VERSION;
 var CACHE_FILES = [
     '.',
@@ -25,7 +25,7 @@ var CACHE_FILES = [
     'app/views/item.html',
     'app/views/member.html',
     'app/views/misc.html',
-    'node_modules/dialog-polyfill/dialog-polyfill.css',
+    'node_modules/dialog-polyfill/dist/dialog-polyfill.css',
     'node_modules/material-design-lite/material.min.css',
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/dialog-polyfill/dialog-polyfill.js',
@@ -34,7 +34,7 @@ var CACHE_FILES = [
     'node_modules/moment/min/moment.min.js',
     'node_modules/jquery.scrollto/jquery.scrollTo.min.js',
     'node_modules/handlebars/dist/handlebars.min.js',
-    'node_modules/file-saver/FileSaver.min.js'
+    'node_modules/file-saver/dist/FileSaver.min.js'
 ];
 
 self.addEventListener('install', function(InstallEvent) {
