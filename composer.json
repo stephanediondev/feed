@@ -37,7 +37,7 @@
         "incenteev/composer-parameter-handler": "^2.0"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^4.3"
     },
     "scripts": {
         "symfony-scripts": [
