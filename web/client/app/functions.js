@@ -36,8 +36,23 @@ function ready() {
 
         $('.mdl-layout__drawer').on('click', '.mdl-list__item a', function() {
             if(document.querySelector('.mdl-layout__drawer').classList.contains('is-visible')) {
-                var d = document.querySelector('.mdl-layout');
-                d.MaterialLayout.toggleDrawer();
+                $('.mdl-layout__drawer').removeClass('is-visible');
+                $('.mdl-layout__obfuscator').removeClass('is-visible');
+            }
+        });
+
+        $('.mdl-layout').on('click', '.mdl-layout__obfuscator', function() {
+            $('.mdl-layout__drawer').removeClass('is-visible');
+            $('.mdl-layout__obfuscator').removeClass('is-visible');
+        });
+
+        $('.mdl-layout__header').on('click', '.mdl-layout__drawer-button', function() {
+            if(document.querySelector('.mdl-layout__drawer').classList.contains('is-visible')) {
+                $('.mdl-layout__drawer').removeClass('is-visible');
+                $('.mdl-layout__obfuscator').removeClass('is-visible');
+            } else {
+                $('.mdl-layout__drawer').addClass('is-visible');
+                $('.mdl-layout__obfuscator').addClass('is-visible');
             }
         });
 
