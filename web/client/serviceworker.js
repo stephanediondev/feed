@@ -3,7 +3,7 @@ var FETCH_IN_CACHE = false;
 var FETCH_EXCLUDE = [
     '/api/',
 ];
-var VERSION = '1.3';
+var VERSION = '1.4';
 var CACHE_KEY = 'readerself-v' + VERSION;
 var CACHE_FILES = [
     '.',
