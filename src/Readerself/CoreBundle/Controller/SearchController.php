@@ -192,8 +192,12 @@ class SearchController extends AbstractController
 
             if(isset($result['hits']['hits']) == 1) {
                 $data['entries_entity'] = $type;
-                $data['entries_total'] = $result['hits']['total'];
-                $data['entries_pages'] = $pages = ceil($result['hits']['total']/20);
+                if (true == isset($result['hits']['total']['value'])) {
+                    $data['entries_total'] = $result['hits']['total']['value'];
+                } else {
+                    $data['entries_total'] = $result['hits']['total'];
+                }
+                $data['entries_pages'] = $pages = ceil($data['entries_total'] / 20);
                 $data['entries_page_current'] = $page;
                 $pagePrevious = $page - 1;
                 if($pagePrevious >= 1) {
