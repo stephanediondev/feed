@@ -77,6 +77,7 @@ class StatusController extends AbstractController
                 $result = $this->searchManager->query('GET', $path);
                 if(isset($result->error) == 0) {
                     $data['types'][$type]['search'] = $result;
+                    $data['types'][$type]['index'] = $this->searchManager->getIndex();
                 }
             }
 
