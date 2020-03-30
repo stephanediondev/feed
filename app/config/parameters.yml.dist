@@ -15,6 +15,8 @@ parameters:
     elasticsearch_enabled: false
     elasticsearch_index: readerself
     elasticsearch_url: http://127.0.0.1:9200
+    elasticsearch_username: false
+    elasticsearch_password: false
 
     facebook_enabled: false
     facebook_id: ~

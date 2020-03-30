@@ -13,11 +13,17 @@ class SearchManager extends AbstractManager
 
     protected $url;
 
-    public function setElasticsearch($enabled, $index, $url)
+    protected $username;
+
+    protected $password;
+
+    public function setElasticsearch($enabled, $index, $url, $username, $password)
     {
         $this->enabled = $enabled;
         $this->index = $index;
         $this->url = $url;
+        $this->username = $username;
+        $this->password = $password;
     }
 
     public function getEnabled()
@@ -33,6 +39,16 @@ class SearchManager extends AbstractManager
     public function getUrl()
     {
         return $this->url;
+    }
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
     }
 
     public function start()
@@ -166,12 +182,20 @@ class SearchManager extends AbstractManager
         if($this->getEnabled()) {
             $path = $this->getUrl().$path;
 
+            $headers = [
+                'Content-Type: application/json',
+            ];
+
+            if ($this->getUsername() && $this->getPassword()) {
+                $headers[] = 'Authorization Basic '.base64_encode($this->getUsername().':'.$this->getPassword());
+            }
+
             $ci = curl_init();
             curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 5);
             curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ci, CURLOPT_CUSTOMREQUEST, $action);
             curl_setopt($ci, CURLOPT_URL, $path);
-            curl_setopt($ci, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
             if($body) {
                 curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($body));
             }
