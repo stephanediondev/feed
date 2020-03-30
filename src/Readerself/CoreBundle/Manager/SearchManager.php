@@ -187,7 +187,7 @@ class SearchManager extends AbstractManager
             ];
 
             if ($this->getUsername() && $this->getPassword()) {
-                $headers[] = 'Authorization Basic '.base64_encode($this->getUsername().':'.$this->getPassword());
+                $headers[] = 'Authorization: Basic '.base64_encode($this->getUsername().':'.$this->getPassword());
             }
 
             $ci = curl_init();
