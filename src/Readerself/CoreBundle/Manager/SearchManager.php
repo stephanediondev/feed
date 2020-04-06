@@ -17,13 +17,16 @@ class SearchManager extends AbstractManager
 
     protected $password;
 
-    public function setElasticsearch($enabled, $index, $url, $username, $password)
+    protected $sslVerifyPeer;
+
+    public function setElasticsearch($enabled, $index, $url, $username, $password, $sslVerifyPeer)
     {
         $this->enabled = $enabled;
         $this->index = $index;
         $this->url = $url;
         $this->username = $username;
         $this->password = $password;
+        $this->sslVerifyPeer = $sslVerifyPeer;
     }
 
     public function getEnabled()
@@ -49,6 +52,11 @@ class SearchManager extends AbstractManager
     public function getPassword()
     {
         return $this->password;
+    }
+
+    public function getSslVerifyPeer()
+    {
+        return $this->sslVerifyPeer;
     }
 
     public function start()
@@ -196,6 +204,7 @@ class SearchManager extends AbstractManager
             curl_setopt($ci, CURLOPT_CUSTOMREQUEST, $action);
             curl_setopt($ci, CURLOPT_URL, $path);
             curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->getSslVerifyPeer());
             if($body) {
                 curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($body));
             }

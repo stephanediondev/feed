@@ -111,7 +111,7 @@ services:
         parent: "readerself_core_manager_abstract"
         public: true
         calls:
-            - [ "setElasticsearch", [ "%elasticsearch_enabled%", "%elasticsearch_index%", "%elasticsearch_url%", "%elasticsearch_username%", "%elasticsearch_password%" ] ]
+            - [ "setElasticsearch", [ "%elasticsearch_enabled%", "%elasticsearch_index%", "%elasticsearch_url%", "%elasticsearch_username%", "%elasticsearch_password%", "%ssl_verify_peer%" ] ]
 
     readerself_core_manager_collection_feed:
         class: Readerself\CoreBundle\Manager\CollectionFeedManager

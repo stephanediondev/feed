@@ -17,6 +17,7 @@ parameters:
     elasticsearch_url: http://127.0.0.1:9200
     elasticsearch_username: false
     elasticsearch_password: false
+    ssl_verify_peer: true
 
     facebook_enabled: false
     facebook_id: ~
