@@ -225,17 +225,25 @@ class SearchManager extends AbstractManager
     public function init()
     {
         if($this->getEnabled()) {
+            $body = [
+                'settings' => [
+                    'index' => [
+                        'number_of_shards' => 1,
+                        'number_of_replicas' => 0,
+                    ],
+                ],
+            ];
             $path = '/'.$this->getIndex().'_feed';
-            $result = $this->query('PUT', $path);
+            $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_category';
-            $result = $this->query('PUT', $path);
+            $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_author';
-            $result = $this->query('PUT', $path);
+            $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_item';
-            $result = $this->query('PUT', $path);
+            $result = $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_category/_mapping/doc';
             $body = [
