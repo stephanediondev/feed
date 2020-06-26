@@ -70,40 +70,42 @@ class SearchManager extends AbstractManager
             $stmt->execute();
             $results = $stmt->fetchAll();
 
+            $body = '';
             foreach($results as $result) {
-                $action = 'POST';
+                $body .= json_encode(['index' => ['_id' => $result['id']]])."\r\n";
 
-                $path = '/'.$this->getIndex().'_feed/doc/'.$result['id'];
-
-                $body = [
+                $line = [
                     'title' => $result['title'],
                     'description' => $result['description'],
                     'website' => $result['website'],
                     'language' => $result['language'],
                     'date_created' => $result['date_created'],
                 ];
-                $this->query($action, $path, $body);
+                $body .= json_encode($line)."\r\n";
             }
+
+            $action = 'POST';
+            $path = '/'.$this->getIndex().'_feed/_bulk';
+            $this->queryPlain($action, $path, $body);
 
             //categories
             $sql = 'SELECT cat.*
             FROM category AS cat
             WHERE cat.id NOT IN (SELECT act_cat.category_id FROM action_category AS act_cat WHERE act_cat.category_id = cat.id AND act_cat.action_id = 11)
-            ORDER BY cat.id DESC LIMIT 0,3000';
+            ORDER BY cat.id DESC LIMIT 0,1000';
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll();
 
+            $body = '';
             foreach($results as $result) {
-                $action = 'POST';
+                $body .= json_encode(['index' => ['_id' => $result['id']]])."\r\n";
 
-                $path = '/'.$this->getIndex().'_category/doc/'.$result['id'];
-
-                $body = [
+                $line = [
                     'title' => $result['title'],
                     'date_created' => $result['date_created'],
                 ];
-                $this->query($action, $path, $body);
+                $body .= json_encode($line)."\r\n";
 
                 $insertActionCategory = [
                     'category_id' => $result['id'],
@@ -113,25 +115,28 @@ class SearchManager extends AbstractManager
                 $this->insert('action_category', $insertActionCategory);
             }
 
+            $action = 'POST';
+            $path = '/'.$this->getIndex().'_category/_bulk';
+            $this->queryPlain($action, $path, $body);
+
             //authors
             $sql = 'SELECT aut.*
             FROM author AS aut
             WHERE aut.id NOT IN (SELECT act_aut.author_id FROM action_author AS act_aut WHERE act_aut.author_id = aut.id AND act_aut.action_id = 11)
-            ORDER BY aut.id DESC LIMIT 0,3000';
+            ORDER BY aut.id DESC LIMIT 0,1000';
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll();
 
+            $body = '';
             foreach($results as $result) {
-                $action = 'POST';
+                $body .= json_encode(['index' => ['_id' => $result['id']]])."\r\n";
 
-                $path = '/'.$this->getIndex().'_author/doc/'.$result['id'];
-
-                $body = [
+                $line = [
                     'title' => $result['title'],
                     'date_created' => $result['date_created'],
                 ];
-                $this->query($action, $path, $body);
+                $body .= json_encode($line)."\r\n";
 
                 $insertActionCategory = [
                     'author_id' => $result['id'],
@@ -141,23 +146,26 @@ class SearchManager extends AbstractManager
                 $this->insert('action_author', $insertActionCategory);
             }
 
+            $action = 'POST';
+            $path = '/'.$this->getIndex().'_author/_bulk';
+            $this->queryPlain($action, $path, $body);
+
             //items
             $sql = 'SELECT itm.*, auh.title AS author_title, fed.title AS feed_title, fed.language AS feed_language
             FROM item AS itm
             LEFT JOIN author AS auh ON auh.id = itm.author_id
             LEFT JOIN feed AS fed ON fed.id = itm.feed_id
             WHERE itm.content IS NOT NULL AND itm.id NOT IN (SELECT act_itm.item_id FROM action_item AS act_itm WHERE act_itm.item_id = itm.id AND act_itm.action_id = 11)
-            ORDER BY itm.id DESC LIMIT 0,3000';
+            ORDER BY itm.id DESC LIMIT 0,1000';
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
             $results = $stmt->fetchAll();
 
+            $body = '';
             foreach($results as $result) {
-                $action = 'POST';
+                $body .= json_encode(['index' => ['_id' => $result['id']]])."\r\n";
 
-                $path = '/'.$this->getIndex().'_item/doc/'.$result['id'];
-
-                $body = [
+                $line = [
                     'feed' => [
                         'id' => $result['feed_id'],
                         'title' => $result['feed_title'],
@@ -168,12 +176,12 @@ class SearchManager extends AbstractManager
                     'date' => $result['date'],
                 ];
                 if($result['author_id']) {
-                    $body['author'] = [
+                    $line['author'] = [
                         'id' => $result['author_id'],
                         'title' => $result['author_title'],
                     ];
                 }
-                $this->query($action, $path, $body);
+                $body .= json_encode($line)."\r\n";
 
                 $insertActionItem = [
                     'item_id' => $result['id'],
@@ -182,6 +190,10 @@ class SearchManager extends AbstractManager
                 ];
                 $this->insert('action_item', $insertActionItem);
             }
+
+            $action = 'POST';
+            $path = '/'.$this->getIndex().'_item/_bulk';
+            $this->queryPlain($action, $path, $body);
         }
     }
 
@@ -207,6 +219,43 @@ class SearchManager extends AbstractManager
             curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->getSslVerifyPeer());
             if($body) {
                 curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($body));
+            }
+            $exec = curl_exec($ci);
+            if(false === $exec) {
+                return curl_error($ci);
+            } else {
+                $result = json_decode($exec, true);
+                if($action == 'HEAD') {
+                    $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
+                }
+                //print_r($result);
+                return $result;
+            }
+        }
+    }
+
+    public function queryPlain($action, $path, $body = false)
+    {
+        if($this->getEnabled()) {
+            $path = $this->getUrl().$path;
+
+            $headers = [
+                'Content-Type: application/json',
+            ];
+
+            if ($this->getUsername() && $this->getPassword()) {
+                $headers[] = 'Authorization: Basic '.base64_encode($this->getUsername().':'.$this->getPassword());
+            }
+
+            $ci = curl_init();
+            curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 5);
+            curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ci, CURLOPT_CUSTOMREQUEST, $action);
+            curl_setopt($ci, CURLOPT_URL, $path);
+            curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->getSslVerifyPeer());
+            if($body) {
+                curl_setopt($ci, CURLOPT_POSTFIELDS, $body);
             }
             $exec = curl_exec($ci);
             if(false === $exec) {
