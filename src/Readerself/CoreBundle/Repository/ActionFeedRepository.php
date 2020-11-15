@@ -3,14 +3,14 @@ namespace Readerself\CoreBundle\Repository;
 
 use Readerself\CoreBundle\Repository\AbstractRepository;
 
-class ActionFeedMemberRepository extends AbstractRepository
+class ActionFeedRepository extends AbstractRepository
 {
     public function getOne($parameters = []) {
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
         $query->addSelect('act_fed_mbr', 'act', 'fed', 'mbr');
-        $query->from('ReaderselfCoreBundle:ActionFeedMember', 'act_fed_mbr');
+        $query->from('ReaderselfCoreBundle:ActionFeed', 'act_fed_mbr');
         $query->leftJoin('act_fed_mbr.action', 'act');
         $query->leftJoin('act_fed_mbr.feed', 'fed');
         $query->leftJoin('act_fed_mbr.member', 'mbr');
@@ -46,7 +46,7 @@ class ActionFeedMemberRepository extends AbstractRepository
 
         $query = $em->createQueryBuilder();
         $query->addSelect('act_fed_mbr', 'act', 'fed', 'mbr');
-        $query->from('ReaderselfCoreBundle:ActionFeedMember', 'act_fed_mbr');
+        $query->from('ReaderselfCoreBundle:ActionFeed', 'act_fed_mbr');
         $query->leftJoin('act_fed_mbr.action', 'act');
         $query->leftJoin('act_fed_mbr.feed', 'fed');
         $query->leftJoin('act_fed_mbr.member', 'mbr');

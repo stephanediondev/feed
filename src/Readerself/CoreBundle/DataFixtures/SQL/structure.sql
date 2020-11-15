@@ -1,14 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.3
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 30, 2016 at 10:26 AM
--- Server version: 5.7.14
--- PHP Version: 7.0.9
+-- Generation Time: Nov 15, 2020 at 07:40 AM
+-- Server version: 5.7.31
+-- PHP Version: 7.4.11
 
-SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
@@ -40,22 +40,8 @@ CREATE TABLE `action_author` (
   `id` int(10) UNSIGNED NOT NULL,
   `author_id` int(10) UNSIGNED NOT NULL,
   `action_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `action_author_member`
---
-
-DROP TABLE IF EXISTS `action_author_member`;
-CREATE TABLE `action_author_member` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `action_id` int(10) UNSIGNED NOT NULL,
-  `author_id` int(10) UNSIGNED NOT NULL,
-  `member_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  `member_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -69,32 +55,18 @@ CREATE TABLE `action_category` (
   `id` int(10) UNSIGNED NOT NULL,
   `action_id` int(10) UNSIGNED NOT NULL,
   `category_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  `member_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `action_category_member`
+-- Table structure for table `action_feed`
 --
 
-DROP TABLE IF EXISTS `action_category_member`;
-CREATE TABLE `action_category_member` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `action_id` int(10) UNSIGNED NOT NULL,
-  `category_id` int(10) UNSIGNED NOT NULL,
-  `member_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `action_feed_member`
---
-
-DROP TABLE IF EXISTS `action_feed_member`;
-CREATE TABLE `action_feed_member` (
+DROP TABLE IF EXISTS `action_feed`;
+CREATE TABLE `action_feed` (
   `id` int(10) UNSIGNED NOT NULL,
   `action_id` int(10) UNSIGNED NOT NULL,
   `feed_id` int(10) UNSIGNED NOT NULL,
@@ -113,22 +85,8 @@ CREATE TABLE `action_item` (
   `id` int(10) UNSIGNED NOT NULL,
   `action_id` int(10) UNSIGNED NOT NULL,
   `item_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `action_item_member`
---
-
-DROP TABLE IF EXISTS `action_item_member`;
-CREATE TABLE `action_item_member` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `action_id` int(10) UNSIGNED NOT NULL,
-  `item_id` int(10) UNSIGNED NOT NULL,
-  `member_id` int(10) UNSIGNED NOT NULL,
-  `date_created` datetime NOT NULL
+  `date_created` datetime NOT NULL,
+  `member_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -327,43 +285,23 @@ ALTER TABLE `action_author`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `action_id_author_id` (`action_id`,`author_id`),
   ADD KEY `author_id` (`author_id`),
-  ADD KEY `action_id` (`action_id`);
-
-  --
-  -- Indexes for table `action_author_member`
-  --
-  ALTER TABLE `action_author_member`
-    ADD PRIMARY KEY (`id`),
-    ADD UNIQUE KEY `action_id_author_id_member_id` (`action_id`,`author_id`,`member_id`) USING BTREE,
-    ADD KEY `member_id` (`member_id`),
-    ADD KEY `author_id` (`author_id`),
-    ADD KEY `action_id` (`action_id`);
+  ADD KEY `action_id` (`action_id`),
+  ADD KEY `member_id` (`member_id`);
 
 --
 -- Indexes for table `action_category`
 --
 ALTER TABLE `action_category`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_category_id` (`action_id`,`category_id`) USING BTREE,
   ADD KEY `category_id` (`category_id`),
-  ADD KEY `action_id` (`action_id`);
+  ADD KEY `action_id` (`action_id`),
+  ADD KEY `member_id` (`member_id`);
 
 --
--- Indexes for table `action_category_member`
+-- Indexes for table `action_feed`
 --
-ALTER TABLE `action_category_member`
+ALTER TABLE `action_feed`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_category_id_member_id` (`action_id`,`category_id`,`member_id`) USING BTREE,
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `category_id` (`category_id`),
-  ADD KEY `action_id` (`action_id`);
-
---
--- Indexes for table `action_feed_member`
---
-ALTER TABLE `action_feed_member`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_feed_id_member_id` (`action_id`,`feed_id`,`member_id`),
   ADD KEY `feed_id` (`feed_id`),
   ADD KEY `member_id` (`member_id`),
   ADD KEY `action_id` (`action_id`);
@@ -373,19 +311,9 @@ ALTER TABLE `action_feed_member`
 --
 ALTER TABLE `action_item`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_item_id` (`action_id`,`item_id`) USING BTREE,
   ADD KEY `item_id` (`item_id`),
-  ADD KEY `action_id` (`action_id`);
-
---
--- Indexes for table `action_item_member`
---
-ALTER TABLE `action_item_member`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `action_id_item_id_member_id` (`action_id`,`item_id`,`member_id`) USING BTREE,
-  ADD KEY `item_id` (`item_id`),
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `action_id` (`action_id`);
+  ADD KEY `action_id` (`action_id`),
+  ADD KEY `member_id` (`member_id`);
 
 --
 -- Indexes for table `author`
@@ -484,96 +412,97 @@ ALTER TABLE `member`
 --
 ALTER TABLE `action`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `action_author`
 --
 ALTER TABLE `action_author`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `action_author_member`
---
-ALTER TABLE `action_author_member`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `action_category`
 --
 ALTER TABLE `action_category`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT for table `action_category_member`
+-- AUTO_INCREMENT for table `action_feed`
 --
-ALTER TABLE `action_category_member`
+ALTER TABLE `action_feed`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `action_feed_member`
---
-ALTER TABLE `action_feed_member`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `action_item`
 --
 ALTER TABLE `action_item`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `action_item_member`
---
-ALTER TABLE `action_item_member`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `author`
 --
 ALTER TABLE `author`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `collection`
 --
 ALTER TABLE `collection`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `collection_feed`
 --
 ALTER TABLE `collection_feed`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `connection`
 --
 ALTER TABLE `connection`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `enclosure`
 --
 ALTER TABLE `enclosure`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `feed`
 --
 ALTER TABLE `feed`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `feed_category`
 --
 ALTER TABLE `feed_category`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `item`
 --
 ALTER TABLE `item`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `item_category`
 --
 ALTER TABLE `item_category`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `member`
 --
 ALTER TABLE `member`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- Constraints for dumped tables
 --
@@ -588,36 +517,22 @@ ALTER TABLE `action`
 -- Constraints for table `action_author`
 --
 ALTER TABLE `action_author`
+  ADD CONSTRAINT `FK_7F9FE9A37597D3FE` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_7F9FE9A39D32F035` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_7F9FE9A3F675F31B` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `action_author_member`
---
-ALTER TABLE `action_author_member`
-  ADD CONSTRAINT `FK_1C1E667412469DE3` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_1C1E66747597D3FF` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_1C1E66749D32F036` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `action_category`
 --
 ALTER TABLE `action_category`
   ADD CONSTRAINT `FK_D19B69A712469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_D19B69A77597D3FE` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_D19B69A79D32F035` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `action_category_member`
+-- Constraints for table `action_feed`
 --
-ALTER TABLE `action_category_member`
-  ADD CONSTRAINT `FK_1C1E667412469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_1C1E66747597D3FE` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_1C1E66749D32F035` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `action_feed_member`
---
-ALTER TABLE `action_feed_member`
+ALTER TABLE `action_feed`
   ADD CONSTRAINT `FK_C914034851A5BC03` FOREIGN KEY (`feed_id`) REFERENCES `feed` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_C91403487597D3FE` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_C91403489D32F035` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE;
@@ -627,15 +542,8 @@ ALTER TABLE `action_feed_member`
 --
 ALTER TABLE `action_item`
   ADD CONSTRAINT `FK_69FA9E10126F525E` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_69FA9E107597D3FE` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_69FA9E109D32F035` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `action_item_member`
---
-ALTER TABLE `action_item_member`
-  ADD CONSTRAINT `FK_8DCF0673126F525E` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_8DCF06737597D3FE` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_8DCF06739D32F035` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `collection_feed`
@@ -676,3 +584,4 @@ ALTER TABLE `item`
 ALTER TABLE `item_category`
   ADD CONSTRAINT `FK_6A41D10A12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_6A41D10A126F525E` FOREIGN KEY (`item_id`) REFERENCES `item` (`id`) ON DELETE CASCADE;
+COMMIT;

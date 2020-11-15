@@ -143,7 +143,7 @@ class ItemController extends AbstractController
         foreach($pagination as $result) {
             $item = $this->itemManager->getOne(['id' => $result['id']]);
 
-            $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
+            $actions = $this->actionManager->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
 
             $categories = [];
             foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
@@ -186,7 +186,7 @@ class ItemController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
+        $actions = $this->actionManager->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
 
         $categories = [];
         foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
@@ -348,47 +348,47 @@ class ItemController extends AbstractController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
-        if($actionItemMember = $this->actionManager->actionItemMemberManager->getOne([
+        if($actionItem = $this->actionManager->actionItemManager->getOne([
             'action' => $action,
             'item' => $item,
             'member' => $memberConnected,
         ])) {
-            $this->actionManager->actionItemMemberManager->remove($actionItemMember);
+            $this->actionManager->actionItemManager->remove($actionItem);
 
             $data['action'] = $action->getReverse()->getTitle();
             $data['action_reverse'] = $action->getTitle();
 
             if($action->getReverse()) {
-                if($actionItemMemberReverse = $this->actionManager->actionItemMemberManager->getOne([
+                if($actionItemReverse = $this->actionManager->actionItemManager->getOne([
                     'action' => $action->getReverse(),
                     'item' => $item,
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionItemMemberReverse = $this->actionManager->actionItemMemberManager->init();
-                    $actionItemMemberReverse->setAction($action->getReverse());
-                    $actionItemMemberReverse->setItem($item);
-                    $actionItemMemberReverse->setMember($memberConnected);
-                    $this->actionManager->actionItemMemberManager->persist($actionItemMemberReverse);
+                    $actionItemReverse = $this->actionManager->actionItemManager->init();
+                    $actionItemReverse->setAction($action->getReverse());
+                    $actionItemReverse->setItem($item);
+                    $actionItemReverse->setMember($memberConnected);
+                    $this->actionManager->actionItemManager->persist($actionItemReverse);
                 }
             }
         } else {
-            $actionItemMember = $this->actionManager->actionItemMemberManager->init();
-            $actionItemMember->setAction($action);
-            $actionItemMember->setItem($item);
-            $actionItemMember->setMember($memberConnected);
-            $this->actionManager->actionItemMemberManager->persist($actionItemMember);
+            $actionItem = $this->actionManager->actionItemManager->init();
+            $actionItem->setAction($action);
+            $actionItem->setItem($item);
+            $actionItem->setMember($memberConnected);
+            $this->actionManager->actionItemManager->persist($actionItem);
 
             $data['action'] = $action->getTitle();
             $data['action_reverse'] = $action->getReverse()->getTitle();
 
             if($action->getReverse()) {
-                if($actionItemMemberReverse = $this->actionManager->actionItemMemberManager->getOne([
+                if($actionItemReverse = $this->actionManager->actionItemManager->getOne([
                     'action' => $action->getReverse(),
                     'item' => $item,
                     'member' => $memberConnected,
                 ])) {
-                    $this->actionManager->actionItemMemberManager->remove($actionItemMemberReverse);
+                    $this->actionManager->actionItemManager->remove($actionItemReverse);
                 }
             }
         }

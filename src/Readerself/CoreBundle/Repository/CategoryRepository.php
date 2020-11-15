@@ -39,7 +39,7 @@ class CategoryRepository extends AbstractRepository
 
         if(isset($parameters['trendy']) == 1 && $parameters['trendy']) {
             if(isset($parameters['member'])) {
-                $exclude = 'AND cat.id NOT IN( SELECT category_id FROM action_category_member WHERE member_id = :member_id AND action_id = :action_id )';
+                $exclude = 'AND cat.id NOT IN( SELECT category_id FROM action_category WHERE member_id = :member_id AND action_id = :action_id )';
             } else {
                 $exclude = '';
             }
@@ -74,7 +74,7 @@ SQL;
         $query->from('ReaderselfCoreBundle:Category', 'cat');
 
         if(isset($parameters['excluded']) == 1 && $parameters['excluded']) {
-            $query->andWhere('cat.id IN (SELECT IDENTITY(excluded.category) FROM ReaderselfCoreBundle:ActionCategoryMember AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
+            $query->andWhere('cat.id IN (SELECT IDENTITY(excluded.category) FROM ReaderselfCoreBundle:ActionCategory AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
             $query->setParameter(':member', $parameters['member']);
         }
 

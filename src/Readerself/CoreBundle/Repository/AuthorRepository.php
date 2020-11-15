@@ -39,7 +39,7 @@ class AuthorRepository extends AbstractRepository
 
         if(isset($parameters['trendy']) == 1 && $parameters['trendy']) {
             if(isset($parameters['member'])) {
-                $exclude = 'AND aut.id NOT IN( SELECT author_id FROM action_author_member WHERE member_id = :member_id AND action_id = :action_id )';
+                $exclude = 'AND aut.id NOT IN( SELECT author_id FROM action_author WHERE member_id = :member_id AND action_id = :action_id )';
             } else {
                 $exclude = '';
             }
@@ -73,7 +73,7 @@ SQL;
         $query->from('ReaderselfCoreBundle:Author', 'aut');
 
         if(isset($parameters['excluded']) == 1 && $parameters['excluded']) {
-            $query->andWhere('aut.id IN (SELECT IDENTITY(excluded.author) FROM ReaderselfCoreBundle:ActionAuthorMember AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
+            $query->andWhere('aut.id IN (SELECT IDENTITY(excluded.author) FROM ReaderselfCoreBundle:ActionAuthor AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
             $query->setParameter(':member', $parameters['member']);
         }
 

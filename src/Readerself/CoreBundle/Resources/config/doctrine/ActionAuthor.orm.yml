@@ -9,11 +9,9 @@ Readerself\CoreBundle\Entity\ActionAuthor:
         action_id:
             columns:
                 - action_id
-    uniqueConstraints:
-        action_id_author_id:
+        member_id:
             columns:
-                - action_id
-                - author_id
+                - member_id
     id:
         id:
             type: integer
@@ -50,6 +48,18 @@ Readerself\CoreBundle\Entity\ActionAuthor:
             joinColumns:
                 action_id:
                     nullable: false
+                    referencedColumnName: id
+                    onDelete: "cascade"
+            orphanRemoval: false
+        member:
+            targetEntity: Member
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                member_id:
+                    nullable: true
                     referencedColumnName: id
                     onDelete: "cascade"
             orphanRemoval: false

@@ -99,7 +99,7 @@ class FeedManager extends AbstractManager
                     $feed_id = $this->insert('feed', $insertFeed);
                 }
 
-                $sql = 'SELECT id FROM action_feed_member WHERE feed_id = :feed_id AND member_id = :member_id AND action_id = :action_id';
+                $sql = 'SELECT id FROM action_feed WHERE feed_id = :feed_id AND member_id = :member_id AND action_id = :action_id';
                 $stmt = $this->connection->prepare($sql);
                 $stmt->bindValue('feed_id', $feed_id);
                 $stmt->bindValue('member_id', $member->getId());
@@ -109,13 +109,13 @@ class FeedManager extends AbstractManager
 
                 if($test) {
                 } else {
-                    $insertActionFeedMember = [
+                    $insertActionFeed = [
                         'feed_id' => $feed_id,
                         'member_id' => $member->getId(),
                         'action_id' => $action_id,
                         'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                     ];
-                    $this->insert('action_feed_member', $insertActionFeedMember);
+                    $this->insert('action_feed', $insertActionFeed);
                 }
             }
         }

@@ -3,8 +3,8 @@ namespace Readerself\CoreBundle\EventListener;
 
 use Readerself\CoreBundle\Manager\MemberManager;
 
-use Readerself\CoreBundle\Entity\ActionFeedMember;
-use Readerself\CoreBundle\Event\ActionFeedMemberEvent;
+use Readerself\CoreBundle\Entity\ActionFeed;
+use Readerself\CoreBundle\Event\ActionFeedEvent;
 
 class SubscribeListener
 {
@@ -16,12 +16,12 @@ class SubscribeListener
         $this->memberManager = $memberManager;
     }
 
-    public function unread(ActionFeedMemberEvent $actionFeedMemberEvent)
+    public function unread(ActionFeedEvent $actionFeedEvent)
     {
-        $actionFeedMember = $actionFeedMemberEvent->getdata();
+        $actionFeed = $actionFeedEvent->getdata();
 
-        if($actionFeedMember->getAction()->getTitle() == 'subscribe') {
-            $member = $actionFeedMember->getMember();
+        if($actionFeed->getAction()->getTitle() == 'subscribe') {
+            $member = $actionFeed->getMember();
             $this->memberManager->syncUnread($member->getid());
         }
     }

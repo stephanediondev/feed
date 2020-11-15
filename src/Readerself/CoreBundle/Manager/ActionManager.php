@@ -9,26 +9,22 @@ class ActionManager extends AbstractManager
 {
     public $actionItemManager;
 
-    public $actionItemMemberManager;
+    public $actionFeedManager;
 
-    public $actionFeedMemberManager;
+    public $actionCategoryManager;
 
-    public $actionCategoryMemberManager;
-
-    public $actionAuthorMemberManager;
+    public $actionAuthorManager;
 
     public function __construct(
         ActionItemManager $actionItemManager,
-        ActionItemMemberManager $actionItemMemberManager,
-        ActionFeedMemberManager $actionFeedMemberManager,
-        ActionCategoryMemberManager $actionCategoryMemberManager,
-        ActionAuthorMemberManager $actionAuthorMemberManager
+        ActionFeedManager $actionFeedManager,
+        ActionCategoryManager $actionCategoryManager,
+        ActionAuthorManager $actionAuthorManager
     ) {
         $this->actionItemManager = $actionItemManager;
-        $this->actionItemMemberManager = $actionItemMemberManager;
-        $this->actionFeedMemberManager = $actionFeedMemberManager;
-        $this->actionCategoryMemberManager = $actionCategoryMemberManager;
-        $this->actionAuthorMemberManager = $actionAuthorMemberManager;
+        $this->actionFeedManager = $actionFeedManager;
+        $this->actionCategoryManager = $actionCategoryManager;
+        $this->actionAuthorManager = $actionAuthorManager;
     }
 
     public function getOne($paremeters = [])

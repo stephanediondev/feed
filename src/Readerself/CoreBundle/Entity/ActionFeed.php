@@ -3,9 +3,9 @@
 namespace Readerself\CoreBundle\Entity;
 
 /**
- * ActionCategoryMember
+ * ActionFeed
  */
-class ActionCategoryMember
+class ActionFeed
 {
     /**
      * @var integer
@@ -18,9 +18,9 @@ class ActionCategoryMember
     private $dateCreated;
 
     /**
-     * @var \Readerself\CoreBundle\Entity\Category
+     * @var \Readerself\CoreBundle\Entity\Feed
      */
-    private $category;
+    private $feed;
 
     /**
      * @var \Readerself\CoreBundle\Entity\Member
@@ -48,7 +48,7 @@ class ActionCategoryMember
      *
      * @param \DateTime $dateCreated
      *
-     * @return ActionCategoryMember
+     * @return ActionFeed
      */
     public function setDateCreated($dateCreated)
     {
@@ -68,27 +68,27 @@ class ActionCategoryMember
     }
 
     /**
-     * Set category
+     * Set feed
      *
-     * @param \Readerself\CoreBundle\Entity\Category $category
+     * @param \Readerself\CoreBundle\Entity\Feed $feed
      *
-     * @return ActionCategoryMember
+     * @return ActionFeed
      */
-    public function setCategory(\Readerself\CoreBundle\Entity\Category $category = null)
+    public function setFeed(\Readerself\CoreBundle\Entity\Feed $feed = null)
     {
-        $this->category = $category;
+        $this->feed = $feed;
 
         return $this;
     }
 
     /**
-     * Get category
+     * Get feed
      *
-     * @return \Readerself\CoreBundle\Entity\Category
+     * @return \Readerself\CoreBundle\Entity\Feed
      */
-    public function getCategory()
+    public function getFeed()
     {
-        return $this->category;
+        return $this->feed;
     }
 
     /**
@@ -96,7 +96,7 @@ class ActionCategoryMember
      *
      * @param \Readerself\CoreBundle\Entity\Member $member
      *
-     * @return ActionCategoryMember
+     * @return ActionFeed
      */
     public function setMember(\Readerself\CoreBundle\Entity\Member $member = null)
     {
@@ -120,7 +120,7 @@ class ActionCategoryMember
      *
      * @param \Readerself\CoreBundle\Entity\Action $action
      *
-     * @return ActionCategoryMember
+     * @return ActionFeed
      */
     public function setAction(\Readerself\CoreBundle\Entity\Action $action = null)
     {
@@ -138,5 +138,12 @@ class ActionCategoryMember
     {
         return $this->action;
     }
-}
 
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->getAction()->toArray();
+    }
+}
