@@ -73,3 +73,8 @@ swiftmailer:
 nelmio_api_doc:
     sandbox:
         enabled: false
+
+doctrine_migrations:
+    # List of namespace/path pairs to search for migrations, at least one required
+    migrations_paths:
+        'Readerself\Migrations': 'src/Readerself/Migrations'

@@ -2,24 +2,24 @@
 namespace Readerself\CoreBundle\Manager;
 
 use Readerself\CoreBundle\Manager\AbstractManager;
-use Readerself\CoreBundle\Entity\ActionItemMember;
-use Readerself\CoreBundle\Event\ActionItemMemberEvent;
+use Readerself\CoreBundle\Entity\ActionFeed;
+use Readerself\CoreBundle\Event\ActionFeedEvent;
 
-class ActionItemMemberManager extends AbstractManager
+class ActionFeedManager extends AbstractManager
 {
     public function getOne($paremeters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:ActionItemMember')->getOne($paremeters);
+        return $this->em->getRepository('ReaderselfCoreBundle:ActionFeed')->getOne($paremeters);
     }
 
     public function getList($parameters = [])
     {
-        return $this->em->getRepository('ReaderselfCoreBundle:ActionItemMember')->getList($parameters);
+        return $this->em->getRepository('ReaderselfCoreBundle:ActionFeed')->getList($parameters);
     }
 
     public function init()
     {
-        return new ActionItemMember();
+        return new ActionFeed();
     }
 
     public function persist($data)
@@ -34,8 +34,8 @@ class ActionItemMemberManager extends AbstractManager
         $this->em->persist($data);
         $this->em->flush();
 
-        $event = new ActionItemMemberEvent($data, $mode);
-        $this->eventDispatcher->dispatch('ActionItemMember.after_persist', $event);
+        $event = new ActionFeedEvent($data, $mode);
+        $this->eventDispatcher->dispatch('ActionFeed.after_persist', $event);
 
         $this->clearCache();
 
@@ -44,8 +44,8 @@ class ActionItemMemberManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new ActionItemMemberEvent($data, 'delete');
-        $this->eventDispatcher->dispatch('ActionItemMember.before_remove', $event);
+        $event = new ActionFeedEvent($data, 'delete');
+        $this->eventDispatcher->dispatch('ActionFeed.before_remove', $event);
 
         $this->em->remove($data);
         $this->em->flush();

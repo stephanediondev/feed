@@ -178,33 +178,27 @@ services:
         public: true
         arguments:
             - "@readerself_core_manager_action_item"
-            - "@readerself_core_manager_action_item_member"
-            - "@readerself_core_manager_action_feed_member"
-            - "@readerself_core_manager_action_category_member"
-            - "@readerself_core_manager_action_author_member"
+            - "@readerself_core_manager_action_feed"
+            - "@readerself_core_manager_action_category"
+            - "@readerself_core_manager_action_author"
 
     readerself_core_manager_action_item:
         class: Readerself\CoreBundle\Manager\ActionItemManager
         parent: "readerself_core_manager_abstract"
         public: true
 
-    readerself_core_manager_action_item_member:
-        class: Readerself\CoreBundle\Manager\ActionItemMemberManager
+    readerself_core_manager_action_feed:
+        class: Readerself\CoreBundle\Manager\ActionFeedManager
         parent: "readerself_core_manager_abstract"
         public: true
 
-    readerself_core_manager_action_feed_member:
-        class: Readerself\CoreBundle\Manager\ActionFeedMemberManager
+    readerself_core_manager_action_category:
+        class: Readerself\CoreBundle\Manager\ActionCategoryManager
         parent: "readerself_core_manager_abstract"
         public: true
 
-    readerself_core_manager_action_category_member:
-        class: Readerself\CoreBundle\Manager\ActionCategoryMemberManager
-        parent: "readerself_core_manager_abstract"
-        public: true
-
-    readerself_core_manager_action_author_member:
-        class: Readerself\CoreBundle\Manager\ActionAuthorMemberManager
+    readerself_core_manager_action_author:
+        class: Readerself\CoreBundle\Manager\ActionAuthorManager
         parent: "readerself_core_manager_abstract"
         public: true
 
@@ -240,12 +234,12 @@ services:
         arguments:
             - "@readerself_core_manager_member"
         tags:
-            - { name: "kernel.event_listener", event: "ActionItemMember.after_persist", method: "add" }
-            - { name: "kernel.event_listener", event: "ActionItemMember.before_remove", method: "delete" }
+            - { name: "kernel.event_listener", event: "ActionItem.after_persist", method: "add" }
+            - { name: "kernel.event_listener", event: "ActionItem.before_remove", method: "delete" }
 
     readerself_core_eventlistener_subscribe:
         class: Readerself\CoreBundle\EventListener\SubscribeListener
         arguments:
             - "@readerself_core_manager_member"
         tags:
-            - { name: "kernel.event_listener", event: "ActionFeedMember.after_persist", method: "unread" }
+            - { name: "kernel.event_listener", event: "ActionFeed.after_persist", method: "unread" }

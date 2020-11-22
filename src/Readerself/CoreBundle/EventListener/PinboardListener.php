@@ -3,8 +3,8 @@ namespace Readerself\CoreBundle\EventListener;
 
 use Readerself\CoreBundle\Manager\MemberManager;
 
-use Readerself\CoreBundle\Entity\ActionItemMember;
-use Readerself\CoreBundle\Event\ActionItemMemberEvent;
+use Readerself\CoreBundle\Entity\ActionItem;
+use Readerself\CoreBundle\Event\ActionItemEvent;
 
 class PinboardListener
 {
@@ -16,30 +16,30 @@ class PinboardListener
         $this->memberManager = $memberManager;
     }
 
-    public function add(ActionItemMemberEvent $actionItemMemberEvent)
+    public function add(ActionItemEvent $actionItemEvent)
     {
-        $actionItemMember = $actionItemMemberEvent->getdata();
+        $actionItem = $actionItemEvent->getdata();
 
-        if($actionItemMember->getAction()->getTitle() == 'star') {
-            $this->query('add', $actionItemMember);
+        if($actionItem->getAction()->getTitle() == 'star') {
+            $this->query('add', $actionItem);
         }
     }
 
-    public function delete(ActionItemMemberEvent $actionItemMemberEvent)
+    public function delete(ActionItemEvent $actionItemEvent)
     {
-        $actionItemMember = $actionItemMemberEvent->getdata();
+        $actionItem = $actionItemEvent->getdata();
 
-        if($actionItemMember->getAction()->getTitle() == 'star') {
-            $this->query('delete', $actionItemMember);
+        if($actionItem->getAction()->getTitle() == 'star') {
+            $this->query('delete', $actionItem);
         }
     }
 
-    private function query($method, ActionItemMember $actionItemMember)
+    private function query($method, ActionItem $actionItem)
     {
-        $member = $actionItemMember->getMember();
+        $member = $actionItem->getMember();
 
         if($connection = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $member])) {
-            $item = $actionItemMember->getItem();
+            $item = $actionItem->getItem();
 
             $url = 'https://api.pinboard.in/v1/posts/'.$method;
 

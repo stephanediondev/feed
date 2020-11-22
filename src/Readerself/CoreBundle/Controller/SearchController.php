@@ -215,7 +215,7 @@ class SearchController extends AbstractController
                     if($type == 'feed') {
                         $feed = $this->feedManager->getOne(['id' => $hit['_id']]);
                         if($feed) {
-                            $actions = $this->actionManager->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+                            $actions = $this->actionManager->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
                             $categories = [];
                             foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
@@ -241,7 +241,7 @@ class SearchController extends AbstractController
                     if($type == 'category') {
                         $category = $this->categoryManager->getOne(['id' => $hit['_id']]);
                         if($category) {
-                            $actions = $this->actionManager->actionCategoryMemberManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
+                            $actions = $this->actionManager->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
 
                             $data['entries'][$index] = $category->toArray();
                             $data['entries'][$index]['score'] = $hit['_score'];
@@ -276,7 +276,7 @@ class SearchController extends AbstractController
                     if($type == 'item') {
                         $item = $this->itemManager->getOne(['id' => $hit['_id']]);
                         if($item) {
-                            $actions = $this->actionManager->actionItemMemberManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
+                            $actions = $this->actionManager->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
 
                             $categories = [];
                             foreach($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
