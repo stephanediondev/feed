@@ -27,6 +27,10 @@ class ActionAuthor
      */
     private $action;
 
+    /**
+     * @var \Readerself\CoreBundle\Entity\Member
+     */
+    private $member;
 
     /**
      * Get id
@@ -43,7 +47,7 @@ class ActionAuthor
      *
      * @param \DateTime $dateCreated
      *
-     * @return ActionItemMember
+     * @return ActionItem
      */
     public function setDateCreated($dateCreated)
     {
@@ -108,5 +112,29 @@ class ActionAuthor
     public function getAction()
     {
         return $this->action;
+    }
+
+    /**
+     * Set member
+     *
+     * @param \Readerself\CoreBundle\Entity\Member $member
+     *
+     * @return ActionAuthor
+     */
+    public function setMember(\Readerself\CoreBundle\Entity\Member $member = null)
+    {
+        $this->member = $member;
+
+        return $this;
+    }
+
+    /**
+     * Get member
+     *
+     * @return \Readerself\CoreBundle\Entity\Member
+     */
+    public function getMember()
+    {
+        return $this->member;
     }
 }

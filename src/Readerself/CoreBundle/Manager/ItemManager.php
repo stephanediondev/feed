@@ -65,7 +65,7 @@ class ItemManager extends AbstractManager
     public function readAll($parameters = [])
     {
         foreach($this->em->getRepository('ReaderselfCoreBundle:Item')->getList($parameters)->getResult() as $result) {
-            $sql = 'SELECT id FROM action_item_member WHERE member_id = :member_id AND item_id = :item_id AND action_id = :action_id';
+            $sql = 'SELECT id FROM action_item WHERE member_id = :member_id AND item_id = :item_id AND action_id = :action_id';
             $stmt = $this->connection->prepare($sql);
             $stmt->bindValue('member_id', $parameters['member']->getId());
             $stmt->bindValue('item_id', $result['id']);
@@ -75,15 +75,15 @@ class ItemManager extends AbstractManager
 
             if($test) {
             } else {
-                $insertActionItemMember = [
+                $insertActionItem = [
                     'member_id' => $parameters['member']->getId(),
                     'item_id' => $result['id'],
                     'action_id' => 1,
                     'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                 ];
-                $this->insert('action_item_member', $insertActionItemMember);
+                $this->insert('action_item', $insertActionItem);
 
-                $sql = 'DELETE FROM action_item_member WHERE action_id = :action_id AND item_id = :item_id AND member_id = :member_id';
+                $sql = 'DELETE FROM action_item WHERE action_id = :action_id AND item_id = :item_id AND member_id = :member_id';
                 $stmt = $this->connection->prepare($sql);
                 $stmt->bindValue('action_id', 12);
                 $stmt->bindValue('item_id', $result['id']);

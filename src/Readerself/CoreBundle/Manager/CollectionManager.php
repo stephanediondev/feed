@@ -198,16 +198,8 @@ class CollectionManager extends AbstractManager
                     ]);
 
                     if($sp_feed->error()) {
-                        $string = file_get_contents($this->toAscii($feed['link']));
-                        $json = json_decode($string, true);
-
-                        if(json_last_error() == JSON_ERROR_NONE) {
-                            $this->manageJsonFeed($feed, $json);
-
-                        } else {
-                            $errors++;
-                            $insertCollectionFeed['error'] = $sp_feed->error();
-                        }
+                        $errors++;
+                        $insertCollectionFeed['error'] = $sp_feed->error();
                     }
 
                     if(!$sp_feed->error()) {

@@ -51,7 +51,7 @@ class FeedCategoryRepository extends AbstractRepository
         }
 
         if(isset($parameters['member']) == 1) {
-            $query->andWhere('cat.id NOT IN (SELECT IDENTITY(exclude.category) FROM ReaderselfCoreBundle:ActionCategoryMember AS exclude WHERE exclude.member = :member AND exclude.action = 5)');
+            $query->andWhere('cat.id NOT IN (SELECT IDENTITY(exclude.category) FROM ReaderselfCoreBundle:ActionCategory AS exclude WHERE exclude.member = :member AND exclude.action = 5)');
             $query->setParameter(':member', $parameters['member']);
         }
 

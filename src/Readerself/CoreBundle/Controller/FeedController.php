@@ -123,7 +123,7 @@ class FeedController extends AbstractController
         $index = 0;
         foreach($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
-            $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+            $actions = $this->get('readerself_core_manager_action')->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
             $categories = [];
             foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
@@ -214,7 +214,7 @@ class FeedController extends AbstractController
             return new JsonResponse($data, 404);
         }
 
-        $actions = $this->get('readerself_core_manager_action')->actionFeedMemberManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+        $actions = $this->get('readerself_core_manager_action')->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
         $categories = [];
         foreach($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
@@ -350,48 +350,48 @@ class FeedController extends AbstractController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
-        if($actionFeedMember = $this->actionManager->actionFeedMemberManager->getOne([
+        if($actionFeed = $this->actionManager->actionFeedManager->getOne([
             'action' => $action,
             'feed' => $feed,
             'member' => $memberConnected,
         ])) {
-            $this->actionManager->actionFeedMemberManager->remove($actionFeedMember);
+            $this->actionManager->actionFeedManager->remove($actionFeed);
 
             $data['action'] = $action->getReverse()->getTitle();
             $data['action_reverse'] = $action->getTitle();
 
             if($action->getReverse()) {
-                if($actionFeedMemberReverse = $this->actionManager->actionFeedMemberManager->getOne([
+                if($actionFeedReverse = $this->actionManager->actionFeedManager->getOne([
                     'action' => $action->getReverse(),
                     'feed' => $feed,
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionFeedMemberReverse = $this->actionManager->actionFeedMemberManager->init();
-                    $actionFeedMemberReverse->setAction($action->getReverse());
-                    $actionFeedMemberReverse->setFeed($feed);
-                    $actionFeedMemberReverse->setMember($memberConnected);
-                    $this->actionManager->actionFeedMemberManager->persist($actionFeedMemberReverse);
+                    $actionFeedReverse = $this->actionManager->actionFeedManager->init();
+                    $actionFeedReverse->setAction($action->getReverse());
+                    $actionFeedReverse->setFeed($feed);
+                    $actionFeedReverse->setMember($memberConnected);
+                    $this->actionManager->actionFeedManager->persist($actionFeedReverse);
                 }
             }
 
         } else {
-            $actionFeedMember = $this->actionManager->actionFeedMemberManager->init();
-            $actionFeedMember->setAction($action);
-            $actionFeedMember->setFeed($feed);
-            $actionFeedMember->setMember($memberConnected);
-            $this->actionManager->actionFeedMemberManager->persist($actionFeedMember);
+            $actionFeed = $this->actionManager->actionFeedManager->init();
+            $actionFeed->setAction($action);
+            $actionFeed->setFeed($feed);
+            $actionFeed->setMember($memberConnected);
+            $this->actionManager->actionFeedManager->persist($actionFeed);
 
             $data['action'] = $action->getTitle();
             $data['action_reverse'] = $action->getReverse()->getTitle();
 
             if($action->getReverse()) {
-                if($actionFeedMemberReverse = $this->actionManager->actionFeedMemberManager->getOne([
+                if($actionFeedReverse = $this->actionManager->actionFeedManager->getOne([
                     'action' => $action->getReverse(),
                     'feed' => $feed,
                     'member' => $memberConnected,
                 ])) {
-                    $this->actionManager->actionFeedMemberManager->remove($actionFeedMemberReverse);
+                    $this->actionManager->actionFeedManager->remove($actionFeedReverse);
                 }
             }
         }
