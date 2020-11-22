@@ -14,11 +14,13 @@ final class Version20201115082734 extends AbstractMigration
 {
     public function getDescription() : string
     {
-        return '';
+        return 'replace tables action_*_member by action_*';
     }
 
     public function up(Schema $schema) : void
     {
+        $this->addSql('SET FOREIGN_KEY_CHECKS=0;');
+
         $this->addSql('RENAME TABLE action_feed_member TO action_feed;');
 
         $this->addSql('DROP INDEX action_id_feed_id_member_id ON action_feed;');
@@ -46,6 +48,8 @@ final class Version20201115082734 extends AbstractMigration
         $this->addSql('DROP TABLE action_author_member;');
         $this->addSql('DROP TABLE action_category_member;');
         $this->addSql('DROP TABLE action_item_member;');
+
+        $this->addSql('SET FOREIGN_KEY_CHECKS=1;');
     }
 
     public function down(Schema $schema) : void
