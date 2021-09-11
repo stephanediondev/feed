@@ -17,4 +17,4 @@ rm composer-setup.php
 SYMFONY_ENV=prod ./composer install --no-dev -o --prefer-dist
 bin/console doctrine:fixtures:load --append --fixtures="src/Readerself/CoreBundle/DataFixtures"
 
-yarn install --modules-folder=web/client/node_modules --production=true
+yarn install --modules-folder=public/client/node_modules --production=true
