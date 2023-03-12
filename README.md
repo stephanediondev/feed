@@ -1,62 +1,51 @@
-#### Requirements
+# Requirements
 
-##### Language
-* PHP 5.5 or greater
-* php-curl
-* php-json
-* php-iconv
-* php-mbstring
-* php-gmp
-* php-xml and php-tidy (recommended, to cleanup, repair and sanitize html from feeds)
+- PHP 8.2 with apcu, curl, gmp, iconv, json, mbstring, tidy, xml
+- Composer
+- MySQL 8
+- Yarn
 
-##### Database
-* MySQL 5.5.3 or greater (utf8mb4 character set)
+# Installation
 
-To fix ```#1709 - Index column size too large. The maximum column size is 767 bytes.```, add in MySQL configuration:
+## MySql user and database
 
 ```
-innodb_large_prefix = ON
-innodb_file_format = BARRACUDA
+mysql -u root -p
+CREATE USER 'your-user'@'your-host' IDENTIFIED WITH mysql_native_password BY 'your-password';
+CREATE DATABASE IF NOT EXISTS feed DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+GRANT ALL PRIVILEGES ON feed.* TO 'your-user'@'your-host';
+FLUSH PRIVILEGES;
 ```
 
-##### Web server
-* Apache 2.2 or greater with mod_rewrite module enabled (and "Allowoverride All" in VirtualHost / Directory configuration to allow .htaccess file)
+## Application
 
-#### Installation
+Copy ```.env.dist``` to ```.env.local```
 
-You need to install Yarn https://yarnpkg.com/en/docs/install
+Edit ```DATABASE_URL=mysql://your-user:your-password@your-host:3306/feed?serverVersion=8&charset=utf8mb4```, ```MESSENGER_TRANSPORT_DSN=sync://``` and ```MAILER_DSN=null://null```
 
-```text
-cd /path-to-installation
-chmod +x install.sh && chmod +x update.sh
-./install.sh
-#bin/console readerself:elasticsearch:init
+Copy ```.env.test``` to ```.env.test.local```
+
+Add and edit ```DATABASE_URL=mysql://your-user:your-password@your-host:3306/feed?serverVersion=8&charset=utf8mb4```
+
+```
+composer install
+bin/console doctrine:schema:create
+bin/console app:setup
+bin/console app:member:create
+yarn install
+yarn run build
 ```
 
-Set commands
-```text
+## Commands
+
+```
 crontab -e
 # m h dom mon dow command
-0 * * * * cd /path-to-installation && bin/console readerself:collection
-#30 * * * * cd /path-to-installation && bin/console readerself:elasticsearch
+0 * * * * cd /path-to-installation && bin/console app:collection
+#30 * * * * cd /path-to-installation && bin/console app:elasticsearch
 ```
 
-#### Update
-
-```text
-cd /path-to-installation
-./update.sh
-```
-
-#### Client
-http://example.com/client
-- Email: example@example.com
-- Password: example
-
-#### Api documentation
-http://example.com/api/documentation
-
-#### Screenshots
+# Screenshots
 
 ![Login](public/screenshots/Screenshot_20170108-101851.png)
 ![Add to home screen dialog](public/screenshots/Screenshot_20170108-102110.png)

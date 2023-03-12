@@ -1,0 +1,195 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\MemberRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: MemberRepository::class)]
+#[ORM\Table(name: "member")]
+#[ORM\UniqueConstraint(name: "email", columns: ["email"])]
+class Member implements UserInterface, PasswordAuthenticatedUserInterface
+{
+    #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
+    private ?int $id = null;
+
+    #[ORM\Column(name: "email", type: "string", length: 255, nullable: false)]
+    private ?string $email;
+
+    #[ORM\Column(name: "password", type: "string", length: 255, nullable: false)]
+    private ?string $password;
+
+    #[ORM\Column(name: "administrator", type: "boolean", nullable: false, options: ["default" => 0])]
+    private bool $administrator = false;
+
+    #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
+    private ?\DateTimeInterface $dateCreated = null;
+
+    #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
+    private ?\DateTimeInterface $dateModified = null;
+
+    private ?string$plainPassword;
+
+    private ?string $username;
+
+    private ?string $nickname;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getAdministrator(): bool
+    {
+        return $this->administrator;
+    }
+
+    public function setAdministrator(bool $administrator): self
+    {
+        $this->administrator = $administrator;
+
+        return $this;
+    }
+
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
+    {
+        $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    public function getDateModified(): ?\DateTimeInterface
+    {
+        return $this->dateModified;
+    }
+
+    public function setDateModified(?\DateTimeInterface $dateModified): self
+    {
+        $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string$plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->email;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = [];
+        if ($this->getAdministrator()) {
+            $roles[] = 'ROLE_ADMINISTRATOR';
+        } else {
+            $roles[] = 'ROLE_USER';
+        }
+        return $roles;
+    }
+
+    public function eraseCredentials(): void
+    {
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            $this->nickname,
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->username,
+            $this->password,
+            $this->nickname,
+        ) = unserialize($serialized);
+    }
+
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return true;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'administrator' => $this->getAdministrator(),
+            'date_created' => $this->getDateCreated()->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->getEmail() ?? '';
+    }
+}
