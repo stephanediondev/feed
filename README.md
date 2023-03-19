@@ -7,10 +7,13 @@
 
 # Installation
 
-## MySql user and database
+## MySQL user and database
 
 ```
 mysql -u root -p
+```
+
+```sql
 CREATE USER 'your-user'@'your-host' IDENTIFIED WITH mysql_native_password BY 'your-password';
 CREATE DATABASE IF NOT EXISTS feed DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 GRANT ALL PRIVILEGES ON feed.* TO 'your-user'@'your-host';
@@ -19,13 +22,9 @@ FLUSH PRIVILEGES;
 
 ## Application
 
-Copy ```.env.dist``` to ```.env.local```
+Copy ```.env.dist``` to ```.env```
 
-Edit ```DATABASE_URL=mysql://your-user:your-password@your-host:3306/feed?serverVersion=8&charset=utf8mb4```, ```MESSENGER_TRANSPORT_DSN=sync://``` and ```MAILER_DSN=null://null```
-
-Copy ```.env.test``` to ```.env.test.local```
-
-Add and edit ```DATABASE_URL=mysql://your-user:your-password@your-host:3306/feed?serverVersion=8&charset=utf8mb4```
+Edit ```DATABASE_URL=mysql://your-user:your-password@your-host:3306/feed?serverVersion=8&charset=utf8mb4```
 
 ```
 composer install
@@ -40,6 +39,9 @@ yarn run build
 
 ```
 crontab -e
+```
+
+```
 # m h dom mon dow command
 0 * * * * cd /path-to-installation && bin/console app:collection
 #30 * * * * cd /path-to-installation && bin/console app:elasticsearch
