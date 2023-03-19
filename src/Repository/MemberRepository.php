@@ -1,0 +1,101 @@
+<?php
+
+namespace App\Repository;
+
+use App\Repository\AbstractRepository;
+use App\Entity\Member;
+
+class MemberRepository extends AbstractRepository
+{
+    public function getEntityClass(): string
+    {
+        return Member::class;
+    }
+
+    public function getOne($parameters = [])
+    {
+        $em = $this->getEntityManager();
+
+        $query = $em->createQueryBuilder();
+        $query->addSelect('mbr');
+        $query->from(Member::class, 'mbr');
+
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('mbr.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
+        if (isset($parameters['email']) == 1) {
+            $query->andWhere('mbr.email = :email');
+            $query->setParameter(':email', $parameters['email']);
+        }
+
+        $getQuery = $query->getQuery();
+        $getQuery->setMaxResults(1);
+
+        return $getQuery->getOneOrNullResult();
+    }
+
+    public function getList($parameters = [])
+    {
+        $em = $this->getEntityManager();
+
+        $query = $em->createQueryBuilder();
+        $query->addSelect('fed');
+        $query->from(Member::class, 'mbr');
+
+        $query->addOrderBy('mbr.email');
+        $query->groupBy('mbr.id');
+
+        $getQuery = $query->getQuery();
+        return $getQuery;
+    }
+
+    public function persist(Member $member, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($member);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Member $member, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($member);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function syncUnread($member_id)
+    {
+        $sql = 'INSERT INTO action_item (item_id, member_id, action_id, date_created) SELECT itm.id, :member_id, :action_id, :date_created FROM item AS itm
+            WHERE itm.feed_id IN (SELECT subscribed.feed_id FROM action_feed AS subscribed WHERE subscribed.member_id = :member_id AND subscribed.action_id = 3)
+            AND itm.id NOT IN (SELECT alreadyRead.item_id FROM action_item AS alreadyRead WHERE alreadyRead.member_id = :member_id AND alreadyRead.action_id IN(1,4))
+            AND itm.id NOT IN (SELECT unreadSaved.item_id FROM action_item AS unreadSaved WHERE unreadSaved.member_id = :member_id AND unreadSaved.action_id = 12)
+        ';
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('member_id', $member_id);
+        $stmt->bindValue('action_id', 12);
+        $stmt->bindValue('date_created', (new \Datetime())->format('Y-m-d H:i:s'));
+        $resultSet = $stmt->executeQuery();
+    }
+
+    public function countUnread($member_id)
+    {
+        $sql = 'SELECT COUNT(DISTINCT(itm.id)) AS total FROM item AS itm
+            WHERE itm.feed_id IN (SELECT subscribed.feed_id FROM action_feed AS subscribed WHERE subscribed.member_id = :member_id AND subscribed.action_id = 3)
+            AND itm.id NOT IN (SELECT alreadyRead.item_id FROM action_item AS alreadyRead WHERE alreadyRead.member_id = :member_id AND alreadyRead.action_id IN(1,4))
+            AND itm.id IN (SELECT unreadSaved.item_id FROM action_item AS unreadSaved WHERE unreadSaved.member_id = :member_id AND unreadSaved.action_id = 12)
+        ';
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->bindValue('member_id', $member_id);
+        $resultSet = $stmt->executeQuery();
+
+        $fetch = $resultSet->fetchAssociative();
+
+        return $fetch['total'];
+    }
+}

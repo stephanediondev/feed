@@ -1,0 +1,447 @@
+<?php
+
+namespace App\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use App\Controller\AbstractAppController;
+
+use App\Form\Type\MemberType;
+
+use App\Model\LoginModel;
+use App\Form\Type\LoginType;
+
+use App\Model\ProfileModel;
+use App\Form\Type\ProfileType;
+
+use App\Model\PinboardModel;
+use App\Form\Type\PinboardType;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
+#[Route(path: '/api', name: 'api_')]
+class MemberController extends AbstractAppController
+{
+    protected $ldapEnabled = false;
+
+    protected $ldapServer = 'ldap://localhost';
+
+    protected $ldapPort = 389;
+
+    protected $ldapProtocol = 3;
+
+    protected $ldapRootDn = 'cn=Manager,dc=my-domain,dc=com';
+
+    protected $ldapRootPw = 'secret';
+
+    protected $ldapBaseDn = 'dc=my-domain,dc=com';
+
+    protected $ldapSearchUser = 'mail=[email]';
+
+    protected $ldapSearchGroupAdmin = 'cn=admingroup';
+
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
+    public function setLdap($enabled, $server, $port, $protocol, $rootDn, $rootPw, $baseDn, $searchUser, $searchGroupAdmin)
+    {
+        $this->ldapEnabled = $enabled;
+        $this->ldapServer = $server;
+        $this->ldapPort = $port;
+        $this->ldapProtocol = $protocol;
+        $this->ldapRootDn = $rootDn;
+        $this->ldapRootPw = $rootPw;
+        $this->ldapBaseDn = $baseDn;
+        $this->ldapSearchUser = $searchUser;
+        $this->ldapSearchGroupAdmin = $searchGroupAdmin;
+    }
+
+    public function create(Request $request)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        if (!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
+        $status = 200;
+
+        $member = $this->memberManager->init();
+        $form = $this->createForm(MemberType::class, $member, ['validation_groups'=>['insert']]);
+
+        $form->submit($request->request->all());
+
+        $data[] = 'a';
+
+        if ($form->isValid()) {
+            $test = $this->memberManager->getOne(['email' => $member->getEmail()]);
+
+            if (!$test) {
+                $member->setPassword($this->passwordHasher->hashPassword($member, $member->getPassword()));
+
+                $member_id = $this->memberManager->persist($member);
+
+                $data[] = $form->getData()->getEmail();
+            } else {
+                $data[] = 'b';
+                $status = 403;
+            }
+        }
+
+        return new JsonResponse($data, $status);
+    }
+
+    public function read(Request $request, $id)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        if (!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
+        $member = $this->memberManager->getOne(['id' => $id]);
+
+        if (!$member) {
+            return new JsonResponse($data, 404);
+        }
+
+        $data['entry'] = $member->toArray();
+        $data['entry_entity'] = 'member';
+
+        return new JsonResponse($data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        if (!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
+        $member = $this->memberManager->getOne(['id' => $id]);
+
+        if (!$member) {
+            return new JsonResponse($data, 404);
+        }
+
+        return new JsonResponse($data);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        if (!$memberConnected->getAdministrator()) {
+            return new JsonResponse($data, 403);
+        }
+
+        $member = $this->memberManager->getOne(['id' => $id]);
+
+        if (!$member) {
+            return new JsonResponse($data, 404);
+        }
+
+        return new JsonResponse($data);
+    }
+
+    #[Route(path: '/test', name: 'test', methods: ['GET'])]
+    public function test(Request $request)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $this->memberManager->syncUnread($memberConnected->getId());
+
+        $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+
+        return new JsonResponse($data);
+    }
+
+    #[Route(path: '/login', name: 'login', methods: ['POST'])]
+    public function login(Request $request)
+    {
+        $data = [];
+
+        $status = 401;
+
+        $login = new LoginModel();
+        $form = $this->createForm(LoginType::class, $login);
+
+        $form->submit($request->request->all());
+
+        if ($form->isValid()) {
+            if ($this->ldapEnabled) {
+                $ldapConnect = ldap_connect($this->ldapServer, $this->ldapPort);
+                if ($ldapConnect) {
+                    ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, $this->ldapProtocol);
+                    ldap_set_option($ldapConnect, LDAP_OPT_REFERRALS, 0);
+                    if (ldap_bind($ldapConnect, $this->ldapRootDn, $this->ldapRootPw)) {
+                        $ldapSearch = ldap_search($ldapConnect, $this->ldapBaseDn, str_replace('[email]', $login->getEmail(), $this->ldapSearchUser), ['uid']);
+                        if ($ldapSearch) {
+                            $ldapGetEntries = ldap_get_entries($ldapConnect, $ldapSearch);
+                            if (0 < $ldapGetEntries['count']) {
+                                try {
+                                    $ldapSearch2 = ldap_search($ldapConnect, $this->ldapBaseDn, $this->ldapSearchGroupAdmin, []);
+                                    if ($ldapSearch2) {
+                                        $ldapGetEntries2 = ldap_get_entries($ldapConnect, $ldapSearch2);
+                                    }
+
+                                    if (ldap_bind($ldapConnect, $ldapGetEntries[0]['dn'], $login->getPassword())) {
+                                        $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
+
+                                        if (!$member) {
+                                            $member = $this->memberManager->init();
+                                            $member->setEmail($login->getEmail());
+                                        }
+                                        $member->setPassword($this->passwordHasher->hashPassword($member, $login->getPassword()));
+
+                                        $administrator = false;
+                                        if (isset($ldapGetEntries2)) {
+                                            if (in_array($ldapGetEntries[0]['uid'][0], $ldapGetEntries2[0]['memberuid'])) {
+                                                $administrator = true;
+                                            }
+                                        }
+                                        $member->setAdministrator($administrator);
+                                        $this->memberManager->persist($member);
+                                    }
+                                } catch(\Exception $e) {
+                                }
+                            }
+                        }
+                    }
+                    ldap_unbind($ldapConnect);
+                }
+            }
+
+            $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
+
+            if ($member) {
+                if ($this->passwordHasher->isPasswordValid($member, $login->getPassword())) {
+                    $connection = $this->memberManager->connectionManager->init();
+                    $connection->setMember($member);
+                    $connection->setType('login');
+                    $connection->setToken(base64_encode(random_bytes(50)));
+                    $connection->setIp($request->getClientIp());
+                    $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
+
+                    $this->memberManager->connectionManager->persist($connection);
+
+                    $data['entry'] = $connection->toArray();
+                    $data['entry_entity'] = 'connection';
+
+                    $status = 200;
+                }
+            }
+        }
+
+        return new JsonResponse($data, $status);
+    }
+
+    #[Route(path: '/profile', name: 'profile', methods: ['GET'])]
+    public function profile(Request $request)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $pinboard = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
+
+        if ($pinboard) {
+            $data['pinboard'] = $pinboard->toArray();
+        }
+
+        $data['entry'] = $memberConnected->toArray();
+        $data['entry_entity'] = 'member';
+
+        return new JsonResponse($data);
+    }
+
+    #[Route(path: '/profile/connections', name: 'profile_connections', methods: ['GET'])]
+    public function profileConnections(Request $request)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $connections = [];
+        $index = 0;
+        foreach ($this->memberManager->connectionManager->getList(['member' => $memberConnected])->getResult() as $connection) {
+            $connections[$index] = $connection->toArray();
+            if ($connection->getIp() == $request->getClientIp()) {
+                $connections[$index]['currentIp'] = true;
+            }
+            if ($connection->getAgent() == $request->server->get('HTTP_USER_AGENT')) {
+                $connections[$index]['currentAgent'] = true;
+            }
+            $index++;
+        }
+
+        $data['entry'] = $memberConnected->toArray();
+        $data['entry_entity'] = 'member';
+
+        $data['entries'] = $connections;
+        $data['entries_entity'] = 'connection';
+
+        return new JsonResponse($data);
+    }
+
+    public function profileUpdate(Request $request)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $profile = new ProfileModel();
+        $form = $this->createForm(ProfileType::class, $profile);
+
+        $form->submit($request->request->all());
+
+        if ($form->isValid()) {
+            $memberConnected->setEmail($profile->getEmail());
+            if ($profile->getPassword()) {
+                $memberConnected->setPassword($this->passwordHasher->hashPassword($memberConnected, $profile->getPassword()));
+            }
+
+            $this->memberManager->persist($memberConnected);
+        } else {
+            $errors = $form->getErrors(true);
+            foreach ($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
+        }
+
+        $data['entry'] = $memberConnected->toArray();
+        $data['entry_entity'] = 'member';
+
+        return new JsonResponse($data);
+    }
+
+    #[Route(path: '/logout', name: 'logout', methods: ['GET'])]
+    public function logout(Request $request)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $connection = $this->memberManager->connectionManager->getOne(['type' => 'login', 'token' => $request->headers->get('X-CONNECTION-TOKEN'), 'member' => $memberConnected]);
+
+        $data['entry'] = $connection->toArray();
+        $data['entry_entity'] = 'connection';
+
+        $this->memberManager->connectionManager->remove($connection);
+
+
+        return new JsonResponse($data);
+    }
+
+    public function pinboard(Request $request)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request)) {
+            return new JsonResponse($data, 403);
+        }
+
+        $pinboard = new PinboardModel();
+        $form = $this->createForm(PinboardType::class, $pinboard);
+
+        $form->submit($request->request->all());
+
+        if ($form->isValid()) {
+            $connection = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
+
+            if ($connection) {
+                $connection->setToken($pinboard->getToken());
+            } else {
+                $connection = $this->memberManager->connectionManager->init();
+                $connection->setMember($memberConnected);
+                $connection->setType('pinboard');
+                $connection->setToken($pinboard->getToken());
+                $connection->setIp($request->getClientIp());
+                $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
+            }
+            $this->memberManager->connectionManager->persist($connection);
+
+            $data['entry'] = $connection->toArray();
+            $data['entry_entity'] = 'connection';
+        } else {
+            $errors = $form->getErrors(true);
+            foreach ($errors as $error) {
+                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
+        }
+
+        return new JsonResponse($data);
+    }
+
+    public function notifier(Request $request)
+    {
+        $data = [];
+
+        $status = 401;
+
+        $login = new LoginModel();
+        $form = $this->createForm(LoginType::class, $login);
+
+        $form->submit($request->request->all());
+
+        if ($form->isValid()) {
+            $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
+
+            if ($member) {
+                if ($this->passwordHasher->isPasswordValid($member, $login->getPassword())) {
+                    $connection = $this->memberManager->connectionManager->init();
+                    $connection->setMember($member);
+                    $connection->setType('notifier');
+                    $connection->setToken(base64_encode(random_bytes(50)));
+                    $connection->setIp($request->getClientIp());
+                    $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
+
+                    $this->memberManager->connectionManager->persist($connection);
+
+                    $data['entry'] = $connection->toArray();
+                    $data['entry_entity'] = 'connection';
+
+                    $status = 200;
+                }
+            }
+        }
+
+        return new JsonResponse($data, $status);
+    }
+
+    public function unread(Request $request)
+    {
+        $data = [];
+        if (!$memberConnected = $this->validateToken($request, 'notifier')) {
+            return new JsonResponse($data, 403);
+        }
+
+        $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+
+        return new JsonResponse($data);
+    }
+}
