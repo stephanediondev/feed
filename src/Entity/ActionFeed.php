@@ -20,128 +20,73 @@ class ActionFeed
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $feed;
+    private ?Feed $feed = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Member", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "member_id", referencedColumnName: "id", onDelete: "cascade", nullable: true)]
-    private $member;
+    private ?Member $member = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Action", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "action_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $action;
+    private ?Action $action = null;
 
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return ActionFeed
-     */
-    public function setDateCreated($dateCreated)
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getFeed(): ?Feed
     {
-        return $this->dateCreated;
+        return $this->feed;
     }
 
-    /**
-     * Set feed
-     *
-     * @param \App\Entity\Feed $feed
-     *
-     * @return ActionFeed
-     */
-    public function setFeed(Feed $feed = null)
+    public function setFeed(?Feed $feed): self
     {
         $this->feed = $feed;
 
         return $this;
     }
 
-    /**
-     * Get feed
-     *
-     * @return \App\Entity\Feed
-     */
-    public function getFeed()
+    public function getAction(): ?Action
     {
-        return $this->feed;
+        return $this->action;
     }
 
-    /**
-     * Set member
-     *
-     * @param \App\Entity\Member $member
-     *
-     * @return ActionFeed
-     */
-    public function setMember(Member $member = null)
-    {
-        $this->member = $member;
-
-        return $this;
-    }
-
-    /**
-     * Get member
-     *
-     * @return \App\Entity\Member
-     */
-    public function getMember()
-    {
-        return $this->member;
-    }
-
-    /**
-     * Set action
-     *
-     * @param \App\Entity\Action $action
-     *
-     * @return ActionFeed
-     */
-    public function setAction(Action $action = null)
+    public function setAction(?Action $action): self
     {
         $this->action = $action;
 
         return $this;
     }
 
-    /**
-     * Get action
-     *
-     * @return \App\Entity\Action
-     */
-    public function getAction()
+    public function getMember(): ?Member
     {
-        return $this->action;
+        return $this->member;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function setMember(?Member $member): self
     {
-        return $this->getAction()->toArray();
+        $this->member = $member;
+
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'action' => $this->getAction()->toArray(),
+        ];
     }
 }

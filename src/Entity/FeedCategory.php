@@ -17,74 +17,43 @@ class FeedCategory
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Category", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $category;
+    private ?Category $category = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $feed;
+    private ?Feed $feed = null;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set category
-     *
-     * @param \App\Entity\Category $category
-     *
-     * @return FeedCategory
-     */
-    public function setCategory(Category $category = null)
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
     {
         $this->category = $category;
 
         return $this;
     }
 
-    /**
-     * Get category
-     *
-     * @return \App\Entity\Category
-     */
-    public function getCategory()
+    public function getFeed(): ?Feed
     {
-        return $this->category;
+        return $this->feed;
     }
 
-    /**
-     * Set feed
-     *
-     * @param \App\Entity\Feed $feed
-     *
-     * @return FeedCategory
-     */
-    public function setFeed(Feed $feed = null)
+    public function setFeed(?Feed $feed): self
     {
         $this->feed = $feed;
 
         return $this;
     }
 
-    /**
-     * Get feed
-     *
-     * @return \App\Entity\Feed
-     */
-    public function getFeed()
-    {
-        return $this->feed;
-    }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getCategory()->getId(),

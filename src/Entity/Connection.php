@@ -15,16 +15,16 @@ class Connection
     private ?int $id = null;
 
     #[ORM\Column(name: "type", type: "string", length: 255, nullable: false)]
-    private $type;
+    private ?String $type = null;
 
     #[ORM\Column(name: "token", type: "string", length: 255, nullable: false)]
-    private $token;
+    private ?String $token = null;
 
     #[ORM\Column(name: "ip", type: "string", length: 255, nullable: true)]
-    private $ip;
+    private ?String $ip = null;
 
     #[ORM\Column(name: "agent", type: "string", length: 255, nullable: true)]
-    private $agent;
+    private ?String $agent = null;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
@@ -34,192 +34,98 @@ class Connection
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Member", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "member_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $member;
+    private ?Member $member = null;
 
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set type
-     *
-     * @param string $type
-     *
-     * @return Connection
-     */
-    public function setType($type)
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
     {
         $this->type = $type;
 
         return $this;
     }
 
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
+    public function getToken(): ?string
     {
-        return $this->type;
+        return $this->token;
     }
 
-
-    /**
-     * Set token
-     *
-     * @param string $token
-     *
-     * @return Connection
-     */
-    public function setToken($token)
+    public function setToken(?string $token): self
     {
         $this->token = $token;
 
         return $this;
     }
 
-    /**
-     * Get token
-     *
-     * @return string
-     */
-    public function getToken()
+    public function getIp(): ?string
     {
-        return $this->token;
+        return $this->ip;
     }
 
-    /**
-     * Set ip
-     *
-     * @param string $ip
-     *
-     * @return Connection
-     */
-    public function setIp($ip)
+    public function setIp(?string $ip): self
     {
         $this->ip = $ip;
 
         return $this;
     }
 
-    /**
-     * Get ip
-     *
-     * @return string
-     */
-    public function getIp()
+    public function getAgent(): ?string
     {
-        return $this->ip;
+        return $this->agent;
     }
 
-    /**
-     * Set agent
-     *
-     * @param string $agent
-     *
-     * @return Connection
-     */
-    public function setAgent($agent)
+    public function setAgent(?string $agent): self
     {
         $this->agent = $agent;
 
         return $this;
     }
 
-    /**
-     * Get agent
-     *
-     * @return string
-     */
-    public function getAgent()
+    public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->agent;
+        return $this->dateCreated;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return Connection
-     */
-    public function setDateCreated($dateCreated)
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getDateModified(): ?\DateTimeInterface
     {
-        return $this->dateCreated;
+        return $this->dateModified;
     }
 
-    /**
-     * Set dateModified
-     *
-     * @param \DateTime $dateModified
-     *
-     * @return Connection
-     */
-    public function setDateModified($dateModified)
+    public function setDateModified(?\DateTimeInterface $dateModified): self
     {
         $this->dateModified = $dateModified;
 
         return $this;
     }
 
-    /**
-     * Get dateModified
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateModified()
+    public function getMember(): ?Member
     {
-        return $this->dateModified;
+        return $this->member;
     }
 
-    /**
-     * Set member
-     *
-     * @param \App\Entity\Member $member
-     *
-     * @return Connection
-     */
-    public function setMember(Member $member = null)
+    public function setMember(?Member $member): self
     {
         $this->member = $member;
 
         return $this;
     }
 
-    /**
-     * Get member
-     *
-     * @return \App\Entity\Member
-     */
-    public function getMember()
-    {
-        return $this->member;
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),

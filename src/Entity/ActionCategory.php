@@ -20,119 +20,73 @@ class ActionCategory
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Category", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $category;
+    private ?Category $category = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Action", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "action_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $action;
+    private ?Action $action = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Member", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "member_id", referencedColumnName: "id", onDelete: "cascade", nullable: true)]
-    private $member;
+    private ?Member $member = null;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return ActionCategory
-     */
-    public function setDateCreated($dateCreated)
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getCategory(): ?Category
     {
-        return $this->dateCreated;
+        return $this->category;
     }
 
-    /**
-     * Set category
-     *
-     * @param \App\Entity\Category $category
-     *
-     * @return ActionCategory
-     */
-    public function setCategory(Category $category = null)
+    public function setCategory(?Category $category): self
     {
         $this->category = $category;
 
         return $this;
     }
 
-    /**
-     * Get category
-     *
-     * @return \App\Entity\Category
-     */
-    public function getCategory()
+    public function getAction(): ?Action
     {
-        return $this->category;
+        return $this->action;
     }
 
-    /**
-     * Set action
-     *
-     * @param \App\Entity\Action $action
-     *
-     * @return ActionCategory
-     */
-    public function setAction(Action $action = null)
+    public function setAction(?Action $action): self
     {
         $this->action = $action;
 
         return $this;
     }
 
-    /**
-     * Get action
-     *
-     * @return \App\Entity\Action
-     */
-    public function getAction()
+    public function getMember(): ?Member
     {
-        return $this->action;
+        return $this->member;
     }
 
-    /**
-     * Set member
-     *
-     * @param \App\Entity\Member $member
-     *
-     * @return ActionCategory
-     */
-    public function setMember(Member $member = null)
+    public function setMember(?Member $member): self
     {
         $this->member = $member;
 
         return $this;
     }
 
-    /**
-     * Get member
-     *
-     * @return \App\Entity\Member
-     */
-    public function getMember()
+    public function toArray(): array
     {
-        return $this->member;
+        return [
+            'action' => $this->getAction()->toArray(),
+        ];
     }
 }

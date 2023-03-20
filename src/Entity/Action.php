@@ -15,101 +15,57 @@ class Action
     private ?int $id = null;
 
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: false)]
-    private string $title;
+    private ?string $title = null;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Action", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "reverse", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
-    private $reverse;
+    private ?Action $reverse = null;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Action
-     */
-    public function setTitle($title)
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->title;
+        return $this->dateCreated;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return Action
-     */
-    public function setDateCreated($dateCreated)
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getReverse(): ?Action
     {
-        return $this->dateCreated;
+        return $this->reverse;
     }
 
-    /**
-     * Set reverse
-     *
-     * @param \App\Entity\Action $reverse
-     *
-     * @return Action
-     */
-    public function setReverse(Action $reverse = null)
+    public function setReverse(?Action $reverse): self
     {
         $this->reverse = $reverse;
 
         return $this;
     }
 
-    /**
-     * Get reverse
-     *
-     * @return \App\Entity\Action
-     */
-    public function getReverse()
-    {
-        return $this->reverse;
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),

@@ -14,74 +14,41 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: false)]
-    private string $title;
+    private ?string $title = null;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
 
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Category
-     */
-    public function setTitle($title)
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->title;
+        return $this->dateCreated;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return Category
-     */
-    public function setDateCreated($dateCreated)
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
-    {
-        return $this->dateCreated;
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),

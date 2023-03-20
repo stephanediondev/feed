@@ -13,16 +13,16 @@ class Collection
     private ?int $id = null;
 
     #[ORM\Column(name: "feeds", type: "integer", nullable: false, options: ["unsigned" => true, "default" => 0])]
-    private $feeds = '0';
+    private int $feeds = 0;
 
     #[ORM\Column(name: "errors", type: "integer", nullable: false, options: ["unsigned" => true, "default" => 0])]
-    private $errors = '0';
+    private int $errors = 0;
 
     #[ORM\Column(name: "time", type: "float", nullable: false, options: ["unsigned" => true, "default" => 0])]
-    private $time;
+    private float $time = 0;
 
     #[ORM\Column(name: "memory", type: "integer", nullable: false, options: ["unsigned" => true, "default" => 0])]
-    private $memory;
+    private int $memory = 0;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
@@ -30,165 +30,84 @@ class Collection
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
 
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set feeds
-     *
-     * @param integer $feeds
-     *
-     * @return Collection
-     */
-    public function setFeeds($feeds)
+    public function getFeeds(): int
+    {
+        return $this->feeds;
+    }
+
+    public function setFeeds(int $feeds): self
     {
         $this->feeds = $feeds;
 
         return $this;
     }
 
-    /**
-     * Get feeds
-     *
-     * @return integer
-     */
-    public function getFeeds()
+    public function getErrors(): int
     {
-        return $this->feeds;
+        return $this->errors;
     }
 
-    /**
-     * Set errors
-     *
-     * @param integer $errors
-     *
-     * @return Collection
-     */
-    public function setErrors($errors)
+    public function setErrors(int $errors): self
     {
         $this->errors = $errors;
 
         return $this;
     }
 
-    /**
-     * Get errors
-     *
-     * @return integer
-     */
-    public function getErrors()
+    public function getTime(): float
     {
-        return $this->errors;
+        return $this->time;
     }
 
-    /**
-     * Set time
-     *
-     * @param float $time
-     *
-     * @return Collection
-     */
-    public function setTime($time)
+    public function setTime(float $time): self
     {
         $this->time = $time;
 
         return $this;
     }
 
-    /**
-     * Get time
-     *
-     * @return float
-     */
-    public function getTime()
+    public function getMemory(): int
     {
-        return $this->time;
+        return $this->memory;
     }
 
-    /**
-     * Set memory
-     *
-     * @param integer $memory
-     *
-     * @return Collection
-     */
-    public function setMemory($memory)
+    public function setMemory(int $memory): self
     {
         $this->memory = $memory;
 
         return $this;
     }
 
-    /**
-     * Get memory
-     *
-     * @return integer
-     */
-    public function getMemory()
+    public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->memory;
+        return $this->dateCreated;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return Collection
-     */
-    public function setDateCreated($dateCreated)
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getDateModified(): ?\DateTimeInterface
     {
-        return $this->dateCreated;
+        return $this->dateModified;
     }
 
-    /**
-     * Set dateModified
-     *
-     * @param \DateTime $dateModified
-     *
-     * @return Collection
-     */
-    public function setDateModified($dateModified)
+    public function setDateModified(?\DateTimeInterface $dateModified): self
     {
         $this->dateModified = $dateModified;
 
         return $this;
     }
 
-    /**
-     * Get dateModified
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateModified()
-    {
-        return $this->dateModified;
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),

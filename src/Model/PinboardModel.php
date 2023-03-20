@@ -4,14 +4,14 @@ namespace App\Model;
 
 class PinboardModel
 {
-    private string $token;
+    private ?string $token = null;
 
-    public function getToken(): string
+    public function getToken(): ?string
     {
         return $this->token;
     }
 
-    public function setToken(string $token): self
+    public function setToken(?string $token): self
     {
         $this->token = $token;
 

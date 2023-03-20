@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\MemberRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
 #[ORM\Table(name: "member")]
@@ -16,10 +16,10 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(name: "email", type: "string", length: 255, nullable: false)]
-    private ?string $email;
+    private ?string $email = null;
 
     #[ORM\Column(name: "password", type: "string", length: 255, nullable: false)]
-    private ?string $password;
+    private ?string $password = null;
 
     #[ORM\Column(name: "administrator", type: "boolean", nullable: false, options: ["default" => 0])]
     private bool $administrator = false;
@@ -30,13 +30,13 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
 
-    private ?string$plainPassword;
+    private ?string $plainPassword = null;
 
-    private ?string $username;
+    private ?string $username = null;
 
-    private ?string $nickname;
+    private ?string $nickname = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -106,7 +106,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->plainPassword;
     }
 
-    public function setPlainPassword(?string$plainPassword): self
+    public function setPlainPassword(?string $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
 

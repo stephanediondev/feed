@@ -16,130 +16,73 @@ class CollectionFeed
     private ?int $id = null;
 
     #[ORM\Column(name: "error", type: "text", length: 65535, nullable: true)]
-    private $error;
+    private ?string $error = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Collection", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "collection_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $collection;
+    private ?Collection $collection = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $feed;
+    private ?Feed $feed = null;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
 
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set error
-     *
-     * @param string $error
-     *
-     * @return CollectionFeed
-     */
-    public function setError($error)
+    public function getError(): ?string
+    {
+        return $this->error;
+    }
+
+    public function setError(?string $error): self
     {
         $this->error = $error;
 
         return $this;
     }
 
-    /**
-     * Get error
-     *
-     * @return string
-     */
-    public function getError()
+    public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->error;
+        return $this->dateCreated;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return CollectionFeed
-     */
-    public function setDateCreated($dateCreated)
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getCollection(): ?Collection
     {
-        return $this->dateCreated;
+        return $this->collection;
     }
 
-    /**
-     * Set collection
-     *
-     * @param \App\Entity\Collection $collection
-     *
-     * @return CollectionFeed
-     */
-    public function setCollection(Collection $collection = null)
+    public function setCollection(?Collection $collection): self
     {
         $this->collection = $collection;
 
         return $this;
     }
 
-    /**
-     * Get collection
-     *
-     * @return \App\Entity\Collection
-     */
-    public function getCollection()
+    public function getFeed(): ?Feed
     {
-        return $this->collection;
+        return $this->feed;
     }
 
-    /**
-     * Set feed
-     *
-     * @param \App\Entity\Feed $feed
-     *
-     * @return CollectionFeed
-     */
-    public function setFeed(Feed $feed = null)
+    public function setFeed(?Feed $feed): self
     {
         $this->feed = $feed;
 
         return $this;
     }
 
-    /**
-     * Get feed
-     *
-     * @return \App\Entity\Feed
-     */
-    public function getFeed()
-    {
-        return $this->feed;
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),

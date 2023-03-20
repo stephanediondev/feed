@@ -20,119 +20,73 @@ class ActionItem
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Item", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $item;
+    private ?Item $item = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Action", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "action_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $action;
+    private ?Action $action = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Member", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "member_id", referencedColumnName: "id", onDelete: "cascade", nullable: true)]
-    private $member;
+    private ?Member $member = null;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return ActionItem
-     */
-    public function setDateCreated($dateCreated)
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getItem(): ?Item
     {
-        return $this->dateCreated;
+        return $this->item;
     }
 
-    /**
-     * Set item
-     *
-     * @param \App\Entity\Item $item
-     *
-     * @return ActionItem
-     */
-    public function setItem(Item $item = null)
+    public function setItem(?Item $item): self
     {
         $this->item = $item;
 
         return $this;
     }
 
-    /**
-     * Get item
-     *
-     * @return \App\Entity\Item
-     */
-    public function getItem()
+    public function getAction(): ?Action
     {
-        return $this->item;
+        return $this->action;
     }
 
-    /**
-     * Set action
-     *
-     * @param \App\Entity\Action $action
-     *
-     * @return ActionItem
-     */
-    public function setAction(Action $action = null)
+    public function setAction(?Action $action): self
     {
         $this->action = $action;
 
         return $this;
     }
 
-    /**
-     * Get action
-     *
-     * @return \App\Entity\Action
-     */
-    public function getAction()
+    public function getMember(): ?Member
     {
-        return $this->action;
+        return $this->member;
     }
 
-    /**
-     * Set member
-     *
-     * @param \App\Entity\Member $member
-     *
-     * @return ActionItem
-     */
-    public function setMember(Member $member = null)
+    public function setMember(?Member $member): self
     {
         $this->member = $member;
 
         return $this;
     }
 
-    /**
-     * Get member
-     *
-     * @return \App\Entity\Member
-     */
-    public function getMember()
+    public function toArray(): array
     {
-        return $this->member;
+        return [
+            'action' => $this->getAction()->toArray(),
+        ];
     }
 }

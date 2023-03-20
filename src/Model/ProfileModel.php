@@ -4,42 +4,42 @@ namespace App\Model;
 
 class ProfileModel
 {
-    private string $email;
+    private ?string $email = null;
 
-    private $password;
+    private ?string $password = null;
 
-    private $passwordConfirm;
+    private ?string $passwordConfirm = null;
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
 
-    public function getPasswordConfirm(): string
+    public function getPasswordConfirm(): ?string
     {
         return $this->passwordConfirm;
     }
 
-    public function setPasswordConfirm(string $passwordConfirm): self
+    public function setPasswordConfirm(?string $passwordConfirm): self
     {
         $this->passwordConfirm = $passwordConfirm;
 

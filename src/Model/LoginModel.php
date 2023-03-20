@@ -4,9 +4,9 @@ namespace App\Model;
 
 class LoginModel
 {
-    private string $email;
+    private ?string $email = null;
 
-    private string $password;
+    private ?string $password = null;
 
     public function getEmail(): string
     {

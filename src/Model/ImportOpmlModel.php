@@ -4,14 +4,14 @@ namespace App\Model;
 
 class ImportOpmlModel
 {
-    private string $file;
+    private ?string $file = null;
 
-    public function getFile(): string
+    public function getFile(): ?string
     {
         return $this->file;
     }
 
-    public function setFile(string$file): self
+    public function setFile(?string $file): self
     {
         $this->file = $file;
 

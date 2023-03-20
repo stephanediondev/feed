@@ -20,119 +20,73 @@ class ActionAuthor
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Author", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $author;
+    private ?Author $author = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Action", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "action_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $action;
+    private ?Action $action = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Member", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "member_id", referencedColumnName: "id", onDelete: "cascade", nullable: true)]
-    private $member;
+    private ?Member $member = null;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return ActionAuthor
-     */
-    public function setDateCreated($dateCreated)
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getAuthor(): ?Author
     {
-        return $this->dateCreated;
+        return $this->author;
     }
 
-    /**
-     * Set author
-     *
-     * @param \App\Entity\Author $author
-     *
-     * @return ActionAuthor
-     */
-    public function setAuthor(Author $author = null)
+    public function setAuthor(?Author $author): self
     {
         $this->author = $author;
 
         return $this;
     }
 
-    /**
-     * Get author
-     *
-     * @return \App\Entity\Author
-     */
-    public function getAuthor()
+    public function getAction(): ?Action
     {
-        return $this->author;
+        return $this->action;
     }
 
-    /**
-     * Set action
-     *
-     * @param \App\Entity\Action $action
-     *
-     * @return ActionAuthor
-     */
-    public function setAction(Action $action = null)
+    public function setAction(?Action $action): self
     {
         $this->action = $action;
 
         return $this;
     }
 
-    /**
-     * Get action
-     *
-     * @return \App\Entity\Action
-     */
-    public function getAction()
+    public function getMember(): ?Member
     {
-        return $this->action;
+        return $this->member;
     }
 
-    /**
-     * Set member
-     *
-     * @param \App\Entity\Member $member
-     *
-     * @return ActionAuthor
-     */
-    public function setMember(Member $member = null)
+    public function setMember(?Member $member): self
     {
         $this->member = $member;
 
         return $this;
     }
 
-    /**
-     * Get member
-     *
-     * @return \App\Entity\Member
-     */
-    public function getMember()
+    public function toArray(): array
     {
-        return $this->member;
+        return [
+            'action' => $this->getAction()->toArray(),
+        ];
     }
 }

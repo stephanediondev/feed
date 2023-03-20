@@ -15,213 +15,121 @@ class Enclosure
     private ?int $id = null;
 
     #[ORM\Column(name: "link", type: "string", length: 255, nullable: false)]
-    private $link;
+    private ?string $link = null;
 
     #[ORM\Column(name: "type", type: "string", length: 255, nullable: false)]
-    private $type;
+    private ?string $type = null;
 
     #[ORM\Column(name: "length", type: "integer", nullable: true, options: ["unsigned" => true])]
-    private $length;
+    private ?int $length = null;
 
     #[ORM\Column(name: "width", type: "integer", nullable: true, options: ["unsigned" => true])]
-    private $width;
+    private ?int $width = null;
 
     #[ORM\Column(name: "height", type: "integer", nullable: true, options: ["unsigned" => true])]
-    private $height;
+    private ?int $height = null;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Item", inversedBy: "enclosures", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id", onDelete: "cascade", nullable: true)]
-    private $item;
+    private ?Item $item = null;
 
-    /**
-     * @var string
-     */
-    private $typeGroup;
+    private ?string $typeGroup = null;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set link
-     *
-     * @param string $link
-     *
-     * @return Enclosure
-     */
-    public function setLink($link)
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(?string $link): self
     {
         $this->link = $link;
 
         return $this;
     }
 
-    /**
-     * Get link
-     *
-     * @return string
-     */
-    public function getLink()
+    public function getType(): ?string
     {
-        return $this->link;
+        return $this->type;
     }
 
-    /**
-     * Set type
-     *
-     * @param string $type
-     *
-     * @return Enclosure
-     */
-    public function setType($type)
+    public function setType(?string $type): self
     {
         $this->type = $type;
 
         return $this;
     }
 
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
+    public function getLength(): ?int
     {
-        return $this->type;
+        return $this->length;
     }
 
-    /**
-     * Set length
-     *
-     * @param integer $length
-     *
-     * @return Enclosure
-     */
-    public function setLength($length)
+    public function setLength(?int $length): self
     {
         $this->length = $length;
 
         return $this;
     }
 
-    /**
-     * Get length
-     *
-     * @return integer
-     */
-    public function getLength()
+    public function getWidth(): ?int
     {
-        return $this->length;
+        return $this->width;
     }
 
-    /**
-     * Set width
-     *
-     * @param integer $width
-     *
-     * @return Enclosure
-     */
-    public function setWidth($width)
+    public function setWidth(?int $width): self
     {
         $this->width = $width;
 
         return $this;
     }
 
-    /**
-     * Get width
-     *
-     * @return integer
-     */
-    public function getWidth()
+    public function getHeight(): ?int
     {
-        return $this->width;
+        return $this->height;
     }
 
-    /**
-     * Set height
-     *
-     * @param integer $height
-     *
-     * @return Enclosure
-     */
-    public function setHeight($height)
+    public function setHeight(?int $height): self
     {
         $this->height = $height;
 
         return $this;
     }
 
-    /**
-     * Get height
-     *
-     * @return integer
-     */
-    public function getHeight()
+    public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->height;
+        return $this->dateCreated;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return Enclosure
-     */
-    public function setDateCreated($dateCreated)
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getItem(): ?Item
     {
-        return $this->dateCreated;
+        return $this->item;
     }
 
-    /**
-     * Set item
-     *
-     * @param \App\Entity\Item $item
-     *
-     * @return Enclosure
-     */
-    public function setItem(Item $item = null)
+    public function setItem(?Item $item): self
     {
         $this->item = $item;
 
         return $this;
     }
 
-    /**
-     * Get item
-     *
-     * @return \App\Entity\Item
-     */
-    public function getItem()
+    public function getTypeGroup(): ?string
     {
-        return $this->item;
-    }
-
-    public function getTypeGroup()
-    {
-        $this->typeGroup = '';
+        $this->typeGroup = null;
 
         if (strstr($this->getType(), '/')) {
             $parts = explode('/', $this->getType());
@@ -231,15 +139,12 @@ class Enclosure
         return $this->typeGroup;
     }
 
-    public function isLinkSecure()
+    public function isLinkSecure(): bool
     {
         return substr($this->getLink(), 0, 6) == 'https:';
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),

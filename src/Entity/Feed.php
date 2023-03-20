@@ -15,25 +15,25 @@ class Feed
     private ?int $id = null;
 
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: true)]
-    private string $title;
+    private ?string $title = null;
 
     #[ORM\Column(name: "link", type: "string", length: 255, nullable: false)]
-    private $link;
+    private ?string $link = null;
 
     #[ORM\Column(name: "website", type: "string", length: 255, nullable: true)]
-    private $website;
+    private ?string $website = null;
 
     #[ORM\Column(name: "hostname", type: "string", length: 255, nullable: true)]
-    private $hostname;
+    private ?string $hostname = null;
 
     #[ORM\Column(name: "description", type: "text", length: 65535, nullable: true)]
-    private $description;
+    private ?string $description = null;
 
     #[ORM\Column(name: "language", type: "string", length: 2, nullable: true, options: ["fixed" => true])]
-    private $language;
+    private ?string $language = null;
 
     #[ORM\Column(name: "next_collection", type: "datetime", nullable: true)]
-    private $nextCollection;
+    private ?\DateTimeInterface $nextCollection = null;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
@@ -41,239 +41,122 @@ class Feed
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
 
-    /**
-     * @var string
-     */
-    private $direction;
+    private string $direction;
 
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Feed
-     */
-    public function setTitle($title)
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getLink(): ?string
     {
-        return $this->title;
+        return $this->link;
     }
 
-    /**
-     * Set link
-     *
-     * @param string $link
-     *
-     * @return Feed
-     */
-    public function setLink($link)
+    public function setLink(?string $link): self
     {
         $this->link = $link;
 
         return $this;
     }
 
-    /**
-     * Get link
-     *
-     * @return string
-     */
-    public function getLink()
+    public function getWebsite(): ?string
     {
-        return $this->link;
+        return $this->website;
     }
 
-    /**
-     * Set website
-     *
-     * @param string $website
-     *
-     * @return Feed
-     */
-    public function setWebsite($website)
+    public function setWebsite(?string $website): self
     {
         $this->website = $website;
 
         return $this;
     }
 
-    /**
-     * Get website
-     *
-     * @return string
-     */
-    public function getWebsite()
+    public function getHostname(): ?string
     {
-        return $this->website;
+        return $this->hostname;
     }
 
-    /**
-     * Set hostname
-     *
-     * @param string $hostname
-     *
-     * @return Feed
-     */
-    public function setHostname($hostname)
+    public function setHostname(?string $hostname): self
     {
         $this->hostname = $hostname;
 
         return $this;
     }
 
-    /**
-     * Get hostname
-     *
-     * @return string
-     */
-    public function getHostname()
+    public function getDescription()
     {
-        return $this->hostname;
+        return $this->description;
     }
 
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Feed
-     */
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getLanguage(): ?string
     {
-        return $this->description;
+        return $this->language;
     }
 
-    /**
-     * Set language
-     *
-     * @param string $language
-     *
-     * @return Feed
-     */
-    public function setLanguage($language)
+    public function setLanguage(?string $language): self
     {
         $this->language = $language;
 
         return $this;
     }
 
-    /**
-     * Get language
-     *
-     * @return string
-     */
-    public function getLanguage()
+    public function getNextCollection(): ?\DateTimeInterface
     {
-        return $this->language;
+        return $this->nextCollection;
     }
 
-    /**
-     * Set nextCollection
-     *
-     * @param \DateTime $nextCollection
-     *
-     * @return Feed
-     */
-    public function setNextCollection($nextCollection)
+    public function setNextCollection(?\DateTimeInterface $nextCollection): self
     {
         $this->nextCollection = $nextCollection;
 
         return $this;
     }
 
-    /**
-     * Get nextCollection
-     *
-     * @return \DateTimeInterface
-     */
-    public function getNextCollection()
+    public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->nextCollection;
+        return $this->dateCreated;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return Feed
-     */
-    public function setDateCreated($dateCreated)
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getDateModified(): ?\DateTimeInterface
     {
-        return $this->dateCreated;
+        return $this->dateModified;
     }
 
-    /**
-     * Set dateModified
-     *
-     * @param \DateTime $dateModified
-     *
-     * @return Feed
-     */
-    public function setDateModified($dateModified)
+    public function setDateModified(?\DateTimeInterface $dateModified): self
     {
         $this->dateModified = $dateModified;
 
         return $this;
     }
 
-    /**
-     * Get dateModified
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateModified()
-    {
-        return $this->dateModified;
-    }
-
-    public function getDirection()
+    public function getDirection(): string
     {
         $this->direction = 'ltr';
 
@@ -284,20 +167,17 @@ class Feed
         return $this->direction;
     }
 
-    public function isLinkSecure()
+    public function isLinkSecure(): bool
     {
         return substr($this->getLink(), 0, 6) == 'https:';
     }
 
-    public function isWebsiteSecure()
+    public function isWebsiteSecure(): bool
     {
         return substr($this->getWebsite(), 0, 6) == 'https:';
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),

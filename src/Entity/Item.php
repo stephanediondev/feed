@@ -19,22 +19,22 @@ class Item
     private ?int $id = null;
 
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: false)]
-    private string $title;
+    private ?string $title = null;
 
     #[ORM\Column(name: "link", type: "string", length: 255, nullable: false)]
-    private $link;
+    private ?string $link = null;
 
     #[ORM\Column(name: "date", type: "datetime", nullable: false)]
-    private $date;
+    private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(name: "content", type: "string", length: 4294967295, nullable: true)]
-    private $content;
+    private ?string $content = null;
 
     #[ORM\Column(name: "latitude", type: "float", nullable: true)]
-    private $latitude;
+    private ?float $latitude = null;
 
     #[ORM\Column(name: "longitude", type: "float", nullable: true)]
-    private $longitude;
+    private ?float $longitude = null;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
@@ -44,11 +44,11 @@ class Item
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
-    private $feed;
+    private ?Feed $feed = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Author", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
-    private $author;
+    private ?Author $author = null;
 
     #[ORM\OneToMany(targetEntity: "App\Entity\Enclosure", mappedBy: "item", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
     private Collection $enclosures;
@@ -58,230 +58,117 @@ class Item
         $this->enclosures = new ArrayCollection();
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Item
-     */
-    public function setTitle($title)
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getLink(): ?string
     {
-        return $this->title;
+        return $this->link;
     }
 
-    /**
-     * Set link
-     *
-     * @param string $link
-     *
-     * @return Item
-     */
-    public function setLink($link)
+    public function setLink(?string $link): self
     {
         $this->link = $link;
 
         return $this;
     }
 
-    /**
-     * Get link
-     *
-     * @return string
-     */
-    public function getLink()
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->link;
+        return $this->date;
     }
 
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     *
-     * @return Item
-     */
-    public function setDate($date)
+    public function setDate(?\DateTimeInterface $date): self
     {
         $this->date = $date;
 
         return $this;
     }
 
-    /**
-     * Get date
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDate()
+    public function getContent(): ?string
     {
-        return $this->date;
+        return $this->content;
     }
 
-    /**
-     * Set content
-     *
-     * @param string $content
-     *
-     * @return Item
-     */
-    public function setContent($content)
+    public function setContent(?string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
+    public function getLatitude(): ?float
     {
-        return $this->content;
+        return $this->latitude;
     }
 
-    /**
-     * Set latitude
-     *
-     * @param float $latitude
-     *
-     * @return Item
-     */
-    public function setLatitude($latitude)
+    public function setLatitude(?float $latitude): self
     {
         $this->latitude = $latitude;
 
         return $this;
     }
 
-    /**
-     * Get latitude
-     *
-     * @return float
-     */
-    public function getLatitude()
+    public function getLongitude(): ?float
     {
-        return $this->latitude;
+        return $this->longitude;
     }
 
-    /**
-     * Set longitude
-     *
-     * @param float $longitude
-     *
-     * @return Item
-     */
-    public function setLongitude($longitude)
+    public function setLongitude(?float $longitude): self
     {
         $this->longitude = $longitude;
 
         return $this;
     }
 
-    /**
-     * Get longitude
-     *
-     * @return float
-     */
-    public function getLongitude()
+    public function getDateCreated(): ?\DateTimeInterface
     {
-        return $this->longitude;
+        return $this->dateCreated;
     }
 
-    /**
-     * Set dateCreated
-     *
-     * @param \DateTimeInterface $dateCreated
-     *
-     * @return Item
-     */
-    public function setDateCreated($dateCreated)
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
         $this->dateCreated = $dateCreated;
 
         return $this;
     }
 
-    /**
-     * Get dateCreated
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateCreated()
+    public function getDateModified(): ?\DateTimeInterface
     {
-        return $this->dateCreated;
+        return $this->dateModified;
     }
 
-    /**
-     * Set dateModified
-     *
-     * @param \DateTime $dateModified
-     *
-     * @return Item
-     */
-    public function setDateModified($dateModified)
+    public function setDateModified(?\DateTimeInterface $dateModified): self
     {
         $this->dateModified = $dateModified;
 
         return $this;
     }
 
-    /**
-     * Get dateModified
-     *
-     * @return \DateTimeInterface
-     */
-    public function getDateModified()
+    public function getFeed(): ?Feed
     {
-        return $this->dateModified;
+        return $this->feed;
     }
 
-    /**
-     * Set feed
-     *
-     * @param \App\Entity\Feed $feed
-     *
-     * @return Item
-     */
-    public function setFeed(Feed $feed = null)
+    public function setFeed(?Feed $feed): self
     {
         $this->feed = $feed;
 
         return $this;
-    }
-
-    /**
-     * Get feed
-     *
-     * @return \App\Entity\Feed
-     */
-    public function getFeed()
-    {
-        return $this->feed;
     }
 
     public function getAuthor(): ?Author
@@ -321,20 +208,17 @@ class Item
         return $this->enclosures->contains($enclosure);
     }
 
-    public function isLinkSecure()
+    public function isLinkSecure(): bool
     {
         return substr($this->getLink(), 0, 6) == 'https:';
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         if ($this->getAuthor()) {
             $author = $this->getAuthor()->toArray();
         } else {
-            $author = false;
+            $author = null;
         }
 
         return [
