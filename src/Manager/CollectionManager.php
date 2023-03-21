@@ -14,16 +14,14 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class CollectionManager extends AbstractManager
 {
-    public CollectionRepository $collectionRepository;
+    private CollectionRepository $collectionRepository;
 
     protected MemberManager $memberManager;
 
     protected $cacheDriver;
 
-    public function __construct(
-        CollectionRepository $collectionRepository,
-        MemberManager $memberManager
-    ) {
+    public function __construct(CollectionRepository $collectionRepository, MemberManager $memberManager)
+    {
         $this->collectionRepository = $collectionRepository;
         $this->memberManager = $memberManager;
 

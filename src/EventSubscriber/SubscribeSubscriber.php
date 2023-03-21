@@ -8,11 +8,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SubscribeSubscriber implements EventSubscriberInterface
 {
-    protected MemberManager $memberManager;
+    private MemberManager $memberManager;
 
-    public function __construct(
-        MemberManager $memberManager
-    ) {
+    public function __construct(MemberManager $memberManager)
+    {
         $this->memberManager = $memberManager;
     }
 

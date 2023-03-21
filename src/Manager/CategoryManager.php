@@ -9,7 +9,7 @@ use App\Repository\CategoryRepository;
 
 class CategoryManager extends AbstractManager
 {
-    public CategoryRepository $categoryRepository;
+    private CategoryRepository $categoryRepository;
 
     public $itemCategoryManager;
 

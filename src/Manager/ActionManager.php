@@ -9,7 +9,7 @@ use App\Repository\ActionRepository;
 
 class ActionManager extends AbstractManager
 {
-    public ActionRepository $actionRepository;
+    private ActionRepository $actionRepository;
 
     public function __construct(ActionRepository $actionRepository)
     {

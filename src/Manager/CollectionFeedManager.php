@@ -9,7 +9,7 @@ use App\Repository\CollectionFeedRepository;
 
 class CollectionFeedManager extends AbstractManager
 {
-    public CollectionFeedRepository $collectionFeedRepository;
+    private CollectionFeedRepository $collectionFeedRepository;
 
     public function __construct(CollectionFeedRepository $collectionFeedRepository)
     {

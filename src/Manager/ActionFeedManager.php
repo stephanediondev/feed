@@ -9,7 +9,7 @@ use App\Repository\ActionFeedRepository;
 
 class ActionFeedManager extends AbstractManager
 {
-    public ActionFeedRepository $actionFeedRepository;
+    private ActionFeedRepository $actionFeedRepository;
 
     public function __construct(ActionFeedRepository $actionFeedRepository)
     {

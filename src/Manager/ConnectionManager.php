@@ -9,7 +9,7 @@ use App\Repository\ConnectionRepository;
 
 class ConnectionManager extends AbstractManager
 {
-    public ConnectionRepository $connectionRepository;
+    private ConnectionRepository $connectionRepository;
 
     public function __construct(ConnectionRepository $connectionRepository)
     {

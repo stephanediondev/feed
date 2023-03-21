@@ -9,7 +9,7 @@ use App\Repository\FeedCategoryRepository;
 
 class FeedCategoryManager extends AbstractManager
 {
-    public FeedCategoryRepository $feedCategoryRepository;
+    private FeedCategoryRepository $feedCategoryRepository;
 
     public function __construct(FeedCategoryRepository $feedCategoryRepository)
     {

@@ -9,7 +9,7 @@ use App\Repository\FeedRepository;
 
 class FeedManager extends AbstractManager
 {
-    public FeedRepository $feedRepository;
+    private FeedRepository $feedRepository;
 
     public $collectionFeedManager;
 

@@ -5,21 +5,15 @@ namespace App\Manager;
 use App\Entity\Member;
 use App\Event\MemberEvent;
 use App\Manager\AbstractManager;
-use App\Manager\ConnectionManager;
 use App\Repository\MemberRepository;
 
 class MemberManager extends AbstractManager
 {
-    public MemberRepository $memberRepository;
+    private MemberRepository $memberRepository;
 
-    public $connectionManager;
-
-    public function __construct(
-        MemberRepository $memberRepository,
-        ConnectionManager $connectionManager
-    ) {
+    public function __construct(MemberRepository $memberRepository)
+    {
         $this->memberRepository = $memberRepository;
-        $this->connectionManager = $connectionManager;
     }
 
     public function getOne($parameters = []): ?Member

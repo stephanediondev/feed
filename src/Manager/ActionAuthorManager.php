@@ -9,7 +9,7 @@ use App\Repository\ActionAuthorRepository;
 
 class ActionAuthorManager extends AbstractManager
 {
-    public ActionAuthorRepository $actionAuthorRepository;
+    private ActionAuthorRepository $actionAuthorRepository;
 
     public function __construct(ActionAuthorRepository $actionAuthorRepository)
     {

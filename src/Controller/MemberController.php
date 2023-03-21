@@ -7,6 +7,7 @@ use App\Form\Type\LoginType;
 use App\Form\Type\MemberType;
 use App\Form\Type\PinboardType;
 use App\Form\Type\ProfileType;
+use App\Manager\MemberManager;
 use App\Model\LoginModel;
 use App\Model\PinboardModel;
 use App\Model\ProfileModel;
@@ -18,28 +19,31 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/api', name: 'api_')]
 class MemberController extends AbstractAppController
 {
-    protected bool $ldapEnabled = false;
-
-    protected string $ldapServer = 'ldap://localhost';
-
-    protected int $ldapPort = 389;
-
-    protected int $ldapProtocol = 3;
-
-    protected string $ldapRootDn = 'cn=Manager,dc=my-domain,dc=com';
-
-    protected string $ldapRootPw = 'secret';
-
-    protected string $ldapBaseDn = 'dc=my-domain,dc=com';
-
-    protected string $ldapSearchUser = 'mail=[email]';
-
-    protected string $ldapSearchGroupAdmin = 'cn=admingroup';
+    private MemberManager $memberManager;
 
     private UserPasswordHasherInterface $passwordHasher;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher, bool $ldapEnabled, string $ldapServer, int $ldapPort, int $ldapProtocol, string $ldapRootDn, string $ldapRootPw, string $ldapBaseDn, string $ldapSearchUser, string $ldapSearchGroupAdmin)
+    private bool $ldapEnabled = false;
+
+    private string $ldapServer = 'ldap://localhost';
+
+    private int $ldapPort = 389;
+
+    private int $ldapProtocol = 3;
+
+    private string $ldapRootDn = 'cn=Manager,dc=my-domain,dc=com';
+
+    private string $ldapRootPw = 'secret';
+
+    private string $ldapBaseDn = 'dc=my-domain,dc=com';
+
+    private string $ldapSearchUser = 'mail=[email]';
+
+    private string $ldapSearchGroupAdmin = 'cn=admingroup';
+
+    public function __construct(MemberManager $memberManager, UserPasswordHasherInterface $passwordHasher, bool $ldapEnabled, string $ldapServer, int $ldapPort, int $ldapProtocol, string $ldapRootDn, string $ldapRootPw, string $ldapBaseDn, string $ldapSearchUser, string $ldapSearchGroupAdmin)
     {
+        $this->memberManager = $memberManager;
         $this->passwordHasher = $passwordHasher;
         $this->ldapEnabled = $ldapEnabled;
         $this->ldapServer = $ldapServer;
@@ -228,14 +232,14 @@ class MemberController extends AbstractAppController
 
             if ($member) {
                 if ($this->passwordHasher->isPasswordValid($member, $login->getPassword())) {
-                    $connection = $this->memberManager->connectionManager->init();
+                    $connection = $this->connectionManager->init();
                     $connection->setMember($member);
                     $connection->setType('login');
                     $connection->setToken(base64_encode(random_bytes(50)));
                     $connection->setIp($request->getClientIp());
                     $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
 
-                    $this->memberManager->connectionManager->persist($connection);
+                    $this->connectionManager->persist($connection);
 
                     $data['entry'] = $connection->toArray();
                     $data['entry_entity'] = 'connection';
@@ -256,7 +260,7 @@ class MemberController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $pinboard = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
+        $pinboard = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
 
         if ($pinboard) {
             $data['pinboard'] = $pinboard->toArray();
@@ -278,7 +282,7 @@ class MemberController extends AbstractAppController
 
         $connections = [];
         $index = 0;
-        foreach ($this->memberManager->connectionManager->getList(['member' => $memberConnected])->getResult() as $connection) {
+        foreach ($this->connectionManager->getList(['member' => $memberConnected])->getResult() as $connection) {
             $connections[$index] = $connection->toArray();
             if ($connection->getIp() == $request->getClientIp()) {
                 $connections[$index]['currentIp'] = true;
@@ -338,12 +342,12 @@ class MemberController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $connection = $this->memberManager->connectionManager->getOne(['type' => 'login', 'token' => $request->headers->get('X-CONNECTION-TOKEN'), 'member' => $memberConnected]);
+        $connection = $this->connectionManager->getOne(['type' => 'login', 'token' => $request->headers->get('X-CONNECTION-TOKEN'), 'member' => $memberConnected]);
 
         $data['entry'] = $connection->toArray();
         $data['entry_entity'] = 'connection';
 
-        $this->memberManager->connectionManager->remove($connection);
+        $this->connectionManager->remove($connection);
 
 
         return new JsonResponse($data);
@@ -362,19 +366,19 @@ class MemberController extends AbstractAppController
         $form->submit($request->request->all());
 
         if ($form->isValid()) {
-            $connection = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
+            $connection = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
 
             if ($connection) {
                 $connection->setToken($pinboard->getToken());
             } else {
-                $connection = $this->memberManager->connectionManager->init();
+                $connection = $this->connectionManager->init();
                 $connection->setMember($memberConnected);
                 $connection->setType('pinboard');
                 $connection->setToken($pinboard->getToken());
                 $connection->setIp($request->getClientIp());
                 $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
             }
-            $this->memberManager->connectionManager->persist($connection);
+            $this->connectionManager->persist($connection);
 
             $data['entry'] = $connection->toArray();
             $data['entry_entity'] = 'connection';
@@ -404,14 +408,14 @@ class MemberController extends AbstractAppController
 
             if ($member) {
                 if ($this->passwordHasher->isPasswordValid($member, $login->getPassword())) {
-                    $connection = $this->memberManager->connectionManager->init();
+                    $connection = $this->connectionManager->init();
                     $connection->setMember($member);
                     $connection->setType('notifier');
                     $connection->setToken(base64_encode(random_bytes(50)));
                     $connection->setIp($request->getClientIp());
                     $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
 
-                    $this->memberManager->connectionManager->persist($connection);
+                    $this->connectionManager->persist($connection);
 
                     $data['entry'] = $connection->toArray();
                     $data['entry_entity'] = 'connection';

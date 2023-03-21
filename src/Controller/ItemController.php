@@ -9,6 +9,7 @@ use App\Manager\AuthorManager;
 use App\Manager\CategoryManager;
 use App\Manager\FeedManager;
 use App\Manager\ItemManager;
+use App\Manager\MemberManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,8 +23,9 @@ class ItemController extends AbstractAppController
     private AuthorManager $authorManager;
     private CategoryManager $categoryManager;
     private ItemManager $itemManager;
+    private MemberManager $memberManager;
 
-    public function __construct(ActionManager $actionManager, ActionItemManager $actionItemManager, FeedManager $feedManager, AuthorManager $authorManager, CategoryManager $categoryManager, ItemManager $itemManager)
+    public function __construct(ActionManager $actionManager, ActionItemManager $actionItemManager, FeedManager $feedManager, AuthorManager $authorManager, CategoryManager $categoryManager, ItemManager $itemManager, MemberManager $memberManager)
     {
         $this->actionManager = $actionManager;
         $this->actionItemManager = $actionItemManager;
@@ -31,6 +33,7 @@ class ItemController extends AbstractAppController
         $this->authorManager = $authorManager;
         $this->categoryManager = $categoryManager;
         $this->itemManager = $itemManager;
+        $this->memberManager = $memberManager;
     }
 
     #[Route(path: '/items', name: 'index', methods: ['GET'])]

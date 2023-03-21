@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Member;
-use App\Manager\MemberManager;
+use App\Manager\ConnectionManager;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -20,24 +20,24 @@ abstract class AbstractAppController extends AbstractController
 
     protected TranslatorInterface $translator;
 
-    protected MemberManager $memberManager;
+    protected ConnectionManager $connectionManager;
 
     /**
      * @required
      */
-    public function setRequired(RequestStack $requestStack, PaginatorInterface $paginator, TranslatorInterface $translator, MemberManager $memberManager): void
+    public function setRequired(RequestStack $requestStack, PaginatorInterface $paginator, TranslatorInterface $translator, ConnectionManager $connectionManager): void
     {
         date_default_timezone_set('UTC');
 
         $this->request = $requestStack->getMainRequest();
         $this->paginator = $paginator;
         $this->translator = $translator;
-        $this->memberManager = $memberManager;
+        $this->connectionManager = $connectionManager;
     }
 
     public function validateToken(Request $request, $type = 'login'): ?Member
     {
-        if ($request->headers->get('X-CONNECTION-TOKEN') && $connection = $this->memberManager->connectionManager->getOne(['type' => $type, 'token' => $request->headers->get('X-CONNECTION-TOKEN')])) {
+        if ($request->headers->get('X-CONNECTION-TOKEN') && $connection = $this->connectionManager->getOne(['type' => $type, 'token' => $request->headers->get('X-CONNECTION-TOKEN')])) {
             return $connection->getMember();
         }
 

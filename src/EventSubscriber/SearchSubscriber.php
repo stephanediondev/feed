@@ -12,9 +12,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SearchSubscriber implements EventSubscriberInterface
 {
-    protected SearchManager $searchManager;
+    private SearchManager $searchManager;
 
-    protected ItemManager $itemManager;
+    private ItemManager $itemManager;
 
     public function __construct(SearchManager $searchManager, ItemManager $itemManager)
     {

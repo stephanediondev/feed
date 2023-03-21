@@ -9,7 +9,7 @@ use App\Repository\EnclosureRepository;
 
 class EnclosureManager extends AbstractManager
 {
-    public EnclosureRepository $enclosureRepository;
+    private EnclosureRepository $enclosureRepository;
 
     public function __construct(
         EnclosureRepository $enclosureRepository

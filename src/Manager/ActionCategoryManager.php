@@ -9,7 +9,7 @@ use App\Repository\ActionCategoryRepository;
 
 class ActionCategoryManager extends AbstractManager
 {
-    public ActionCategoryRepository $actionCategoryRepository;
+    private ActionCategoryRepository $actionCategoryRepository;
 
     public function __construct(ActionCategoryRepository $actionCategoryRepository)
     {

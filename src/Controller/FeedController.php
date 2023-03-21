@@ -11,6 +11,7 @@ use App\Manager\AuthorManager;
 use App\Manager\CategoryManager;
 use App\Manager\CollectionManager;
 use App\Manager\FeedManager;
+use App\Manager\MemberManager;
 use App\Model\ImportOpmlModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,8 +27,9 @@ class FeedController extends AbstractAppController
     private FeedManager $feedManager;
     private CollectionManager $collectionManager;
     private CategoryManager $categoryManager;
+    private MemberManager $memberManager;
 
-    public function __construct(AuthorManager $authorManager, ActionManager $actionManager, ActionFeedManager $actionFeedManager, FeedManager $feedManager, CollectionManager $collectionManager, CategoryManager $categoryManager)
+    public function __construct(AuthorManager $authorManager, ActionManager $actionManager, ActionFeedManager $actionFeedManager, FeedManager $feedManager, CollectionManager $collectionManager, CategoryManager $categoryManager, MemberManager $memberManager)
     {
         $this->authorManager = $authorManager;
         $this->actionManager = $actionManager;
@@ -35,6 +37,7 @@ class FeedController extends AbstractAppController
         $this->feedManager = $feedManager;
         $this->collectionManager = $collectionManager;
         $this->categoryManager = $categoryManager;
+        $this->memberManager = $memberManager;
     }
 
     #[Route(path: '/feeds', name: 'index', methods: ['GET'])]

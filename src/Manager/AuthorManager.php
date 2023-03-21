@@ -9,7 +9,7 @@ use App\Repository\AuthorRepository;
 
 class AuthorManager extends AbstractManager
 {
-    public AuthorRepository $authorRepository;
+    private AuthorRepository $authorRepository;
 
     public function __construct(
         AuthorRepository $authorRepository

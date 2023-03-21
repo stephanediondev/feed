@@ -9,7 +9,7 @@ use App\Repository\ItemCategoryRepository;
 
 class ItemCategoryManager extends AbstractManager
 {
-    public ItemCategoryRepository $itemCategoryRepository;
+    private ItemCategoryRepository $itemCategoryRepository;
 
     public function __construct(ItemCategoryRepository $itemCategoryRepository)
     {

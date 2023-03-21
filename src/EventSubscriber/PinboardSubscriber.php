@@ -4,16 +4,16 @@ namespace App\EventSubscriber;
 
 use App\Entity\ActionItem;
 use App\Event\ActionItemEvent;
-use App\Manager\MemberManager;
+use App\Manager\ConnectionManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PinboardSubscriber implements EventSubscriberInterface
 {
-    protected MemberManager $memberManager;
+    private ConnectionManager $connectionManager;
 
-    public function __construct(MemberManager $memberManager)
+    public function __construct(ConnectionManager $connectionManager)
     {
-        $this->memberManager = $memberManager;
+        $this->connectionManager = $connectionManager;
     }
 
     public static function getSubscribedEvents(): array
@@ -46,7 +46,7 @@ class PinboardSubscriber implements EventSubscriberInterface
     {
         $member = $actionItem->getMember();
 
-        if ($connection = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $member])) {
+        if ($connection = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $member])) {
             $item = $actionItem->getItem();
 
             $url = 'https://api.pinboard.in/v1/posts/'.$method;

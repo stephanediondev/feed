@@ -10,7 +10,7 @@ use App\Repository\ItemRepository;
 
 class ItemManager extends AbstractManager
 {
-    public ItemRepository $itemRepository;
+    private ItemRepository $itemRepository;
 
     public EnclosureManager $enclosureManager;
 

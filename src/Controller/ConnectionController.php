@@ -28,7 +28,7 @@ class ConnectionController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $connection = $this->memberManager->connectionManager->getOne(['id' => $id, 'member' => $memberConnected]);
+        $connection = $this->connectionManager->getOne(['id' => $id, 'member' => $memberConnected]);
 
         if (!$connection) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
@@ -47,7 +47,7 @@ class ConnectionController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $connection = $this->memberManager->connectionManager->getOne(['id' => $id, 'member' => $memberConnected]);
+        $connection = $this->connectionManager->getOne(['id' => $id, 'member' => $memberConnected]);
 
         if (!$connection) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
@@ -55,7 +55,7 @@ class ConnectionController extends AbstractAppController
 
         $connection->setIp($request->getClientIp());
         $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
-        $connection_id = $this->memberManager->connectionManager->persist($connection);
+        $connection_id = $this->connectionManager->persist($connection);
 
         $data['entry'] = $connection->toArray();
         $data['entry_entity'] = 'connection';
@@ -73,7 +73,7 @@ class ConnectionController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $connection = $this->memberManager->connectionManager->getOne(['id' => $id, 'member' => $memberConnected]);
+        $connection = $this->connectionManager->getOne(['id' => $id, 'member' => $memberConnected]);
 
         if (!$connection) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
@@ -82,7 +82,7 @@ class ConnectionController extends AbstractAppController
         $data['entry'] = $connection->toArray();
         $data['entry_entity'] = 'connection';
 
-        $this->memberManager->connectionManager->remove($connection);
+        $this->connectionManager->remove($connection);
 
         return new JsonResponse($data);
     }
