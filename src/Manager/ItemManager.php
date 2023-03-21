@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\Item;
 use App\Event\ItemEvent;
+use App\Manager\AbstractManager;
 use App\Manager\EnclosureManager;
 use App\Repository\ItemRepository;
 
@@ -20,9 +20,9 @@ class ItemManager extends AbstractManager
         $this->enclosureManager = $enclosureManager;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?Item
     {
-        return $this->itemRepository->getOne($paremeters);
+        return $this->itemRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

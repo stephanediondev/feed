@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
 use App\Entity\ActionFeed;
+use App\Repository\AbstractRepository;
 
 class ActionFeedRepository extends AbstractRepository
 {
@@ -12,7 +12,7 @@ class ActionFeedRepository extends AbstractRepository
         return ActionFeed::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?ActionFeed
     {
         $em = $this->getEntityManager();
 

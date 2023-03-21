@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\Feed;
 use App\Event\FeedEvent;
+use App\Manager\AbstractManager;
 use App\Repository\FeedRepository;
 
 class FeedManager extends AbstractManager
@@ -25,9 +25,9 @@ class FeedManager extends AbstractManager
         $this->collectionFeedManager = $collectionFeedManager;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?Feed
     {
-        return $this->feedRepository->getOne($paremeters);
+        return $this->feedRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

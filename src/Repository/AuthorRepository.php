@@ -2,10 +2,10 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
-use App\Entity\Author;
 use App\Entity\ActionAuthor;
+use App\Entity\Author;
 use App\Entity\Item;
+use App\Repository\AbstractRepository;
 
 class AuthorRepository extends AbstractRepository
 {
@@ -14,7 +14,7 @@ class AuthorRepository extends AbstractRepository
         return Author::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?Author
     {
         $em = $this->getEntityManager();
 

@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\Connection;
 use App\Event\ConnectionEvent;
+use App\Manager\AbstractManager;
 use App\Repository\ConnectionRepository;
 
 class ConnectionManager extends AbstractManager
@@ -16,9 +16,9 @@ class ConnectionManager extends AbstractManager
         $this->connectionRepository = $connectionRepository;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?Connection
     {
-        return $this->connectionRepository->getOne($paremeters);
+        return $this->connectionRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

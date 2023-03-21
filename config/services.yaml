@@ -12,16 +12,16 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             $kernelProjectDir: "%kernel.project_dir%"
-            $elasticsearchEnabled: '%env(ELASTICSEARCH_ENABLED)%'
+            $elasticsearchEnabled: '%env(bool:ELASTICSEARCH_ENABLED)%'
             $elasticsearchIndex: '%env(ELASTICSEARCH_INDEX)%'
             $elasticsearchUrl: '%env(ELASTICSEARCH_URL)%'
             $elasticsearchUsername: '%env(ELASTICSEARCH_USERNAME)%'
             $elasticsearchPassword: '%env(ELASTICSEARCH_PASSWORD)%'
-            $sslVerifyPeer: '%env(SSL_VERIFY_PEER)%'
-            $ldapEnabled: '%env(LDAP_ENABLED)%'
+            $sslVerifyPeer: '%env(bool:SSL_VERIFY_PEER)%'
+            $ldapEnabled: '%env(bool:LDAP_ENABLED)%'
             $ldapServer: '%env(LDAP_SERVER)%'
-            $ldapPort: '%env(LDAP_PORT)%'
-            $ldapProtocol: '%env(LDAP_PROTOCOL)%'
+            $ldapPort: '%env(int:LDAP_PORT)%'
+            $ldapProtocol: '%env(int:LDAP_PROTOCOL)%'
             $ldapRootDn: '%env(LDAP_ROOT_DN)%'
             $ldapRootPw: '%env(LDAP_ROOT_PW)%'
             $ldapBaseDn: '%env(LDAP_BASE_DN)%'

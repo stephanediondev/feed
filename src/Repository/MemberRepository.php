@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
 use App\Entity\Member;
+use App\Repository\AbstractRepository;
 
 class MemberRepository extends AbstractRepository
 {
@@ -12,7 +12,7 @@ class MemberRepository extends AbstractRepository
         return Member::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?Member
     {
         $em = $this->getEntityManager();
 

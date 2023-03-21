@@ -2,10 +2,9 @@
 
 namespace App\EventListener;
 
-use App\Manager\MemberManager;
-
 use App\Entity\ActionItem;
 use App\Event\ActionItemEvent;
+use App\Manager\MemberManager;
 
 class PinboardListener
 {

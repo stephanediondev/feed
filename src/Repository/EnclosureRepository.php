@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
 use App\Entity\Enclosure;
+use App\Repository\AbstractRepository;
 
 class EnclosureRepository extends AbstractRepository
 {
@@ -12,7 +12,7 @@ class EnclosureRepository extends AbstractRepository
         return Enclosure::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?Enclosure
     {
         $em = $this->getEntityManager();
 

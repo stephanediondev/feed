@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
 use App\Entity\Collection;
+use App\Repository\AbstractRepository;
 
 class CollectionRepository extends AbstractRepository
 {
@@ -12,7 +12,7 @@ class CollectionRepository extends AbstractRepository
         return Collection::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?Collection
     {
         $em = $this->getEntityManager();
 

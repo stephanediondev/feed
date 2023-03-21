@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
 use App\Entity\Connection;
+use App\Repository\AbstractRepository;
 
 class ConnectionRepository extends AbstractRepository
 {
@@ -12,7 +12,7 @@ class ConnectionRepository extends AbstractRepository
         return Connection::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?Connection
     {
         $em = $this->getEntityManager();
 

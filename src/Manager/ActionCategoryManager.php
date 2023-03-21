@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\ActionCategory;
 use App\Event\ActionCategoryEvent;
+use App\Manager\AbstractManager;
 use App\Repository\ActionCategoryRepository;
 
 class ActionCategoryManager extends AbstractManager
@@ -16,9 +16,9 @@ class ActionCategoryManager extends AbstractManager
         $this->actionCategoryRepository = $actionCategoryRepository;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?ActionCategory
     {
-        return $this->actionCategoryRepository->getOne($paremeters);
+        return $this->actionCategoryRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

@@ -2,12 +2,12 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\Member;
 use App\Event\MemberEvent;
-use App\Repository\MemberRepository;
-
+use App\Manager\AbstractManager;
 use App\Manager\ConnectionManager;
+
+use App\Repository\MemberRepository;
 
 class MemberManager extends AbstractManager
 {
@@ -23,9 +23,9 @@ class MemberManager extends AbstractManager
         $this->connectionManager = $connectionManager;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?Member
     {
-        return $this->memberRepository->getOne($paremeters);
+        return $this->memberRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

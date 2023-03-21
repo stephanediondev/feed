@@ -2,13 +2,12 @@
 
 namespace App\EventListener;
 
-use App\Manager\SearchManager;
-use App\Manager\ItemManager;
-
 use App\Event\AuthorEvent;
 use App\Event\CategoryEvent;
 use App\Event\FeedEvent;
 use App\Event\ItemEvent;
+use App\Manager\ItemManager;
+use App\Manager\SearchManager;
 
 class SearchListener
 {

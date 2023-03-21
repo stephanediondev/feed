@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
 use App\Entity\CollectionFeed;
+use App\Repository\AbstractRepository;
 
 class CollectionFeedRepository extends AbstractRepository
 {
@@ -12,7 +12,7 @@ class CollectionFeedRepository extends AbstractRepository
         return CollectionFeed::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?CollectionFeed
     {
         $em = $this->getEntityManager();
 

@@ -2,12 +2,12 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
-use App\Entity\Feed;
-use App\Entity\CollectionFeed;
 use App\Entity\ActionFeed;
+use App\Entity\CollectionFeed;
+use App\Entity\Feed;
 use App\Entity\FeedCategory;
 use App\Entity\Item;
+use App\Repository\AbstractRepository;
 
 class FeedRepository extends AbstractRepository
 {
@@ -16,7 +16,7 @@ class FeedRepository extends AbstractRepository
         return Feed::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?Feed
     {
         $em = $this->getEntityManager();
 

@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\Enclosure;
 use App\Event\EnclosureEvent;
+use App\Manager\AbstractManager;
 use App\Repository\EnclosureRepository;
 
 class EnclosureManager extends AbstractManager
@@ -17,9 +17,9 @@ class EnclosureManager extends AbstractManager
         $this->enclosureRepository = $enclosureRepository;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?Enclosure
     {
-        return $this->enclosureRepository->getOne($paremeters);
+        return $this->enclosureRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

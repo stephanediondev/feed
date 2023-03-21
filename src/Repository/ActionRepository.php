@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
 use App\Entity\Action;
+use App\Repository\AbstractRepository;
 
 class ActionRepository extends AbstractRepository
 {
@@ -12,7 +12,7 @@ class ActionRepository extends AbstractRepository
         return Action::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?Action
     {
         $em = $this->getEntityManager();
 

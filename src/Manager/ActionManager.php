@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\Action;
 use App\Event\ActionEvent;
+use App\Manager\AbstractManager;
 use App\Repository\ActionRepository;
 
 class ActionManager extends AbstractManager
@@ -33,9 +33,9 @@ class ActionManager extends AbstractManager
         $this->actionAuthorManager = $actionAuthorManager;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?Action
     {
-        return $this->actionRepository->getOne($paremeters);
+        return $this->actionRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

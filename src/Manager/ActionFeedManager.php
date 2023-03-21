@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\ActionFeed;
 use App\Event\ActionFeedEvent;
+use App\Manager\AbstractManager;
 use App\Repository\ActionFeedRepository;
 
 class ActionFeedManager extends AbstractManager
@@ -16,9 +16,9 @@ class ActionFeedManager extends AbstractManager
         $this->actionFeedRepository = $actionFeedRepository;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?ActionFeed
     {
-        return $this->actionFeedRepository->getOne($paremeters);
+        return $this->actionFeedRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

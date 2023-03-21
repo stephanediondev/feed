@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\FeedCategory;
 use App\Event\FeedCategoryEvent;
+use App\Manager\AbstractManager;
 use App\Repository\FeedCategoryRepository;
 
 class FeedCategoryManager extends AbstractManager
@@ -16,9 +16,9 @@ class FeedCategoryManager extends AbstractManager
         $this->feedCategoryRepository = $feedCategoryRepository;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?FeedCategory
     {
-        return $this->feedCategoryRepository->getOne($paremeters);
+        return $this->feedCategoryRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

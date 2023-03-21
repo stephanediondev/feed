@@ -2,16 +2,16 @@
 
 namespace App\Manager;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Cache\Adapter\ApcuAdapter;
-use Symfony\Component\String\Slugger\AsciiSlugger;
-
-use App\Manager\AbstractManager;
 use App\Entity\Collection;
 use App\Event\CollectionEvent;
-use App\Repository\CollectionRepository;
+use App\Manager\AbstractManager;
 
+use App\Repository\CollectionRepository;
 use SimplePie\SimplePie;
+use Symfony\Component\Cache\Adapter\ApcuAdapter;
+use Symfony\Component\Config\Definition\Exception\Exception;
+
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class CollectionManager extends AbstractManager
 {
@@ -31,9 +31,9 @@ class CollectionManager extends AbstractManager
         $this->cacheDriver = new ApcuAdapter();
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?Collection
     {
-        return $this->collectionRepository->getOne($paremeters);
+        return $this->collectionRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

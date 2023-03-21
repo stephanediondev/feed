@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\ItemCategory;
 use App\Event\ItemCategoryEvent;
+use App\Manager\AbstractManager;
 use App\Repository\ItemCategoryRepository;
 
 class ItemCategoryManager extends AbstractManager
@@ -16,9 +16,9 @@ class ItemCategoryManager extends AbstractManager
         $this->itemCategoryRepository = $itemCategoryRepository;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?ItemCategory
     {
-        return $this->itemCategoryRepository->getOne($paremeters);
+        return $this->itemCategoryRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

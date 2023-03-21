@@ -2,7 +2,6 @@
 
 namespace App\Manager;
 
-use App\Entity\Enclosure;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

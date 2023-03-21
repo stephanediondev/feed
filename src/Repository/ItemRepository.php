@@ -2,11 +2,11 @@
 
 namespace App\Repository;
 
-use App\Repository\AbstractRepository;
+use App\Entity\ActionFeed;
+use App\Entity\ActionItem;
 use App\Entity\Item;
 use App\Entity\ItemCategory;
-use App\Entity\ActionItem;
-use App\Entity\ActionFeed;
+use App\Repository\AbstractRepository;
 
 class ItemRepository extends AbstractRepository
 {
@@ -15,7 +15,7 @@ class ItemRepository extends AbstractRepository
         return Item::class;
     }
 
-    public function getOne($parameters = [])
+    public function getOne($parameters = []): ?Item
     {
         $em = $this->getEntityManager();
 

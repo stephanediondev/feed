@@ -2,9 +2,9 @@
 
 namespace App\Manager;
 
-use App\Manager\AbstractManager;
 use App\Entity\CollectionFeed;
 use App\Event\CollectionFeedEvent;
+use App\Manager\AbstractManager;
 use App\Repository\CollectionFeedRepository;
 
 class CollectionFeedManager extends AbstractManager
@@ -16,9 +16,9 @@ class CollectionFeedManager extends AbstractManager
         $this->collectionFeedRepository = $collectionFeedRepository;
     }
 
-    public function getOne($paremeters = [])
+    public function getOne($parameters = []): ?CollectionFeed
     {
-        return $this->collectionFeedRepository->getOne($paremeters);
+        return $this->collectionFeedRepository->getOne($parameters);
     }
 
     public function getList($parameters = [])

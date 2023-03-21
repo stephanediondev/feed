@@ -2,10 +2,8 @@
 
 namespace App\EventListener;
 
-use App\Manager\MemberManager;
-
-use App\Entity\ActionFeed;
 use App\Event\ActionFeedEvent;
+use App\Manager\MemberManager;
 
 class SubscribeListener
 {

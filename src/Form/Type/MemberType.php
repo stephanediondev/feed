@@ -2,29 +2,29 @@
 
 namespace App\Form\Type;
 
+use App\Entity\Member;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MemberType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('email', EmailType::class);
 
-        $builder->add('plainPassword', PasswordType::class, ['mapped' => false]);
+        $builder->add('plainPassword', PasswordType::class, [
+            'mapped' => false,
+        ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => 'Readerself\CoreBundle\Entity\Member',
-            'csrf_protection' => false
+            'data_class' => Member::class,
+            'csrf_protection' => false,
         ]);
     }
 }
