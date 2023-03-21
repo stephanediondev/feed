@@ -307,7 +307,7 @@ function ready() {
 
             } else if (form.data('query')) {
                 var headers = new Headers({
-                    'X-CONNECTION-TOKEN': connectionData.token
+                    'Authorization': 'Bearer ' + connectionData.token
                 });
 
                 var body = null;
@@ -490,7 +490,7 @@ function explainConnection(connection) {
             method: 'PUT',
             mode: 'cors',
             headers: new Headers({
-                'X-CONNECTION-TOKEN': connection.token,
+                'Authorization': 'Bearer ' + connection.token,
                 'Content-Type': 'application/json'
             })
     	}).then(function(response) {
@@ -605,7 +605,7 @@ function loadRoute(key, parameters) {
                 method: 'GET',
                 mode: 'cors',
                 headers: new Headers({
-                    'X-CONNECTION-TOKEN': connectionData.token,
+                    'Authorization': 'Bearer ' + connectionData.token,
                     'Content-Type': 'application/json'
                 })
         	}).then(function(response) {

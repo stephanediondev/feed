@@ -342,7 +342,7 @@ class MemberController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $connection = $this->connectionManager->getOne(['type' => 'login', 'token' => $request->headers->get('X-CONNECTION-TOKEN'), 'member' => $memberConnected]);
+        $connection = $this->connectionManager->getOne(['type' => 'login', 'token' => $request->headers->get('Authorization'), 'member' => $memberConnected]);
 
         $data['entry'] = $connection->toArray();
         $data['entry_entity'] = 'connection';

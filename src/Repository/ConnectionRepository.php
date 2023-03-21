@@ -36,6 +36,9 @@ class ConnectionRepository extends AbstractRepository
         }
 
         if (isset($parameters['token']) == 1) {
+            if (str_starts_with($parameters['token'], 'Bearer ')) {
+                $parameters['token'] = substr($parameters['token'], 7);
+            }
             $query->andWhere('cnt.token = :token');
             $query->setParameter(':token', $parameters['token']);
         }
