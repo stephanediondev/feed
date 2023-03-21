@@ -11,26 +11,9 @@ class ActionManager extends AbstractManager
 {
     public ActionRepository $actionRepository;
 
-    public $actionItemManager;
-
-    public $actionFeedManager;
-
-    public $actionCategoryManager;
-
-    public $actionAuthorManager;
-
-    public function __construct(
-        ActionRepository $actionRepository,
-        ActionItemManager $actionItemManager,
-        ActionFeedManager $actionFeedManager,
-        ActionCategoryManager $actionCategoryManager,
-        ActionAuthorManager $actionAuthorManager
-    ) {
+    public function __construct(ActionRepository $actionRepository)
+    {
         $this->actionRepository = $actionRepository;
-        $this->actionItemManager = $actionItemManager;
-        $this->actionFeedManager = $actionFeedManager;
-        $this->actionCategoryManager = $actionCategoryManager;
-        $this->actionAuthorManager = $actionAuthorManager;
     }
 
     public function getOne($parameters = []): ?Action

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\AbstractAppController;
 use App\Form\Type\FeedType;
 use App\Form\Type\ImportOpmlType;
+use App\Manager\ActionFeedManager;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
 use App\Manager\CategoryManager;
@@ -21,14 +22,16 @@ class FeedController extends AbstractAppController
 {
     private AuthorManager $authorManager;
     private ActionManager $actionManager;
+    private ActionFeedManager $actionFeedManager;
     private FeedManager $feedManager;
     private CollectionManager $collectionManager;
     private CategoryManager $categoryManager;
 
-    public function __construct(AuthorManager $authorManager, ActionManager $actionManager, FeedManager $feedManager, CollectionManager $collectionManager, CategoryManager $categoryManager)
+    public function __construct(AuthorManager $authorManager, ActionManager $actionManager, ActionFeedManager $actionFeedManager, FeedManager $feedManager, CollectionManager $collectionManager, CategoryManager $categoryManager)
     {
         $this->authorManager = $authorManager;
         $this->actionManager = $actionManager;
+        $this->actionFeedManager = $actionFeedManager;
         $this->feedManager = $feedManager;
         $this->collectionManager = $collectionManager;
         $this->categoryManager = $categoryManager;
@@ -117,7 +120,7 @@ class FeedController extends AbstractAppController
         $index = 0;
         foreach ($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
-            $actions = $this->actionManager->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+            $actions = $this->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
             $categories = [];
             foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
@@ -182,7 +185,7 @@ class FeedController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $actions = $this->actionManager->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+        $actions = $this->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
         $categories = [];
         foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
@@ -285,47 +288,47 @@ class FeedController extends AbstractAppController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
-        if ($actionFeed = $this->actionManager->actionFeedManager->getOne([
+        if ($actionFeed = $this->actionFeedManager->getOne([
             'action' => $action,
             'feed' => $feed,
             'member' => $memberConnected,
         ])) {
-            $this->actionManager->actionFeedManager->remove($actionFeed);
+            $this->actionFeedManager->remove($actionFeed);
 
             $data['action'] = $action->getReverse()->getTitle();
             $data['action_reverse'] = $action->getTitle();
 
             if ($action->getReverse()) {
-                if ($actionFeedReverse = $this->actionManager->actionFeedManager->getOne([
+                if ($actionFeedReverse = $this->actionFeedManager->getOne([
                     'action' => $action->getReverse(),
                     'feed' => $feed,
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionFeedReverse = $this->actionManager->actionFeedManager->init();
+                    $actionFeedReverse = $this->actionFeedManager->init();
                     $actionFeedReverse->setAction($action->getReverse());
                     $actionFeedReverse->setFeed($feed);
                     $actionFeedReverse->setMember($memberConnected);
-                    $this->actionManager->actionFeedManager->persist($actionFeedReverse);
+                    $this->actionFeedManager->persist($actionFeedReverse);
                 }
             }
         } else {
-            $actionFeed = $this->actionManager->actionFeedManager->init();
+            $actionFeed = $this->actionFeedManager->init();
             $actionFeed->setAction($action);
             $actionFeed->setFeed($feed);
             $actionFeed->setMember($memberConnected);
-            $this->actionManager->actionFeedManager->persist($actionFeed);
+            $this->actionFeedManager->persist($actionFeed);
 
             $data['action'] = $action->getTitle();
             $data['action_reverse'] = $action->getReverse()->getTitle();
 
             if ($action->getReverse()) {
-                if ($actionFeedReverse = $this->actionManager->actionFeedManager->getOne([
+                if ($actionFeedReverse = $this->actionFeedManager->getOne([
                     'action' => $action->getReverse(),
                     'feed' => $feed,
                     'member' => $memberConnected,
                 ])) {
-                    $this->actionManager->actionFeedManager->remove($actionFeedReverse);
+                    $this->actionFeedManager->remove($actionFeedReverse);
                 }
             }
         }

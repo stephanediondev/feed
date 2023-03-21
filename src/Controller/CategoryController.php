@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use App\Form\Type\CategoryType;
+use App\Manager\ActionCategoryManager;
 use App\Manager\ActionManager;
 use App\Manager\CategoryManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,11 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class CategoryController extends AbstractAppController
 {
     private ActionManager $actionManager;
+    private ActionCategoryManager $actionCategoryManager;
     private CategoryManager $categoryManager;
 
-    public function __construct(ActionManager $actionManager, CategoryManager $categoryManager)
+    public function __construct(ActionManager $actionManager, ActionCategoryManager $actionCategoryManager, CategoryManager $categoryManager)
     {
         $this->actionManager = $actionManager;
+        $this->actionCategoryManager = $actionCategoryManager;
         $this->categoryManager = $categoryManager;
     }
 
@@ -109,7 +112,7 @@ class CategoryController extends AbstractAppController
             $index = 0;
             foreach ($pagination as $result) {
                 $category = $this->categoryManager->getOne(['id' => $result['id']]);
-                $actions = $this->actionManager->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
+                $actions = $this->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
 
                 $data['entries'][$index] = $category->toArray();
                 foreach ($actions as $action) {
@@ -162,7 +165,7 @@ class CategoryController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $actions = $this->actionManager->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
+        $actions = $this->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
 
         $data['entry'] = $category->toArray();
         foreach ($actions as $action) {
@@ -238,47 +241,47 @@ class CategoryController extends AbstractAppController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
-        if ($actionCategory = $this->actionManager->actionCategoryManager->getOne([
+        if ($actionCategory = $this->actionCategoryManager->getOne([
             'action' => $action,
             'category' => $category,
             'member' => $memberConnected,
         ])) {
-            $this->actionManager->actionCategoryManager->remove($actionCategory);
+            $this->actionCategoryManager->remove($actionCategory);
 
             $data['action'] = $action->getReverse()->getTitle();
             $data['action_reverse'] = $action->getTitle();
 
             if ($action->getReverse()) {
-                if ($actionCategoryReverse = $this->actionManager->actionCategoryManager->getOne([
+                if ($actionCategoryReverse = $this->actionCategoryManager->getOne([
                     'action' => $action->getReverse(),
                     'category' => $category,
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionCategoryReverse = $this->actionManager->actionCategoryManager->init();
+                    $actionCategoryReverse = $this->actionCategoryManager->init();
                     $actionCategoryReverse->setAction($action->getReverse());
                     $actionCategoryReverse->setCategory($category);
                     $actionCategoryReverse->setMember($memberConnected);
-                    $this->actionManager->actionCategoryManager->persist($actionCategoryReverse);
+                    $this->actionCategoryManager->persist($actionCategoryReverse);
                 }
             }
         } else {
-            $actionCategory = $this->actionManager->actionCategoryManager->init();
+            $actionCategory = $this->actionCategoryManager->init();
             $actionCategory->setAction($action);
             $actionCategory->setCategory($category);
             $actionCategory->setMember($memberConnected);
-            $this->actionManager->actionCategoryManager->persist($actionCategory);
+            $this->actionCategoryManager->persist($actionCategory);
 
             $data['action'] = $action->getTitle();
             $data['action_reverse'] = $action->getReverse()->getTitle();
 
             if ($action->getReverse()) {
-                if ($actionCategoryReverse = $this->actionManager->actionCategoryManager->getOne([
+                if ($actionCategoryReverse = $this->actionCategoryManager->getOne([
                     'action' => $action->getReverse(),
                     'category' => $category,
                     'member' => $memberConnected,
                 ])) {
-                    $this->actionManager->actionCategoryManager->remove($actionCategoryReverse);
+                    $this->actionCategoryManager->remove($actionCategoryReverse);
                 }
             }
         }

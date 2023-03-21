@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use App\Form\Type\AuthorType;
+use App\Manager\ActionAuthorManager;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,11 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class AuthorController extends AbstractAppController
 {
     private ActionManager $actionManager;
+    private ActionAuthorManager $actionAuthorManager;
     private AuthorManager $authorManager;
 
-    public function __construct(ActionManager $actionManager, AuthorManager $authorManager)
+    public function __construct(ActionManager $actionManager, ActionAuthorManager $actionAuthorManager, AuthorManager $authorManager)
     {
         $this->actionManager = $actionManager;
+        $this->actionAuthorManager = $actionAuthorManager;
         $this->authorManager = $authorManager;
     }
 
@@ -111,7 +114,7 @@ class AuthorController extends AbstractAppController
             $index = 0;
             foreach ($pagination as $result) {
                 $author = $this->authorManager->getOne(['id' => $result['id']]);
-                $actions = $this->actionManager->actionAuthorManager->getList(['member' => $memberConnected, 'author' => $author])->getResult();
+                $actions = $this->actionAuthorManager->getList(['member' => $memberConnected, 'author' => $author])->getResult();
 
                 $data['entries'][$index] = $author->toArray();
                 foreach ($actions as $action) {
@@ -235,47 +238,47 @@ class AuthorController extends AbstractAppController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
-        if ($actionAuthor = $this->actionManager->actionAuthorManager->getOne([
+        if ($actionAuthor = $this->actionAuthorManager->getOne([
             'action' => $action,
             'author' => $author,
             'member' => $memberConnected,
         ])) {
-            $this->actionManager->actionAuthorManager->remove($actionAuthor);
+            $this->actionAuthorManager->remove($actionAuthor);
 
             $data['action'] = $action->getReverse()->getTitle();
             $data['action_reverse'] = $action->getTitle();
 
             if ($action->getReverse()) {
-                if ($actionAuthorReverse = $this->actionManager->actionAuthorManager->getOne([
+                if ($actionAuthorReverse = $this->actionAuthorManager->getOne([
                     'action' => $action->getReverse(),
                     'author' => $author,
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionAuthorReverse = $this->actionManager->actionAuthorManager->init();
+                    $actionAuthorReverse = $this->actionAuthorManager->init();
                     $actionAuthorReverse->setAction($action->getReverse());
                     $actionAuthorReverse->setAuthor($author);
                     $actionAuthorReverse->setMember($memberConnected);
-                    $this->actionManager->actionAuthorManager->persist($actionAuthorReverse);
+                    $this->actionAuthorManager->persist($actionAuthorReverse);
                 }
             }
         } else {
-            $actionAuthor = $this->actionManager->actionAuthorManager->init();
+            $actionAuthor = $this->actionAuthorManager->init();
             $actionAuthor->setAction($action);
             $actionAuthor->setAuthor($author);
             $actionAuthor->setMember($memberConnected);
-            $this->actionManager->actionAuthorManager->persist($actionAuthor);
+            $this->actionAuthorManager->persist($actionAuthor);
 
             $data['action'] = $action->getTitle();
             $data['action_reverse'] = $action->getReverse()->getTitle();
 
             if ($action->getReverse()) {
-                if ($actionAuthorReverse = $this->actionManager->actionAuthorManager->getOne([
+                if ($actionAuthorReverse = $this->actionAuthorManager->getOne([
                     'action' => $action->getReverse(),
                     'author' => $author,
                     'member' => $memberConnected,
                 ])) {
-                    $this->actionManager->actionAuthorManager->remove($actionAuthorReverse);
+                    $this->actionAuthorManager->remove($actionAuthorReverse);
                 }
             }
         }

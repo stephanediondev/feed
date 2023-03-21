@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Manager\ActionItemManager;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
 use App\Manager\CategoryManager;
@@ -16,14 +17,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class ItemController extends AbstractAppController
 {
     private ActionManager $actionManager;
+    private ActionItemManager $actionItemManager;
     private FeedManager $feedManager;
     private AuthorManager $authorManager;
     private CategoryManager $categoryManager;
     private ItemManager $itemManager;
 
-    public function __construct(ActionManager $actionManager, FeedManager $feedManager, AuthorManager $authorManager, CategoryManager $categoryManager, ItemManager $itemManager)
+    public function __construct(ActionManager $actionManager, ActionItemManager $actionItemManager, FeedManager $feedManager, AuthorManager $authorManager, CategoryManager $categoryManager, ItemManager $itemManager)
     {
         $this->actionManager = $actionManager;
+        $this->actionItemManager = $actionItemManager;
         $this->feedManager = $feedManager;
         $this->authorManager = $authorManager;
         $this->categoryManager = $categoryManager;
@@ -130,7 +133,7 @@ class ItemController extends AbstractAppController
         foreach ($pagination as $result) {
             $item = $this->itemManager->getOne(['id' => $result['id']]);
 
-            $actions = $this->actionManager->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
+            $actions = $this->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
 
             $categories = [];
             foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
@@ -164,7 +167,7 @@ class ItemController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $actions = $this->actionManager->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
+        $actions = $this->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
 
         $categories = [];
         foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
@@ -282,47 +285,47 @@ class ItemController extends AbstractAppController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
-        if ($actionItem = $this->actionManager->actionItemManager->getOne([
+        if ($actionItem = $this->actionItemManager->getOne([
             'action' => $action,
             'item' => $item,
             'member' => $memberConnected,
         ])) {
-            $this->actionManager->actionItemManager->remove($actionItem);
+            $this->actionItemManager->remove($actionItem);
 
             $data['action'] = $action->getReverse()->getTitle();
             $data['action_reverse'] = $action->getTitle();
 
             if ($action->getReverse()) {
-                if ($actionItemReverse = $this->actionManager->actionItemManager->getOne([
+                if ($actionItemReverse = $this->actionItemManager->getOne([
                     'action' => $action->getReverse(),
                     'item' => $item,
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionItemReverse = $this->actionManager->actionItemManager->init();
+                    $actionItemReverse = $this->actionItemManager->init();
                     $actionItemReverse->setAction($action->getReverse());
                     $actionItemReverse->setItem($item);
                     $actionItemReverse->setMember($memberConnected);
-                    $this->actionManager->actionItemManager->persist($actionItemReverse);
+                    $this->actionItemManager->persist($actionItemReverse);
                 }
             }
         } else {
-            $actionItem = $this->actionManager->actionItemManager->init();
+            $actionItem = $this->actionItemManager->init();
             $actionItem->setAction($action);
             $actionItem->setItem($item);
             $actionItem->setMember($memberConnected);
-            $this->actionManager->actionItemManager->persist($actionItem);
+            $this->actionItemManager->persist($actionItem);
 
             $data['action'] = $action->getTitle();
             $data['action_reverse'] = $action->getReverse()->getTitle();
 
             if ($action->getReverse()) {
-                if ($actionItemReverse = $this->actionManager->actionItemManager->getOne([
+                if ($actionItemReverse = $this->actionItemManager->getOne([
                     'action' => $action->getReverse(),
                     'item' => $item,
                     'member' => $memberConnected,
                 ])) {
-                    $this->actionManager->actionItemManager->remove($actionItemReverse);
+                    $this->actionItemManager->remove($actionItemReverse);
                 }
             }
         }

@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
-use App\Manager\ActionManager;
+use App\Manager\ActionAuthorManager;
+use App\Manager\ActionCategoryManager;
+use App\Manager\ActionFeedManager;
+use App\Manager\ActionItemManager;
 use App\Manager\AuthorManager;
 use App\Manager\CategoryManager;
 use App\Manager\FeedManager;
@@ -18,17 +21,23 @@ class SearchController extends AbstractAppController
 {
     private const LIMIT = 20;
 
+    private ActionFeedManager $actionFeedManager;
+    private ActionAuthorManager $actionAuthorManager;
+    private ActionCategoryManager $actionCategoryManager;
+    private ActionItemManager $actionItemManager;
     private AuthorManager $authorManager;
-    private ActionManager $actionManager;
     private FeedManager $feedManager;
     private ItemManager $itemManager;
     private SearchManager $searchManager;
     private CategoryManager $categoryManager;
 
-    public function __construct(AuthorManager $authorManager, ActionManager $actionManager, FeedManager $feedManager, ItemManager $itemManager, SearchManager $searchManager, CategoryManager $categoryManager)
+    public function __construct(ActionFeedManager $actionFeedManager, ActionAuthorManager $actionAuthorManager, ActionCategoryManager $actionCategoryManager, ActionItemManager $actionItemManager, AuthorManager $authorManager, FeedManager $feedManager, ItemManager $itemManager, SearchManager $searchManager, CategoryManager $categoryManager)
     {
+        $this->actionFeedManager = $actionFeedManager;
+        $this->actionAuthorManager = $actionAuthorManager;
+        $this->actionCategoryManager = $actionCategoryManager;
+        $this->actionItemManager = $actionItemManager;
         $this->authorManager = $authorManager;
-        $this->actionManager = $actionManager;
         $this->feedManager = $feedManager;
         $this->itemManager = $itemManager;
         $this->searchManager = $searchManager;
@@ -168,7 +177,7 @@ class SearchController extends AbstractAppController
                         case 'feed':
                             $feed = $this->feedManager->getOne(['id' => $hit['_id']]);
                             if ($feed) {
-                                $actions = $this->actionManager->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+                                $actions = $this->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
                                 $categories = [];
                                 foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
@@ -193,7 +202,7 @@ class SearchController extends AbstractAppController
                         case 'category':
                             $category = $this->categoryManager->getOne(['id' => $hit['_id']]);
                             if ($category) {
-                                $actions = $this->actionManager->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
+                                $actions = $this->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
 
                                 $data['entries'][$index] = $category->toArray();
                                 $data['entries'][$index]['score'] = $hit['_score'];
@@ -212,8 +221,13 @@ class SearchController extends AbstractAppController
                         case 'author':
                             $author = $this->authorManager->getOne(['id' => $hit['_id']]);
                             if ($author) {
+                                $actions = $this->actionAuthorManager->getList(['member' => $memberConnected, 'author' => $author])->getResult();
+
                                 $data['entries'][$index] = $author->toArray();
                                 $data['entries'][$index]['score'] = $hit['_score'];
+                                foreach ($actions as $action) {
+                                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                }
 
                                 $index++;
                             } else {
@@ -226,7 +240,7 @@ class SearchController extends AbstractAppController
                         case 'item':
                             $item = $this->itemManager->getOne(['id' => $hit['_id']]);
                             if ($item) {
-                                $actions = $this->actionManager->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
+                                $actions = $this->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
 
                                 $categories = [];
                                 foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
