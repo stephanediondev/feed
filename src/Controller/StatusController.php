@@ -2,13 +2,11 @@
 
 namespace App\Controller;
 
-use App\Manager\SearchManager;
-
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
-
 use App\Controller\AbstractAppController;
+use App\Manager\SearchManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api', name: 'api_status_')]
 class StatusController extends AbstractAppController
@@ -21,15 +19,15 @@ class StatusController extends AbstractAppController
     }
 
     #[Route('/status', name: 'index', methods: ['GET'])]
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         if (!$memberConnected->getAdministrator()) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $types = ['author', 'category', 'feed', 'item'];

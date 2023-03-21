@@ -2,18 +2,16 @@
 
 namespace App\Controller;
 
-use App\Manager\AuthorManager;
+use App\Controller\AbstractAppController;
 use App\Manager\ActionManager;
+use App\Manager\AuthorManager;
+use App\Manager\CategoryManager;
 use App\Manager\FeedManager;
 use App\Manager\ItemManager;
 use App\Manager\SearchManager;
-use App\Manager\CategoryManager;
-
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-
-use App\Controller\AbstractAppController;
 
 #[Route(path: '/api', name: 'api_search_')]
 class SearchController extends AbstractAppController
@@ -36,34 +34,34 @@ class SearchController extends AbstractAppController
     }
 
     #[Route(path: '/feeds/search', name: 'feeds', methods: ['GET'])]
-    public function feeds(Request $request)
+    public function feeds(Request $request): JsonResponse
     {
         return $this->getResults($request, 'feed');
     }
 
     #[Route(path: '/categories/search', name: 'categories', methods: ['GET'])]
-    public function categories(Request $request)
+    public function categories(Request $request): JsonResponse
     {
         return $this->getResults($request, 'category');
     }
 
     #[Route(path: '/authors/search', name: 'authors', methods: ['GET'])]
-    public function authors(Request $request)
+    public function authors(Request $request): JsonResponse
     {
         return $this->getResults($request, 'author');
     }
 
     #[Route(path: '/items/search', name: 'items', methods: ['GET'])]
-    public function items(Request $request)
+    public function items(Request $request): JsonResponse
     {
         return $this->getResults($request, 'item');
     }
 
-    private function getResults(Request $request, $type)
+    private function getResults(Request $request, $type): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, 403);
+            //return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $sortFields = ['date.sort', '_score', 'title.sort'];

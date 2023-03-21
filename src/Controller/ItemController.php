@@ -4,12 +4,12 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use App\Manager\ActionManager;
-use App\Manager\FeedManager;
 use App\Manager\AuthorManager;
 use App\Manager\CategoryManager;
+use App\Manager\FeedManager;
 use App\Manager\ItemManager;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api', name: 'api_items_')]
@@ -31,7 +31,7 @@ class ItemController extends AbstractAppController
     }
 
     #[Route(path: '/items', name: 'index', methods: ['GET'])]
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $data = [];
         $memberConnected = $this->validateToken($request);
@@ -41,14 +41,14 @@ class ItemController extends AbstractAppController
 
         if ($request->query->get('starred')) {
             if (!$memberConnected) {
-                return new JsonResponse($data, 403);
+                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
             }
             $parameters['starred'] = $request->query->get('starred');
         }
 
         if ($request->query->get('unread')) {
             if (!$memberConnected) {
-                return new JsonResponse($data, 403);
+                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
             }
             $parameters['unread'] = (bool) $request->query->get('unread');
         }
@@ -153,7 +153,7 @@ class ItemController extends AbstractAppController
     }
 
     #[Route('/item/{id}', name: 'read', methods: ['GET'])]
-    public function read(Request $request, $id)
+    public function read(Request $request, $id): JsonResponse
     {
         $data = [];
         $memberConnected = $this->validateToken($request);
@@ -161,7 +161,7 @@ class ItemController extends AbstractAppController
         $item = $this->itemManager->getOne(['id' => $id]);
 
         if (!$item) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $actions = $this->actionManager->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
@@ -185,21 +185,22 @@ class ItemController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function delete(Request $request, $id)
+    #[Route('/item/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         if (!$memberConnected->getAdministrator()) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $item = $this->itemManager->getOne(['id' => $id]);
 
         if (!$item) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data['entry'] = $item->toArray();
@@ -211,11 +212,11 @@ class ItemController extends AbstractAppController
     }
 
     #[Route('/items/markallasread', name: 'markallasread', methods: ['GET'])]
-    public function markallasread(Request $request)
+    public function markallasread(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $parameters = [];
@@ -255,28 +256,28 @@ class ItemController extends AbstractAppController
     }
 
     #[Route('/item/action/read/{id}', name: 'action_read', methods: ['GET'])]
-    public function actionRead(Request $request, $id)
+    public function actionRead(Request $request, $id): JsonResponse
     {
         return $this->setAction('read', $request, $id);
     }
 
     #[Route('/item/action/star/{id}', name: 'action_star', methods: ['GET'])]
-    public function actionStar(Request $request, $id)
+    public function actionStar(Request $request, $id): JsonResponse
     {
         return $this->setAction('star', $request, $id);
     }
 
-    private function setAction($case, Request $request, $id)
+    private function setAction($case, Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $item = $this->itemManager->getOne(['id' => $id]);
 
         if (!$item) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);
@@ -332,25 +333,6 @@ class ItemController extends AbstractAppController
         if ($case == 'read') {
             $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
         }
-
-        return new JsonResponse($data);
-    }
-
-    #[Route('/item/action/email/{id}', name: 'action_email', methods: ['GET'])]
-    public function actionEmail(Request $request, $id)
-    {
-        $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
-        }
-
-        $item = $this->itemManager->getOne(['id' => $id]);
-
-        if (!$item) {
-            return new JsonResponse($data, 404);
-        }
-
-        $action = $this->actionManager->getOne(['title' => 'email']);
 
         return new JsonResponse($data);
     }

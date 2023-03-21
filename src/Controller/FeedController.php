@@ -2,23 +2,19 @@
 
 namespace App\Controller;
 
-use App\Manager\AuthorManager;
+use App\Controller\AbstractAppController;
+use App\Form\Type\FeedType;
+use App\Form\Type\ImportOpmlType;
 use App\Manager\ActionManager;
-use App\Manager\FeedManager;
-use App\Manager\CollectionManager;
+use App\Manager\AuthorManager;
 use App\Manager\CategoryManager;
-
+use App\Manager\CollectionManager;
+use App\Manager\FeedManager;
+use App\Model\ImportOpmlModel;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-
-use App\Controller\AbstractAppController;
-
-use App\Form\Type\FeedType;
-
-use App\Model\ImportOpmlModel;
-use App\Form\Type\ImportOpmlType;
 
 #[Route(path: '/api', name: 'api_feeds_')]
 class FeedController extends AbstractAppController
@@ -39,7 +35,7 @@ class FeedController extends AbstractAppController
     }
 
     #[Route(path: '/feeds', name: 'index', methods: ['GET'])]
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $data = [];
         $memberConnected = $this->validateToken($request);
@@ -48,14 +44,14 @@ class FeedController extends AbstractAppController
 
         if ($request->query->get('witherrors')) {
             if (!$memberConnected) {
-                return new JsonResponse($data, 403);
+                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
             }
             $parameters['witherrors'] = true;
         }
 
         if ($request->query->get('subscribed')) {
             if (!$memberConnected) {
-                return new JsonResponse($data, 403);
+                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
             }
             $parameters['subscribed'] = true;
             $parameters['member'] = $memberConnected;
@@ -63,7 +59,7 @@ class FeedController extends AbstractAppController
 
         if ($request->query->get('unsubscribed')) {
             if (!$memberConnected) {
-                return new JsonResponse($data, 403);
+                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
             }
             $parameters['unsubscribed'] = true;
             $parameters['member'] = $memberConnected;
@@ -139,11 +135,11 @@ class FeedController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $form = $this->createForm(FeedType::class, $this->feedManager->init());
@@ -175,7 +171,7 @@ class FeedController extends AbstractAppController
     }
 
     #[Route('/feed/{id}', name: 'read', methods: ['GET'])]
-    public function read(Request $request, $id)
+    public function read(Request $request, $id): JsonResponse
     {
         $data = [];
         $memberConnected = $this->validateToken($request);
@@ -183,7 +179,7 @@ class FeedController extends AbstractAppController
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if (!$feed) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $actions = $this->actionManager->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
@@ -210,17 +206,17 @@ class FeedController extends AbstractAppController
     }
 
     #[Route('/feed/{id}', name: 'update', methods: ['PUT'])]
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if (!$feed) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $form = $this->createForm(FeedType::class, $feed);
@@ -243,21 +239,21 @@ class FeedController extends AbstractAppController
     }
 
     #[Route('/feed/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Request $request, $id)
+    public function delete(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         if (!$memberConnected->getAdministrator()) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if (!$feed) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data['entry'] = $feed->toArray();
@@ -269,22 +265,22 @@ class FeedController extends AbstractAppController
     }
 
     #[Route('/feed/action/subscribe/{id}', name: 'subscribe', methods: ['GET'])]
-    public function actionSubscribe(Request $request, $id)
+    public function actionSubscribe(Request $request, $id): JsonResponse
     {
         return $this->setAction('subscribe', $request, $id);
     }
 
-    private function setAction($case, Request $request, $id)
+    private function setAction($case, Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if (!$feed) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);
@@ -345,11 +341,11 @@ class FeedController extends AbstractAppController
     }
 
     #[Route(path: '/feeds/import', name: 'import', methods: ['POST'])]
-    public function import(Request $request)
+    public function import(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $importOpml = new ImportOpmlModel();
@@ -377,7 +373,7 @@ class FeedController extends AbstractAppController
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $parameters = [];

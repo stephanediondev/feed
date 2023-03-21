@@ -2,16 +2,13 @@
 
 namespace App\Controller;
 
+use App\Controller\AbstractAppController;
+use App\Form\Type\AuthorType;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
-
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-
-use App\Controller\AbstractAppController;
-
-use App\Form\Type\AuthorType;
 
 #[Route(path: '/api', name: 'api_authors_')]
 class AuthorController extends AbstractAppController
@@ -26,7 +23,7 @@ class AuthorController extends AbstractAppController
     }
 
     #[Route(path: '/authors', name: 'index', methods: ['GET'])]
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $data = [];
         $memberConnected = $this->validateToken($request);
@@ -62,7 +59,7 @@ class AuthorController extends AbstractAppController
         } else {
             if ($request->query->get('excluded')) {
                 if (!$memberConnected) {
-                    return new JsonResponse($data, 403);
+                    return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
                 }
                 $parameters['excluded'] = true;
                 $parameters['member'] = $memberConnected;
@@ -127,11 +124,11 @@ class AuthorController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $form = $this->createForm(AuthorType::class, $this->authorManager->init());
@@ -154,17 +151,17 @@ class AuthorController extends AbstractAppController
     }
 
     #[Route('/author/{id}', name: 'read', methods: ['GET'])]
-    public function read(Request $request, $id)
+    public function read(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, 403);
+            //return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data['entry'] = $author->toArray();
@@ -173,17 +170,17 @@ class AuthorController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data['entry'] = $author->toArray();
@@ -192,21 +189,21 @@ class AuthorController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function delete(Request $request, $id)
+    public function delete(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         if (!$memberConnected->getAdministrator()) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data['entry'] = $author->toArray();
@@ -217,22 +214,23 @@ class AuthorController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function actionExclude(Request $request, $id)
+    #[Route('/author/action/exclude/{id}', name: 'action_exclude', methods: ['GET'])]
+    public function actionExclude(Request $request, $id): JsonResponse
     {
         return $this->setAction('exclude', $request, $id);
     }
 
-    private function setAction($case, Request $request, $id)
+    private function setAction($case, Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);

@@ -2,80 +2,71 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
 use App\Controller\AbstractAppController;
-
-use App\Form\Type\MemberType;
-
-use App\Model\LoginModel;
 use App\Form\Type\LoginType;
-
-use App\Model\ProfileModel;
-use App\Form\Type\ProfileType;
-
-use App\Model\PinboardModel;
+use App\Form\Type\MemberType;
 use App\Form\Type\PinboardType;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Form\Type\ProfileType;
+use App\Model\LoginModel;
+use App\Model\PinboardModel;
+use App\Model\ProfileModel;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api', name: 'api_')]
 class MemberController extends AbstractAppController
 {
-    protected $ldapEnabled = false;
+    protected bool $ldapEnabled = false;
 
-    protected $ldapServer = 'ldap://localhost';
+    protected string $ldapServer = 'ldap://localhost';
 
-    protected $ldapPort = 389;
+    protected int $ldapPort = 389;
 
-    protected $ldapProtocol = 3;
+    protected int $ldapProtocol = 3;
 
-    protected $ldapRootDn = 'cn=Manager,dc=my-domain,dc=com';
+    protected string $ldapRootDn = 'cn=Manager,dc=my-domain,dc=com';
 
-    protected $ldapRootPw = 'secret';
+    protected string $ldapRootPw = 'secret';
 
-    protected $ldapBaseDn = 'dc=my-domain,dc=com';
+    protected string $ldapBaseDn = 'dc=my-domain,dc=com';
 
-    protected $ldapSearchUser = 'mail=[email]';
+    protected string $ldapSearchUser = 'mail=[email]';
 
-    protected $ldapSearchGroupAdmin = 'cn=admingroup';
+    protected string $ldapSearchGroupAdmin = 'cn=admingroup';
 
     private UserPasswordHasherInterface $passwordHasher;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    public function __construct(UserPasswordHasherInterface $passwordHasher, bool $ldapEnabled, string $ldapServer, int $ldapPort, int $ldapProtocol, string $ldapRootDn, string $ldapRootPw, string $ldapBaseDn, string $ldapSearchUser, string $ldapSearchGroupAdmin)
     {
         $this->passwordHasher = $passwordHasher;
+        $this->ldapEnabled = $ldapEnabled;
+        $this->ldapServer = $ldapServer;
+        $this->ldapPort = $ldapPort;
+        $this->ldapProtocol = $ldapProtocol;
+        $this->ldapRootDn = $ldapRootDn;
+        $this->ldapRootPw = $ldapRootPw;
+        $this->ldapBaseDn = $ldapBaseDn;
+        $this->ldapSearchUser = $ldapSearchUser;
+        $this->ldapSearchGroupAdmin = $ldapSearchGroupAdmin;
     }
 
-    public function setLdap($enabled, $server, $port, $protocol, $rootDn, $rootPw, $baseDn, $searchUser, $searchGroupAdmin)
-    {
-        $this->ldapEnabled = $enabled;
-        $this->ldapServer = $server;
-        $this->ldapPort = $port;
-        $this->ldapProtocol = $protocol;
-        $this->ldapRootDn = $rootDn;
-        $this->ldapRootPw = $rootPw;
-        $this->ldapBaseDn = $baseDn;
-        $this->ldapSearchUser = $searchUser;
-        $this->ldapSearchGroupAdmin = $searchGroupAdmin;
-    }
-
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         if (!$memberConnected->getAdministrator()) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $status = 200;
+        $status = JsonResponse::HTTP_UNAUTHORIZED;
 
         $member = $this->memberManager->init();
-        $form = $this->createForm(MemberType::class, $member, ['validation_groups'=>['insert']]);
+        $form = $this->createForm(MemberType::class, $member, ['validation_groups' => ['insert']]);
 
         $form->submit($request->request->all());
 
@@ -92,28 +83,28 @@ class MemberController extends AbstractAppController
                 $data[] = $form->getData()->getEmail();
             } else {
                 $data[] = 'b';
-                $status = 403;
+                $status = JsonResponse::HTTP_FORBIDDEN;
             }
         }
 
         return new JsonResponse($data, $status);
     }
 
-    public function read(Request $request, $id)
+    public function read(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         if (!$memberConnected->getAdministrator()) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if (!$member) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data['entry'] = $member->toArray();
@@ -122,52 +113,52 @@ class MemberController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         if (!$memberConnected->getAdministrator()) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if (!$member) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         return new JsonResponse($data);
     }
 
-    public function delete(Request $request, $id)
+    public function delete(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         if (!$memberConnected->getAdministrator()) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if (!$member) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         return new JsonResponse($data);
     }
 
     #[Route(path: '/test', name: 'test', methods: ['GET'])]
-    public function test(Request $request)
+    public function test(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $this->memberManager->syncUnread($memberConnected->getId());
@@ -178,11 +169,11 @@ class MemberController extends AbstractAppController
     }
 
     #[Route(path: '/login', name: 'login', methods: ['POST'])]
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         $data = [];
 
-        $status = 401;
+        $status = JsonResponse::HTTP_UNAUTHORIZED;
 
         $login = new LoginModel();
         $form = $this->createForm(LoginType::class, $login);
@@ -224,7 +215,7 @@ class MemberController extends AbstractAppController
                                         $member->setAdministrator($administrator);
                                         $this->memberManager->persist($member);
                                     }
-                                } catch(\Exception $e) {
+                                } catch (\Exception $e) {
                                 }
                             }
                         }
@@ -249,7 +240,7 @@ class MemberController extends AbstractAppController
                     $data['entry'] = $connection->toArray();
                     $data['entry_entity'] = 'connection';
 
-                    $status = 200;
+                    $status = JsonResponse::HTTP_OK;
                 }
             }
         }
@@ -258,11 +249,11 @@ class MemberController extends AbstractAppController
     }
 
     #[Route(path: '/profile', name: 'profile', methods: ['GET'])]
-    public function profile(Request $request)
+    public function profile(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $pinboard = $this->memberManager->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
@@ -278,11 +269,11 @@ class MemberController extends AbstractAppController
     }
 
     #[Route(path: '/profile/connections', name: 'profile_connections', methods: ['GET'])]
-    public function profileConnections(Request $request)
+    public function profileConnections(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $connections = [];
@@ -307,11 +298,11 @@ class MemberController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function profileUpdate(Request $request)
+    public function profileUpdate(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $profile = new ProfileModel();
@@ -340,11 +331,11 @@ class MemberController extends AbstractAppController
     }
 
     #[Route(path: '/logout', name: 'logout', methods: ['GET'])]
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $connection = $this->memberManager->connectionManager->getOne(['type' => 'login', 'token' => $request->headers->get('X-CONNECTION-TOKEN'), 'member' => $memberConnected]);
@@ -358,11 +349,11 @@ class MemberController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function pinboard(Request $request)
+    public function pinboard(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $pinboard = new PinboardModel();
@@ -397,11 +388,11 @@ class MemberController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function notifier(Request $request)
+    public function notifier(Request $request): JsonResponse
     {
         $data = [];
 
-        $status = 401;
+        $status = JsonResponse::HTTP_UNAUTHORIZED;
 
         $login = new LoginModel();
         $form = $this->createForm(LoginType::class, $login);
@@ -425,7 +416,7 @@ class MemberController extends AbstractAppController
                     $data['entry'] = $connection->toArray();
                     $data['entry_entity'] = 'connection';
 
-                    $status = 200;
+                    $status = JsonResponse::HTTP_UNAUTHORIZED;
                 }
             }
         }
@@ -433,11 +424,11 @@ class MemberController extends AbstractAppController
         return new JsonResponse($data, $status);
     }
 
-    public function unread(Request $request)
+    public function unread(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request, 'notifier')) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());

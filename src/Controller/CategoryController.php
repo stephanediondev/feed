@@ -2,16 +2,13 @@
 
 namespace App\Controller;
 
+use App\Controller\AbstractAppController;
+use App\Form\Type\CategoryType;
 use App\Manager\ActionManager;
 use App\Manager\CategoryManager;
-
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-
-use App\Controller\AbstractAppController;
-
-use App\Form\Type\CategoryType;
 
 #[Route(path: '/api', name: 'api_categories_')]
 class CategoryController extends AbstractAppController
@@ -26,7 +23,7 @@ class CategoryController extends AbstractAppController
     }
 
     #[Route(path: '/categories', name: 'index', methods: ['GET'])]
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $data = [];
         $memberConnected = $this->validateToken($request);
@@ -62,7 +59,7 @@ class CategoryController extends AbstractAppController
         } else {
             if ($request->query->get('excluded')) {
                 if (!$memberConnected) {
-                    return new JsonResponse($data, 403);
+                    return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
                 }
                 $parameters['excluded'] = true;
                 $parameters['member'] = $memberConnected;
@@ -125,11 +122,11 @@ class CategoryController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $form = $this->createForm(CategoryType::class, $this->categoryManager->init());
@@ -152,17 +149,17 @@ class CategoryController extends AbstractAppController
     }
 
     #[Route('/category/{id}', name: 'read', methods: ['GET'])]
-    public function read(Request $request, $id)
+    public function read(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, 403);
+            //return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $actions = $this->actionManager->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
@@ -176,17 +173,17 @@ class CategoryController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data['entry'] = $category->toArray();
@@ -195,21 +192,21 @@ class CategoryController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function delete(Request $request, $id)
+    public function delete(Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         if (!$memberConnected->getAdministrator()) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data['entry'] = $category->toArray();
@@ -221,22 +218,22 @@ class CategoryController extends AbstractAppController
     }
 
     #[Route('/category/action/exclude/{id}', name: 'action_exclude', methods: ['GET'])]
-    public function actionExclude(Request $request, $id)
+    public function actionExclude(Request $request, $id): JsonResponse
     {
         return $this->setAction('exclude', $request, $id);
     }
 
-    private function setAction($case, Request $request, $id)
+    private function setAction($case, Request $request, $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, 403);
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
-            return new JsonResponse($data, 404);
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);

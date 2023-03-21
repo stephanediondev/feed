@@ -18,6 +18,15 @@ services:
             $elasticsearchUsername: '%env(ELASTICSEARCH_USERNAME)%'
             $elasticsearchPassword: '%env(ELASTICSEARCH_PASSWORD)%'
             $sslVerifyPeer: '%env(SSL_VERIFY_PEER)%'
+            $ldapEnabled: '%env(LDAP_ENABLED)%'
+            $ldapServer: '%env(LDAP_SERVER)%'
+            $ldapPort: '%env(LDAP_PORT)%'
+            $ldapProtocol: '%env(LDAP_PROTOCOL)%'
+            $ldapRootDn: '%env(LDAP_ROOT_DN)%'
+            $ldapRootPw: '%env(LDAP_ROOT_PW)%'
+            $ldapBaseDn: '%env(LDAP_BASE_DN)%'
+            $ldapSearchUser: '%env(LDAP_SEARCH_USER)%'
+            $ldapSearchGroupAdmin: '%env(LDAP_SEARCH_GROUP_ADMIN)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

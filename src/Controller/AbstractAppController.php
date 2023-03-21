@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Member;
 use App\Manager\MemberManager;
 use Doctrine\ORM\QueryBuilder;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Knp\Component\Pager\Pagination\PaginationInterface;
 
 abstract class AbstractAppController extends AbstractController
 {
@@ -35,12 +35,13 @@ abstract class AbstractAppController extends AbstractController
         $this->memberManager = $memberManager;
     }
 
-    public function validateToken(Request $request, $type = 'login')
+    public function validateToken(Request $request, $type = 'login'): ?Member
     {
         if ($request->headers->get('X-CONNECTION-TOKEN') && $connection = $this->memberManager->connectionManager->getOne(['type' => $type, 'token' => $request->headers->get('X-CONNECTION-TOKEN')])) {
             return $connection->getMember();
         }
-        return false;
+
+        return null;
     }
 
     public function paginateAbstract(?QueryBuilder $queryBuilder, int $page, ?int $limit = 20): ?PaginationInterface
@@ -53,18 +54,6 @@ abstract class AbstractAppController extends AbstractController
             $page = 1;
         }
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit, [
-        ]);
-    }
-
-    public function renderAbstract(string $view, array $parameters = [], Response $response = null): Response
-    {
-        if (null === $response) {
-            $response = new Response();
-        }
-
-        $response->headers->set('X-Frame-Options', 'sameorigin');
-
-        return $this->render($view, $parameters, $response);
+        return $this->paginator->paginate($queryBuilder, $page, $limit, []);
     }
 }

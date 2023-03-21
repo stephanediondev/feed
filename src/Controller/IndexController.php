@@ -10,7 +10,8 @@ class IndexController extends AbstractAppController
     #[Route(path: '/', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
-        $parameters = [];
-        return $this->renderAbstract('base.html.twig', $parameters);
+        $response = new Response();
+        $response->headers->set('X-Frame-Options', 'sameorigin');
+        return $this->render('base.html.twig', [], $response);
     }
 }
