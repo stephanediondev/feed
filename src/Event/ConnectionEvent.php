@@ -7,23 +7,19 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ConnectionEvent extends Event
 {
-    protected $data;
+    private Connection $connection;
 
-    protected $mode;
+    public const CREATED = 'connection.event.created';
+    public const UPDATED = 'connection.event.updated';
+    public const DELETED = 'connection.event.deleted';
 
-    public function __construct(Connection $data, $mode)
+    public function __construct(Connection $connection)
     {
-        $this->data = $data;
-        $this->mode = $mode;
+        $this->connection = $connection;
     }
 
-    public function getData()
+    public function getConnection(): Connection
     {
-        return $this->data;
-    }
-
-    public function getMode()
-    {
-        return $this->mode;
+        return $this->connection;
     }
 }

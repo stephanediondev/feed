@@ -51,16 +51,16 @@ class ActionManager extends AbstractManager
     public function persist($data)
     {
         if ($data->getDateCreated() == null) {
-            $mode = 'insert';
+            $eventName = ActionEvent::CREATED;
             $data->setDateCreated(new \Datetime());
         } else {
-            $mode = 'update';
+            $eventName = ActionEvent::UPDATED;
         }
 
         $this->actionRepository->persist($data);
 
-        $event = new ActionEvent($data, $mode);
-        $this->eventDispatcher->dispatch($event, 'Action.after_persist');
+        $event = new ActionEvent($data);
+        $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
@@ -69,8 +69,8 @@ class ActionManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new ActionEvent($data, 'delete');
-        $this->eventDispatcher->dispatch($event, 'Action.before_remove');
+        $event = new ActionEvent($data);
+        $this->eventDispatcher->dispatch($event, ActionEvent::DELETED);
 
         $this->actionRepository->remove($data);
 

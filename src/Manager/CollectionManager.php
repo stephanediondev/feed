@@ -5,7 +5,6 @@ namespace App\Manager;
 use App\Entity\Collection;
 use App\Event\CollectionEvent;
 use App\Manager\AbstractManager;
-
 use App\Repository\CollectionRepository;
 use SimplePie\SimplePie;
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
@@ -54,17 +53,17 @@ class CollectionManager extends AbstractManager
     public function persist($data)
     {
         if ($data->getDateCreated() === null) {
-            $mode = 'insert';
+            $eventName = CollectionEvent::CREATED;
             $data->setDateCreated(new \Datetime());
         } else {
-            $mode = 'update';
+            $eventName = CollectionEvent::UPDATED;
         }
         $data->setDateModified(new \Datetime());
 
         $this->collectionRepository->persist($data);
 
-        $event = new CollectionEvent($data, $mode);
-        $this->eventDispatcher->dispatch($event, 'Collection.after_persist');
+        $event = new CollectionEvent($data);
+        $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
@@ -73,8 +72,8 @@ class CollectionManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new CollectionEvent($data, 'delete');
-        $this->eventDispatcher->dispatch($event, 'Collection.before_remove');
+        $event = new CollectionEvent($data);
+        $this->eventDispatcher->dispatch($event, CollectionEvent::DELETED);
 
         $this->collectionRepository->remove($data);
 

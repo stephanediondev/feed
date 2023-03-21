@@ -7,23 +7,19 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class FeedCategoryEvent extends Event
 {
-    protected $data;
+    private FeedCategory $feedCategory;
 
-    protected $mode;
+    public const CREATED = 'feed_category.event.created';
+    public const UPDATED = 'feed_category.event.updated';
+    public const DELETED = 'feed_category.event.deleted';
 
-    public function __construct(FeedCategory $data, $mode)
+    public function __construct(FeedCategory $feedCategory)
     {
-        $this->data = $data;
-        $this->mode = $mode;
+        $this->feedCategory = $feedCategory;
     }
 
-    public function getData()
+    public function getFeedCategory(): FeedCategory
     {
-        return $this->data;
-    }
-
-    public function getMode()
-    {
-        return $this->mode;
+        return $this->feedCategory;
     }
 }

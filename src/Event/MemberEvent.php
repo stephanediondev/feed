@@ -7,23 +7,19 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class MemberEvent extends Event
 {
-    protected $data;
+    private Member $member;
 
-    protected $mode;
+    public const CREATED = 'member.event.created';
+    public const UPDATED = 'member.event.updated';
+    public const DELETED = 'member.event.deleted';
 
-    public function __construct(Member $data, $mode)
+    public function __construct(Member $member)
     {
-        $this->data = $data;
-        $this->mode = $mode;
+        $this->member = $member;
     }
 
-    public function getData()
+    public function getMember(): Member
     {
-        return $this->data;
-    }
-
-    public function getMode()
-    {
-        return $this->mode;
+        return $this->member;
     }
 }

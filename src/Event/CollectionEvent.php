@@ -7,23 +7,19 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class CollectionEvent extends Event
 {
-    protected $data;
+    private Collection $collection;
 
-    protected $mode;
+    public const CREATED = 'collection.event.created';
+    public const UPDATED = 'collection.event.updated';
+    public const DELETED = 'collection.event.deleted';
 
-    public function __construct(Collection $data, $mode)
+    public function __construct(Collection $collection)
     {
-        $this->data = $data;
-        $this->mode = $mode;
+        $this->collection = $collection;
     }
 
-    public function getData()
+    public function getCollection(): Collection
     {
-        return $this->data;
-    }
-
-    public function getMode()
-    {
-        return $this->mode;
+        return $this->collection;
     }
 }

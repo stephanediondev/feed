@@ -7,23 +7,19 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ActionItemEvent extends Event
 {
-    protected $data;
+    private ActionItem $actionItem;
 
-    protected $mode;
+    public const CREATED = 'action_item.event.created';
+    public const UPDATED = 'action_item.event.updated';
+    public const DELETED = 'action_item.event.deleted';
 
-    public function __construct(ActionItem $data, $mode)
+    public function __construct(ActionItem $actionItem)
     {
-        $this->data = $data;
-        $this->mode = $mode;
+        $this->actionItem = $actionItem;
     }
 
-    public function getData()
+    public function getActionItem(): ActionItem
     {
-        return $this->data;
-    }
-
-    public function getMode()
-    {
-        return $this->mode;
+        return $this->actionItem;
     }
 }

@@ -34,18 +34,18 @@ class FeedCategoryManager extends AbstractManager
     public function persist($data)
     {
         if ($data->getDateCreated() == null) {
-            $mode = 'insert';
+            $eventName = FeedCategoryEvent::CREATED;
             $data->setDateCreated(new \Datetime());
         } else {
-            $mode = 'update';
+            $eventName = FeedCategoryEvent::UPDATED;
         }
         $data->setDateModified(new \Datetime());
 
         $this->entityManager->persist($data);
         $this->entityManager->flush();
 
-        $event = new FeedCategoryEvent($data, $mode);
-        $this->eventDispatcher->dispatch($event, 'FeedCategory.after_persist');
+        $event = new FeedCategoryEvent($data);
+        $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
@@ -54,8 +54,8 @@ class FeedCategoryManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new FeedCategoryEvent($data, 'delete');
-        $this->eventDispatcher->dispatch($event, 'FeedCategory.before_remove');
+        $event = new FeedCategoryEvent($data);
+        $this->eventDispatcher->dispatch($event, FeedCategoryEvent::DELETED);
 
         $this->entityManager->remove($data);
         $this->entityManager->flush();

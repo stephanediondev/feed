@@ -1,40 +1,48 @@
 <?php
 
-namespace App\EventListener;
+namespace App\EventSubscriber;
 
 use App\Entity\ActionItem;
 use App\Event\ActionItemEvent;
 use App\Manager\MemberManager;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class PinboardListener
+class PinboardSubscriber implements EventSubscriberInterface
 {
     protected MemberManager $memberManager;
 
-    public function __construct(
-        MemberManager $memberManager
-    ) {
+    public function __construct(MemberManager $memberManager)
+    {
         $this->memberManager = $memberManager;
     }
 
-    public function add(ActionItemEvent $actionItemEvent)
+    public static function getSubscribedEvents(): array
     {
-        $actionItem = $actionItemEvent->getdata();
+        return [
+            ActionItemEvent::CREATED => 'add',
+            ActionItemEvent::DELETED => 'delete',
+        ];
+    }
+
+    public function add(ActionItemEvent $actionItemEvent): void
+    {
+        $actionItem = $actionItemEvent->getActionItem();
 
         if ($actionItem->getAction()->getTitle() == 'star') {
             $this->query('add', $actionItem);
         }
     }
 
-    public function delete(ActionItemEvent $actionItemEvent)
+    public function delete(ActionItemEvent $actionItemEvent): void
     {
-        $actionItem = $actionItemEvent->getdata();
+        $actionItem = $actionItemEvent->getActionItem();
 
         if ($actionItem->getAction()->getTitle() == 'star') {
             $this->query('delete', $actionItem);
         }
     }
 
-    private function query($method, ActionItem $actionItem)
+    private function query(string $method, ActionItem $actionItem): void
     {
         $member = $actionItem->getMember();
 

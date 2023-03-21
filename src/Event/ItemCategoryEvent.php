@@ -7,23 +7,19 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ItemCategoryEvent extends Event
 {
-    protected $data;
+    private ItemCategory $itemCategory;
 
-    protected $mode;
+    public const CREATED = 'item_category.event.created';
+    public const UPDATED = 'item_category.event.updated';
+    public const DELETED = 'item_category.event.deleted';
 
-    public function __construct(ItemCategory $data, $mode)
+    public function __construct(ItemCategory $itemCategory)
     {
-        $this->data = $data;
-        $this->mode = $mode;
+        $this->itemCategory = $itemCategory;
     }
 
-    public function getData()
+    public function getItemCategory(): ItemCategory
     {
-        return $this->data;
-    }
-
-    public function getMode()
-    {
-        return $this->mode;
+        return $this->itemCategory;
     }
 }

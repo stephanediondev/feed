@@ -43,17 +43,17 @@ class CategoryManager extends AbstractManager
     public function persist($data)
     {
         if ($data->getDateCreated() == null) {
-            $mode = 'insert';
+            $eventName = CategoryEvent::CREATED;
             $data->setDateCreated(new \Datetime());
         } else {
-            $mode = 'update';
+            $eventName = CategoryEvent::UPDATED;
         }
 
         $this->entityManager->persist($data);
         $this->entityManager->flush();
 
-        $event = new CategoryEvent($data, $mode);
-        $this->eventDispatcher->dispatch($event, 'Category.after_persist');
+        $event = new CategoryEvent($data);
+        $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
@@ -62,8 +62,8 @@ class CategoryManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new CategoryEvent($data, 'delete');
-        $this->eventDispatcher->dispatch($event, 'Category.before_remove');
+        $event = new CategoryEvent($data);
+        $this->eventDispatcher->dispatch($event, CategoryEvent::DELETED);
 
         $this->entityManager->remove($data);
         $this->entityManager->flush();

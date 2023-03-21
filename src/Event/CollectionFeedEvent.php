@@ -7,23 +7,19 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class CollectionFeedEvent extends Event
 {
-    protected $data;
+    private CollectionFeed $collectionFeed;
 
-    protected $mode;
+    public const CREATED = 'collection_feed.event.created';
+    public const UPDATED = 'collection_feed.event.updated';
+    public const DELETED = 'collection_feed.event.deleted';
 
-    public function __construct(CollectionFeed $data, $mode)
+    public function __construct(CollectionFeed $collectionFeed)
     {
-        $this->data = $data;
-        $this->mode = $mode;
+        $this->collectionFeed = $collectionFeed;
     }
 
-    public function getData()
+    public function getCollectionFeed(): CollectionFeed
     {
-        return $this->data;
-    }
-
-    public function getMode()
-    {
-        return $this->mode;
+        return $this->collectionFeed;
     }
 }

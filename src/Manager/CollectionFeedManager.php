@@ -34,17 +34,17 @@ class CollectionFeedManager extends AbstractManager
     public function persist($data)
     {
         if ($data->getDateCreated() == null) {
-            $mode = 'insert';
+            $eventName = CollectionFeedEvent::CREATED;
             $data->setDateCreated(new \Datetime());
         } else {
-            $mode = 'update';
+            $eventName = CollectionFeedEvent::UPDATED;
         }
 
         $this->entityManager->persist($data);
         $this->entityManager->flush();
 
-        $event = new CollectionFeedEvent($data, $mode);
-        $this->eventDispatcher->dispatch($event, 'CollectionFeed.after_persist');
+        $event = new CollectionFeedEvent($data);
+        $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
@@ -53,8 +53,8 @@ class CollectionFeedManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new CollectionFeedEvent($data, 'delete');
-        $this->eventDispatcher->dispatch($event, 'CollectionFeed.before_remove');
+        $event = new CollectionFeedEvent($data);
+        $this->eventDispatcher->dispatch($event, CollectionFeedEvent::DELETED);
 
         $this->entityManager->remove($data);
         $this->entityManager->flush();

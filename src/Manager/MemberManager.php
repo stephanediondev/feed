@@ -6,7 +6,6 @@ use App\Entity\Member;
 use App\Event\MemberEvent;
 use App\Manager\AbstractManager;
 use App\Manager\ConnectionManager;
-
 use App\Repository\MemberRepository;
 
 class MemberManager extends AbstractManager
@@ -41,17 +40,17 @@ class MemberManager extends AbstractManager
     public function persist($data)
     {
         if ($data->getDateCreated() == null) {
-            $mode = 'insert';
+            $eventName = MemberEvent::CREATED;
             $data->setDateCreated(new \Datetime());
         } else {
-            $mode = 'update';
+            $eventName = MemberEvent::UPDATED;
         }
         $data->setDateModified(new \Datetime());
 
         $this->memberRepository->persist($data);
 
-        $event = new MemberEvent($data, $mode);
-        $this->eventDispatcher->dispatch($event, 'Member.after_persist');
+        $event = new MemberEvent($data);
+        $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
@@ -60,8 +59,8 @@ class MemberManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new MemberEvent($data, 'delete');
-        $this->eventDispatcher->dispatch($event, 'Member.before_remove');
+        $event = new MemberEvent($data);
+        $this->eventDispatcher->dispatch($event, MemberEvent::DELETED);
 
         $this->memberRepository->remove($data);
 

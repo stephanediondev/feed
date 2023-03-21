@@ -34,16 +34,16 @@ class ActionFeedManager extends AbstractManager
     public function persist($data)
     {
         if ($data->getDateCreated() == null) {
-            $mode = 'insert';
+            $eventName = ActionFeedEvent::CREATED;
             $data->setDateCreated(new \Datetime());
         } else {
-            $mode = 'update';
+            $eventName = ActionFeedEvent::UPDATED;
         }
 
         $this->actionFeedRepository->persist($data);
 
-        $event = new ActionFeedEvent($data, $mode);
-        $this->eventDispatcher->dispatch($event, 'ActionFeed.after_persist');
+        $event = new ActionFeedEvent($data);
+        $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
@@ -52,8 +52,8 @@ class ActionFeedManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new ActionFeedEvent($data, 'delete');
-        $this->eventDispatcher->dispatch($event, 'ActionFeed.before_remove');
+        $event = new ActionFeedEvent($data);
+        $this->eventDispatcher->dispatch($event, ActionFeedEvent::DELETED);
 
         $this->actionFeedRepository->remove($data);
 

@@ -35,17 +35,17 @@ class EnclosureManager extends AbstractManager
     public function persist($data)
     {
         if ($data->getDateCreated() == null) {
-            $mode = 'insert';
+            $eventName = EnclosureEvent::CREATED;
             $data->setDateCreated(new \Datetime());
         } else {
-            $mode = 'update';
+            $eventName = EnclosureEvent::UPDATED;
         }
 
         $this->entityManager->persist($data);
         $this->entityManager->flush();
 
-        $event = new EnclosureEvent($data, $mode);
-        $this->eventDispatcher->dispatch($event, 'Enclosure.after_persist');
+        $event = new EnclosureEvent($data);
+        $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
@@ -54,8 +54,8 @@ class EnclosureManager extends AbstractManager
 
     public function remove($data)
     {
-        $event = new EnclosureEvent($data, 'delete');
-        $this->eventDispatcher->dispatch($event, 'Enclosure.before_remove');
+        $event = new EnclosureEvent($data);
+        $this->eventDispatcher->dispatch($event, EnclosureEvent::DELETED);
 
         $this->entityManager->remove($data);
         $this->entityManager->flush();

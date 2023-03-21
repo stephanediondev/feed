@@ -7,23 +7,19 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class EnclosureEvent extends Event
 {
-    protected $data;
+    private Enclosure $enclosure;
 
-    protected $mode;
+    public const CREATED = 'enclosure.event.created';
+    public const UPDATED = 'enclosure.event.updated';
+    public const DELETED = 'enclosure.event.deleted';
 
-    public function __construct(Enclosure $data, $mode)
+    public function __construct(Enclosure $enclosure)
     {
-        $this->data = $data;
-        $this->mode = $mode;
+        $this->enclosure = $enclosure;
     }
 
-    public function getData()
+    public function getEnclosure(): Enclosure
     {
-        return $this->data;
-    }
-
-    public function getMode()
-    {
-        return $this->mode;
+        return $this->enclosure;
     }
 }
