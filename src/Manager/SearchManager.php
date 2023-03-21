@@ -4,58 +4,56 @@ namespace App\Manager;
 
 use App\Manager\AbstractManager;
 
-use PDO;
-
 class SearchManager extends AbstractManager
 {
-    protected $enabled;
+    private bool $elasticsearchEnabled;
 
-    protected $index;
+    private string $elasticsearchIndex;
 
-    protected $url;
+    private string $elasticsearchUrl;
 
-    protected $username;
+    private string $elasticsearchUsername;
 
-    protected $password;
+    private string $elasticsearchPassword;
 
-    protected $sslVerifyPeer;
+    private bool $sslVerifyPeer;
 
-    public function __construct($elasticsearchEnabled, $elasticsearchIndex, $elasticsearchUrl, $elasticsearchUsername, $elasticsearchPassword, $sslVerifyPeer)
+    public function __construct(bool $elasticsearchEnabled, string $elasticsearchIndex, string $elasticsearchUrl, string $elasticsearchUsername, string $elasticsearchPassword, bool $sslVerifyPeer)
     {
-        $this->enabled = $elasticsearchEnabled;
-        $this->index = $elasticsearchIndex;
-        $this->url = $elasticsearchUrl;
-        $this->username = $elasticsearchUsername;
-        $this->password = $elasticsearchPassword;
+        $this->elasticsearchEnabled = $elasticsearchEnabled;
+        $this->elasticsearchIndex = $elasticsearchIndex;
+        $this->elasticsearchUrl = $elasticsearchUrl;
+        $this->elasticsearchUsername = $elasticsearchUsername;
+        $this->elasticsearchPassword = $elasticsearchPassword;
         $this->sslVerifyPeer = $sslVerifyPeer;
     }
 
-    public function getEnabled()
+    public function getEnabled(): bool
     {
-        return $this->enabled;
+        return $this->elasticsearchEnabled;
     }
 
-    public function getIndex()
+    public function getIndex(): string
     {
-        return $this->index;
+        return $this->elasticsearchIndex;
     }
 
-    public function getUrl()
+    public function getUrl(): string
     {
-        return $this->url;
+        return $this->elasticsearchUrl;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
-        return $this->username;
+        return $this->elasticsearchUsername;
     }
 
-    public function getPassword()
+    public function getPassword(): string
     {
-        return $this->password;
+        return $this->elasticsearchPassword;
     }
 
-    public function getSslVerifyPeer()
+    public function getSslVerifyPeer(): bool
     {
         return $this->sslVerifyPeer;
     }
@@ -63,8 +61,6 @@ class SearchManager extends AbstractManager
     public function start()
     {
         if ($this->getEnabled()) {
-            //$this->init();
-
             //feeds
             $sql = 'SELECT fed.* FROM feed AS fed';
             $stmt = $this->connection->prepare($sql);
@@ -229,7 +225,6 @@ class SearchManager extends AbstractManager
                 if ($action == 'HEAD') {
                     $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
                 }
-                dump($result);
                 return $result;
             }
         }
@@ -266,13 +261,12 @@ class SearchManager extends AbstractManager
                 if ($action == 'HEAD') {
                     $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
                 }
-                //print_r($result);
                 return $result;
             }
         }
     }
 
-    public function init()
+    public function init(): void
     {
         if ($this->getEnabled()) {
             $body = [
@@ -284,16 +278,16 @@ class SearchManager extends AbstractManager
                 ],
             ];
             $path = '/'.$this->getIndex().'_feed';
-            $result = $this->query('PUT', $path, $body);
+            $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_category';
-            $result = $this->query('PUT', $path, $body);
+            $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_author';
-            $result = $this->query('PUT', $path, $body);
+            $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_item';
-            $result = $this->query('PUT', $path, $body);
+            $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_category/_mapping/doc';
             $body = [
@@ -309,7 +303,7 @@ class SearchManager extends AbstractManager
                     ],
                 ],
             ];
-            $result = $this->query('PUT', $path, $body);
+            $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_author/_mapping/doc';
             $body = [
@@ -325,7 +319,7 @@ class SearchManager extends AbstractManager
                     ],
                 ],
             ];
-            $result = $this->query('PUT', $path, $body);
+            $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_item/_mapping/doc';
             $body = [
@@ -367,7 +361,7 @@ class SearchManager extends AbstractManager
                     ],
                 ],
             ];
-            $result = $this->query('PUT', $path, $body);
+            $this->query('PUT', $path, $body);
 
             $path = '/'.$this->getIndex().'_feed/_mapping/doc';
             $body = [
@@ -392,7 +386,7 @@ class SearchManager extends AbstractManager
                     ],
                 ],
             ];
-            $result = $this->query('PUT', $path, $body);
+            $this->query('PUT', $path, $body);
         }
     }
 
