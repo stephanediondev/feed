@@ -16,6 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/api', name: 'api_search_')]
 class SearchController extends AbstractAppController
 {
+    private const LIMIT = 20;
+
     private AuthorManager $authorManager;
     private ActionManager $actionManager;
     private FeedManager $feedManager;
@@ -57,7 +59,7 @@ class SearchController extends AbstractAppController
         return $this->getResults($request, 'item');
     }
 
-    private function getResults(Request $request, $type): JsonResponse
+    private function getResults(Request $request, string $type): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -81,8 +83,8 @@ class SearchController extends AbstractAppController
                 $sortDirection = $request->query->get('sortDirection');
             }
 
-            $size = 20;
-            $from = ($size * $page) - 20;
+            $size = self::LIMIT;
+            $from = ($size * $page) - self::LIMIT;
             $path = '/'.$this->searchManager->getIndex().'_'.$type.'/_search?size='.intval($size).'&from='.intval($from);
 
             $body = [];
@@ -92,37 +94,27 @@ class SearchController extends AbstractAppController
                 ],
             ];
 
-            if ($type == 'feed') {
-                $body['query'] = [
-                    'query_string' => [
-                        'fields' => ['title', 'description', 'website'],
-                        'query' => $request->query->get('q'),
-                    ],
-                ];
+            $fields = null;
+
+            switch ($type) {
+                case 'feed':
+                    $fields = ['title', 'description', 'website'];
+                    break;
+                case 'category':
+                    $fields = ['title'];
+                    break;
+                case 'author':
+                    $fields = ['title'];
+                    break;
+                case 'item':
+                    $fields = ['title', 'content', 'feed.title', 'author.title'];
+                    break;
             }
 
-            if ($type == 'category') {
+            if ($fields) {
                 $body['query'] = [
                     'query_string' => [
-                        'fields' => ['title'],
-                        'query' => $request->query->get('q'),
-                    ],
-                ];
-            }
-
-            if ($type == 'author') {
-                $body['query'] = [
-                    'query_string' => [
-                        'fields' => ['title'],
-                        'query' => $request->query->get('q'),
-                    ],
-                ];
-            }
-
-            if ($type == 'item') {
-                $body['query'] = [
-                    'query_string' => [
-                        'fields' => ['title', 'content', 'feed.title', 'author.title'],
+                        'fields' => $fields,
                         'query' => $request->query->get('q'),
                     ],
                 ];
@@ -157,7 +149,7 @@ class SearchController extends AbstractAppController
                 } else {
                     $data['entries_total'] = $result['hits']['total'];
                 }
-                $data['entries_pages'] = $pages = ceil($data['entries_total'] / 20);
+                $data['entries_pages'] = $pages = ceil($data['entries_total'] / self::LIMIT);
                 $data['entries_page_current'] = $page;
                 $pagePrevious = $page - 1;
                 if ($pagePrevious >= 1) {
@@ -172,94 +164,93 @@ class SearchController extends AbstractAppController
 
                 $index = 0;
                 foreach ($result['hits']['hits'] as $hit) {
-                    if ($type == 'feed') {
-                        $feed = $this->feedManager->getOne(['id' => $hit['_id']]);
-                        if ($feed) {
-                            $actions = $this->actionManager->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+                    switch ($type) {
+                        case 'feed':
+                            $feed = $this->feedManager->getOne(['id' => $hit['_id']]);
+                            if ($feed) {
+                                $actions = $this->actionManager->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
-                            $categories = [];
-                            foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
-                                $categories[] = $feedCategory->toArray();
+                                $categories = [];
+                                foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
+                                    $categories[] = $feedCategory->toArray();
+                                }
+
+                                $data['entries'][$index] = $feed->toArray();
+                                $data['entries'][$index]['score'] = $hit['_score'];
+                                foreach ($actions as $action) {
+                                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                }
+                                $data['entries'][$index]['categories'] = $categories;
+
+                                $index++;
+                            } else {
+                                $action = 'DELETE';
+                                $path = '/'.$this->searchManager->getIndex().'/feed/'.$hit['_id'];
+                                $body = [];
+                                $this->searchManager->query($action, $path, $body);
                             }
+                            break;
+                        case 'category':
+                            $category = $this->categoryManager->getOne(['id' => $hit['_id']]);
+                            if ($category) {
+                                $actions = $this->actionManager->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
 
-                            $data['entries'][$index] = $feed->toArray();
-                            $data['entries'][$index]['score'] = $hit['_score'];
-                            foreach ($actions as $action) {
-                                $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                $data['entries'][$index] = $category->toArray();
+                                $data['entries'][$index]['score'] = $hit['_score'];
+                                foreach ($actions as $action) {
+                                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                }
+
+                                $index++;
+                            } else {
+                                $action = 'DELETE';
+                                $path = '/'.$this->searchManager->getIndex().'/category/'.$hit['_id'];
+                                $body = [];
+                                $this->searchManager->query($action, $path, $body);
                             }
-                            $data['entries'][$index]['categories'] = $categories;
+                            break;
+                        case 'author':
+                            $author = $this->authorManager->getOne(['id' => $hit['_id']]);
+                            if ($author) {
+                                $data['entries'][$index] = $author->toArray();
+                                $data['entries'][$index]['score'] = $hit['_score'];
 
-                            $index++;
-                        } else {
-                            $action = 'DELETE';
-                            $path = '/'.$this->searchManager->getIndex().'/feed/'.$hit['_id'];
-                            $body = [];
-                            $this->searchManager->query($action, $path, $body);
-                        }
-                    }
-
-                    if ($type == 'category') {
-                        $category = $this->categoryManager->getOne(['id' => $hit['_id']]);
-                        if ($category) {
-                            $actions = $this->actionManager->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
-
-                            $data['entries'][$index] = $category->toArray();
-                            $data['entries'][$index]['score'] = $hit['_score'];
-                            foreach ($actions as $action) {
-                                $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                $index++;
+                            } else {
+                                $action = 'DELETE';
+                                $path = '/'.$this->searchManager->getIndex().'/author/'.$hit['_id'];
+                                $body = [];
+                                $this->searchManager->query($action, $path, $body);
                             }
+                            break;
+                        case 'item':
+                            $item = $this->itemManager->getOne(['id' => $hit['_id']]);
+                            if ($item) {
+                                $actions = $this->actionManager->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
 
-                            $index++;
-                        } else {
-                            $action = 'DELETE';
-                            $path = '/'.$this->searchManager->getIndex().'/category/'.$hit['_id'];
-                            $body = [];
-                            $this->searchManager->query($action, $path, $body);
-                        }
-                    }
+                                $categories = [];
+                                foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
+                                    $categories[] = $itemCategory->toArray();
+                                }
 
-                    if ($type == 'author') {
-                        $author = $this->authorManager->getOne(['id' => $hit['_id']]);
-                        if ($author) {
-                            $data['entries'][$index] = $author->toArray();
-                            $data['entries'][$index]['score'] = $hit['_score'];
+                                $data['entries'][$index] = $item->toArray();
+                                $data['entries'][$index]['score'] = $hit['_score'];
+                                foreach ($actions as $action) {
+                                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                }
+                                $data['entries'][$index]['categories'] = $categories;
+                                $data['entries'][$index]['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
 
-                            $index++;
-                        } else {
-                            $action = 'DELETE';
-                            $path = '/'.$this->searchManager->getIndex().'/author/'.$hit['_id'];
-                            $body = [];
-                            $this->searchManager->query($action, $path, $body);
-                        }
-                    }
+                                $data['entries'][$index]['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
 
-                    if ($type == 'item') {
-                        $item = $this->itemManager->getOne(['id' => $hit['_id']]);
-                        if ($item) {
-                            $actions = $this->actionManager->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
-
-                            $categories = [];
-                            foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
-                                $categories[] = $itemCategory->toArray();
+                                $index++;
+                            } else {
+                                $action = 'DELETE';
+                                $path = '/'.$this->searchManager->getIndex().'/item/'.$hit['_id'];
+                                $body = [];
+                                $this->searchManager->query($action, $path, $body);
                             }
-
-                            $data['entries'][$index] = $item->toArray();
-                            $data['entries'][$index]['score'] = $hit['_score'];
-                            foreach ($actions as $action) {
-                                $data['entries'][$index][$action->getAction()->getTitle()] = true;
-                            }
-                            $data['entries'][$index]['categories'] = $categories;
-                            $data['entries'][$index]['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
-
-                            $data['entries'][$index]['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
-
-                            $index++;
-                        } else {
-                            $action = 'DELETE';
-                            $path = '/'.$this->searchManager->getIndex().'/item/'.$hit['_id'];
-                            $body = [];
-                            $this->searchManager->query($action, $path, $body);
-                        }
+                            break;
                     }
                 }
             }
