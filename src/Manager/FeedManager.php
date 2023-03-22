@@ -3,9 +3,11 @@
 namespace App\Manager;
 
 use App\Entity\Feed;
+use App\Entity\Member;
 use App\Event\FeedEvent;
 use App\Manager\AbstractManager;
 use App\Repository\FeedRepository;
+use SimpleXMLElement;
 
 class FeedManager extends AbstractManager
 {
@@ -70,17 +72,14 @@ class FeedManager extends AbstractManager
         $this->clearCache();
     }
 
-    public function import($member, $opml)
+    public function import(Member $member, $opml)
     {
-        $this->categories = [];
-        $this->feeds = [];
+        $data = $this->transformOpml($opml);
 
-        $this->transformOpml($opml);
-
-        if (count($this->feeds) > 0) {
+        if (0 < count($data['feeds'])) {
             $action_id = 3;
 
-            foreach ($this->feeds as $obj) {
+            foreach ($data['feeds'] as $obj) {
                 $link = $this->cleanLink($obj->xmlUrl);
 
                 $sql = 'SELECT id FROM feed WHERE link = :link';
@@ -127,30 +126,33 @@ class FeedManager extends AbstractManager
         }
     }
 
-    private function transformOpml($obj, $cat = false)
+    private function transformOpml(SimpleXMLElement $obj, bool $cat = false): array
     {
-        $feeds = array();
+        $data = [
+            'feeds' => [],
+            'categories' => [],
+        ];
         if (isset($obj->outline) == 1) {
             foreach ($obj->outline as $outline) {
                 if (isset($outline->outline) == 1) {
                     if ($outline->attributes()->title) {
                         $cat = strval($outline->attributes()->title);
-                        $this->categories[] = $cat;
+                        $data['categories'][] = $cat;
                     } elseif ($outline->attributes()->text) {
                         $cat = strval($outline->attributes()->text);
-                        $this->categories[] = $cat;
+                        $data['categories'][] = $cat;
                     }
-                    $this->transformOpml($outline, $cat);
+                    $data = array_merge($data, $this->transformOpml($outline, $cat));
                 } else {
                     $feed = new \stdClass();
                     foreach ($outline->attributes() as $k => $attribute) {
                         $feed->{$k} = strval($attribute);
                     }
                     $feed->flr = $cat;
-                    $this->feeds[] = $feed;
+                    $data['feeds'][] = $feed;
                 }
             }
         }
-        return $feeds;
+        return $data;
     }
 }

@@ -194,7 +194,7 @@ class MemberController extends AbstractAppController
                         $ldapSearch = ldap_search($ldapConnect, $this->ldapBaseDn, str_replace('[email]', $login->getEmail(), $this->ldapSearchUser), ['uid']);
                         if ($ldapSearch) {
                             $ldapGetEntries = ldap_get_entries($ldapConnect, $ldapSearch);
-                            if (0 < $ldapGetEntries['count']) {
+                            if ($ldapGetEntries && true === is_numeric($ldapGetEntries['count']) && 0 < $ldapGetEntries['count']) {
                                 try {
                                     $ldapSearch2 = ldap_search($ldapConnect, $this->ldapBaseDn, $this->ldapSearchGroupAdmin, []);
                                     if ($ldapSearch2) {

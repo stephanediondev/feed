@@ -79,39 +79,24 @@ class ItemRepository extends AbstractRepository
             $memberSet = false;
 
             if (isset($parameters['unread']) == 1 && $parameters['unread']) {
+                $memberSet = true;
+
                 $query->andWhere('act_itm_mbr.member = :member');
                 $query->andWhere('act_itm_mbr.action = 12');
-                if (!$memberSet) {
-                    $query->setParameter(':member', $parameters['member']);
-                    $memberSet = true;
-                }
-
                 $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM '.ActionFeed::class.' AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
-                if (!$memberSet) {
-                    $query->setParameter(':member', $parameters['member']);
-                    $memberSet = true;
-                }
-
-                /*$query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM ReaderselfCoreBundle:ActionItem AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
-                if(!$memberSet) {
-                    $query->setParameter(':member', $parameters['member']);
-                    $memberSet = true;
-                }*/
+                //$query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM '.ActionItem::class.' AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
             }
 
             if (isset($parameters['starred']) == 1 && $parameters['starred']) {
+                $memberSet = true;
+
                 $query->andWhere('act_itm_mbr.member = :member');
                 $query->andWhere('act_itm_mbr.action = 2');
-                if (!$memberSet) {
-                    $query->setParameter(':member', $parameters['member']);
-                    $memberSet = true;
-                }
+                //$query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM '.ActionItem::class.' AS starred WHERE starred.member = :member AND starred.action = 2)');
+            }
 
-                /*$query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM ReaderselfCoreBundle:ActionItem AS starred WHERE starred.member = :member AND starred.action = 2)');
-                if(!$memberSet) {
-                    $query->setParameter(':member', $parameters['member']);
-                    $memberSet = true;
-                }*/
+            if (true === $memberSet) {
+                $query->setParameter(':member', $parameters['member']);
             }
         }
 
