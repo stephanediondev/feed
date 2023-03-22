@@ -12,7 +12,10 @@ class EnclosureRepository extends AbstractRepository
         return Enclosure::class;
     }
 
-    public function getOne($parameters = []): ?Enclosure
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Enclosure
     {
         $em = $this->getEntityManager();
 
@@ -37,7 +40,10 @@ class EnclosureRepository extends AbstractRepository
         return $getQuery->getOneOrNullResult();
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         $em = $this->getEntityManager();
 

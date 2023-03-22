@@ -13,7 +13,10 @@ class ItemCategoryRepository extends AbstractRepository
         return ItemCategory::class;
     }
 
-    public function getOne($parameters = []): ?ItemCategory
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?ItemCategory
     {
         $em = $this->getEntityManager();
 
@@ -40,7 +43,10 @@ class ItemCategoryRepository extends AbstractRepository
         return $getQuery->getOneOrNullResult();
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         $em = $this->getEntityManager();
 

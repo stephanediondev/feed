@@ -53,6 +53,9 @@ class FeedCategory
     }
 
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return [

@@ -12,7 +12,10 @@ class ActionFeedRepository extends AbstractRepository
         return ActionFeed::class;
     }
 
-    public function getOne($parameters = []): ?ActionFeed
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?ActionFeed
     {
         $em = $this->getEntityManager();
 
@@ -49,7 +52,10 @@ class ActionFeedRepository extends AbstractRepository
         return $getQuery->getOneOrNullResult();
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         $em = $this->getEntityManager();
 

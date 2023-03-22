@@ -152,7 +152,7 @@ class CategoryController extends AbstractAppController
     }
 
     #[Route('/category/{id}', name: 'read', methods: ['GET'])]
-    public function read(Request $request, $id): JsonResponse
+    public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -176,7 +176,7 @@ class CategoryController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -195,7 +195,7 @@ class CategoryController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function delete(Request $request, $id): JsonResponse
+    public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -221,12 +221,12 @@ class CategoryController extends AbstractAppController
     }
 
     #[Route('/category/action/exclude/{id}', name: 'action_exclude', methods: ['GET'])]
-    public function actionExclude(Request $request, $id): JsonResponse
+    public function actionExclude(Request $request, int $id): JsonResponse
     {
         return $this->setAction('exclude', $request, $id);
     }
 
-    private function setAction($case, Request $request, $id): JsonResponse
+    private function setAction(string $case, Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {

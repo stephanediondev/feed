@@ -16,7 +16,10 @@ class FeedRepository extends AbstractRepository
         return Feed::class;
     }
 
-    public function getOne($parameters = []): ?Feed
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Feed
     {
         $em = $this->getEntityManager();
 
@@ -46,7 +49,10 @@ class FeedRepository extends AbstractRepository
         return $getQuery->getOneOrNullResult();
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         $em = $this->getEntityManager();
 

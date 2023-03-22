@@ -35,7 +35,7 @@ abstract class AbstractAppController extends AbstractController
         $this->connectionManager = $connectionManager;
     }
 
-    public function validateToken(Request $request, $type = 'login'): ?Member
+    public function validateToken(Request $request, string $type = 'login'): ?Member
     {
         if ($request->headers->get('Authorization') && $connection = $this->connectionManager->getOne(['type' => $type, 'token' => $request->headers->get('Authorization')])) {
             return $connection->getMember();

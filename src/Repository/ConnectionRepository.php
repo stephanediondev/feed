@@ -12,7 +12,10 @@ class ConnectionRepository extends AbstractRepository
         return Connection::class;
     }
 
-    public function getOne($parameters = []): ?Connection
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Connection
     {
         $em = $this->getEntityManager();
 
@@ -49,7 +52,10 @@ class ConnectionRepository extends AbstractRepository
         return $getQuery->getOneOrNullResult();
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         $em = $this->getEntityManager();
 

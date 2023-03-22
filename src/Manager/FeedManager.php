@@ -6,6 +6,7 @@ use App\Entity\Feed;
 use App\Entity\Member;
 use App\Event\FeedEvent;
 use App\Manager\AbstractManager;
+use App\Manager\CollectionManager;
 use App\Repository\FeedRepository;
 use SimpleXMLElement;
 
@@ -13,36 +14,36 @@ class FeedManager extends AbstractManager
 {
     private FeedRepository $feedRepository;
 
-    public $collectionFeedManager;
+    public CollectionFeedManager $collectionFeedManager;
 
-    private array $categories;
-
-    private array $feeds;
-
-    public function __construct(
-        FeedRepository $feedRepository,
-        CollectionFeedManager $collectionFeedManager
-    ) {
+    public function __construct(FeedRepository $feedRepository, CollectionFeedManager $collectionFeedManager)
+    {
         $this->feedRepository = $feedRepository;
         $this->collectionFeedManager = $collectionFeedManager;
     }
 
-    public function getOne($parameters = []): ?Feed
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Feed
     {
         return $this->feedRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->feedRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): Feed
     {
         return new Feed();
     }
 
-    public function persist($data)
+    public function persist(Feed $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = FeedEvent::CREATED;
@@ -62,7 +63,7 @@ class FeedManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(Feed $data): void
     {
         $event = new FeedEvent($data);
         $this->eventDispatcher->dispatch($event, FeedEvent::DELETED);
@@ -72,7 +73,7 @@ class FeedManager extends AbstractManager
         $this->clearCache();
     }
 
-    public function import(Member $member, $opml)
+    public function import(Member $member, SimpleXMLElement $opml): void
     {
         $data = $this->transformOpml($opml);
 
@@ -126,6 +127,9 @@ class FeedManager extends AbstractManager
         }
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function transformOpml(SimpleXMLElement $obj, bool $cat = false): array
     {
         $data = [

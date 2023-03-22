@@ -12,7 +12,10 @@ class MemberRepository extends AbstractRepository
         return Member::class;
     }
 
-    public function getOne($parameters = []): ?Member
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Member
     {
         $em = $this->getEntityManager();
 
@@ -36,7 +39,10 @@ class MemberRepository extends AbstractRepository
         return $getQuery->getOneOrNullResult();
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         $em = $this->getEntityManager();
 
@@ -69,7 +75,7 @@ class MemberRepository extends AbstractRepository
         }
     }
 
-    public function syncUnread($member_id)
+    public function syncUnread(int $member_id): void
     {
         $sql = 'INSERT INTO action_item (item_id, member_id, action_id, date_created) SELECT itm.id, :member_id, :action_id, :date_created FROM item AS itm
             WHERE itm.feed_id IN (SELECT subscribed.feed_id FROM action_feed AS subscribed WHERE subscribed.member_id = :member_id AND subscribed.action_id = 3)
@@ -80,10 +86,10 @@ class MemberRepository extends AbstractRepository
         $stmt->bindValue('member_id', $member_id);
         $stmt->bindValue('action_id', 12);
         $stmt->bindValue('date_created', (new \Datetime())->format('Y-m-d H:i:s'));
-        $resultSet = $stmt->executeQuery();
+        $stmt->executeQuery();
     }
 
-    public function countUnread($member_id)
+    public function countUnread(int $member_id): int
     {
         $sql = 'SELECT COUNT(DISTINCT(itm.id)) AS total FROM item AS itm
             WHERE itm.feed_id IN (SELECT subscribed.feed_id FROM action_feed AS subscribed WHERE subscribed.member_id = :member_id AND subscribed.action_id = 3)

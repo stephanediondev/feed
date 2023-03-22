@@ -48,6 +48,9 @@ class Author
         return $this;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return [

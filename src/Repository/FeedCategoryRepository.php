@@ -13,7 +13,10 @@ class FeedCategoryRepository extends AbstractRepository
         return FeedCategory::class;
     }
 
-    public function getOne($parameters = []): ?FeedCategory
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?FeedCategory
     {
         $em = $this->getEntityManager();
 
@@ -40,7 +43,10 @@ class FeedCategoryRepository extends AbstractRepository
         return $getQuery->getOneOrNullResult();
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         $em = $this->getEntityManager();
 

@@ -16,22 +16,28 @@ class ConnectionManager extends AbstractManager
         $this->connectionRepository = $connectionRepository;
     }
 
-    public function getOne($parameters = []): ?Connection
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Connection
     {
         return $this->connectionRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->connectionRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): Connection
     {
         return new Connection();
     }
 
-    public function persist($data)
+    public function persist(Connection $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = ConnectionEvent::CREATED;
@@ -51,7 +57,7 @@ class ConnectionManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(Connection $data): void
     {
         $event = new ConnectionEvent($data);
         $this->eventDispatcher->dispatch($event, ConnectionEvent::DELETED);

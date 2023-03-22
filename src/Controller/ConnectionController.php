@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/api', name: 'api_connections_')]
 class ConnectionController extends AbstractAppController
 {
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -21,7 +21,7 @@ class ConnectionController extends AbstractAppController
     }
 
     #[Route('/connection/{id}', name: 'read', methods: ['PUT'])]
-    public function read(Request $request, $id): JsonResponse
+    public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -40,7 +40,7 @@ class ConnectionController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -66,7 +66,7 @@ class ConnectionController extends AbstractAppController
     }
 
     #[Route('/connection/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Request $request, $id): JsonResponse
+    public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {

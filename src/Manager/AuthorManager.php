@@ -17,22 +17,28 @@ class AuthorManager extends AbstractManager
         $this->authorRepository = $authorRepository;
     }
 
-    public function getOne($parameters = []): ?Author
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Author
     {
         return $this->authorRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->authorRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): Author
     {
         return new Author();
     }
 
-    public function persist($data)
+    public function persist(Author $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = AuthorEvent::CREATED;
@@ -52,7 +58,7 @@ class AuthorManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(Author $data): void
     {
         $event = new AuthorEvent($data);
         $this->eventDispatcher->dispatch($event, AuthorEvent::DELETED);

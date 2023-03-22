@@ -107,6 +107,9 @@ class Collection
         return $this;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return [

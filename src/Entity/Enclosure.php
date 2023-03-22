@@ -144,6 +144,9 @@ class Enclosure
         return substr($this->getLink(), 0, 6) == 'https:';
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return [

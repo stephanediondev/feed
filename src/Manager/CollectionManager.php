@@ -28,17 +28,23 @@ class CollectionManager extends AbstractManager
         $this->cacheDriver = new ApcuAdapter();
     }
 
-    public function getOne($parameters = []): ?Collection
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Collection
     {
         return $this->collectionRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->collectionRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): Collection
     {
         $collection = new Collection();
         $collection->setFeeds(0);
@@ -48,7 +54,7 @@ class CollectionManager extends AbstractManager
         return $collection;
     }
 
-    public function persist($data)
+    public function persist(Collection $data): int
     {
         if ($data->getDateCreated() === null) {
             $eventName = CollectionEvent::CREATED;
@@ -68,7 +74,7 @@ class CollectionManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(Collection $data): void
     {
         $event = new CollectionEvent($data);
         $this->eventDispatcher->dispatch($event, CollectionEvent::DELETED);

@@ -16,22 +16,28 @@ class ActionFeedManager extends AbstractManager
         $this->actionFeedRepository = $actionFeedRepository;
     }
 
-    public function getOne($parameters = []): ?ActionFeed
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?ActionFeed
     {
         return $this->actionFeedRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->actionFeedRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): ActionFeed
     {
         return new ActionFeed();
     }
 
-    public function persist($data)
+    public function persist(ActionFeed $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = ActionFeedEvent::CREATED;
@@ -50,7 +56,7 @@ class ActionFeedManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(ActionFeed $data): void
     {
         $event = new ActionFeedEvent($data);
         $this->eventDispatcher->dispatch($event, ActionFeedEvent::DELETED);

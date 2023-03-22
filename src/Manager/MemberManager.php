@@ -16,22 +16,28 @@ class MemberManager extends AbstractManager
         $this->memberRepository = $memberRepository;
     }
 
-    public function getOne($parameters = []): ?Member
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Member
     {
         return $this->memberRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->memberRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): Member
     {
         return new Member();
     }
 
-    public function persist($data)
+    public function persist(Member $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = MemberEvent::CREATED;
@@ -51,7 +57,7 @@ class MemberManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(Member $data): void
     {
         $event = new MemberEvent($data);
         $this->eventDispatcher->dispatch($event, MemberEvent::DELETED);
@@ -61,14 +67,13 @@ class MemberManager extends AbstractManager
         $this->clearCache();
     }
 
-    public function syncUnread($member_id)
+    public function syncUnread(int $member_id): void
     {
         $this->memberRepository->syncUnread($member_id);
     }
 
-    public function countUnread($member_id)
+    public function countUnread(int $member_id): int
     {
         return $this->memberRepository->countUnread($member_id);
-        ;
     }
 }

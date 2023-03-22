@@ -94,7 +94,7 @@ class MemberController extends AbstractAppController
         return new JsonResponse($data, $status);
     }
 
-    public function read(Request $request, $id): JsonResponse
+    public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -117,7 +117,7 @@ class MemberController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -137,7 +137,7 @@ class MemberController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function delete(Request $request, $id): JsonResponse
+    public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {

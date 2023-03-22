@@ -16,30 +16,34 @@ class ItemCategoryManager extends AbstractManager
         $this->itemCategoryRepository = $itemCategoryRepository;
     }
 
-    public function getOne($parameters = []): ?ItemCategory
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?ItemCategory
     {
         return $this->itemCategoryRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->itemCategoryRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): ItemCategory
     {
         return new ItemCategory();
     }
 
-    public function persist($data)
+    public function persist(ItemCategory $data): int
     {
-        if ($data->getDateCreated() == null) {
+        if ($data->getId() == null) {
             $eventName = ItemCategoryEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
         } else {
             $eventName = ItemCategoryEvent::UPDATED;
         }
-        $data->setDateModified(new \Datetime());
 
         $this->entityManager->persist($data);
         $this->entityManager->flush();
@@ -52,7 +56,7 @@ class ItemCategoryManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(ItemCategory $data): void
     {
         $event = new ItemCategoryEvent($data);
         $this->eventDispatcher->dispatch($event, ItemCategoryEvent::DELETED);

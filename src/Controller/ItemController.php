@@ -159,7 +159,7 @@ class ItemController extends AbstractAppController
     }
 
     #[Route('/item/{id}', name: 'read', methods: ['GET'])]
-    public function read(Request $request, $id): JsonResponse
+    public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
         $memberConnected = $this->validateToken($request);
@@ -192,7 +192,7 @@ class ItemController extends AbstractAppController
     }
 
     #[Route('/item/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Request $request, $id): JsonResponse
+    public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -262,18 +262,18 @@ class ItemController extends AbstractAppController
     }
 
     #[Route('/item/action/read/{id}', name: 'action_read', methods: ['GET'])]
-    public function actionRead(Request $request, $id): JsonResponse
+    public function actionRead(Request $request, int $id): JsonResponse
     {
         return $this->setAction('read', $request, $id);
     }
 
     #[Route('/item/action/star/{id}', name: 'action_star', methods: ['GET'])]
-    public function actionStar(Request $request, $id): JsonResponse
+    public function actionStar(Request $request, int $id): JsonResponse
     {
         return $this->setAction('star', $request, $id);
     }
 
-    private function setAction($case, Request $request, $id): JsonResponse
+    private function setAction(string $case, Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {

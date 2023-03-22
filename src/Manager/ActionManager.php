@@ -16,22 +16,28 @@ class ActionManager extends AbstractManager
         $this->actionRepository = $actionRepository;
     }
 
-    public function getOne($parameters = []): ?Action
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Action
     {
         return $this->actionRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->actionRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): Action
     {
         return new Action();
     }
 
-    public function persist($data)
+    public function persist(Action $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = ActionEvent::CREATED;
@@ -50,7 +56,7 @@ class ActionManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(Action $data): void
     {
         $event = new ActionEvent($data);
         $this->eventDispatcher->dispatch($event, ActionEvent::DELETED);

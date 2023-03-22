@@ -17,22 +17,28 @@ class EnclosureManager extends AbstractManager
         $this->enclosureRepository = $enclosureRepository;
     }
 
-    public function getOne($parameters = []): ?Enclosure
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Enclosure
     {
         return $this->enclosureRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->enclosureRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): Enclosure
     {
         return new Enclosure();
     }
 
-    public function persist($data)
+    public function persist(Enclosure $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = EnclosureEvent::CREATED;
@@ -52,7 +58,7 @@ class EnclosureManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(Enclosure $data): void
     {
         $event = new EnclosureEvent($data);
         $this->eventDispatcher->dispatch($event, EnclosureEvent::DELETED);

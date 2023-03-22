@@ -177,7 +177,7 @@ class FeedController extends AbstractAppController
     }
 
     #[Route('/feed/{id}', name: 'read', methods: ['GET'])]
-    public function read(Request $request, $id): JsonResponse
+    public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
         $memberConnected = $this->validateToken($request);
@@ -212,7 +212,7 @@ class FeedController extends AbstractAppController
     }
 
     #[Route('/feed/{id}', name: 'update', methods: ['PUT'])]
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -245,7 +245,7 @@ class FeedController extends AbstractAppController
     }
 
     #[Route('/feed/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Request $request, $id): JsonResponse
+    public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {
@@ -271,12 +271,12 @@ class FeedController extends AbstractAppController
     }
 
     #[Route('/feed/action/subscribe/{id}', name: 'subscribe', methods: ['GET'])]
-    public function actionSubscribe(Request $request, $id): JsonResponse
+    public function actionSubscribe(Request $request, int $id): JsonResponse
     {
         return $this->setAction('subscribe', $request, $id);
     }
 
-    private function setAction($case, Request $request, $id): JsonResponse
+    private function setAction(string $case, Request $request, int $id): JsonResponse
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {

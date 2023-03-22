@@ -12,7 +12,10 @@ class ActionAuthorRepository extends AbstractRepository
         return ActionAuthor::class;
     }
 
-    public function getOne($parameters = []): ?ActionAuthor
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?ActionAuthor
     {
         $em = $this->getEntityManager();
 
@@ -49,7 +52,10 @@ class ActionAuthorRepository extends AbstractRepository
         return $getQuery->getOneOrNullResult();
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         $em = $this->getEntityManager();
 

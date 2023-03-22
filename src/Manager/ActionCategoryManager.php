@@ -16,22 +16,28 @@ class ActionCategoryManager extends AbstractManager
         $this->actionCategoryRepository = $actionCategoryRepository;
     }
 
-    public function getOne($parameters = []): ?ActionCategory
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?ActionCategory
     {
         return $this->actionCategoryRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->actionCategoryRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): ActionCategory
     {
         return new ActionCategory();
     }
 
-    public function persist($data)
+    public function persist(ActionCategory $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = ActionCategoryEvent::CREATED;
@@ -51,7 +57,7 @@ class ActionCategoryManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(ActionCategory $data): void
     {
         $event = new ActionCategoryEvent($data);
         $this->eventDispatcher->dispatch($event, ActionCategoryEvent::DELETED);

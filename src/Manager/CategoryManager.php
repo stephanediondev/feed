@@ -25,22 +25,28 @@ class CategoryManager extends AbstractManager
         $this->feedCategoryManager = $feedCategoryManager;
     }
 
-    public function getOne($parameters = []): ?Category
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Category
     {
         return $this->categoryRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->categoryRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): Category
     {
         return new Category();
     }
 
-    public function persist($data)
+    public function persist(Category $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = CategoryEvent::CREATED;
@@ -60,7 +66,7 @@ class CategoryManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(Category $data): void
     {
         $event = new CategoryEvent($data);
         $this->eventDispatcher->dispatch($event, CategoryEvent::DELETED);

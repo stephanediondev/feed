@@ -138,46 +138,9 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     {
     }
 
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-            $this->username,
-            $this->password,
-            $this->nickname,
-        ));
-    }
-
-    public function unserialize($serialized)
-    {
-        list(
-            $this->id,
-            $this->username,
-            $this->password,
-            $this->nickname,
-        ) = unserialize($serialized);
-    }
-
-    public function isAccountNonExpired()
-    {
-        return true;
-    }
-
-    public function isAccountNonLocked()
-    {
-        return true;
-    }
-
-    public function isCredentialsNonExpired()
-    {
-        return true;
-    }
-
-    public function isEnabled()
-    {
-        return true;
-    }
-
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return [

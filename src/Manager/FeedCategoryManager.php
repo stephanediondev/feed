@@ -16,30 +16,34 @@ class FeedCategoryManager extends AbstractManager
         $this->feedCategoryRepository = $feedCategoryRepository;
     }
 
-    public function getOne($parameters = []): ?FeedCategory
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?FeedCategory
     {
         return $this->feedCategoryRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->feedCategoryRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): FeedCategory
     {
         return new FeedCategory();
     }
 
-    public function persist($data)
+    public function persist(FeedCategory $data): int
     {
-        if ($data->getDateCreated() == null) {
+        if ($data->getId() == null) {
             $eventName = FeedCategoryEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
         } else {
             $eventName = FeedCategoryEvent::UPDATED;
         }
-        $data->setDateModified(new \Datetime());
 
         $this->entityManager->persist($data);
         $this->entityManager->flush();
@@ -52,7 +56,7 @@ class FeedCategoryManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(FeedCategory $data): void
     {
         $event = new FeedCategoryEvent($data);
         $this->eventDispatcher->dispatch($event, FeedCategoryEvent::DELETED);

@@ -7,6 +7,7 @@ use App\Event\ItemEvent;
 use App\Manager\AbstractManager;
 use App\Manager\EnclosureManager;
 use App\Repository\ItemRepository;
+use Symfony\Component\HttpFoundation\Request;
 
 class ItemManager extends AbstractManager
 {
@@ -20,22 +21,28 @@ class ItemManager extends AbstractManager
         $this->enclosureManager = $enclosureManager;
     }
 
-    public function getOne($parameters = []): ?Item
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?Item
     {
         return $this->itemRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->itemRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): Item
     {
         return new Item();
     }
 
-    public function persist($data)
+    public function persist(Item $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = ItemEvent::CREATED;
@@ -56,7 +63,7 @@ class ItemManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(Item $data): void
     {
         $event = new ItemEvent($data);
         $this->eventDispatcher->dispatch($event, ItemEvent::DELETED);
@@ -67,7 +74,10 @@ class ItemManager extends AbstractManager
         $this->clearCache();
     }
 
-    public function prepareEnclosures($item, $request)
+    /**
+     * @return array<mixed>
+     */
+    public function prepareEnclosures(Item $item, Request $request): array
     {
         $enclosures = [];
         $index_enclosures = 0;
@@ -87,7 +97,10 @@ class ItemManager extends AbstractManager
         return $enclosures;
     }
 
-    public function readAll($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function readAll(array $parameters = []): void
     {
         foreach ($this->itemRepository->getList($parameters)->getResult() as $result) {
             $sql = 'SELECT id FROM action_item WHERE member_id = :member_id AND item_id = :item_id AND action_id = :action_id';

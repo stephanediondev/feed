@@ -16,22 +16,28 @@ class CollectionFeedManager extends AbstractManager
         $this->collectionFeedRepository = $collectionFeedRepository;
     }
 
-    public function getOne($parameters = []): ?CollectionFeed
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getOne(array $parameters = []): ?CollectionFeed
     {
         return $this->collectionFeedRepository->getOne($parameters);
     }
 
-    public function getList($parameters = [])
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function getList(array $parameters = []): mixed
     {
         return $this->collectionFeedRepository->getList($parameters);
     }
 
-    public function init()
+    public function init(): CollectionFeed
     {
         return new CollectionFeed();
     }
 
-    public function persist($data)
+    public function persist(CollectionFeed $data): int
     {
         if ($data->getDateCreated() == null) {
             $eventName = CollectionFeedEvent::CREATED;
@@ -51,7 +57,7 @@ class CollectionFeedManager extends AbstractManager
         return $data->getId();
     }
 
-    public function remove($data)
+    public function remove(CollectionFeed $data): void
     {
         $event = new CollectionFeedEvent($data);
         $this->eventDispatcher->dispatch($event, CollectionFeedEvent::DELETED);

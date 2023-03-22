@@ -96,7 +96,7 @@ class Feed
         return $this;
     }
 
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -177,6 +177,9 @@ class Feed
         return substr($this->getWebsite(), 0, 6) == 'https:';
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return [
