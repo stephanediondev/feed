@@ -5,7 +5,6 @@ namespace App\Manager;
 use App\Entity\Item;
 use App\Event\ItemEvent;
 use App\Manager\AbstractManager;
-use App\Manager\EnclosureManager;
 use App\Repository\ItemRepository;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,12 +12,10 @@ class ItemManager extends AbstractManager
 {
     private ItemRepository $itemRepository;
 
-    public EnclosureManager $enclosureManager;
 
-    public function __construct(ItemRepository $itemRepository, EnclosureManager $enclosureManager)
+    public function __construct(ItemRepository $itemRepository)
     {
         $this->itemRepository = $itemRepository;
-        $this->enclosureManager = $enclosureManager;
     }
 
     /**
@@ -81,7 +78,7 @@ class ItemManager extends AbstractManager
     {
         $enclosures = [];
         $index_enclosures = 0;
-        foreach ($this->enclosureManager->getList(['item' => $item])->getResult() as $enclosure) {
+        foreach ($item->getEnclosures() as $enclosure) {
             $src = $enclosure->getLink();
             if (!strstr($item->getContent(), $src)) {
                 $enclosures[$index_enclosures] = $enclosure->toArray();
@@ -126,7 +123,7 @@ class ItemManager extends AbstractManager
                 $stmt->bindValue('action_id', 12);
                 $stmt->bindValue('item_id', $result['id']);
                 $stmt->bindValue('member_id', $parameters['member']->getId());
-                $resultSet = $stmt->executeQuery();
+                $stmt->executeQuery();
             }
         }
     }

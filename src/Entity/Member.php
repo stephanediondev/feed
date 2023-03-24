@@ -32,10 +32,6 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
-    private ?string $username = null;
-
-    private ?string $nickname = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -118,7 +114,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function getSalt()
+    public function getSalt(): null
     {
         return null;
     }

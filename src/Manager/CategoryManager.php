@@ -5,21 +5,20 @@ namespace App\Manager;
 use App\Entity\Category;
 use App\Event\CategoryEvent;
 use App\Manager\AbstractManager;
+use App\Manager\ItemCategoryManager;
+use App\Manager\FeedCategoryManager;
 use App\Repository\CategoryRepository;
 
 class CategoryManager extends AbstractManager
 {
     private CategoryRepository $categoryRepository;
 
-    public $itemCategoryManager;
+    public ItemCategoryManager $itemCategoryManager;
 
-    public $feedCategoryManager;
+    public FeedCategoryManager $feedCategoryManager;
 
-    public function __construct(
-        CategoryRepository $categoryRepository,
-        ItemCategoryManager $itemCategoryManager,
-        FeedCategoryManager $feedCategoryManager
-    ) {
+    public function __construct(CategoryRepository $categoryRepository, ItemCategoryManager $itemCategoryManager, FeedCategoryManager $feedCategoryManager)
+    {
         $this->categoryRepository = $categoryRepository;
         $this->itemCategoryManager = $itemCategoryManager;
         $this->feedCategoryManager = $feedCategoryManager;

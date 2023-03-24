@@ -13,14 +13,14 @@ abstract class AbstractManager
 
     protected Connection $connection;
 
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    protected $router;
+    protected RouterInterface $router;
 
     /**
      * @required
      */
-    public function setRequired(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher, RouterInterface $router)
+    public function setRequired(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher, RouterInterface $router): void
     {
         $this->entityManager = $entityManager;
         $this->connection = $entityManager->getConnection();
@@ -28,14 +28,14 @@ abstract class AbstractManager
         $this->router = $router;
     }
 
-    public function clearCache()
+    public function clearCache(): void
     {
         if (function_exists('apcu_clear_cache')) {
-            apcu_clear_cache();
+            //apcu_clear_cache();
         }
     }
 
-    public function count($table)
+    public function count(string $table): int
     {
         $sql = 'SELECT COUNT(id) AS count FROM '.$table;
         $stmt = $this->connection->prepare($sql);
@@ -44,7 +44,10 @@ abstract class AbstractManager
         return $result['count'];
     }
 
-    public function insert($table, $fields)
+    /**
+     * @param array<mixed> $fields
+     */
+    public function insert(string $table, array $fields): int
     {
         $sql = 'INSERT INTO '.$table.' ('.implode(', ', array_keys($fields)).') VALUES ('.implode(', ', array_map(function ($n) {
             return ':'.$n;
@@ -53,11 +56,14 @@ abstract class AbstractManager
         foreach ($fields as $k => $v) {
             $stmt->bindValue($k, $v);
         }
-        $resultSet = $stmt->executeQuery();
+        $stmt->executeQuery();
         return $this->connection->lastInsertId();
     }
 
-    public function update($table, $fields, $id)
+    /**
+     * @param array<mixed> $fields
+     */
+    public function update(string $table, array $fields, int $id): void
     {
         $sql = 'UPDATE '.$table.' SET '.implode(', ', array_map(function ($n) {
             return $n.' = :'.$n;
@@ -67,10 +73,10 @@ abstract class AbstractManager
             $stmt->bindValue($k, $v);
         }
         $stmt->bindValue('id', $id);
-        $resultSet = $stmt->executeQuery();
+        $stmt->executeQuery();
     }
 
-    public function setCategory($title)
+    public function setCategory(string $title): int
     {
         $sql = 'SELECT id FROM category WHERE title = :title';
         $stmt = $this->connection->prepare($sql);
@@ -91,7 +97,7 @@ abstract class AbstractManager
         return $category_id;
     }
 
-    public function cleanWebsite($website)
+    public function cleanWebsite(string $website): string
     {
         $website = str_replace('&amp;', '&', $website);
         $website = mb_substr($website, 0, 255, 'UTF-8');
@@ -99,7 +105,7 @@ abstract class AbstractManager
         return $website;
     }
 
-    public function cleanLink($link)
+    public function cleanLink(string $link): string
     {
         $link = str_replace('&amp;', '&', $link);
         $link = mb_substr($link, 0, 255, 'UTF-8');
@@ -107,7 +113,7 @@ abstract class AbstractManager
         return $link;
     }
 
-    public function cleanTitle($title)
+    public function cleanTitle(string $title): string
     {
         $title = str_replace('&amp;', '&', $title);
         $title = trim(strip_tags(html_entity_decode($title)));
@@ -116,7 +122,7 @@ abstract class AbstractManager
         return $title;
     }
 
-    public function cleanContent($content, $case)
+    public function cleanContent(mixed $content, string $case): string
     {
         if (class_exists('DOMDocument') && $content != '') {
             try {

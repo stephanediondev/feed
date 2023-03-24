@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ItemRepository;
+use App\Entity\Enclosure;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -50,6 +51,9 @@ class Item
     #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
     private ?Author $author = null;
 
+    /**
+     * @var Collection<int, Enclosure> $enclosures
+     */
     #[ORM\OneToMany(targetEntity: "App\Entity\Enclosure", mappedBy: "item", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
     private Collection $enclosures;
 
@@ -183,6 +187,9 @@ class Item
         return $this;
     }
 
+    /**
+     * @return Collection<int, Enclosure>
+     */
     public function getEnclosures(): Collection
     {
         return $this->enclosures;

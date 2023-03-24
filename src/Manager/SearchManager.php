@@ -194,7 +194,7 @@ class SearchManager extends AbstractManager
         }
     }
 
-    public function query($action, $path, $body = false)
+    public function query(string $action, string $path, $body = false): mixed
     {
         if ($this->getEnabled()) {
             $path = $this->getUrl().$path;
@@ -230,7 +230,7 @@ class SearchManager extends AbstractManager
         }
     }
 
-    public function queryPlain($action, $path, $body = false)
+    public function queryPlain(string $action, string $path, $body = false): mixed
     {
         if ($this->getEnabled()) {
             $path = $this->getUrl().$path;

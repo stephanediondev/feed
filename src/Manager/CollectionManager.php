@@ -84,7 +84,7 @@ class CollectionManager extends AbstractManager
         $this->clearCache();
     }
 
-    public function start($feed_id = false)
+    public function start($feed_id = false): void
     {
         $startTime = microtime(true);
 
@@ -194,7 +194,7 @@ class CollectionManager extends AbstractManager
         }
     }
 
-    public function setNextCollection($feed)
+    public function setNextCollection(array $feed): ?string
     {
         $sql = 'SELECT date_created FROM item WHERE feed_id = :feed_id GROUP BY id ORDER BY id DESC';
         $stmt = $this->connection->prepare($sql);
@@ -219,10 +219,11 @@ class CollectionManager extends AbstractManager
                 return $nextCollection->format('Y-m-d H:i:s');
             }
         }
+
         return null;
     }
 
-    public function setItems($feed, $items)
+    public function setItems(array $feed, $items): void
     {
         foreach ($items as $sp_item) {
             $link = $this->cleanLink($sp_item->get_link());
@@ -314,7 +315,7 @@ class CollectionManager extends AbstractManager
         }
     }
 
-    public function setAuthorSimplePie($sp_item)
+    public function setAuthorSimplePie($sp_item): ?int
     {
         $author_id = null;
 
@@ -325,7 +326,7 @@ class CollectionManager extends AbstractManager
         return $author_id;
     }
 
-    public function setAuthor($name)
+    public function setAuthor(string $name): ?int
     {
         $author_id = null;
 
@@ -360,7 +361,7 @@ class CollectionManager extends AbstractManager
         return $author_id;
     }
 
-    public function setCategories($item_id, $categories)
+    public function setCategories(int $item_id, $categories): void
     {
         if ($categories) {
             $titles = [];
@@ -410,7 +411,7 @@ class CollectionManager extends AbstractManager
         }
     }
 
-    public function setEnclosures($item_id, $enclosures)
+    public function setEnclosures(int $item_id, $enclosures): void
     {
         if ($enclosures) {
             $links = [];
@@ -443,7 +444,7 @@ class CollectionManager extends AbstractManager
         }
     }
 
-    public function toAscii($url)
+    public function toAscii(string $url): string
     {
         $parse_url = parse_url($url);
         if (!isset($parse_url['host'])) {
