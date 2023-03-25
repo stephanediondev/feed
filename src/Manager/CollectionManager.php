@@ -321,6 +321,9 @@ class CollectionManager extends AbstractManager
 
         if ($sp_author = $sp_item->get_author()) {
             $author_id = $this->setAuthor($sp_author->get_name());
+            if ($sp_author->get_name()) {
+                $author_id = $this->setAuthor($sp_author->get_name());
+            }
         }
 
         return $author_id;
