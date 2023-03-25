@@ -342,12 +342,12 @@ class MemberController extends AbstractAppController
             $payloadjwtPayloadModel = JwtHelper::getPayload(str_replace('Bearer ', '', $request->headers->get('Authorization')));
             $token = $payloadjwtPayloadModel->getJwtId();
 
-            $connection = $this->connectionManager->getOne(['type' => 'login', 'token' => $token]);
+            if ($connection = $this->connectionManager->getOne(['type' => 'login', 'token' => $token])) {
+                $data['entry'] = $connection->toArray();
+                $data['entry_entity'] = 'connection';
 
-            $data['entry'] = $connection->toArray();
-            $data['entry_entity'] = 'connection';
-
-            $this->connectionManager->remove($connection);
+                $this->connectionManager->remove($connection);
+            }
 
         } catch (\Exception $e) {
             throw new AccessDeniedHttpException();

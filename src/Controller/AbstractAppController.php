@@ -43,8 +43,9 @@ abstract class AbstractAppController extends AbstractController
                 $payloadjwtPayloadModel = JwtHelper::getPayload(str_replace('Bearer ', '', $request->headers->get('Authorization')));
                 $token = $payloadjwtPayloadModel->getJwtId();
 
-                $connection = $this->connectionManager->getOne(['type' => $type, 'token' => $token]);
-                return $connection->getMember();
+                if ($connection = $this->connectionManager->getOne(['type' => $type, 'token' => $token])) {
+                    return $connection->getMember();
+                }
 
             } catch (\Exception $e) {
             }
