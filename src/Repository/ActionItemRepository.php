@@ -76,6 +76,11 @@ class ActionItemRepository extends AbstractRepository
             $query->setParameter(':item', $parameters['item']);
         }
 
+        if (isset($parameters['items']) == 1) {
+            $query->andWhere('act_itm_mbr.item IN (:items)');
+            $query->setParameter(':items', $parameters['items']);
+        }
+
         if (isset($parameters['member']) == 1) {
             $query->andWhere('act_itm_mbr.member = :member');
             $query->setParameter(':member', $parameters['member']);

@@ -132,27 +132,43 @@ class ItemController extends AbstractAppController
 
         $data['entries'] = [];
 
-        $index = 0;
+        $ids = [];
+        foreach ($pagination as $result) {
+            $ids[] = $result['id'];
+        }
+
+        $results = $this->actionItemManager->getList(['member' => $memberConnected, 'items' => $ids])->getResult();
+        $actions = [];
+        foreach ($results as $actionItem) {
+            $actions[$actionItem->getItem()->getId()][] = $actionItem;
+        }
+
+        $results = $this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'items' => $ids])->getResult();
+        $categories = [];
+        foreach ($results as $itemCategory) {
+            $categories[$itemCategory->getItem()->getId()][] = $itemCategory->toArray();
+        }
+
         foreach ($pagination as $result) {
             $item = $this->itemManager->getOne(['id' => $result['id']]);
 
-            $actions = $this->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
+            $entry = $item->toArray();
 
-            $categories = [];
-            foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
-                $categories[] = $itemCategory->toArray();
+            if (true === isset($actions[$result['id']])) {
+                foreach ($actions[$result['id']] as $action) {
+                    $entry[$action->getAction()->getTitle()] = true;
+                }
             }
 
-            $data['entries'][$index] = $item->toArray();
-            foreach ($actions as $action) {
-                $data['entries'][$index][$action->getAction()->getTitle()] = true;
+            if (true === isset($categories[$result['id']])) {
+                $entry['categories'] = $categories[$result['id']];
             }
-            $data['entries'][$index]['categories'] = $categories;
-            $data['entries'][$index]['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
 
-            $data['entries'][$index]['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
+            $entry['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
 
-            $index++;
+            $entry['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
+
+            $data['entries'][] = $entry;
         }
 
         return new JsonResponse($data);

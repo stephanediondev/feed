@@ -276,23 +276,23 @@ class MemberController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $connections = [];
-        $index = 0;
+        $data['entries'] = [];
+
         foreach ($this->connectionManager->getList(['member' => $memberConnected])->getResult() as $connection) {
-            $connections[$index] = $connection->toArray();
+            $entry = $connection->toArray();
             if ($connection->getIp() == $request->getClientIp()) {
-                $connections[$index]['currentIp'] = true;
+                $entry['currentIp'] = true;
             }
             if ($connection->getAgent() == $request->server->get('HTTP_USER_AGENT')) {
-                $connections[$index]['currentAgent'] = true;
+                $entry['currentAgent'] = true;
             }
-            $index++;
+            $data['entries'][] = $entry;
+
         }
 
         $data['entry'] = $memberConnected->toArray();
         $data['entry_entity'] = 'member';
 
-        $data['entries'] = $connections;
         $data['entries_entity'] = 'connection';
 
         return new JsonResponse($data);

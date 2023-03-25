@@ -55,6 +55,11 @@ class ItemCategoryRepository extends AbstractRepository
             $query->setParameter(':item', $parameters['item']);
         }
 
+        if (isset($parameters['items']) == 1) {
+            $query->andWhere('itm_cat.item IN (:items)');
+            $query->setParameter(':items', $parameters['items']);
+        }
+
         if (isset($parameters['category']) == 1) {
             $query->andWhere('itm_cat.category = :category');
             $query->setParameter(':category', $parameters['category']);

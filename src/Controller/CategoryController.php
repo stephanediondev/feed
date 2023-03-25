@@ -109,16 +109,29 @@ class CategoryController extends AbstractAppController
 
             $data['entries'] = [];
 
-            $index = 0;
+            $ids = [];
+            foreach ($pagination as $result) {
+                $ids[] = $result['id'];
+            }
+
+            $results = $this->actionCategoryManager->getList(['member' => $memberConnected, 'categories' => $ids])->getResult();
+            $actions = [];
+            foreach ($results as $actionCategory) {
+                $actions[$actionCategory->getCategory()->getId()][] = $actionCategory;
+            }
+
             foreach ($pagination as $result) {
                 $category = $this->categoryManager->getOne(['id' => $result['id']]);
-                $actions = $this->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
 
-                $data['entries'][$index] = $category->toArray();
-                foreach ($actions as $action) {
-                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                $entry = $category->toArray();
+
+                if (true === isset($actions[$result['id']])) {
+                    foreach ($actions[$result['id']] as $action) {
+                        $entry[$action->getAction()->getTitle()] = true;
+                    }
                 }
-                $index++;
+
+                $data['entries'][] = $entry;
             }
         }
 

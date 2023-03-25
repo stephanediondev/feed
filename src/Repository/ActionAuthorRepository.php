@@ -76,6 +76,11 @@ class ActionAuthorRepository extends AbstractRepository
             $query->setParameter(':author', $parameters['author']);
         }
 
+        if (isset($parameters['authors']) == 1) {
+            $query->andWhere('act_cat_mbr.author IN (:authors)');
+            $query->setParameter(':authors', $parameters['authors']);
+        }
+
         if (isset($parameters['member']) == 1) {
             $query->andWhere('act_cat_mbr.member = :member');
             $query->setParameter(':member', $parameters['member']);

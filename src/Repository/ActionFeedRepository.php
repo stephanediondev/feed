@@ -76,6 +76,11 @@ class ActionFeedRepository extends AbstractRepository
             $query->setParameter(':feed', $parameters['feed']);
         }
 
+        if (isset($parameters['feeds']) == 1) {
+            $query->andWhere('act_fed_mbr.feed IN (:feeds)');
+            $query->setParameter(':feeds', $parameters['feeds']);
+        }
+
         if (isset($parameters['member']) == 1) {
             $query->andWhere('act_fed_mbr.member = :member');
             $query->setParameter(':member', $parameters['member']);

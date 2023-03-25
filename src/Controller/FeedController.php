@@ -120,22 +120,39 @@ class FeedController extends AbstractAppController
 
         $data['entries'] = [];
 
-        $index = 0;
+        $ids = [];
+        foreach ($pagination as $result) {
+            $ids[] = $result['id'];
+        }
+
+        $results = $this->actionFeedManager->getList(['member' => $memberConnected, 'feeds' => $ids])->getResult();
+        $actions = [];
+        foreach ($results as $actionFeed) {
+            $actions[$actionFeed->getFeed()->getId()][] = $actionFeed;
+        }
+
+        $results = $this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feeds' => $ids])->getResult();
+        $categories = [];
+        foreach ($results as $feedCategory) {
+            $categories[$feedCategory->getFeed()->getId()][] = $feedCategory->toArray();
+        }
+
         foreach ($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
-            $actions = $this->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
 
-            $categories = [];
-            foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
-                $categories[] = $feedCategory->toArray();
+            $entry = $feed->toArray();
+
+            if (true === isset($actions[$result['id']])) {
+                foreach ($actions[$result['id']] as $action) {
+                    $entry[$action->getAction()->getTitle()] = true;
+                }
             }
 
-            $data['entries'][$index] = $feed->toArray();
-            foreach ($actions as $action) {
-                $data['entries'][$index][$action->getAction()->getTitle()] = true;
+            if (true === isset($categories[$result['id']])) {
+                $entry['categories'] = $categories[$result['id']];
             }
-            $data['entries'][$index]['categories'] = $categories;
-            $index++;
+
+            $data['entries'][] = $entry;
         }
 
         return new JsonResponse($data);

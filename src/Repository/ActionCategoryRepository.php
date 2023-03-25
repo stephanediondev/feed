@@ -76,6 +76,11 @@ class ActionCategoryRepository extends AbstractRepository
             $query->setParameter(':category', $parameters['category']);
         }
 
+        if (isset($parameters['categories']) == 1) {
+            $query->andWhere('act_cat_mbr.category IN (:categories)');
+            $query->setParameter(':categories', $parameters['categories']);
+        }
+
         if (isset($parameters['member']) == 1) {
             $query->andWhere('act_cat_mbr.member = :member');
             $query->setParameter(':member', $parameters['member']);

@@ -55,6 +55,11 @@ class FeedCategoryRepository extends AbstractRepository
             $query->setParameter(':feed', $parameters['feed']);
         }
 
+        if (isset($parameters['feeds']) == 1) {
+            $query->andWhere('fed_cat.feed IN (:feeds)');
+            $query->setParameter(':feeds', $parameters['feeds']);
+        }
+
         if (isset($parameters['category']) == 1) {
             $query->andWhere('fed_cat.category = :category');
             $query->setParameter(':category', $parameters['category']);

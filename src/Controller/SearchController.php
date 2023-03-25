@@ -171,7 +171,6 @@ class SearchController extends AbstractAppController
 
                 $data['entries'] = [];
 
-                $index = 0;
                 foreach ($result['hits']['hits'] as $hit) {
                     switch ($type) {
                         case 'feed':
@@ -184,14 +183,14 @@ class SearchController extends AbstractAppController
                                     $categories[] = $feedCategory->toArray();
                                 }
 
-                                $data['entries'][$index] = $feed->toArray();
-                                $data['entries'][$index]['score'] = $hit['_score'];
+                                $entry = $feed->toArray();
+                                $entry['score'] = $hit['_score'];
                                 foreach ($actions as $action) {
-                                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                    $entry[$action->getAction()->getTitle()] = true;
                                 }
-                                $data['entries'][$index]['categories'] = $categories;
+                                $entry['categories'] = $categories;
 
-                                $index++;
+                                $data['entries'][] = $entry;
                             } else {
                                 $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/feed/'.$hit['_id'];
@@ -204,13 +203,13 @@ class SearchController extends AbstractAppController
                             if ($category) {
                                 $actions = $this->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
 
-                                $data['entries'][$index] = $category->toArray();
-                                $data['entries'][$index]['score'] = $hit['_score'];
+                                $entry = $category->toArray();
+                                $entry['score'] = $hit['_score'];
                                 foreach ($actions as $action) {
-                                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                    $entry[$action->getAction()->getTitle()] = true;
                                 }
 
-                                $index++;
+                                $data['entries'][] = $entry;
                             } else {
                                 $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/category/'.$hit['_id'];
@@ -223,13 +222,13 @@ class SearchController extends AbstractAppController
                             if ($author) {
                                 $actions = $this->actionAuthorManager->getList(['member' => $memberConnected, 'author' => $author])->getResult();
 
-                                $data['entries'][$index] = $author->toArray();
-                                $data['entries'][$index]['score'] = $hit['_score'];
+                                $entry = $author->toArray();
+                                $entry['score'] = $hit['_score'];
                                 foreach ($actions as $action) {
-                                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                    $entry[$action->getAction()->getTitle()] = true;
                                 }
 
-                                $index++;
+                                $data['entries'][] = $entry;
                             } else {
                                 $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/author/'.$hit['_id'];
@@ -247,17 +246,17 @@ class SearchController extends AbstractAppController
                                     $categories[] = $itemCategory->toArray();
                                 }
 
-                                $data['entries'][$index] = $item->toArray();
-                                $data['entries'][$index]['score'] = $hit['_score'];
+                                $entry = $item->toArray();
+                                $entry['score'] = $hit['_score'];
                                 foreach ($actions as $action) {
-                                    $data['entries'][$index][$action->getAction()->getTitle()] = true;
+                                    $entry[$action->getAction()->getTitle()] = true;
                                 }
-                                $data['entries'][$index]['categories'] = $categories;
-                                $data['entries'][$index]['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
+                                $entry['categories'] = $categories;
+                                $entry['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
 
-                                $data['entries'][$index]['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
+                                $entry['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
 
-                                $index++;
+                                $data['entries'][] = $entry;
                             } else {
                                 $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/item/'.$hit['_id'];
