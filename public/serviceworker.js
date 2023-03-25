@@ -1,4 +1,4 @@
-var LOG_ENABLED = true;
+var LOG_ENABLED = false;
 var FETCH_IN_CACHE = false;
 var FETCH_EXCLUDE = [
     '/api/',

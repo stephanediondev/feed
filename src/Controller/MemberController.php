@@ -7,12 +7,15 @@ use App\Form\Type\LoginType;
 use App\Form\Type\MemberType;
 use App\Form\Type\PinboardType;
 use App\Form\Type\ProfileType;
+use App\Helper\JwtHelper;
 use App\Manager\MemberManager;
+use App\Model\JwtPayloadModel;
 use App\Model\LoginModel;
 use App\Model\PinboardModel;
 use App\Model\ProfileModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -157,21 +160,6 @@ class MemberController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    #[Route(path: '/test', name: 'test', methods: ['GET'])]
-    public function test(Request $request): JsonResponse
-    {
-        $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
-        $this->memberManager->syncUnread($memberConnected->getId());
-
-        $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
-
-        return new JsonResponse($data);
-    }
-
     #[Route(path: '/login', name: 'login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
@@ -232,10 +220,12 @@ class MemberController extends AbstractAppController
 
             if ($member) {
                 if ($this->passwordHasher->isPasswordValid($member, $login->getPassword())) {
+                    $identifier = JwtHelper::generateUniqueIdentifier();
+
                     $connection = $this->connectionManager->init();
                     $connection->setMember($member);
                     $connection->setType('login');
-                    $connection->setToken(base64_encode(random_bytes(50)));
+                    $connection->setToken($identifier);
                     $connection->setIp($request->getClientIp());
                     $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
 
@@ -243,6 +233,12 @@ class MemberController extends AbstractAppController
 
                     $data['entry'] = $connection->toArray();
                     $data['entry_entity'] = 'connection';
+
+                    $jwtPayloadModel = new JwtPayloadModel();
+                    $jwtPayloadModel->setJwtId($identifier);
+                    $jwtPayloadModel->setAudience($member->getId());
+
+                    $data['entry']['token_signed'] = JwtHelper::createToken($jwtPayloadModel);
 
                     $status = JsonResponse::HTTP_OK;
                 }
@@ -342,13 +338,20 @@ class MemberController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $connection = $this->connectionManager->getOne(['type' => 'login', 'token' => $request->headers->get('Authorization'), 'member' => $memberConnected]);
+        try {
+            $payloadjwtPayloadModel = JwtHelper::getPayload(str_replace('Bearer ', '', $request->headers->get('Authorization')));
+            $token = $payloadjwtPayloadModel->getJwtId();
 
-        $data['entry'] = $connection->toArray();
-        $data['entry_entity'] = 'connection';
+            $connection = $this->connectionManager->getOne(['type' => 'login', 'token' => $token]);
 
-        $this->connectionManager->remove($connection);
+            $data['entry'] = $connection->toArray();
+            $data['entry_entity'] = 'connection';
 
+            $this->connectionManager->remove($connection);
+
+        } catch (\Exception $e) {
+            throw new AccessDeniedHttpException();
+        }
 
         return new JsonResponse($data);
     }

@@ -27,6 +27,9 @@ Copy ```.env.dist``` to ```.env```
 Edit ```DATABASE_URL=mysql://your-user:your-password@your-host:3306/feed?serverVersion=8&charset=utf8mb4```
 
 ```
+mkdir config/jwt-keys
+openssl genrsa -out config/jwt-keys/application.key 2048
+openssl rsa -in config/jwt-keys/application.key -pubout -out config/jwt-keys/application.pub
 composer install
 bin/console doctrine:schema:create
 bin/console app:setup

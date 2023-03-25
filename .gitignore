@@ -28,4 +28,6 @@ yarn-error.log
 
 ###> app ###
 .php-cs-fixer.cache
+/config/jwt-keys/application.key
+/config/jwt-keys/application.pub
 ###< app ###

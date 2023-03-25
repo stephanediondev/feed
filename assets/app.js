@@ -35,7 +35,6 @@ import saveAs from 'file-saver';
 global.saveAs = saveAs;
 
 var routes = [];
-routes['#test'] = {view: false, query: '/test', title: 'init'};
 routes['#login'] = {view: 'view-login', query: false, title: 'login'};
 routes['#logout'] = {view: 'view-logout', query: '/logout'};
 routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
@@ -110,6 +109,38 @@ routes['#authors/feed/{id}'] = {view: 'view-authors', viewUnit: 'view-authors-un
 
 routes['#author/{id}'] = {view: 'view-author-read', query: '/author/{id}'};
 
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let cookie = cname + '=' + cvalue + ';expires=' + d.toUTCString() + ';path=/';
+    if (window.location.protocol === 'https:') {
+        cookie += ';secure';
+    }
+    document.cookie = cookie;
+}
+
+function getCookie(cname) {
+    var cvalue = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(cname + '='))
+    ?.split('=')[1];
+
+    if ('undefined' === typeof cvalue) {
+        return null;
+    }
+    return cvalue;
+}
+
+function removeCookie(cname) {
+    const d = new Date();
+    d.setTime(d.getTime() - (365 * 24 * 60 * 60 * 1000));
+    let cookie = cname + '=;expires=' + d.toUTCString() + ';path=/';
+    if (window.location.protocol === 'https:') {
+        cookie += ';secure';
+    }
+    document.cookie = cookie;
+}
+
 function ready() {
     Promise.all(readyPromises).then(function() {
         updateOnlineStatus();
@@ -143,7 +174,11 @@ function ready() {
         if (window.location.hash) {
             loadRoute(window.location.hash);
         } else {
-            loadRoute('#test');
+            if (getCookie('token_signed')) {
+                loadRoute('#items/unread');
+            } else {
+                loadRoute('#login');
+            }
         }
 
         $('.mdl-layout__drawer').on('click', '.mdl-list__item a', function() {
@@ -307,7 +342,7 @@ function ready() {
 
             } else if (form.data('query')) {
                 var headers = new Headers({
-                    'Authorization': 'Bearer ' + connectionData.token
+                    'Authorization': 'Bearer ' + getCookie('token_signed')
                 });
 
                 var body = null;
@@ -326,6 +361,7 @@ function ready() {
 
                 fetch(apiUrl + form.data('query'), {
                     method: form.attr('method'),
+                    credentials: 'omit',
                     mode: 'cors',
                     headers: headers,
                     body: body
@@ -345,8 +381,9 @@ function ready() {
                                     }
                                 }
                                 if (form.data('query') === '/login') {
-                                    localStorage.setItem('connection', JSON.stringify(dataReturn.entry));
-                                    connectionData = explainConnection(dataReturn.entry);
+                                    setCookie('token_signed', dataReturn.entry.token_signed, 365);
+
+                                    explainConnection();
 
                                     setSnackbar(i18next.t('login'));
                                 }
@@ -472,48 +509,14 @@ function loadFile(url) {
     });
 }
 
-function explainConnection(connection) {
-    if (typeof connection === 'undefined' || null === connection) {
-        connection = {id: false, token: false, member: {id: false, administrator: false, member: false}};
-
-        $('body').removeClass('connected');
-        $('body').addClass('anonymous');
-
-        $('body').removeClass('administrator');
-        $('body').addClass('not_administrator');
-
-    } else {
+function explainConnection() {
+    if (getCookie('token_signed')) {
         $('body').removeClass('anonymous');
         $('body').addClass('connected');
-
-        fetch(apiUrl + '/connection/' + connection.id, {
-            method: 'PUT',
-            mode: 'cors',
-            headers: new Headers({
-                'Authorization': 'Bearer ' + connection.token,
-                'Content-Type': 'application/json'
-            })
-    	}).then(function(response) {
-            if (response.ok) {
-                response.json().then(function(dataReturn) {
-                    if (dataReturn.entry.member.administrator) {
-                        $('body').removeClass('not_administrator');
-                        $('body').addClass('administrator');
-                    }
-
-                    localStorage.setItem('connection', JSON.stringify(dataReturn.entry));
-
-                    if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
-                        navigator.serviceWorker.ready.then(function(ServiceWorkerRegistration) {
-                        }).catch(function() {
-                        });
-                    }
-                });
-            }
-        }).catch(function(err) {
-        });
+    } else {
+        $('body').removeClass('connected');
+        $('body').addClass('anonymous');
     }
-    return connection;
 }
 
 function loadRoute(key, parameters) {
@@ -595,7 +598,6 @@ function loadRoute(key, parameters) {
 
         if (!route.query && route.view) {
             var dataReturn = {};
-            dataReturn.connectionData = connectionData;
 
             var template = getTemplate(route.view);
             document.querySelector('main > .mdl-grid').innerHTML = template(dataReturn);
@@ -603,16 +605,15 @@ function loadRoute(key, parameters) {
         } else if (route.query) {
             fetch(url, {
                 method: 'GET',
+                credentials: 'omit',
                 mode: 'cors',
                 headers: new Headers({
-                    'Authorization': 'Bearer ' + connectionData.token,
+                    'Authorization': 'Bearer ' + getCookie('token_signed'),
                     'Content-Type': 'application/json'
                 })
         	}).then(function(response) {
                 if (response.ok && 200 === response.status) {
                     response.json().then(function(dataReturn) {
-                        dataReturn.connectionData = connectionData;
-
                         dataReturn.current_key = key;
                         dataReturn.current_key_markallasread = key.replace('#items', '#items/markallasread');
                         dataReturn.current_q = parameters.q ? decodeURIComponent(parameters.q) : '';
@@ -620,14 +621,6 @@ function loadRoute(key, parameters) {
                         if (route.title) {
                             dataReturn.current_title = route.title;
                         }
-
-                        /*if (Object.prototype.toString.call( dataReturn.entries ) === '[object Array]' && typeof route.store === 'boolean' && route.store) {
-                            for(i in dataReturn.entries) {
-                                if (dataReturn.entries.hasOwnProperty(i)) {
-                                    localStorage.setItem(dataReturn.entries_entity + '_' + dataReturn.entries[i].id, JSON.stringify(dataReturn.entries[i]));
-                                }
-                            }
-                        }*/
 
                         if (typeof dataReturn.unread !== 'undefined') {
                             var badge = 0;
@@ -662,7 +655,7 @@ function loadRoute(key, parameters) {
 
                                 for(i in dataReturn.entries) {
                                     if (dataReturn.entries.hasOwnProperty(i)) {
-                                        document.querySelector('main > .mdl-grid').innerHTML += templateUnit({connectionData: connectionData, entry: dataReturn.entries[i]});
+                                        document.querySelector('main > .mdl-grid').innerHTML += templateUnit({entry: dataReturn.entries[i]});
                                     }
                                 }
 
@@ -697,8 +690,6 @@ function loadRoute(key, parameters) {
                                 $(this).attr('title', result.format('LLLL'));
                                 $(this).text(result.fromNow());
                             });
-
-                            //componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                         } else {
                             if (parameters.link) {
                                 parameters.link.text(i18next.t(dataReturn.action_reverse));
@@ -710,17 +701,10 @@ function loadRoute(key, parameters) {
                                     setSnackbar(i18next.t(dataReturn.action) + ' ' + dataReturn.entry.title);
                                 }
                             }
-                            /*if (dataReturn.entry_entity === 'Item' && dataReturn.action === 'read') {
-                                localStorage.removeItem(dataReturn.entry_entity + '_' + dataReturn.entry.id);
-                            }*/
-                        }
-
-                        if (route.query === '/test') {
-                            loadRoute('#items/unread');
                         }
 
                         if (route.query === '/logout') {
-                            localStorage.removeItem('connection');
+                            removeCookie('token_signed');
                             $('body').removeClass('connected');
                             $('body').addClass('anonymous');
                             loadRoute('#login');
@@ -729,7 +713,7 @@ function loadRoute(key, parameters) {
                     });
                 }
                 if (403 === response.status) {
-                    localStorage.removeItem('connection');
+                    removeCookie('token_signed');
                     $('body').removeClass('connected');
                     $('body').addClass('anonymous');
                     loadRoute('#login');
@@ -879,7 +863,7 @@ if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
     });
 }
 
-var connectionData = explainConnection(JSON.parse(localStorage.getItem('connection')));
+explainConnection();
 
 var snackbarContainer = document.querySelector('.mdl-snackbar');
 

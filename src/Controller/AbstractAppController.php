@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Member;
+use App\Helper\JwtHelper;
 use App\Manager\ConnectionManager;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -37,8 +38,16 @@ abstract class AbstractAppController extends AbstractController
 
     public function validateToken(Request $request, string $type = 'login'): ?Member
     {
-        if ($request->headers->get('Authorization') && $connection = $this->connectionManager->getOne(['type' => $type, 'token' => $request->headers->get('Authorization')])) {
-            return $connection->getMember();
+        if ($request->headers->get('Authorization')) {
+            try {
+                $payloadjwtPayloadModel = JwtHelper::getPayload(str_replace('Bearer ', '', $request->headers->get('Authorization')));
+                $token = $payloadjwtPayloadModel->getJwtId();
+
+                $connection = $this->connectionManager->getOne(['type' => $type, 'token' => $token]);
+                return $connection->getMember();
+
+            } catch (\Exception $e) {
+            }
         }
 
         return null;
