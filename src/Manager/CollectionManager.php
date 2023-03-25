@@ -18,7 +18,7 @@ class CollectionManager extends AbstractManager
 
     protected MemberManager $memberManager;
 
-    protected $cacheDriver;
+    protected ApcuAdapter $cacheDriver;
 
     public function __construct(CollectionRepository $collectionRepository, MemberManager $memberManager)
     {
@@ -443,9 +443,9 @@ class CollectionManager extends AbstractManager
                             'item_id' => $item_id,
                             'link' => $link,
                             'type' => $simplepieEnclosure->get_type(),
-                            'length' => is_numeric($simplepieEnclosure->get_length()) ? $simplepieEnclosure->get_length() : null,
-                            'width' => is_numeric($simplepieEnclosure->get_width()) ? $simplepieEnclosure->get_width() : null,
-                            'height' => is_numeric($simplepieEnclosure->get_height()) ? $simplepieEnclosure->get_height() : null,
+                            'length' => $simplepieEnclosure->get_length() ? $simplepieEnclosure->get_length() : null,
+                            'width' => $simplepieEnclosure->get_width() && is_numeric($simplepieEnclosure->get_width()) ? $simplepieEnclosure->get_width() : null,
+                            'height' => $simplepieEnclosure->get_height() && is_numeric($simplepieEnclosure->get_height()) ? $simplepieEnclosure->get_height() : null,
                             'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                         ];
                         $this->insert('enclosure', $insertEnclosure);

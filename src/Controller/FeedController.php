@@ -375,7 +375,7 @@ class FeedController extends AbstractAppController
     }
 
     #[Route(path: '/feeds/export', name: 'export', methods: ['POST'])]
-    public function export(Request $request)
+    public function export(Request $request): Response
     {
         $data = [];
         if (!$memberConnected = $this->validateToken($request)) {

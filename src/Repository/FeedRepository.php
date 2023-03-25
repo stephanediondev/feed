@@ -40,12 +40,6 @@ class FeedRepository extends AbstractRepository
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 
-        if ($cacheDriver = $this->cacheDriver()) {
-            $cacheDriver->setNamespace('readerself.feed.');
-            $getQuery->setResultCacheDriver($cacheDriver);
-            $getQuery->setResultCacheLifetime(86400);
-        }
-
         return $getQuery->getOneOrNullResult();
     }
 

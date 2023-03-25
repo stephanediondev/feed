@@ -54,6 +54,9 @@ abstract class AbstractAppController extends AbstractController
         return null;
     }
 
+    /**
+     * @return PaginationInterface<mixed>
+     */
     public function paginateAbstract(?QueryBuilder $queryBuilder, int $page, ?int $limit = 20): ?PaginationInterface
     {
         /*if ($this->request) {

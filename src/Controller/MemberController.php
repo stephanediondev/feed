@@ -236,7 +236,7 @@ class MemberController extends AbstractAppController
 
                     $jwtPayloadModel = new JwtPayloadModel();
                     $jwtPayloadModel->setJwtId($identifier);
-                    $jwtPayloadModel->setAudience($member->getId());
+                    $jwtPayloadModel->setAudience(strval($member->getId()));
 
                     $data['entry']['token_signed'] = JwtHelper::createToken($jwtPayloadModel);
 

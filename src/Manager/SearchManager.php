@@ -58,7 +58,7 @@ class SearchManager extends AbstractManager
         return $this->sslVerifyPeer;
     }
 
-    public function start()
+    public function start(): void
     {
         if ($this->getEnabled()) {
             //feeds
@@ -194,7 +194,10 @@ class SearchManager extends AbstractManager
         }
     }
 
-    public function query(string $action, string $path, $body = false): mixed
+    /**
+     * @param array<mixed> $body
+     */
+    public function query(string $action, string $path, ?array $body = null): mixed
     {
         if ($this->getEnabled()) {
             $path = $this->getUrl().$path;
@@ -228,9 +231,11 @@ class SearchManager extends AbstractManager
                 return $result;
             }
         }
+
+        return null;
     }
 
-    public function queryPlain(string $action, string $path, $body = false): mixed
+    public function queryPlain(string $action, string $path, ?string $body = null): mixed
     {
         if ($this->getEnabled()) {
             $path = $this->getUrl().$path;
@@ -264,6 +269,8 @@ class SearchManager extends AbstractManager
                 return $result;
             }
         }
+
+        return null;
     }
 
     public function init(): void
@@ -390,7 +397,7 @@ class SearchManager extends AbstractManager
         }
     }
 
-    public function reset()
+    public function reset(): void
     {
         if ($this->getEnabled()) {
             $path = '/'.$this->getIndex();

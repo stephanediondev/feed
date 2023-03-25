@@ -34,12 +34,6 @@ class FeedCategoryRepository extends AbstractRepository
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
 
-        if ($cacheDriver = $this->cacheDriver()) {
-            $cacheDriver->setNamespace('readerself.feed_category.');
-            $getQuery->setResultCacheDriver($cacheDriver);
-            $getQuery->setResultCacheLifetime(86400);
-        }
-
         return $getQuery->getOneOrNullResult();
     }
 
@@ -74,12 +68,6 @@ class FeedCategoryRepository extends AbstractRepository
         $query->groupBy('fed_cat.id');
 
         $getQuery = $query->getQuery();
-
-        if ($cacheDriver = $this->cacheDriver()) {
-            $cacheDriver->setNamespace('readerself.feed_category.');
-            $getQuery->setResultCacheDriver($cacheDriver);
-            $getQuery->setResultCacheLifetime(86400);
-        }
 
         return $getQuery;
     }

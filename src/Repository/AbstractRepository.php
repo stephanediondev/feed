@@ -16,9 +16,4 @@ abstract class AbstractRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, $this->getEntityClass());
     }
-
-    public function cacheDriver()
-    {
-        return false;
-    }
 }
