@@ -84,7 +84,7 @@ class CollectionManager extends AbstractManager
         $this->clearCache();
     }
 
-    public function start($feed_id = false): void
+    public function start(?int $feed_id = null): void
     {
         $startTime = microtime(true);
 
@@ -123,43 +123,43 @@ class CollectionManager extends AbstractManager
                 $insertCollectionFeed['error'] = 'Unvalid scheme';
             } else {
                 try {
-                    $sp_feed = new SimplePie();
+                    $simplepieFeed = new SimplePie();
                     $stripTagsNew = [];
-                    foreach ($sp_feed->sanitize->strip_htmltags as $tag) {
+                    foreach ($simplepieFeed->sanitize->strip_htmltags as $tag) {
                         if ($tag != 'iframe') {
                             $stripTagsNew[] = $tag;
                         }
                     }
-                    $sp_feed->sanitize->strip_htmltags = $stripTagsNew;
-                    $sp_feed->set_feed_url($this->toAscii($feed['link']));
-                    $sp_feed->enable_cache(false);
-                    $sp_feed->set_timeout(15);
-                    $sp_feed->force_feed(true);
-                    $sp_feed->init();
-                    $sp_feed->handle_content_type();
-                    $sp_feed->set_curl_options([
+                    $simplepieFeed->sanitize->strip_htmltags = $stripTagsNew;
+                    $simplepieFeed->set_feed_url($this->toAscii($feed['link']));
+                    $simplepieFeed->enable_cache(false);
+                    $simplepieFeed->set_timeout(15);
+                    $simplepieFeed->force_feed(true);
+                    $simplepieFeed->init();
+                    $simplepieFeed->handle_content_type();
+                    $simplepieFeed->set_curl_options([
                         CURLOPT_SSL_VERIFYHOST => false,
                         CURLOPT_SSL_VERIFYPEER => false
                     ]);
 
-                    if ($sp_feed->error()) {
+                    if ($simplepieFeed->error()) {
                         $errors++;
-                        $insertCollectionFeed['error'] = $sp_feed->error();
+                        $insertCollectionFeed['error'] = $simplepieFeed->error();
                     }
 
-                    if (!$sp_feed->error()) {
-                        $this->setItems($feed, $sp_feed->get_items());
+                    if (!$simplepieFeed->error()) {
+                        $this->setItems($feed, $simplepieFeed->get_items());
 
-                        $parse_url = parse_url($sp_feed->get_link());
+                        $parse_url = parse_url($simplepieFeed->get_link());
 
                         $updateFeed = [];
-                        $updateFeed['title'] = $sp_feed->get_title() != '' ? $this->cleanTitle($sp_feed->get_title()) : '-';
-                        $updateFeed['website'] = $this->cleanWebsite($sp_feed->get_link());
-                        $updateFeed['link'] = $this->cleanLink($sp_feed->subscribe_url());
+                        $updateFeed['title'] = $simplepieFeed->get_title() != '' ? $this->cleanTitle($simplepieFeed->get_title()) : '-';
+                        $updateFeed['website'] = $this->cleanWebsite($simplepieFeed->get_link());
+                        $updateFeed['link'] = $this->cleanLink($simplepieFeed->subscribe_url());
                         $updateFeed['hostname'] = isset($parse_url['host']) ? $parse_url['host'] : null;
-                        $updateFeed['description'] = $sp_feed->get_description();
+                        $updateFeed['description'] = $simplepieFeed->get_description();
 
-                        $updateFeed['language'] = $sp_feed->get_language() ? substr($sp_feed->get_language(), 0, 2) : null;
+                        $updateFeed['language'] = $simplepieFeed->get_language() ? substr($simplepieFeed->get_language(), 0, 2) : null;
 
                         $updateFeed['next_collection'] = $this->setNextCollection($feed);
 
@@ -167,8 +167,8 @@ class CollectionManager extends AbstractManager
 
                         $this->update('feed', $updateFeed, $feed['id']);
                     }
-                    $sp_feed->__destruct();
-                    unset($sp_feed);
+                    $simplepieFeed->__destruct();
+                    unset($simplepieFeed);
                 } catch (Exception $e) {
                     $errors++;
                     $insertCollectionFeed['error'] = $e->getMessage();
@@ -194,6 +194,9 @@ class CollectionManager extends AbstractManager
         }
     }
 
+    /**
+     * @param array<mixed> $feed
+     */
     public function setNextCollection(array $feed): ?string
     {
         $sql = 'SELECT date_created FROM item WHERE feed_id = :feed_id GROUP BY id ORDER BY id DESC';
@@ -223,10 +226,14 @@ class CollectionManager extends AbstractManager
         return null;
     }
 
-    public function setItems(array $feed, $items): void
+    /**
+     * @param array<mixed> $feed
+     * @param array<\SimplePie\Item> $items
+     */
+    public function setItems(array $feed, array $items): void
     {
-        foreach ($items as $sp_item) {
-            $link = $this->cleanLink($sp_item->get_link());
+        foreach ($items as $simplepieItem) {
+            $link = $this->cleanLink($simplepieItem->get_link());
             $link = str_replace('http://www.lesnumeriques.com', 'https://www.lesnumeriques.com', $link);
 
             $sql = 'SELECT id FROM item WHERE link = :link';
@@ -243,18 +250,18 @@ class CollectionManager extends AbstractManager
 
             $insertItem['feed_id'] = $feed['id'];
 
-            if ($sp_item->get_title()) {
-                $insertItem['title'] = $this->cleanTitle($sp_item->get_title());
+            if ($simplepieItem->get_title()) {
+                $insertItem['title'] = $this->cleanTitle($simplepieItem->get_title());
             } else {
                 $insertItem['title'] = '-';
             }
 
-            $insertItem['author_id'] = $this->setAuthorSimplePie($sp_item);
+            $insertItem['author_id'] = $this->setAuthorSimplePie($simplepieItem);
 
             $insertItem['link'] = $link;
 
-            if ($content = $sp_item->get_content()) {
-                if (class_exists('Tidy') && $content != '') {
+            if ($content = $simplepieItem->get_content()) {
+                if (class_exists('Tidy')) {
                     try {
                         $options = [
                             'output-xhtml' => true,
@@ -285,14 +292,14 @@ class CollectionManager extends AbstractManager
                 $insertItem['content'] = '-';
             }
 
-            if ($sp_item->get_latitude() && $sp_item->get_longitude()) {
-                $insertItem['latitude'] = $sp_item->get_latitude();
-                $insertItem['longitude'] = $sp_item->get_longitude();
+            if ($simplepieItem->get_latitude() && $simplepieItem->get_longitude()) {
+                $insertItem['latitude'] = $simplepieItem->get_latitude();
+                $insertItem['longitude'] = $simplepieItem->get_longitude();
             }
 
             $dateReference = (new \Datetime())->format('Y-m-d H:i:s');
 
-            if ($date = $sp_item->get_gmdate('Y-m-d H:i:s')) {
+            if ($date = $simplepieItem->get_gmdate('Y-m-d H:i:s')) {
                 if ($date > $dateReference) {
                     $insertItem['date'] = $dateReference;
                 } else {
@@ -307,21 +314,21 @@ class CollectionManager extends AbstractManager
 
             $item_id = $this->insert('item', $insertItem);
 
-            $this->setCategories($item_id, $sp_item->get_categories());
+            $this->setCategories($item_id, $simplepieItem->get_categories());
 
-            $this->setEnclosures($item_id, $sp_item->get_enclosures());
+            $this->setEnclosures($item_id, $simplepieItem->get_enclosures());
 
-            unset($sp_item);
+            unset($simplepieItem);
         }
     }
 
-    public function setAuthorSimplePie($sp_item): ?int
+    public function setAuthorSimplePie(\SimplePie\Item $simplepieItem): ?int
     {
         $author_id = null;
 
-        if ($sp_author = $sp_item->get_author()) {
-            if ($sp_author->get_name()) {
-                $author_id = $this->setAuthor($sp_author->get_name());
+        if ($simplepieAuthor = $simplepieItem->get_author()) {
+            if ($simplepieAuthor->get_name()) {
+                $author_id = $this->setAuthor($simplepieAuthor->get_name());
             }
         }
 
@@ -363,14 +370,17 @@ class CollectionManager extends AbstractManager
         return $author_id;
     }
 
-    public function setCategories(int $item_id, $categories): void
+    /**
+     * @param array<\SimplePie\Category> $categories
+     */
+    public function setCategories(int $item_id, array $categories): void
     {
         if ($categories) {
             $titles = [];
-            foreach ($categories as $sp_category) {
-                if ($sp_category->get_label()) {
-                    if (strstr($sp_category->get_label(), ',')) {
-                        $categoriesPart = explode(',', $sp_category->get_label());
+            foreach ($categories as $simplepieCategory) {
+                if ($simplepieCategory->get_label()) {
+                    if (strstr($simplepieCategory->get_label(), ',')) {
+                        $categoriesPart = explode(',', $simplepieCategory->get_label());
                         foreach ($categoriesPart as $title) {
                             $title = mb_strtolower($title, 'UTF-8');
                             $title = $this->cleanTitle($title);
@@ -379,14 +389,14 @@ class CollectionManager extends AbstractManager
                             }
                         }
                     } else {
-                        $title = mb_strtolower($sp_category->get_label(), 'UTF-8');
+                        $title = mb_strtolower($simplepieCategory->get_label(), 'UTF-8');
                         $title = $this->cleanTitle($title);
                         if ($title != '') {
                             $titles[] = $title;
                         }
                     }
                 }
-                unset($sp_category);
+                unset($simplepieCategory);
             }
 
             $titles = array_unique($titles);
@@ -413,13 +423,16 @@ class CollectionManager extends AbstractManager
         }
     }
 
-    public function setEnclosures(int $item_id, $enclosures): void
+    /**
+     * @param array<\SimplePie\Enclosure> $enclosures
+     */
+    public function setEnclosures(int $item_id, array $enclosures): void
     {
         if ($enclosures) {
             $links = [];
-            foreach ($enclosures as $sp_enclosure) {
-                if ($sp_enclosure->get_link() && $sp_enclosure->get_type()) {
-                    $link = $this->cleanLink($sp_enclosure->get_link());
+            foreach ($enclosures as $simplepieEnclosure) {
+                if ($simplepieEnclosure->get_link() && $simplepieEnclosure->get_type()) {
+                    $link = $this->cleanLink($simplepieEnclosure->get_link());
 
                     if (substr($link, -2) == '?#') {
                         $link = substr($link, 0, -2);
@@ -429,10 +442,10 @@ class CollectionManager extends AbstractManager
                         $insertEnclosure = [
                             'item_id' => $item_id,
                             'link' => $link,
-                            'type' => $sp_enclosure->get_type(),
-                            'length' => is_numeric($sp_enclosure->get_length()) ? $sp_enclosure->get_length() : null,
-                            'width' => is_numeric($sp_enclosure->get_width()) ? $sp_enclosure->get_width() : null,
-                            'height' => is_numeric($sp_enclosure->get_height()) ? $sp_enclosure->get_height() : null,
+                            'type' => $simplepieEnclosure->get_type(),
+                            'length' => is_numeric($simplepieEnclosure->get_length()) ? $simplepieEnclosure->get_length() : null,
+                            'width' => is_numeric($simplepieEnclosure->get_width()) ? $simplepieEnclosure->get_width() : null,
+                            'height' => is_numeric($simplepieEnclosure->get_height()) ? $simplepieEnclosure->get_height() : null,
                             'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                         ];
                         $this->insert('enclosure', $insertEnclosure);
@@ -440,7 +453,7 @@ class CollectionManager extends AbstractManager
                         $links[] = $link;
                     }
                 }
-                unset($sp_enclosure);
+                unset($simplepieEnclosure);
             }
             unset($links);
         }
