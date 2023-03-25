@@ -50,6 +50,14 @@ crontab -e
 #30 * * * * cd /path-to-installation && bin/console app:elasticsearch
 ```
 
+# Update
+
+## Application
+
+```
+bin/console doctrine:migrations:migrate -n
+```
+
 # Screenshots
 
 ![Login](public/screenshots/Screenshot_20170108-101851.png)
