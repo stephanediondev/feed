@@ -4,32 +4,42 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api', name: 'api_')]
 class ProxyController extends AbstractAppController
 {
     #[Route(path: '/proxy', name: 'proxy', methods: ['GET'])]
-    public function index(Request $request)
+    public function index(Request $request): ?Response
     {
-        $file = base64_decode(urldecode($request->query->get('token')));
+        if ($token = $request->query->get('token')) {
+            $file = base64_decode(urldecode($token));
 
-        $opts = array(
-            'http' => array(
-                'method' => 'GET',
-                'user_agent'=> $_SERVER['HTTP_USER_AGENT']
-            )
-        );
+            if ($file != '' && (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://')) {
+                $opts = [
+                    'http' => [
+                        'method' => 'GET',
+                        'user_agent'=> $_SERVER['HTTP_USER_AGENT']
+                    ]
+                ];
 
-        $context = stream_context_create($opts);
+                $context = stream_context_create($opts);
 
-        if ($file != '' && (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://')) {
-            $imginfo = @getimagesize($file);
-            if ($imginfo) {
-                header('Content-type: '.$imginfo['mime']);
+                $content = file_get_contents($file, false, $context);
+
+                $contentType = (new \finfo(FILEINFO_MIME))->buffer($content);
+
+                $response = new Response();
+                $response->setContent($content);
+                if ($contentType) {
+                    $response->headers->set('Content-Type', $contentType);
+                }
+
+                return $response;
             }
-            @readfile($file, false, $context);
         }
-        exit(0);
+
+        return null;
     }
 }
