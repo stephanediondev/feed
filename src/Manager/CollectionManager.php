@@ -314,9 +314,13 @@ class CollectionManager extends AbstractManager
 
             $item_id = $this->insert('item', $insertItem);
 
-            $this->setCategories($item_id, $simplepieItem->get_categories());
+            if ($categories = $simplepieItem->get_categories()) {
+                $this->setCategories($item_id, $categories);
+            }
 
-            $this->setEnclosures($item_id, $simplepieItem->get_enclosures());
+            if ($enclosures = $simplepieItem->get_enclosures()) {
+                $this->setEnclosures($item_id, $enclosures);
+            }
 
             unset($simplepieItem);
         }
@@ -466,7 +470,9 @@ class CollectionManager extends AbstractManager
             return $url;
         }
         if (mb_detect_encoding($parse_url['host']) != 'ASCII') {
-            $url = str_replace($parse_url['host'], idn_to_ascii($parse_url['host']), $url);
+            if ($idn = idn_to_ascii($parse_url['host'])) {
+                $url = str_replace($parse_url['host'], $idn, $url);
+            }
         }
         return $url;
     }

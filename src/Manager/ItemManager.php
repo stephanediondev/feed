@@ -80,7 +80,7 @@ class ItemManager extends AbstractManager
         $index_enclosures = 0;
         foreach ($item->getEnclosures() as $enclosure) {
             $src = $enclosure->getLink();
-            if (!strstr($item->getContent(), $src)) {
+            if ($item->getContent() && $src && !strstr($item->getContent(), $src)) {
                 $enclosures[$index_enclosures] = $enclosure->toArray();
                 if (!$enclosure->isLinkSecure() && $request->server->get('HTTPS') == 'on' && $enclosure->getTypeGroup() == 'image') {
                     $token = urlencode(base64_encode($src));

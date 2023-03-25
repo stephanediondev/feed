@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ActionFeed
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
@@ -30,7 +30,7 @@ class ActionFeed
     #[ORM\JoinColumn(name: "action_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Action $action = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

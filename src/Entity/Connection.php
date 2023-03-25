@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Connection
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(name: "type", type: "string", length: 255, nullable: false)]
     private ?String $type = null;
@@ -36,7 +36,7 @@ class Connection
     #[ORM\JoinColumn(name: "member_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Member $member = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

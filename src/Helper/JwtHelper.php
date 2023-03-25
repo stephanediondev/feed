@@ -26,6 +26,9 @@ class JwtHelper
         return $jwtPayloadModel;
     }
 
+    /**
+     * @param int<1, max> $length
+     */
     public static function generateUniqueIdentifier(int $length = 40): string
     {
         return \bin2hex(\random_bytes($length));
@@ -35,7 +38,9 @@ class JwtHelper
     {
         $file = __DIR__.'/../../config/jwt-keys/'.$privateKey;
         if (file_exists($file)) {
-            return file_get_contents($file);
+            if ($content = file_get_contents($file)) {
+                return $content;
+            }
         }
 
         return null;
@@ -45,7 +50,9 @@ class JwtHelper
     {
         $file = __DIR__.'/../../config/jwt-keys/'.$publicKey;
         if (file_exists($file)) {
-            return file_get_contents($file);
+            if ($content = file_get_contents($file)) {
+                return $content;
+            }
         }
 
         return null;

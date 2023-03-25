@@ -221,14 +221,14 @@ class SearchManager extends AbstractManager
                 curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($body));
             }
             $exec = curl_exec($ci);
-            if (false === $exec) {
-                return curl_error($ci);
-            } else {
+            if ($exec && is_string($exec)) {
                 $result = json_decode($exec, true);
                 if ($action == 'HEAD') {
                     $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
                 }
                 return $result;
+            } else {
+                return curl_error($ci);
             }
         }
 
@@ -259,14 +259,14 @@ class SearchManager extends AbstractManager
                 curl_setopt($ci, CURLOPT_POSTFIELDS, $body);
             }
             $exec = curl_exec($ci);
-            if (false === $exec) {
-                return curl_error($ci);
-            } else {
+            if ($exec && is_string($exec)) {
                 $result = json_decode($exec, true);
                 if ($action == 'HEAD') {
                     $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
                 }
                 return $result;
+            } else {
+                return curl_error($ci);
             }
         }
 

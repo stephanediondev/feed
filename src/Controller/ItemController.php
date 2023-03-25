@@ -92,7 +92,7 @@ class ItemController extends AbstractAppController
         }
 
         $fields = ['title' => 'itm.title', 'date' => 'itm.date'];
-        if ($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
+        if ($request->query->get('sortField') && array_key_exists(strval($request->query->get('sortField')), $fields)) {
             $parameters['sortField'] = $fields[$request->query->get('sortField')];
         } else {
             $parameters['sortField'] = 'itm.date';

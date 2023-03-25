@@ -33,7 +33,7 @@ class SetupCommand extends Command
             $sql = 'SELECT COUNT(*) AS total FROM action';
             $count = $connection->fetchAssociative($sql);
 
-            if (0 == $count['total']) {
+            if (true === isset($count['total']) && 0 == $count['total']) {
                 $connection->executeQuery($file);
                 $output->writeln('<info>Feed data inserted</info>');
             } else {

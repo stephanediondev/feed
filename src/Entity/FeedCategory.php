@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class FeedCategory
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Category", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
@@ -23,7 +23,7 @@ class FeedCategory
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Feed $feed = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

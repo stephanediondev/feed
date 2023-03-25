@@ -28,7 +28,7 @@ class PinboardSubscriber implements EventSubscriberInterface
     {
         $actionItem = $actionItemEvent->getActionItem();
 
-        if ($actionItem->getAction()->getTitle() == 'star') {
+        if ($actionItem->getAction() && $actionItem->getAction()->getTitle() == 'star') {
             $this->query('add', $actionItem);
         }
     }
@@ -37,7 +37,7 @@ class PinboardSubscriber implements EventSubscriberInterface
     {
         $actionItem = $actionItemEvent->getActionItem();
 
-        if ($actionItem->getAction()->getTitle() == 'star') {
+        if ($actionItem->getAction() && $actionItem->getAction()->getTitle() == 'star') {
             $this->query('delete', $actionItem);
         }
     }

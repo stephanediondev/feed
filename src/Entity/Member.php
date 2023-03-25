@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Member implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(name: "email", type: "string", length: 255, nullable: false)]
     private ?string $email = null;
@@ -32,7 +32,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

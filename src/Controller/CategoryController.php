@@ -77,7 +77,7 @@ class CategoryController extends AbstractAppController
             }
 
             $fields = ['title' => 'cat.title', 'date_created' => 'cat.dateCreated'];
-            if ($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
+            if ($request->query->get('sortField') && array_key_exists(strval($request->query->get('sortField')), $fields)) {
                 $parameters['sortField'] = $fields[$request->query->get('sortField')];
             } else {
                 $parameters['sortField'] = 'cat.title';
@@ -144,7 +144,9 @@ class CategoryController extends AbstractAppController
         } else {
             $errors = $form->getErrors(true);
             foreach ($errors as $error) {
-                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
+                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                }
             }
         }
 

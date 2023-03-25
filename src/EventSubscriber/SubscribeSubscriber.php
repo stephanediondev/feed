@@ -28,9 +28,10 @@ class SubscribeSubscriber implements EventSubscriberInterface
     {
         $actionFeed = $actionFeedEvent->getActionFeed();
 
-        if ($actionFeed->getAction()->getTitle() == 'subscribe') {
-            $member = $actionFeed->getMember();
-            $this->memberManager->syncUnread($member->getid());
+        if ($actionFeed->getAction() && $actionFeed->getAction()->getTitle() == 'subscribe') {
+            if ($member = $actionFeed->getMember()) {
+                $this->memberManager->syncUnread($member->getid());
+            }
         }
     }
 }

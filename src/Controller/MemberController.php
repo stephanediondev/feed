@@ -320,7 +320,9 @@ class MemberController extends AbstractAppController
         } else {
             $errors = $form->getErrors(true);
             foreach ($errors as $error) {
-                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
+                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                }
             }
         }
 
@@ -388,7 +390,9 @@ class MemberController extends AbstractAppController
         } else {
             $errors = $form->getErrors(true);
             foreach ($errors as $error) {
-                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
+                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                }
             }
         }
 

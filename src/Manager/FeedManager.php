@@ -98,7 +98,7 @@ class FeedManager extends AbstractManager
                         'title' => $this->cleanTitle($obj->title),
                         'link' => $link,
                         'website' => $this->cleanWebsite($obj->htmlUrl),
-                        'hostname' => $parse_url['host'],
+                        'hostname' => $parse_url['host'] ?? null,
                         'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                         'date_modified' => (new \Datetime())->format('Y-m-d H:i:s'),
                     ];
@@ -130,7 +130,7 @@ class FeedManager extends AbstractManager
     /**
      * @return array<mixed>
      */
-    private function transformOpml(SimpleXMLElement $obj, bool $cat = false): array
+    private function transformOpml(SimpleXMLElement $obj, ?string $cat = null): array
     {
         $data = [
             'feeds' => [],

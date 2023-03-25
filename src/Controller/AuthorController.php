@@ -79,7 +79,7 @@ class AuthorController extends AbstractAppController
             }
 
             $fields = ['title' => 'aut.title', 'date_created' => 'aut.dateCreated'];
-            if ($request->query->get('sortField') && array_key_exists($request->query->get('sortField'), $fields)) {
+            if ($request->query->get('sortField') && array_key_exists(strval($request->query->get('sortField')), $fields)) {
                 $parameters['sortField'] = $fields[$request->query->get('sortField')];
             } else {
                 $parameters['sortField'] = 'aut.title';
@@ -146,7 +146,9 @@ class AuthorController extends AbstractAppController
         } else {
             $errors = $form->getErrors(true);
             foreach ($errors as $error) {
-                $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
+                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                }
             }
         }
 

@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CollectionFeed
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(name: "error", type: "text", length: 65535, nullable: true)]
     private ?string $error = null;
@@ -29,7 +29,7 @@ class CollectionFeed
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

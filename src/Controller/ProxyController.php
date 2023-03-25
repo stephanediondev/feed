@@ -14,7 +14,7 @@ class ProxyController extends AbstractAppController
     public function index(Request $request): ?Response
     {
         if ($token = $request->query->get('token')) {
-            $file = base64_decode(urldecode($token));
+            $file = base64_decode(urldecode(strval($token)));
 
             if ($file != '' && (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://')) {
                 $opts = [
@@ -26,17 +26,17 @@ class ProxyController extends AbstractAppController
 
                 $context = stream_context_create($opts);
 
-                $content = file_get_contents($file, false, $context);
+                if ($content = file_get_contents($file, false, $context)) {
+                    $contentType = (new \finfo(FILEINFO_MIME))->buffer($content);
 
-                $contentType = (new \finfo(FILEINFO_MIME))->buffer($content);
+                    $response = new Response();
+                    $response->setContent($content);
+                    if ($contentType) {
+                        $response->headers->set('Content-Type', $contentType);
+                    }
 
-                $response = new Response();
-                $response->setContent($content);
-                if ($contentType) {
-                    $response->headers->set('Content-Type', $contentType);
+                    return $response;
                 }
-
-                return $response;
             }
         }
 

@@ -81,12 +81,12 @@ class SearchController extends AbstractAppController
         if ($request->query->get('q')) {
             $page = $request->query->getInt('page', 1);
 
-            if (!array_key_exists($request->query->get('sortField'), $sortFields)) {
+            if (!array_key_exists(strval($request->query->get('sortField')), $sortFields)) {
                 $sortField = '_score';
             } else {
                 $sortField = $request->query->get('sortField');
             }
-            if (!array_key_exists($request->query->get('sortDirection'), $sortDirection)) {
+            if (!array_key_exists(strval($request->query->get('sortDirection')), $sortDirection)) {
                 $sortDirection = 'desc';
             } else {
                 $sortDirection = $request->query->get('sortDirection');
