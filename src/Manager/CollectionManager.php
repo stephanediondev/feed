@@ -124,13 +124,15 @@ class CollectionManager extends AbstractManager
             } else {
                 try {
                     $simplepieFeed = new SimplePie();
-                    $stripTagsNew = [];
-                    foreach ($simplepieFeed->sanitize->strip_htmltags as $tag) {
-                        if ($tag != 'iframe') {
-                            $stripTagsNew[] = $tag;
+                    if (true === isset($simplepieFeed->sanitize->strip_htmltags)) {
+                        $stripTagsNew = [];
+                        foreach ($simplepieFeed->sanitize->strip_htmltags as $tag) {
+                            if ($tag != 'iframe') {
+                                $stripTagsNew[] = $tag;
+                            }
                         }
+                        $simplepieFeed->sanitize->strip_htmltags = $stripTagsNew;
                     }
-                    $simplepieFeed->sanitize->strip_htmltags = $stripTagsNew;
                     $simplepieFeed->set_feed_url($this->toAscii($feed['link']));
                     $simplepieFeed->enable_cache(false);
                     $simplepieFeed->set_timeout(15);

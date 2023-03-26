@@ -180,16 +180,16 @@ class MemberController extends AbstractAppController
                     ldap_set_option($ldapConnect, LDAP_OPT_REFERRALS, 0);
                     if (ldap_bind($ldapConnect, $this->ldapRootDn, $this->ldapRootPw)) {
                         $ldapSearch = ldap_search($ldapConnect, $this->ldapBaseDn, str_replace('[email]', $login->getEmail(), $this->ldapSearchUser), ['uid']);
-                        if ($ldapSearch) {
+                        if ($ldapSearch && $ldapSearch instanceof \LDAP\Result) {
                             $ldapGetEntries = ldap_get_entries($ldapConnect, $ldapSearch);
                             if ($ldapGetEntries && true === is_numeric($ldapGetEntries['count']) && 0 < $ldapGetEntries['count']) {
                                 try {
                                     $ldapSearch2 = ldap_search($ldapConnect, $this->ldapBaseDn, $this->ldapSearchGroupAdmin, []);
-                                    if ($ldapSearch2) {
+                                    if ($ldapSearch2 && $ldapSearch2 instanceof \LDAP\Result) {
                                         $ldapGetEntries2 = ldap_get_entries($ldapConnect, $ldapSearch2);
                                     }
 
-                                    if (ldap_bind($ldapConnect, $ldapGetEntries[0]['dn'], $login->getPassword())) {
+                                    if (true === isset($ldapGetEntries[0]['dn']) && ldap_bind($ldapConnect, $ldapGetEntries[0]['dn'], $login->getPassword())) {
                                         $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
 
                                         if (!$member) {
@@ -200,7 +200,7 @@ class MemberController extends AbstractAppController
 
                                         $administrator = false;
                                         if (isset($ldapGetEntries2)) {
-                                            if (in_array($ldapGetEntries[0]['uid'][0], $ldapGetEntries2[0]['memberuid'])) {
+                                            if (true === isset($ldapGetEntries[0]['uid'][0]) && true === isset($ldapGetEntries2[0]['memberuid']) && in_array($ldapGetEntries[0]['uid'][0], $ldapGetEntries2[0]['memberuid'])) {
                                                 $administrator = true;
                                             }
                                         }
