@@ -41,7 +41,7 @@ abstract class AbstractManager
         $stmt = $this->connection->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $result = $resultSet->fetchAssociative();
-        return $result['count'];
+        return $result['count'] ?? 0;
     }
 
     /**
@@ -140,78 +140,90 @@ abstract class AbstractManager
                         $disallowedAttributes = ['id', 'style', 'width', 'height', 'onclick', 'ondblclick', 'onmouseover', 'onmouseout', 'accesskey', 'data', 'dynsrc', 'tabindex'];
                         foreach ($disallowedAttributes as $attribute) {
                             $nodes = $xpath->query('//*[@'.$attribute.']');
-                            foreach ($nodes as $node) {
-                                //don't remove style, width and height if iframe
-                                if (($attribute == 'style' || $attribute == 'width' || $attribute == 'height') && $node->tagName == 'iframe') {
-                                    continue;
-                                }
+                            if ($nodes) {
+                                foreach ($nodes as $node) {
+                                    if ($node instanceof \DOMElement) {
+                                        //don't remove style, width and height if iframe
+                                        if (($attribute == 'style' || $attribute == 'width' || $attribute == 'height') && $node->tagName == 'iframe') {
+                                            continue;
+                                        }
 
-                                $node->removeAttribute($attribute);
+                                        $node->removeAttribute($attribute);
+                                    }
+                                }
                             }
                         }
                     }
 
                     $nodes = $xpath->query('//*[@src]');
-                    foreach ($nodes as $node) {
-                        $src = $node->getAttribute('src');
+                    if ($nodes) {
+                        foreach ($nodes as $node) {
+                            if ($node instanceof \DOMElement) {
+                                $src = $node->getAttribute('src');
 
-                        if ($node->tagName == 'iframe') {
-                            $parse_src = parse_url($src);
-                            //keep iframes from instagram, youtube, vimeo and dailymotion
-                            if (isset($parse_src['host']) && (stristr($parse_src['host'], 'instagram.com') || stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com'))) {
-                                $src = str_replace('http://', 'https://', $src);
-                                $src = str_replace('autoplay=1', 'autoplay=0', $src);
-                                $node->setAttribute('src', $src);
-                                $node->setAttribute('frameborder', 0);
-                                $node->removeAttribute('sandbox');
-                            } else {
-                                $node->parentNode->removeChild($node);
+                                if ($node->tagName == 'iframe') {
+                                    $parse_src = parse_url($src);
+                                    //keep iframes from instagram, youtube, vimeo and dailymotion
+                                    if (isset($parse_src['host']) && (stristr($parse_src['host'], 'instagram.com') || stristr($parse_src['host'], 'youtube.com') || stristr($parse_src['host'], 'vimeo.com') || stristr($parse_src['host'], 'dailymotion.com'))) {
+                                        $src = str_replace('http://', 'https://', $src);
+                                        $src = str_replace('autoplay=1', 'autoplay=0', $src);
+                                        $node->setAttribute('src', $src);
+                                        $node->setAttribute('frameborder', '0');
+                                        $node->removeAttribute('sandbox');
+                                    } else {
+                                        $node->parentNode->removeChild($node);
+                                    }
+                                }
+
+                                if ($node->tagName == 'img' && $case == 'display') {
+                                    if (substr($src, 0, 5) == 'http:') {
+                                        $token = urlencode(base64_encode($src));
+                                        $node->setAttribute('src', 'app/icons/icon-32x32.png');
+                                        $node->setAttribute('data-src', $this->router->generate('api_proxy', ['token' => $token], 0));
+                                        $node->setAttribute('data-src-origin', $src);
+                                        $node->setAttribute('class', 'proxy');
+                                    }
+
+                                    $node->removeAttribute('srcset');
+                                }
                             }
-                        }
-
-                        if ($node->tagName == 'img' && $case == 'display') {
-                            if (substr($src, 0, 5) == 'http:') {
-                                $token = urlencode(base64_encode($src));
-                                $node->setAttribute('src', 'app/icons/icon-32x32.png');
-                                $node->setAttribute('data-src', $this->router->generate('api_proxy', ['token' => $token], 0));
-                                $node->setAttribute('data-src-origin', $src);
-                                $node->setAttribute('class', 'proxy');
-                            }
-
-                            $node->removeAttribute('srcset');
                         }
                     }
 
                     if ($case == 'display') {
                         $nodes = $xpath->query('//*[@class]');
-                        foreach ($nodes as $node) {
-                            $class = $node->getAttribute('class');
+                        if ($nodes) {
+                            foreach ($nodes as $node) {
+                                if ($node instanceof \DOMElement) {
+                                    $class = $node->getAttribute('class');
 
-                            if ($node->tagName == 'div') {
-                                if ($class == 'feedflare') {
-                                    $node->parentNode->removeChild($node);
-                                }
-                            }
+                                    if ($node->tagName == 'div') {
+                                        if ($class == 'feedflare') {
+                                            $node->parentNode->removeChild($node);
+                                        }
+                                    }
 
-                            if ($node->tagName == 'blockquote') {
-                                if ($class == 'instagram-media') {
-                                    $links = $node->getElementsByTagName('a');
-                                    if ($links) {
-                                        foreach ($links as $link) {
-                                            $nodeReplace = $dom->createElement('a');
-                                            $domAttribute = $dom->createAttribute('href');
-                                            $domAttribute->value = $link->getAttribute('href');
-                                            $nodeReplace->appendChild($domAttribute);
+                                    if ($node->tagName == 'blockquote') {
+                                        if ($class == 'instagram-media') {
+                                            $links = $node->getElementsByTagName('a');
+                                            if (0 < count($links)) {
+                                                foreach ($links as $link) {
+                                                    $nodeReplace = $dom->createElement('a');
+                                                    $domAttribute = $dom->createAttribute('href');
+                                                    $domAttribute->value = $link->getAttribute('href');
+                                                    $nodeReplace->appendChild($domAttribute);
 
-                                            $img = $dom->createElement('img');
-                                            $domAttribute = $dom->createAttribute('src');
-                                            $domAttribute->value = $link->getAttribute('href').'media/?size=m';
-                                            $img->appendChild($domAttribute);
+                                                    $img = $dom->createElement('img');
+                                                    $domAttribute = $dom->createAttribute('src');
+                                                    $domAttribute->value = $link->getAttribute('href').'media/?size=m';
+                                                    $img->appendChild($domAttribute);
 
-                                            $nodeReplace->appendChild($img);
+                                                    $nodeReplace->appendChild($img);
 
-                                            $node->parentNode->replaceChild($nodeReplace, $node);
-                                            break;
+                                                    $node->parentNode->replaceChild($nodeReplace, $node);
+                                                    break;
+                                                }
+                                            }
                                         }
                                     }
                                 }

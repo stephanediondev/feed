@@ -241,7 +241,7 @@ class Item
             'content' => $this->getContent(),
             'latitude' => $this->getLatitude(),
             'longitude' => $this->getLongitude(),
-            'date_created' => $this->getDateCreated()->format('Y-m-d H:i:s'),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
             'link_secure' => $this->isLinkSecure(),
         ];
     }

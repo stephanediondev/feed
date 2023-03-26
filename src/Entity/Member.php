@@ -143,7 +143,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
             'id' => $this->getId(),
             'email' => $this->getEmail(),
             'administrator' => $this->getAdministrator(),
-            'date_created' => $this->getDateCreated()->format('Y-m-d H:i:s'),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
         ];
     }
 

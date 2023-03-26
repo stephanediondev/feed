@@ -102,6 +102,6 @@ class MemberRepository extends AbstractRepository
 
         $fetch = $resultSet->fetchAssociative();
 
-        return $fetch['total'];
+        return $fetch['total'] ?? 0;
     }
 }

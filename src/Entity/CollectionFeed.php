@@ -90,7 +90,7 @@ class CollectionFeed
         return [
             'id' => $this->getId(),
             'error' => $this->getError(),
-            'date_created' => $this->getDateCreated()->format('Y-m-d H:i:s'),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
         ];
     }
 }
