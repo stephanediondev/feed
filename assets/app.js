@@ -440,9 +440,15 @@ function explainConnection() {
     if (getCookie('token_signed')) {
         $('body').removeClass('anonymous');
         $('body').addClass('connected');
+
+        $('body').removeClass('not_administrator');
+        $('body').addClass('administrator');
     } else {
         $('body').removeClass('connected');
         $('body').addClass('anonymous');
+
+        $('body').removeClass('administrator');
+        $('body').addClass('not_administrator');
     }
 }
 
