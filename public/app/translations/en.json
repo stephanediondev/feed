@@ -38,6 +38,9 @@
 
     "share": "Share",
 
+    "import": "Import",
+    "export": "Export",
+
     "import_opml": "Import OPML",
     "export_opml": "Export OPML",
     "your_subscriptions": "your subscriptions",
@@ -51,7 +54,6 @@
 
     "email": "Email",
     "password": "Password",
-    "title": "Title",
     "link": "Link",
     "website": "Website",
     "description": "Description",
@@ -60,6 +62,10 @@
     "author": "Author",
     "category": "Category",
     "feed": "Feed",
+
+    "field": {
+        "title": "Title"
+    },
 
     "title": {
         "feeds": "Feeds",

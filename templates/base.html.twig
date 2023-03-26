@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-bs-theme="dark">
 <head>
 <meta charset="utf-8">
 <title>St&eacute;phane Dion - feed</title>
 <meta name="robots" content="noindex, nofollow, noarchive">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 <meta name="HandheldFriendly" content="true">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -15,37 +15,44 @@
 <link rel="apple-touch-icon" sizes="512x512" href="app/icons/icon-512x512.png">
 <link rel="apple-touch-icon-precomposed" sizes="512x512" href="app/icons/icon-512x512.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 {% block encore_entry %}
     {{ encore_entry_link_tags('app') }}
 {% endblock %}
 </head>
 
 <body class="anonymous online not_administrator no_entries">
-
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
-    <header class="mdl-layout__header mdl-color--indigo">
-        <div class="mdl-layout__header-row">
-            <div class="mdl-layout-spacer">
-            </div>
-
-            <nav class="mdl-navigation">
-            </nav>
-        </div>
-    </header>
-
-    <aside class="mdl-layout__drawer">
-    </aside>
-
-    <main class="mdl-layout__content mdl-color--grey-100">
-        <div class="mdl-snackbar mdl-js-snackbar">
-            <div class="mdl-snackbar__text"></div>
-            <button type="button" class="mdl-snackbar__action"></button>
+<nav class="navbar navbar-expand-lg fixed-bottom bg-body-tertiary">
+    <div class="container-fluid">
+        <div class="dropup">
+            <button class="btn btn-lg dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list"></i></button>
+            <ul class="mdl-layout__drawer dropdown-menu">
+            </ul>
         </div>
 
-        <div class="mdl-grid" id="top">
-            <div class="mdl-spinner mdl-js-spinner is-active"></div>
+        <ul class="navbar-nav mdl-navigation">
+        </ul>
+
+        <div class="dropup">
+            <button class="btn btn-lg dropdown-toggle theme-icon-active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i></i></button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li class="fs-5">
+                    <button type="button" class="btn-lg dropdown-item d-flex align-items-center" data-bs-theme-value="light"><i class="bi bi-brightness-high"></i>&nbsp;Light</button>
+                </li>
+                <li class="fs-5">
+                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark"><i class="bi bi-moon-stars-fill"></i>&nbsp;Dark</button>
+                </li>
+                <li class="fs-5">
+                    <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto"><i class="bi bi-circle-half"></i>&nbsp;Auto</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <main class="mdl-layout__content mt-3 row">
+        <div class="mdl-grid col-12" id="top">
+            <div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>
         </div>
     </main>
 </div>

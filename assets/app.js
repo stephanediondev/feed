@@ -11,14 +11,10 @@ import './styles/app.scss';
 // start the Stimulus application
 import './bootstrap';
 
+var bootstrap = require('bootstrap');
+
 require('jquery');
 global.$ = global.jQuery = $;
-
-import dialogPolyfill from 'dialog-polyfill';
-global.dialogPolyfill = dialogPolyfill;
-
-import componentHandler from 'material-design-lite';
-global.componentHandler = componentHandler;
 
 import i18next from 'i18next';
 global.i18next = i18next;
@@ -35,6 +31,26 @@ import saveAs from 'file-saver';
 global.saveAs = saveAs;
 
 import {routes} from './_routes.js'
+
+function setBadge(value) {
+    document.querySelector('.count-unread').innerHTML = value;
+
+    if (navigator.setExperimentalAppBadge) {
+        navigator.setExperimentalAppBadge(value).catch(function(error) {
+        });
+    } else if (navigator.setAppBadge) {
+        navigator.setAppBadge(value).catch(function(error) {
+        });
+    }
+}
+
+function clearBadge() {
+    document.querySelector('.count-unread').innerHTML = 0;
+
+    if (navigator.clearAppBadge) {
+        navigator.clearAppBadge();
+    }
+}
 
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
@@ -108,13 +124,6 @@ function ready() {
             }
         }
 
-        $('.mdl-layout__drawer').on('click', '.mdl-list__item a', function() {
-            if (document.querySelector('.mdl-layout__drawer').classList.contains('is-visible')) {
-                $('.mdl-layout__drawer').removeClass('is-visible');
-                $('.mdl-layout__obfuscator').removeClass('is-visible');
-            }
-        });
-
         $('.mdl-layout').on('click', '.mdl-layout__obfuscator', function() {
             $('.mdl-layout__drawer').removeClass('is-visible');
             $('.mdl-layout__obfuscator').removeClass('is-visible');
@@ -162,25 +171,6 @@ function ready() {
                 }
                 dialog.showModal();
             }
-        });
-
-        $(document).on('click', 'dialog .close', function(event) {
-            if ($(this).hasClass('load-route')) {
-            } else if ($(this).attr('target') === '_blank') {
-            } else {
-                event.preventDefault();
-            }
-            var id = $(this).parents('.mdl-dialog').attr('for');
-
-            var dialog = document.querySelector('dialog[for="' + id + '"]');
-            dialog.close();
-        });
-
-        $(document).on('click', 'dialog .close_submit', function() {
-            var id = $(this).parents('.mdl-dialog').attr('for');
-
-            var dialog = document.querySelector('dialog[for="' + id + '"]');
-            dialog.close();
         });
 
         $('.mdl-grid').on('click', '.item .mdl-card__title h1 a, .item .mdl-card__supporting-text a', function(event) {
@@ -427,7 +417,7 @@ function loadFile(url) {
     return fetch(url).then(function(response) {
         if (response.ok) {
             return response.text().then(function(text) {
-                document.querySelector('body').innerHTML += text;
+                document.querySelector('body').insertAdjacentHTML('afterend', text);
             });
         } else {
             Promise.reject();
@@ -513,8 +503,7 @@ function loadRoute(key, parameters) {
         if (route.view) {
             if (!parameters.page || parameters.page === 1) {
                 scrollTo('#top');
-                document.querySelector('main > .mdl-grid').innerHTML = '<div class="mdl-spinner mdl-js-spinner is-active"></div>';
-                //componentHandler.upgradeDom('MaterialSpinner', 'mdl-spinner');
+                document.querySelector('main > .mdl-grid').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
             }
 
             if (key !== '#401' && key !== '#404' && key !== '#500') {
@@ -563,11 +552,9 @@ function loadRoute(key, parameters) {
                                 } else {
                                     badge = dataReturn.unread;
                                 }
-                                document.querySelector('.count-unread').setAttribute('data-badge', badge);
-                                $('.count-unread').addClass('mdl-badge');
+                                setBadge(badge);
                             } else {
-                                document.querySelector('.count-unread').removeAttribute('data-badge');
-                                $('.count-unread').removeClass('mdl-badge');
+                                clearBadge();
                             }
                         }
 
@@ -669,7 +656,7 @@ function loadRoute(key, parameters) {
 }
 
 function setSnackbar(message) {
-    snackbarContainer.MaterialSnackbar.showSnackbar({message: message, timeout: 1000});
+    //snackbarContainer.MaterialSnackbar.showSnackbar({message: message, timeout: 1000});
 }
 
 function setPositions() {
@@ -718,9 +705,9 @@ function itemDown() {
 }
 
 function actionMore(liknActionMore) {
-    if (liknActionMore.hasClass('progress')) {
+    if (liknActionMore.hasClass('inprogress')) {
     } else {
-        liknActionMore.addClass('progress');
+        liknActionMore.addClass('inprogress');
         liknActionMore.trigger('click');
         //loadRoute(liknActionMore.attr('href'));
     }
@@ -729,9 +716,9 @@ function actionMore(liknActionMore) {
 function actionRead(liknActionRead) {
     if (liknActionRead.hasClass('read')) {
     } else if (liknActionRead.hasClass('unread')) {
-    } else if (liknActionRead.hasClass('progress')) {
+    } else if (liknActionRead.hasClass('inprogress')) {
     } else {
-        liknActionRead.addClass('progress');
+        liknActionRead.addClass('inprogress');
         loadRoute(liknActionRead.attr('href'), {link: liknActionRead, snackbar: false});
     }
 }
@@ -953,3 +940,58 @@ document.addEventListener('keydown', function(event) {
         }
     }
 });
+
+(() => {
+    'use strict'
+
+    const storedTheme = localStorage.getItem('theme')
+
+    const getPreferredTheme = () => {
+        if (storedTheme) {
+            return storedTheme
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+
+    const setTheme = function (theme) {
+        if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-bs-theme', 'dark')
+        } else {
+            document.documentElement.setAttribute('data-bs-theme', theme)
+        }
+    }
+
+    setTheme(getPreferredTheme())
+
+    const showActiveTheme = theme => {
+        const activeThemeIcon = document.querySelector('.theme-icon-active i')
+        const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`);
+
+        activeThemeIcon.className = btnToActive.querySelector('i').className;
+
+        document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+            element.classList.remove('active');
+        })
+
+        btnToActive.classList.add('active');
+    }
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (storedTheme !== 'light' || storedTheme !== 'dark') {
+            setTheme(getPreferredTheme());
+        }
+    })
+
+    window.addEventListener('DOMContentLoaded', () => {
+        showActiveTheme(getPreferredTheme())
+
+        document.querySelectorAll('[data-bs-theme-value]').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const theme = toggle.getAttribute('data-bs-theme-value');
+                localStorage.setItem('theme', theme);
+                setTheme(theme);
+                showActiveTheme(theme);
+            });
+        });
+    })
+})();
