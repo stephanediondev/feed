@@ -37,7 +37,7 @@ class ConnectionManager extends AbstractManager
         return new Connection();
     }
 
-    public function persist(Connection $data): int
+    public function persist(Connection $data): ?int
     {
         if ($data->getDateCreated() == null) {
             $eventName = ConnectionEvent::CREATED;

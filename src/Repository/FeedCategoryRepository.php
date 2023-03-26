@@ -76,4 +76,22 @@ class FeedCategoryRepository extends AbstractRepository
 
         return $getQuery;
     }
+
+    public function persist(FeedCategory $feedCategory, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($feedCategory);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(FeedCategory $feedCategory, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($feedCategory);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

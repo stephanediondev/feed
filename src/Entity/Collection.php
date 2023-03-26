@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Collection
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: "feeds", type: "integer", nullable: false, options: ["unsigned" => true, "default" => 0])]
     private int $feeds = 0;
@@ -30,7 +30,7 @@ class Collection
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

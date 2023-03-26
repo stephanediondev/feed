@@ -54,7 +54,7 @@ class CollectionManager extends AbstractManager
         return $collection;
     }
 
-    public function persist(Collection $data): int
+    public function persist(Collection $data): ?int
     {
         if ($data->getDateCreated() === null) {
             $eventName = CollectionEvent::CREATED;

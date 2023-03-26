@@ -91,4 +91,22 @@ class ActionCategoryRepository extends AbstractRepository
         $getQuery = $query->getQuery();
         return $getQuery;
     }
+
+    public function persist(ActionCategory $actionCategory, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($actionCategory);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(ActionCategory $actionCategory, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($actionCategory);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

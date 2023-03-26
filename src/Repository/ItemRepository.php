@@ -129,4 +129,22 @@ class ItemRepository extends AbstractRepository
         $getQuery = $query->getQuery();
         return $getQuery;
     }
+
+    public function persist(Item $item, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($item);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Item $item, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($item);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

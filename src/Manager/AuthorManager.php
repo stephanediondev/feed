@@ -38,7 +38,7 @@ class AuthorManager extends AbstractManager
         return new Author();
     }
 
-    public function persist(Author $data): int
+    public function persist(Author $data): ?int
     {
         if ($data->getDateCreated() == null) {
             $eventName = AuthorEvent::CREATED;
@@ -47,8 +47,7 @@ class AuthorManager extends AbstractManager
             $eventName = AuthorEvent::UPDATED;
         }
 
-        $this->entityManager->persist($data);
-        $this->entityManager->flush();
+        $this->authorRepository->persist($data);
 
         $event = new AuthorEvent($data);
         $this->eventDispatcher->dispatch($event, $eventName);
@@ -63,8 +62,7 @@ class AuthorManager extends AbstractManager
         $event = new AuthorEvent($data);
         $this->eventDispatcher->dispatch($event, AuthorEvent::DELETED);
 
-        $this->entityManager->remove($data);
-        $this->entityManager->flush();
+        $this->authorRepository->remove($data);
 
         $this->clearCache();
     }

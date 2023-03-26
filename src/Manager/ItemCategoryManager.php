@@ -37,7 +37,7 @@ class ItemCategoryManager extends AbstractManager
         return new ItemCategory();
     }
 
-    public function persist(ItemCategory $data): int
+    public function persist(ItemCategory $data): ?int
     {
         if ($data->getId() == null) {
             $eventName = ItemCategoryEvent::CREATED;
@@ -45,8 +45,7 @@ class ItemCategoryManager extends AbstractManager
             $eventName = ItemCategoryEvent::UPDATED;
         }
 
-        $this->entityManager->persist($data);
-        $this->entityManager->flush();
+        $this->itemCategoryRepository->persist($data);
 
         $event = new ItemCategoryEvent($data);
         $this->eventDispatcher->dispatch($event, $eventName);
@@ -61,8 +60,7 @@ class ItemCategoryManager extends AbstractManager
         $event = new ItemCategoryEvent($data);
         $this->eventDispatcher->dispatch($event, ItemCategoryEvent::DELETED);
 
-        $this->entityManager->remove($data);
-        $this->entityManager->flush();
+        $this->itemCategoryRepository->remove($data);
 
         $this->clearCache();
     }

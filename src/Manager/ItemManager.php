@@ -39,7 +39,7 @@ class ItemManager extends AbstractManager
         return new Item();
     }
 
-    public function persist(Item $data): int
+    public function persist(Item $data): ?int
     {
         if ($data->getDateCreated() == null) {
             $eventName = ItemEvent::CREATED;
@@ -49,8 +49,7 @@ class ItemManager extends AbstractManager
         }
         $data->setDateModified(new \Datetime());
 
-        $this->entityManager->persist($data);
-        $this->entityManager->flush();
+        $this->itemRepository->persist($data);
 
         $event = new ItemEvent($data);
         $this->eventDispatcher->dispatch($event, $eventName);
@@ -65,8 +64,7 @@ class ItemManager extends AbstractManager
         $event = new ItemEvent($data);
         $this->eventDispatcher->dispatch($event, ItemEvent::DELETED);
 
-        $this->entityManager->remove($data);
-        $this->entityManager->flush();
+        $this->itemRepository->remove($data);
 
         $this->clearCache();
     }

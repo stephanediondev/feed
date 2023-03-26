@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Enclosure
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: "link", type: "string", length: 255, nullable: false)]
     private ?string $link = null;
@@ -38,7 +38,7 @@ class Enclosure
 
     private ?string $typeGroup = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

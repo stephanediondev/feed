@@ -91,4 +91,22 @@ class ActionAuthorRepository extends AbstractRepository
         $getQuery = $query->getQuery();
         return $getQuery;
     }
+
+    public function persist(ActionAuthor $actionAuthor, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($actionAuthor);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(ActionAuthor $actionAuthor, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($actionAuthor);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Feed
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: true)]
     private ?string $title = null;
@@ -43,7 +43,7 @@ class Feed
 
     private string $direction;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -43,7 +43,7 @@ class FeedManager extends AbstractManager
         return new Feed();
     }
 
-    public function persist(Feed $data): int
+    public function persist(Feed $data): ?int
     {
         if ($data->getDateCreated() == null) {
             $eventName = FeedEvent::CREATED;

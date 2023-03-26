@@ -108,4 +108,22 @@ SQL;
         $getQuery = $query->getQuery();
         return $getQuery;
     }
+
+    public function persist(Author $author, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($author);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Author $author, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($author);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

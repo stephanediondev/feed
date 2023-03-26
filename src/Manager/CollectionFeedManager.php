@@ -37,7 +37,7 @@ class CollectionFeedManager extends AbstractManager
         return new CollectionFeed();
     }
 
-    public function persist(CollectionFeed $data): int
+    public function persist(CollectionFeed $data): ?int
     {
         if ($data->getDateCreated() == null) {
             $eventName = CollectionFeedEvent::CREATED;
@@ -46,8 +46,7 @@ class CollectionFeedManager extends AbstractManager
             $eventName = CollectionFeedEvent::UPDATED;
         }
 
-        $this->entityManager->persist($data);
-        $this->entityManager->flush();
+        $this->collectionFeedRepository->persist($data);
 
         $event = new CollectionFeedEvent($data);
         $this->eventDispatcher->dispatch($event, $eventName);
@@ -62,8 +61,7 @@ class CollectionFeedManager extends AbstractManager
         $event = new CollectionFeedEvent($data);
         $this->eventDispatcher->dispatch($event, CollectionFeedEvent::DELETED);
 
-        $this->entityManager->remove($data);
-        $this->entityManager->flush();
+        $this->collectionFeedRepository->remove($data);
 
         $this->clearCache();
     }

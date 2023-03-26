@@ -108,4 +108,22 @@ SQL;
         $getQuery = $query->getQuery();
         return $getQuery;
     }
+
+    public function persist(Category $category, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($category);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Category $category, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($category);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

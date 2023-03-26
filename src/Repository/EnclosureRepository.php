@@ -56,4 +56,22 @@ class EnclosureRepository extends AbstractRepository
 
         return $getQuery;
     }
+
+    public function persist(Enclosure $enclosure, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($enclosure);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Enclosure $enclosure, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($enclosure);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

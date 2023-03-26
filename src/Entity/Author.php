@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Author
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: false)]
     private ?string $title = null;
@@ -19,7 +19,7 @@ class Author
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

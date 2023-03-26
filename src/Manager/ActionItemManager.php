@@ -37,7 +37,7 @@ class ActionItemManager extends AbstractManager
         return new ActionItem();
     }
 
-    public function persist(ActionItem $data): int
+    public function persist(ActionItem $data): ?int
     {
         if ($data->getDateCreated() == null) {
             $eventName = ActionItemEvent::CREATED;

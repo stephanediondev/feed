@@ -64,4 +64,22 @@ class CollectionFeedRepository extends AbstractRepository
         $getQuery = $query->getQuery();
         return $getQuery;
     }
+
+    public function persist(CollectionFeed $collectionFeed, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($collectionFeed);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(CollectionFeed $collectionFeed, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($collectionFeed);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

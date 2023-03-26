@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ItemCategory
 {
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Category", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
@@ -23,7 +23,7 @@ class ItemCategory
     #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Item $item = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

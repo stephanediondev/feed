@@ -38,7 +38,7 @@ class EnclosureManager extends AbstractManager
         return new Enclosure();
     }
 
-    public function persist(Enclosure $data): int
+    public function persist(Enclosure $data): ?int
     {
         if ($data->getDateCreated() == null) {
             $eventName = EnclosureEvent::CREATED;
@@ -47,8 +47,7 @@ class EnclosureManager extends AbstractManager
             $eventName = EnclosureEvent::UPDATED;
         }
 
-        $this->entityManager->persist($data);
-        $this->entityManager->flush();
+        $this->enclosureRepository->persist($data);
 
         $event = new EnclosureEvent($data);
         $this->eventDispatcher->dispatch($event, $eventName);
@@ -63,8 +62,7 @@ class EnclosureManager extends AbstractManager
         $event = new EnclosureEvent($data);
         $this->eventDispatcher->dispatch($event, EnclosureEvent::DELETED);
 
-        $this->entityManager->remove($data);
-        $this->entityManager->flush();
+        $this->enclosureRepository->remove($data);
 
         $this->clearCache();
     }

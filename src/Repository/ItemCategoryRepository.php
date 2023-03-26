@@ -76,4 +76,22 @@ class ItemCategoryRepository extends AbstractRepository
 
         return $getQuery;
     }
+
+    public function persist(ItemCategory $itemCategory, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($itemCategory);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(ItemCategory $itemCategory, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($itemCategory);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }
