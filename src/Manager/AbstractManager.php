@@ -175,7 +175,9 @@ abstract class AbstractManager
                                         $node->setAttribute('frameborder', '0');
                                         $node->removeAttribute('sandbox');
                                     } else {
-                                        $node->parentNode->removeChild($node);
+                                        if ($node->parentNode) {
+                                            $node->parentNode->removeChild($node);
+                                        }
                                     }
                                 }
 
@@ -203,7 +205,9 @@ abstract class AbstractManager
 
                                     if ($node->tagName == 'div') {
                                         if ($class == 'feedflare') {
-                                            $node->parentNode->removeChild($node);
+                                            if ($node->parentNode) {
+                                                $node->parentNode->removeChild($node);
+                                            }
                                         }
                                     }
 
@@ -224,7 +228,9 @@ abstract class AbstractManager
 
                                                     $nodeReplace->appendChild($img);
 
-                                                    $node->parentNode->replaceChild($nodeReplace, $node);
+                                                    if ($node->parentNode) {
+                                                        $node->parentNode->replaceChild($nodeReplace, $node);
+                                                    }
                                                     break;
                                                 }
                                             }

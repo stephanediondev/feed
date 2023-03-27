@@ -49,20 +49,22 @@ class PinboardSubscriber implements EventSubscriberInterface
         if ($connection = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $member])) {
             $item = $actionItem->getItem();
 
-            $url = 'https://api.pinboard.in/v1/posts/'.$method;
+            if ($item) {
+                $url = 'https://api.pinboard.in/v1/posts/'.$method;
 
-            $fields = [
-                'auth_token' => $connection->getToken(),
-                'url' => $item->getLink(),
-                'description' => $item->getTitle(),
-                'replace' => 'yes',
-            ];
+                $fields = [
+                    'auth_token' => $connection->getToken(),
+                    'url' => $item->getLink(),
+                    'description' => $item->getTitle(),
+                    'replace' => 'yes',
+                ];
 
-            $ci = curl_init();
-            curl_setopt($ci, CURLOPT_URL, $url.'?'.http_build_query($fields));
-            curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'GET');
-            curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
-            curl_exec($ci);
+                $ci = curl_init();
+                curl_setopt($ci, CURLOPT_URL, $url.'?'.http_build_query($fields));
+                curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'GET');
+                curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
+                curl_exec($ci);
+            }
         }
     }
 }

@@ -43,8 +43,6 @@ class Feed
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
 
-    private string $direction;
-
     /**
      * @var Collection<int, FeedCategory> $categories
      */
@@ -269,13 +267,13 @@ class Feed
 
     public function getDirection(): string
     {
-        $this->direction = 'ltr';
+        $direction = 'ltr';
 
         if ($this->getLanguage() == 'ar' || $this->getLanguage() == 'he') {
-            $this->direction = 'rtl';
+            $direction = 'rtl';
         }
 
-        return $this->direction;
+        return $direction;
     }
 
     public function isLinkSecure(): bool

@@ -36,8 +36,6 @@ class Enclosure
     #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id", onDelete: "cascade", nullable: true)]
     private ?Item $item = null;
 
-    private ?string $typeGroup = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -129,14 +127,12 @@ class Enclosure
 
     public function getTypeGroup(): ?string
     {
-        $this->typeGroup = null;
-
-        if (strstr($this->getType(), '/')) {
+        if ($this->getType() && strstr($this->getType(), '/')) {
             $parts = explode('/', $this->getType());
-            $this->typeGroup = $parts[0];
+            return $parts[0];
         }
 
-        return $this->typeGroup;
+        return null;
     }
 
     public function isLinkSecure(): bool
