@@ -4,7 +4,6 @@ namespace App\Tests\Manager;
 
 use App\Entity\Action;
 use App\Manager\ActionManager;
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ActionManagerTest extends KernelTestCase
@@ -18,7 +17,7 @@ class ActionManagerTest extends KernelTestCase
         $this->actionManager = static::getContainer()->get('App\Manager\ActionManager');
     }
 
-    public function testId()
+    public function testId(): void
     {
         $title = 'test-'.uniqid('', true);
         $action = $this->actionManager->init();
@@ -36,7 +35,7 @@ class ActionManagerTest extends KernelTestCase
         $this->assertNull($test);
     }
 
-    public function testTitle()
+    public function testTitle(): void
     {
         $title = 'test-'.uniqid('', true);
         $action = $this->actionManager->init();

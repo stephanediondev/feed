@@ -1,34 +1,34 @@
 <script type="text/template" id="view-login">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="login">
+    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="login">
         <form action="#items/unread" data-query="/login" method="POST">
             <div class="mdl-card__supporting-text">
                 <p>
-                    <label for="email" class="required">{{trans 'email'}}</label>
-                    <input type="email" id="email" name="email" required="required" value="" autocomplete="email">
+                    <label for="email" class="form-label required">{{trans 'email'}}</label>
+                    <input type="email" class="form-control form-control-lg" id="email" name="email" autocomplete="email" required autofocus>
                 </p>
                 <p>
-                    <label for="password" class="required">{{trans 'password'}}</label>
-                    <input type="password" id="password" name="password" required="required" value="" autocomplete="current-password">
+                    <label for="password" class="form-label required">{{trans 'password'}}</label>
+                    <input type="password" class="form-control form-control-lg" id="password" name="password" autocomplete="current-password" required>
                 </p>
                 <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'login'}}</button>
+                    <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'login'}}</button>
                 </p>
             </div>
-            <div class="mdl-card__actions mdl-card--border">
-                <a href="#forgotpassword" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'forgotpassword'}}</a>
+            <div class="mdl-card__actions text-end mt-3 mdl-card--border">
+                <a href="#forgotpassword" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'forgotpassword'}}</a>
             </div>
         </form>
     </div>
 </script>
 
 <script type="text/template" id="view-profile">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="profile">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
+    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="profile">
+        <div class="mdl-card__title mb-3">
+            <h1 class="mdl-card__title-text fs-5">
                 {{ entry.email }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__supporting-text">
@@ -39,65 +39,65 @@
             </p>
             {{/if}}
         </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'profile'}}</a>
-            <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
+        <div class="mdl-card__actions text-end mt-3 mdl-card--border">
+            <a href="#profile" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'profile'}}</a>
+            <a href="#profile/connections" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'connections'}}</a>
         </div>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone online" id="profile-update">
+    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative online" id="profile-update">
         <form action="#profile" data-query="/profile/update" method="PUT">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
+            <div class="mdl-card__title mb-3">
+                <h1 class="mdl-card__title-text fs-5">
                     {{trans 'profile'}}
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
-                    <label for="email" class="required">{{trans 'email'}}</label>
-                    <input type="email" id="email" name="email" required="required" value="{{ entry.email }}" autocomplete="email">
+                    <label for="email" class="form-label required">{{trans 'email'}}</label>
+                    <input type="email" class="form-control" id="email" name="email" required="required" value="{{ entry.email }}" autocomplete="email">
                 </p>
                 <p>
-                    <label for="password">{{trans 'password'}}</label>
-                    <input type="password" id="password" name="password" value="" autocomplete="new-password">
+                    <label for="password" class="form-label">{{trans 'password'}}</label>
+                    <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password">
                 </p>
                 <p>
-                    <label for="passwordConfirm">{{trans 'password_confirm'}}</label>
-                    <input type="password" id="passwordConfirm" name="passwordConfirm" value="" autocomplete="new-password">
+                    <label for="passwordConfirm" class="form-label">{{trans 'password_confirm'}}</label>
+                    <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" value="" autocomplete="new-password">
                 </p>
                 <p>
-                    <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
+                    <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'update'}}</button>
                 </p>
             </div>
         </form>
     </div>
 
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone online" id="profile-pinboard">
+    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative online" id="profile-pinboard">
         <form action="#profile" data-query="/pinboard" method="POST">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
+            <div class="mdl-card__title mb-3">
+                <h1 class="mdl-card__title-text fs-5">
                     Pinboard
                 </h1>
             </div>
             <div class="mdl-card__supporting-text">
                 <p>Go to your <a href="https://pinboard.in/settings/password" target="_blank">settings page</a> on Pinboard to get your API Token.</p>
                 <p>
-                    <label for="token" class="required">{{trans 'token'}}</label>
-                    <input type="text" id="token" name="token" required="required" value="{{#if pinboard }}{{ pinboard.token }}{{/if}}">
+                    <label for="token" class="form-label required">{{trans 'token'}}</label>
+                    <input type="text" class="form-control" id="token" name="token" required="required" value="{{#if pinboard }}{{ pinboard.token }}{{/if}}">
                 </p>
                 <p>
                     {{#if pinboard }}
-                        <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'update'}}</button>
+                        <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'update'}}</button>
                     {{else}}
-                        <button type="submit" class="mdl-button mdl-color--pink mdl-color-text--white">{{trans 'add'}}</button>
+                        <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'add'}}</button>
                     {{/if}}
                 </p>
             </div>
         </form>
         {{#if pinboard }}
-            <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-card__actions text-end mt-3 mdl-card--border">
                 <form action="#profile" data-query="/connection/{{ pinboard.id }}" method="DELETE">
-                    <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</button>
+                    <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'delete'}}</button>
                 </form>
             </div>
         {{/if}}
@@ -105,30 +105,30 @@
 </script>
 
 <script type="text/template" id="view-profile-connections">
-    <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col" id="profile-connections">
-        <div class="mdl-card__title">
-            <h1 class="mdl-card__title-text">
+    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="profile-connections">
+        <div class="mdl-card__title mb-3">
+            <h1 class="mdl-card__title-text fs-5">
                 {{ entry.email }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.date_created }}"></span></span>
             </div>
         </div>
-        <div class="mdl-card__actions mdl-card--border">
-            <a href="#profile" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'profile'}}</a>
-            <a href="#profile/connections" class="load-route mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'connections'}}</a>
+        <div class="mdl-card__actions text-end mt-3 mdl-card--border">
+            <a href="#profile" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'profile'}}</a>
+            <a href="#profile/connections" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'connections'}}</a>
         </div>
     </div>
 
     {{#each entries as |connection connection_index|}}
-        <div class="mdl-card mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="connection-{{ connection.id }}">
-            <div class="mdl-card__title">
-                <h1 class="mdl-card__title-text">
+        <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="connection-{{ connection.id }}">
+            <div class="mdl-card__title mb-3">
+                <h1 class="mdl-card__title-text fs-5">
                     {{ connection.type }}
                 </h1>
                 <div class="mdl-card__subtitle-text">
-                    <span class="mdl-navigation__link"><i class="material-icons">access_time</i><span class="timeago" data-date="{{ connection.date_modified }}"></span></span>
-                    <span class="mdl-navigation__link"><i class="material-icons md-16">settings_ethernet</i>{{#if connection.currentIp }}<strong>{{ connection.ip }}</strong>{{else}}{{ connection.ip }}{{/if}}</span>
+                    <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ connection.date_modified }}"></span></span>
+                    <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-wifi"></i> {{#if connection.currentIp }}<strong>{{ connection.ip }}</strong>{{else}}{{ connection.ip }}{{/if}}</span>
                 </div>
             </div>
             <div class="mdl-card__supporting-text">
@@ -140,9 +140,9 @@
                     {{/if}}
                 </p>
             </div>
-            <div class="mdl-card__actions mdl-card--border online">
+            <div class="mdl-card__actions text-end mt-3 mdl-card--border online">
                 <form action="#profile/connections" data-query="/connection/{{ connection.id }}" method="DELETE">
-                    <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">{{trans 'delete'}}</button>
+                    <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'delete'}}</button>
                 </form>
             </div>
         </div>

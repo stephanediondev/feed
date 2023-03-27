@@ -4,7 +4,6 @@ namespace App\Tests\Manager;
 
 use App\Entity\Member;
 use App\Manager\MemberManager;
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class MemberManagerTest extends KernelTestCase
@@ -18,7 +17,7 @@ class MemberManagerTest extends KernelTestCase
         $this->memberManager = static::getContainer()->get('App\Manager\MemberManager');
     }
 
-    public function test()
+    public function test(): void
     {
         $member = $this->memberManager->init();
         $member->setEmail('test-'.uniqid('', true));

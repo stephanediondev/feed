@@ -4,7 +4,6 @@ namespace App\Tests\Manager;
 
 use App\Entity\Author;
 use App\Manager\AuthorManager;
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class AuthorManagerTest extends KernelTestCase
@@ -18,7 +17,7 @@ class AuthorManagerTest extends KernelTestCase
         $this->authorManager = static::getContainer()->get('App\Manager\AuthorManager');
     }
 
-    public function testId()
+    public function testId(): void
     {
         $title = 'test-'.uniqid('', true);
         $author = $this->authorManager->init();
@@ -36,7 +35,7 @@ class AuthorManagerTest extends KernelTestCase
         $this->assertNull($test);
     }
 
-    public function testTitle()
+    public function testTitle(): void
     {
         $title = 'test-'.uniqid('', true);
         $author = $this->authorManager->init();

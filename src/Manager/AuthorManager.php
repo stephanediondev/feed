@@ -11,9 +11,8 @@ class AuthorManager extends AbstractManager
 {
     private AuthorRepository $authorRepository;
 
-    public function __construct(
-        AuthorRepository $authorRepository
-    ) {
+    public function __construct(AuthorRepository $authorRepository)
+    {
         $this->authorRepository = $authorRepository;
     }
 
@@ -38,31 +37,31 @@ class AuthorManager extends AbstractManager
         return new Author();
     }
 
-    public function persist(Author $data): ?int
+    public function persist(Author $author): ?int
     {
-        if ($data->getDateCreated() == null) {
+        if ($author->getDateCreated() == null) {
             $eventName = AuthorEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $author->setDateCreated(new \Datetime());
         } else {
             $eventName = AuthorEvent::UPDATED;
         }
 
-        $this->authorRepository->persist($data);
+        $this->authorRepository->persist($author);
 
-        $event = new AuthorEvent($data);
+        $event = new AuthorEvent($author);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $author->getId();
     }
 
-    public function remove(Author $data): void
+    public function remove(Author $author): void
     {
-        $event = new AuthorEvent($data);
+        $event = new AuthorEvent($author);
         $this->eventDispatcher->dispatch($event, AuthorEvent::DELETED);
 
-        $this->authorRepository->remove($data);
+        $this->authorRepository->remove($author);
 
         $this->clearCache();
     }

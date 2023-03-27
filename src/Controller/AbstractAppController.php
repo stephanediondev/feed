@@ -46,7 +46,6 @@ abstract class AbstractAppController extends AbstractController
                 if ($connection = $this->connectionManager->getOne(['type' => $type, 'token' => $token])) {
                     return $connection->getMember();
                 }
-
             } catch (\Exception $e) {
             }
         }

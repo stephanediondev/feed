@@ -37,31 +37,31 @@ class ActionFeedManager extends AbstractManager
         return new ActionFeed();
     }
 
-    public function persist(ActionFeed $data): ?int
+    public function persist(ActionFeed $actionFeed): ?int
     {
-        if ($data->getDateCreated() == null) {
+        if ($actionFeed->getDateCreated() == null) {
             $eventName = ActionFeedEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $actionFeed->setDateCreated(new \Datetime());
         } else {
             $eventName = ActionFeedEvent::UPDATED;
         }
 
-        $this->actionFeedRepository->persist($data);
+        $this->actionFeedRepository->persist($actionFeed);
 
-        $event = new ActionFeedEvent($data);
+        $event = new ActionFeedEvent($actionFeed);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $actionFeed->getId();
     }
 
-    public function remove(ActionFeed $data): void
+    public function remove(ActionFeed $actionFeed): void
     {
-        $event = new ActionFeedEvent($data);
+        $event = new ActionFeedEvent($actionFeed);
         $this->eventDispatcher->dispatch($event, ActionFeedEvent::DELETED);
 
-        $this->actionFeedRepository->remove($data);
+        $this->actionFeedRepository->remove($actionFeed);
 
         $this->clearCache();
     }

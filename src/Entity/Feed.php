@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FeedRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FeedRepository::class)]
@@ -41,7 +43,30 @@ class Feed
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
 
-    private string $direction;
+    /**
+     * @var Collection<int, FeedCategory> $categories
+     */
+    #[ORM\OneToMany(targetEntity: "App\Entity\FeedCategory", mappedBy: "feed", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
+    private Collection $categories;
+
+    /**
+     * @var Collection<int, CollectionFeed> $collections
+     */
+    #[ORM\OneToMany(targetEntity: "App\Entity\CollectionFeed", mappedBy: "feed", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
+    private Collection $collections;
+
+    /**
+     * @var Collection<int, ActionFeed> $actions
+     */
+    #[ORM\OneToMany(targetEntity: "App\Entity\ActionFeed", mappedBy: "feed", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
+    private Collection $actions;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+        $this->collections = new ArrayCollection();
+        $this->actions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -156,15 +181,99 @@ class Feed
         return $this;
     }
 
+    /**
+     * @return Collection<int, FeedCategory>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+    public function addCategory(FeedCategory $feedCategory): self
+    {
+        if (false === $this->hasCategory($feedCategory)) {
+            $this->categories->add($feedCategory);
+            $feedCategory->setFeed($this);
+        }
+        return $this;
+    }
+    public function removeCategory(FeedCategory $feedCategory): self
+    {
+        if (true === $this->hasCategory($feedCategory)) {
+            $this->categories->removeElement($feedCategory);
+            $feedCategory->setFeed(null);
+        }
+        return $this;
+    }
+    public function hasCategory(FeedCategory $feedCategory): bool
+    {
+        return $this->categories->contains($feedCategory);
+    }
+
+    /**
+     * @return Collection<int, CollectionFeed>
+     */
+    public function getCollections(): Collection
+    {
+        return $this->collections;
+    }
+    public function addCollection(CollectionFeed $collecionFeed): self
+    {
+        if (false === $this->hasCollection($collecionFeed)) {
+            $this->collections->add($collecionFeed);
+            $collecionFeed->setFeed($this);
+        }
+        return $this;
+    }
+    public function removeCollection(CollectionFeed $collecionFeed): self
+    {
+        if (true === $this->hasCollection($collecionFeed)) {
+            $this->collections->removeElement($collecionFeed);
+            $collecionFeed->setFeed(null);
+        }
+        return $this;
+    }
+    public function hasCollection(CollectionFeed $collecionFeed): bool
+    {
+        return $this->collections->contains($collecionFeed);
+    }
+
+    /**
+     * @return Collection<int, ActionFeed>
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+    public function addAction(ActionFeed $action): self
+    {
+        if (false === $this->hasAction($action)) {
+            $this->actions->add($action);
+            $action->setFeed($this);
+        }
+        return $this;
+    }
+    public function removeAction(ActionFeed $action): self
+    {
+        if (true === $this->hasAction($action)) {
+            $this->actions->removeElement($action);
+            $action->setFeed(null);
+        }
+        return $this;
+    }
+    public function hasAction(ActionFeed $action): bool
+    {
+        return $this->actions->contains($action);
+    }
+
     public function getDirection(): string
     {
-        $this->direction = 'ltr';
+        $direction = 'ltr';
 
         if ($this->getLanguage() == 'ar' || $this->getLanguage() == 'he') {
-            $this->direction = 'rtl';
+            $direction = 'rtl';
         }
 
-        return $this->direction;
+        return $direction;
     }
 
     public function isLinkSecure(): bool

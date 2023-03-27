@@ -360,7 +360,7 @@ class FeedController extends AbstractAppController
         $data['entry'] = $feed->toArray();
         $data['entry_entity'] = 'feed';
 
-        if ($case == 'subscribe') {
+        if ($case == 'subscribe' && $memberConnected->getId()) {
             $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
         }
 

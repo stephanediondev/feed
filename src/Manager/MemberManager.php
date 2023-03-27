@@ -37,32 +37,32 @@ class MemberManager extends AbstractManager
         return new Member();
     }
 
-    public function persist(Member $data): ?int
+    public function persist(Member $member): ?int
     {
-        if ($data->getDateCreated() == null) {
+        if ($member->getDateCreated() == null) {
             $eventName = MemberEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $member->setDateCreated(new \Datetime());
         } else {
             $eventName = MemberEvent::UPDATED;
         }
-        $data->setDateModified(new \Datetime());
+        $member->setDateModified(new \Datetime());
 
-        $this->memberRepository->persist($data);
+        $this->memberRepository->persist($member);
 
-        $event = new MemberEvent($data);
+        $event = new MemberEvent($member);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $member->getId();
     }
 
-    public function remove(Member $data): void
+    public function remove(Member $member): void
     {
-        $event = new MemberEvent($data);
+        $event = new MemberEvent($member);
         $this->eventDispatcher->dispatch($event, MemberEvent::DELETED);
 
-        $this->memberRepository->remove($data);
+        $this->memberRepository->remove($member);
 
         $this->clearCache();
     }

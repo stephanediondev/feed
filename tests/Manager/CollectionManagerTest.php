@@ -4,7 +4,6 @@ namespace App\Tests\Manager;
 
 use App\Entity\Collection;
 use App\Manager\CollectionManager;
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CollectionManagerTest extends KernelTestCase
@@ -18,7 +17,7 @@ class CollectionManagerTest extends KernelTestCase
         $this->collectionManager = static::getContainer()->get('App\Manager\CollectionManager');
     }
 
-    public function test()
+    public function test(): void
     {
         $collection = $this->collectionManager->init();
 

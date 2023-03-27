@@ -128,7 +128,9 @@ abstract class AbstractManager
             try {
                 libxml_use_internal_errors(true);
 
-                $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
+                if ($iconv = iconv('UTF-8', 'ISO-8859-1', htmlentities($content, ENT_COMPAT, 'UTF-8'))) {
+                    $content = htmlspecialchars_decode($iconv, ENT_QUOTES);
+                }
 
                 if ($content && is_string($content)) {
                     $dom = new \DOMDocument();
@@ -159,6 +161,8 @@ abstract class AbstractManager
                     if ($nodes) {
                         foreach ($nodes as $node) {
                             if ($node instanceof \DOMElement) {
+                                $node->setAttribute('loading', 'lazy');
+
                                 $src = $node->getAttribute('src');
 
                                 if ($node->tagName == 'iframe') {
@@ -171,7 +175,9 @@ abstract class AbstractManager
                                         $node->setAttribute('frameborder', '0');
                                         $node->removeAttribute('sandbox');
                                     } else {
-                                        $node->parentNode->removeChild($node);
+                                        if ($node->parentNode) {
+                                            $node->parentNode->removeChild($node);
+                                        }
                                     }
                                 }
 
@@ -199,7 +205,9 @@ abstract class AbstractManager
 
                                     if ($node->tagName == 'div') {
                                         if ($class == 'feedflare') {
-                                            $node->parentNode->removeChild($node);
+                                            if ($node->parentNode) {
+                                                $node->parentNode->removeChild($node);
+                                            }
                                         }
                                     }
 
@@ -220,7 +228,9 @@ abstract class AbstractManager
 
                                                     $nodeReplace->appendChild($img);
 
-                                                    $node->parentNode->replaceChild($nodeReplace, $node);
+                                                    if ($node->parentNode) {
+                                                        $node->parentNode->replaceChild($nodeReplace, $node);
+                                                    }
                                                     break;
                                                 }
                                             }

@@ -38,6 +38,9 @@
 
     "share": "Partager",
 
+    "import": "Importer",
+    "export": "Exporter",
+
     "import_opml": "Import OPML",
     "export_opml": "Export OPML",
     "your_subscriptions": "vos abonnements",
@@ -51,7 +54,6 @@
 
     "email": "Email",
     "password": "Mot de passe",
-    "title": "Titre",
     "link": "Lien",
     "website": "Site web",
     "description": "Description",
@@ -60,6 +62,10 @@
     "author": "Auteur",
     "category": "Catégorie",
     "feed": "Flux",
+
+    "field": {
+        "title": "Titre"
+    },
 
     "title": {
         "feeds": "Flux",

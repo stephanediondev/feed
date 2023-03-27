@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AuthorRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
@@ -18,6 +20,17 @@ class Author
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
+
+    /**
+     * @var Collection<int, ActionAuthor> $actions
+     */
+    #[ORM\OneToMany(targetEntity: "App\Entity\ActionAuthor", mappedBy: "author", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
+    private Collection $actions;
+
+    public function __construct()
+    {
+        $this->actions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -46,6 +59,34 @@ class Author
         $this->dateCreated = $dateCreated;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, ActionAuthor>
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+    public function addAction(ActionAuthor $action): self
+    {
+        if (false === $this->hasAction($action)) {
+            $this->actions->add($action);
+            $action->setAuthor($this);
+        }
+        return $this;
+    }
+    public function removeAction(ActionAuthor $action): self
+    {
+        if (true === $this->hasAction($action)) {
+            $this->actions->removeElement($action);
+            $action->setAuthor(null);
+        }
+        return $this;
+    }
+    public function hasAction(ActionAuthor $action): bool
+    {
+        return $this->actions->contains($action);
     }
 
     /**

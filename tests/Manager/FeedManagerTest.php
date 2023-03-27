@@ -4,7 +4,6 @@ namespace App\Tests\Manager;
 
 use App\Entity\Feed;
 use App\Manager\FeedManager;
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FeedManagerTest extends KernelTestCase
@@ -18,7 +17,7 @@ class FeedManagerTest extends KernelTestCase
         $this->feedManager = static::getContainer()->get('App\Manager\FeedManager');
     }
 
-    public function test()
+    public function test(): void
     {
         $feed = $this->feedManager->init();
         $feed->setTitle('test-'.uniqid('', true));

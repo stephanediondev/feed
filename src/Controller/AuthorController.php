@@ -7,6 +7,7 @@ use App\Form\Type\AuthorType;
 use App\Manager\ActionAuthorManager;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
+use App\Manager\FeedManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,12 +18,14 @@ class AuthorController extends AbstractAppController
     private ActionManager $actionManager;
     private ActionAuthorManager $actionAuthorManager;
     private AuthorManager $authorManager;
+    private FeedManager $feedManager;
 
-    public function __construct(ActionManager $actionManager, ActionAuthorManager $actionAuthorManager, AuthorManager $authorManager)
+    public function __construct(ActionManager $actionManager, ActionAuthorManager $actionAuthorManager, AuthorManager $authorManager, FeedManager $feedManager)
     {
         $this->actionManager = $actionManager;
         $this->actionAuthorManager = $actionAuthorManager;
         $this->authorManager = $authorManager;
+        $this->feedManager = $feedManager;
     }
 
     #[Route(path: '/authors', name: 'index', methods: ['GET'])]
@@ -70,7 +73,7 @@ class AuthorController extends AbstractAppController
 
             if ($request->query->get('feed')) {
                 $parameters['feed'] = (int) $request->query->get('feed');
-                $data['entry'] = $this->authorManager->getOne(['id' => (int) $request->query->get('feed')])->toArray();
+                $data['entry'] = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])->toArray();
                 $data['entry_entity'] = 'feed';
             }
 

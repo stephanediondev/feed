@@ -20,29 +20,29 @@ class ActionCategoryRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('act_cat_mbr', 'act', 'cat', 'mbr');
-        $query->from(ActionCategory::class, 'act_cat_mbr');
-        $query->leftJoin('act_cat_mbr.action', 'act');
-        $query->leftJoin('act_cat_mbr.category', 'cat');
-        $query->leftJoin('act_cat_mbr.member', 'mbr');
+        $query->addSelect('act_cat', 'act', 'cat', 'mbr');
+        $query->from(ActionCategory::class, 'act_cat');
+        $query->leftJoin('act_cat.action', 'act');
+        $query->leftJoin('act_cat.category', 'cat');
+        $query->leftJoin('act_cat.member', 'mbr');
 
         if (isset($parameters['id']) == 1) {
-            $query->andWhere('act_cat_mbr.id = :id');
+            $query->andWhere('act_cat.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
         if (isset($parameters['action']) == 1) {
-            $query->andWhere('act_cat_mbr.action = :action');
+            $query->andWhere('act_cat.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
         if (isset($parameters['category']) == 1) {
-            $query->andWhere('act_cat_mbr.category = :category');
+            $query->andWhere('act_cat.category = :category');
             $query->setParameter(':category', $parameters['category']);
         }
 
         if (isset($parameters['member']) == 1) {
-            $query->andWhere('act_cat_mbr.member = :member');
+            $query->andWhere('act_cat.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 
@@ -60,33 +60,33 @@ class ActionCategoryRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('act_cat_mbr', 'act', 'cat', 'mbr');
-        $query->from(ActionCategory::class, 'act_cat_mbr');
-        $query->leftJoin('act_cat_mbr.action', 'act');
-        $query->leftJoin('act_cat_mbr.category', 'cat');
-        $query->leftJoin('act_cat_mbr.member', 'mbr');
+        $query->addSelect('act_cat', 'act', 'cat', 'mbr');
+        $query->from(ActionCategory::class, 'act_cat');
+        $query->leftJoin('act_cat.action', 'act');
+        $query->leftJoin('act_cat.category', 'cat');
+        $query->leftJoin('act_cat.member', 'mbr');
 
         if (isset($parameters['action']) == 1) {
-            $query->andWhere('act_cat_mbr.action = :action');
+            $query->andWhere('act_cat.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
         if (isset($parameters['category']) == 1) {
-            $query->andWhere('act_cat_mbr.category = :category');
+            $query->andWhere('act_cat.category = :category');
             $query->setParameter(':category', $parameters['category']);
         }
 
         if (isset($parameters['categories']) == 1) {
-            $query->andWhere('act_cat_mbr.category IN (:categories)');
+            $query->andWhere('act_cat.category IN (:categories)');
             $query->setParameter(':categories', $parameters['categories']);
         }
 
         if (isset($parameters['member']) == 1) {
-            $query->andWhere('act_cat_mbr.member = :member');
+            $query->andWhere('act_cat.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 
-        $query->groupBy('act_cat_mbr.id');
+        $query->groupBy('act_cat.id');
 
         $getQuery = $query->getQuery();
         return $getQuery;
