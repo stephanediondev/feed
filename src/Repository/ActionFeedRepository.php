@@ -20,29 +20,29 @@ class ActionFeedRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('act_fed_mbr', 'act', 'fed', 'mbr');
-        $query->from(ActionFeed::class, 'act_fed_mbr');
-        $query->leftJoin('act_fed_mbr.action', 'act');
-        $query->leftJoin('act_fed_mbr.feed', 'fed');
-        $query->leftJoin('act_fed_mbr.member', 'mbr');
+        $query->addSelect('act_fed', 'act', 'fed', 'mbr');
+        $query->from(ActionFeed::class, 'act_fed');
+        $query->leftJoin('act_fed.action', 'act');
+        $query->leftJoin('act_fed.feed', 'fed');
+        $query->leftJoin('act_fed.member', 'mbr');
 
         if (isset($parameters['id']) == 1) {
-            $query->andWhere('act_fed_mbr.id = :id');
+            $query->andWhere('act_fed.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
         if (isset($parameters['action']) == 1) {
-            $query->andWhere('act_fed_mbr.action = :action');
+            $query->andWhere('act_fed.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
         if (isset($parameters['feed']) == 1) {
-            $query->andWhere('act_fed_mbr.feed = :feed');
+            $query->andWhere('act_fed.feed = :feed');
             $query->setParameter(':feed', $parameters['feed']);
         }
 
         if (isset($parameters['member']) == 1) {
-            $query->andWhere('act_fed_mbr.member = :member');
+            $query->andWhere('act_fed.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 
@@ -60,33 +60,33 @@ class ActionFeedRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('act_fed_mbr', 'act', 'fed', 'mbr');
-        $query->from(ActionFeed::class, 'act_fed_mbr');
-        $query->leftJoin('act_fed_mbr.action', 'act');
-        $query->leftJoin('act_fed_mbr.feed', 'fed');
-        $query->leftJoin('act_fed_mbr.member', 'mbr');
+        $query->addSelect('act_fed', 'act', 'fed', 'mbr');
+        $query->from(ActionFeed::class, 'act_fed');
+        $query->leftJoin('act_fed.action', 'act');
+        $query->leftJoin('act_fed.feed', 'fed');
+        $query->leftJoin('act_fed.member', 'mbr');
 
         if (isset($parameters['action']) == 1) {
-            $query->andWhere('act_fed_mbr.action = :action');
+            $query->andWhere('act_fed.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
         if (isset($parameters['feed']) == 1) {
-            $query->andWhere('act_fed_mbr.feed = :feed');
+            $query->andWhere('act_fed.feed = :feed');
             $query->setParameter(':feed', $parameters['feed']);
         }
 
         if (isset($parameters['feeds']) == 1) {
-            $query->andWhere('act_fed_mbr.feed IN (:feeds)');
+            $query->andWhere('act_fed.feed IN (:feeds)');
             $query->setParameter(':feeds', $parameters['feeds']);
         }
 
         if (isset($parameters['member']) == 1) {
-            $query->andWhere('act_fed_mbr.member = :member');
+            $query->andWhere('act_fed.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 
-        $query->groupBy('act_fed_mbr.id');
+        $query->groupBy('act_fed.id');
 
         $getQuery = $query->getQuery();
         return $getQuery;

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -18,6 +20,17 @@ class Category
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
+
+    /**
+     * @var Collection<int, ActionCategory> $actions
+     */
+    #[ORM\OneToMany(targetEntity: "App\Entity\ActionCategory", mappedBy: "category", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
+    private Collection $actions;
+
+    public function __construct()
+    {
+        $this->actions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -46,6 +59,34 @@ class Category
         $this->dateCreated = $dateCreated;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, ActionCategory>
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+    public function addAction(ActionCategory $action): self
+    {
+        if (false === $this->hasAction($action)) {
+            $this->actions->add($action);
+            $action->setCategory($this);
+        }
+        return $this;
+    }
+    public function removeAction(ActionCategory $action): self
+    {
+        if (true === $this->hasAction($action)) {
+            $this->actions->removeElement($action);
+            $action->setCategory(null);
+        }
+        return $this;
+    }
+    public function hasAction(ActionCategory $action): bool
+    {
+        return $this->actions->contains($action);
     }
 
     /**

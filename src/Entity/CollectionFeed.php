@@ -22,7 +22,7 @@ class CollectionFeed
     #[ORM\JoinColumn(name: "collection_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Collection $collection = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "", fetch: "LAZY")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "collections", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Feed $feed = null;
 

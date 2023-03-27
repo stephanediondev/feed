@@ -20,29 +20,29 @@ class ActionItemRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('act_itm_mbr', 'act', 'itm', 'mbr');
-        $query->from(ActionItem::class, 'act_itm_mbr');
-        $query->leftJoin('act_itm_mbr.action', 'act');
-        $query->leftJoin('act_itm_mbr.item', 'itm');
-        $query->leftJoin('act_itm_mbr.member', 'mbr');
+        $query->addSelect('act_itm', 'act', 'itm', 'mbr');
+        $query->from(ActionItem::class, 'act_itm');
+        $query->leftJoin('act_itm.action', 'act');
+        $query->leftJoin('act_itm.item', 'itm');
+        $query->leftJoin('act_itm.member', 'mbr');
 
         if (isset($parameters['id']) == 1) {
-            $query->andWhere('act_itm_mbr.id = :id');
+            $query->andWhere('act_itm.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
         if (isset($parameters['action']) == 1) {
-            $query->andWhere('act_itm_mbr.action = :action');
+            $query->andWhere('act_itm.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
         if (isset($parameters['item']) == 1) {
-            $query->andWhere('act_itm_mbr.item = :item');
+            $query->andWhere('act_itm.item = :item');
             $query->setParameter(':item', $parameters['item']);
         }
 
         if (isset($parameters['member']) == 1) {
-            $query->andWhere('act_itm_mbr.member = :member');
+            $query->andWhere('act_itm.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 
@@ -60,33 +60,33 @@ class ActionItemRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('act_itm_mbr', 'act', 'itm', 'mbr');
-        $query->from(ActionItem::class, 'act_itm_mbr');
-        $query->leftJoin('act_itm_mbr.action', 'act');
-        $query->leftJoin('act_itm_mbr.item', 'itm');
-        $query->leftJoin('act_itm_mbr.member', 'mbr');
+        $query->addSelect('act_itm', 'act', 'itm', 'mbr');
+        $query->from(ActionItem::class, 'act_itm');
+        $query->leftJoin('act_itm.action', 'act');
+        $query->leftJoin('act_itm.item', 'itm');
+        $query->leftJoin('act_itm.member', 'mbr');
 
         if (isset($parameters['action']) == 1) {
-            $query->andWhere('act_itm_mbr.action = :action');
+            $query->andWhere('act_itm.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
         if (isset($parameters['item']) == 1) {
-            $query->andWhere('act_itm_mbr.item = :item');
+            $query->andWhere('act_itm.item = :item');
             $query->setParameter(':item', $parameters['item']);
         }
 
         if (isset($parameters['items']) == 1) {
-            $query->andWhere('act_itm_mbr.item IN (:items)');
+            $query->andWhere('act_itm.item IN (:items)');
             $query->setParameter(':items', $parameters['items']);
         }
 
         if (isset($parameters['member']) == 1) {
-            $query->andWhere('act_itm_mbr.member = :member');
+            $query->andWhere('act_itm.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 
-        $query->groupBy('act_itm_mbr.id');
+        $query->groupBy('act_itm.id');
 
         $getQuery = $query->getQuery();
         return $getQuery;

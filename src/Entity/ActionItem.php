@@ -18,7 +18,7 @@ class ActionItem
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Item", inversedBy: "", fetch: "LAZY")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Item", inversedBy: "actions", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Item $item = null;
 

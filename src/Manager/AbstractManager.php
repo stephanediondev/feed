@@ -128,7 +128,9 @@ abstract class AbstractManager
             try {
                 libxml_use_internal_errors(true);
 
-                $content = htmlspecialchars_decode(iconv('UTF-8', 'ISO-8859-1', htmlentities($content, ENT_COMPAT, 'UTF-8')), ENT_QUOTES);
+                if ($iconv = iconv('UTF-8', 'ISO-8859-1', htmlentities($content, ENT_COMPAT, 'UTF-8'))) {
+                    $content = htmlspecialchars_decode($iconv, ENT_QUOTES);
+                }
 
                 if ($content && is_string($content)) {
                     $dom = new \DOMDocument();

@@ -48,16 +48,7 @@ class ItemRepository extends AbstractRepository
 
         $query = $em->createQueryBuilder();
         $query->addSelect('itm.id');
-
-        if (isset($parameters['member']) == 1 && $parameters['member'] && isset($parameters['unread']) == 1 && $parameters['unread']) {
-            $query->from(ActionItem::class, 'act_itm_mbr');
-            $query->leftJoin('act_itm_mbr.item', 'itm');
-        } elseif (isset($parameters['member']) == 1 && $parameters['member'] && isset($parameters['starred']) == 1 && $parameters['starred']) {
-            $query->from(ActionItem::class, 'act_itm_mbr');
-            $query->leftJoin('act_itm_mbr.item', 'itm');
-        } else {
-            $query->from(Item::class, 'itm');
-        }
+        $query->from(Item::class, 'itm');
 
         if (isset($parameters['feed']) == 1) {
             $query->andWhere('itm.feed = :feed');
@@ -65,8 +56,7 @@ class ItemRepository extends AbstractRepository
         }
 
         if (isset($parameters['author']) == 1) {
-            $query->leftJoin('itm.author', 'aut');
-            $query->andWhere('aut.id = :author');
+            $query->andWhere('itm.author = :author');
             $query->setParameter(':author', $parameters['author']);
         }
 
@@ -81,8 +71,9 @@ class ItemRepository extends AbstractRepository
             if (isset($parameters['unread']) == 1 && $parameters['unread']) {
                 $memberSet = true;
 
-                $query->andWhere('act_itm_mbr.member = :member');
-                $query->andWhere('act_itm_mbr.action = 12');
+                $query->leftJoin('itm.actions', 'act_itm');
+                $query->andWhere('act_itm.member = :member');
+                $query->andWhere('act_itm.action = 12');
                 $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM '.ActionFeed::class.' AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
                 //$query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM '.ActionItem::class.' AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
             }
@@ -90,8 +81,9 @@ class ItemRepository extends AbstractRepository
             if (isset($parameters['starred']) == 1 && $parameters['starred']) {
                 $memberSet = true;
 
-                $query->andWhere('act_itm_mbr.member = :member');
-                $query->andWhere('act_itm_mbr.action = 2');
+                $query->leftJoin('itm.actions', 'act_itm');
+                $query->andWhere('act_itm.member = :member');
+                $query->andWhere('act_itm.action = 2');
                 //$query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM '.ActionItem::class.' AS starred WHERE starred.member = :member AND starred.action = 2)');
             }
 

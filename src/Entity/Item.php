@@ -52,14 +52,28 @@ class Item
     private ?Author $author = null;
 
     /**
+     * @var Collection<int, ItemCategory> $categories
+     */
+    #[ORM\OneToMany(targetEntity: "App\Entity\ItemCategory", mappedBy: "item", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
+    private Collection $categories;
+
+    /**
      * @var Collection<int, Enclosure> $enclosures
      */
     #[ORM\OneToMany(targetEntity: "App\Entity\Enclosure", mappedBy: "item", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
     private Collection $enclosures;
 
+    /**
+     * @var Collection<int, ActionItem> $actions
+     */
+    #[ORM\OneToMany(targetEntity: "App\Entity\ActionItem", mappedBy: "item", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
+    private Collection $actions;
+
     public function __construct()
     {
+        $this->categories = new ArrayCollection();
         $this->enclosures = new ArrayCollection();
+        $this->actions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,6 +202,34 @@ class Item
     }
 
     /**
+     * @return Collection<int, ItemCategory>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+    public function addCategory(ItemCategory $itemCategory): self
+    {
+        if (false === $this->hasCategory($itemCategory)) {
+            $this->categories->add($itemCategory);
+            $itemCategory->setItem($this);
+        }
+        return $this;
+    }
+    public function removeCategory(ItemCategory $itemCategory): self
+    {
+        if (true === $this->hasCategory($itemCategory)) {
+            $this->categories->removeElement($itemCategory);
+            $itemCategory->setItem(null);
+        }
+        return $this;
+    }
+    public function hasCategory(ItemCategory $itemCategory): bool
+    {
+        return $this->categories->contains($itemCategory);
+    }
+
+    /**
      * @return Collection<int, Enclosure>
      */
     public function getEnclosures(): Collection
@@ -213,6 +255,34 @@ class Item
     public function hasEnclosure(Enclosure $enclosure): bool
     {
         return $this->enclosures->contains($enclosure);
+    }
+
+    /**
+     * @return Collection<int, ActionItem>
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+    public function addAction(ActionItem $action): self
+    {
+        if (false === $this->hasAction($action)) {
+            $this->actions->add($action);
+            $action->setItem($this);
+        }
+        return $this;
+    }
+    public function removeAction(ActionItem $action): self
+    {
+        if (true === $this->hasAction($action)) {
+            $this->actions->removeElement($action);
+            $action->setItem(null);
+        }
+        return $this;
+    }
+    public function hasAction(ActionItem $action): bool
+    {
+        return $this->actions->contains($action);
     }
 
     public function isLinkSecure(): bool

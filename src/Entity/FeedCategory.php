@@ -19,7 +19,7 @@ class FeedCategory
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "", fetch: "LAZY")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "categories", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Feed $feed = null;
 
