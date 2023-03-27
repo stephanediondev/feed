@@ -3,10 +3,8 @@
 namespace App\Tests\Manager;
 
 use App\Entity\Item;
-use App\Entity\Feed;
 use App\Manager\ItemManager;
 use App\Manager\FeedManager;
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ItemManagerTest extends KernelTestCase
@@ -24,7 +22,7 @@ class ItemManagerTest extends KernelTestCase
         $this->feedManager = static::getContainer()->get('App\Manager\FeedManager');
     }
 
-    public function test()
+    public function test(): void
     {
         $feed = $this->feedManager->init();
         $feed->setTitle('test-'.uniqid('', true));

@@ -4,7 +4,6 @@ namespace App\Tests\Manager;
 
 use App\Entity\Category;
 use App\Manager\CategoryManager;
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CategoryManagerTest extends KernelTestCase
@@ -18,7 +17,7 @@ class CategoryManagerTest extends KernelTestCase
         $this->categoryManager = static::getContainer()->get('App\Manager\CategoryManager');
     }
 
-    public function testId()
+    public function testId(): void
     {
         $title = 'test-'.uniqid('', true);
         $category = $this->categoryManager->init();
@@ -36,7 +35,7 @@ class CategoryManagerTest extends KernelTestCase
         $this->assertNull($test);
     }
 
-    public function testTitle()
+    public function testTitle(): void
     {
         $title = 'test-'.uniqid('', true);
         $category = $this->categoryManager->init();

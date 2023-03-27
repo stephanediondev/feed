@@ -11,9 +11,8 @@ class AuthorManager extends AbstractManager
 {
     private AuthorRepository $authorRepository;
 
-    public function __construct(
-        AuthorRepository $authorRepository
-    ) {
+    public function __construct(AuthorRepository $authorRepository)
+    {
         $this->authorRepository = $authorRepository;
     }
 

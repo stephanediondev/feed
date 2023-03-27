@@ -11,9 +11,8 @@ class EnclosureManager extends AbstractManager
 {
     private EnclosureRepository $enclosureRepository;
 
-    public function __construct(
-        EnclosureRepository $enclosureRepository
-    ) {
+    public function __construct(EnclosureRepository $enclosureRepository)
+    {
         $this->enclosureRepository = $enclosureRepository;
     }
 
