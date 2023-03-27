@@ -287,7 +287,6 @@ class MemberController extends AbstractAppController
                 $entry['currentAgent'] = true;
             }
             $data['entries'][] = $entry;
-
         }
 
         $data['entry'] = $memberConnected->toArray();
@@ -350,7 +349,6 @@ class MemberController extends AbstractAppController
 
                 $this->connectionManager->remove($connection);
             }
-
         } catch (\Exception $e) {
             throw new AccessDeniedHttpException();
         }

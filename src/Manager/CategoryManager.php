@@ -5,8 +5,8 @@ namespace App\Manager;
 use App\Entity\Category;
 use App\Event\CategoryEvent;
 use App\Manager\AbstractManager;
-use App\Manager\ItemCategoryManager;
 use App\Manager\FeedCategoryManager;
+use App\Manager\ItemCategoryManager;
 use App\Repository\CategoryRepository;
 
 class CategoryManager extends AbstractManager
