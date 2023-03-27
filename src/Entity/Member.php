@@ -114,11 +114,6 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function getSalt(): null
-    {
-        return null;
-    }
-
     public function getRoles(): array
     {
         $roles = [];
