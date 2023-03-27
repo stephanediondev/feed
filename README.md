@@ -60,10 +60,4 @@ bin/console doctrine:migrations:migrate -n
 
 # Screenshots
 
-![Login](public/screenshots/Screenshot_20170108-101851.png)
-![Add to home screen dialog](public/screenshots/Screenshot_20170108-102110.png)
-![Added to home screen](public/screenshots/Screenshot_20170108-102131.png)
-![Splash screen](public/screenshots/Screenshot_20170108-102139.png)
-![Web application](public/screenshots/Screenshot_20170108-102154.png)
-![Web application](public/screenshots/Screenshot_20170108-102209.png)
-![Menu](public/screenshots/Screenshot_20170108-103142.png)
+![New design](public/screenshots/new-design.png)
