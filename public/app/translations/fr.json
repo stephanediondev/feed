@@ -64,6 +64,8 @@
     "category": "Catégorie",
     "feed": "Flux",
 
+    "connections": "Connexions",
+
     "field": {
         "title": "Titre"
     },

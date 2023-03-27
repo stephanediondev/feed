@@ -64,6 +64,8 @@
     "category": "Category",
     "feed": "Feed",
 
+    "connections": "Connections",
+
     "field": {
         "title": "Title"
     },
