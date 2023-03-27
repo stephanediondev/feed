@@ -54,6 +54,7 @@
 
     "email": "Email",
     "password": "Password",
+    "password_confirm": "Confirm password",
     "link": "Link",
     "website": "Website",
     "description": "Description",

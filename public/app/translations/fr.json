@@ -54,6 +54,7 @@
 
     "email": "Email",
     "password": "Mot de passe",
+    "password_confirm": "Confirmation mot de passe",
     "link": "Lien",
     "website": "Site web",
     "description": "Description",
