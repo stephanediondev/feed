@@ -37,31 +37,31 @@ class ActionManager extends AbstractManager
         return new Action();
     }
 
-    public function persist(Action $data): ?int
+    public function persist(Action $action): ?int
     {
-        if ($data->getDateCreated() == null) {
+        if ($action->getDateCreated() == null) {
             $eventName = ActionEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $action->setDateCreated(new \Datetime());
         } else {
             $eventName = ActionEvent::UPDATED;
         }
 
-        $this->actionRepository->persist($data);
+        $this->actionRepository->persist($action);
 
-        $event = new ActionEvent($data);
+        $event = new ActionEvent($action);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $action->getId();
     }
 
-    public function remove(Action $data): void
+    public function remove(Action $action): void
     {
-        $event = new ActionEvent($data);
+        $event = new ActionEvent($action);
         $this->eventDispatcher->dispatch($event, ActionEvent::DELETED);
 
-        $this->actionRepository->remove($data);
+        $this->actionRepository->remove($action);
 
         $this->clearCache();
     }

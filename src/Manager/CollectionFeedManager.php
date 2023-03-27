@@ -37,31 +37,31 @@ class CollectionFeedManager extends AbstractManager
         return new CollectionFeed();
     }
 
-    public function persist(CollectionFeed $data): ?int
+    public function persist(CollectionFeed $collectionFeed): ?int
     {
-        if ($data->getDateCreated() == null) {
+        if ($collectionFeed->getDateCreated() == null) {
             $eventName = CollectionFeedEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $collectionFeed->setDateCreated(new \Datetime());
         } else {
             $eventName = CollectionFeedEvent::UPDATED;
         }
 
-        $this->collectionFeedRepository->persist($data);
+        $this->collectionFeedRepository->persist($collectionFeed);
 
-        $event = new CollectionFeedEvent($data);
+        $event = new CollectionFeedEvent($collectionFeed);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $collectionFeed->getId();
     }
 
-    public function remove(CollectionFeed $data): void
+    public function remove(CollectionFeed $collectionFeed): void
     {
-        $event = new CollectionFeedEvent($data);
+        $event = new CollectionFeedEvent($collectionFeed);
         $this->eventDispatcher->dispatch($event, CollectionFeedEvent::DELETED);
 
-        $this->collectionFeedRepository->remove($data);
+        $this->collectionFeedRepository->remove($collectionFeed);
 
         $this->clearCache();
     }

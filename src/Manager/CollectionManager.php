@@ -54,32 +54,32 @@ class CollectionManager extends AbstractManager
         return $collection;
     }
 
-    public function persist(Collection $data): ?int
+    public function persist(Collection $collection): ?int
     {
-        if ($data->getDateCreated() === null) {
+        if ($collection->getDateCreated() === null) {
             $eventName = CollectionEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $collection->setDateCreated(new \Datetime());
         } else {
             $eventName = CollectionEvent::UPDATED;
         }
-        $data->setDateModified(new \Datetime());
+        $collection->setDateModified(new \Datetime());
 
-        $this->collectionRepository->persist($data);
+        $this->collectionRepository->persist($collection);
 
-        $event = new CollectionEvent($data);
+        $event = new CollectionEvent($collection);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $collection->getId();
     }
 
-    public function remove(Collection $data): void
+    public function remove(Collection $collection): void
     {
-        $event = new CollectionEvent($data);
+        $event = new CollectionEvent($collection);
         $this->eventDispatcher->dispatch($event, CollectionEvent::DELETED);
 
-        $this->collectionRepository->remove($data);
+        $this->collectionRepository->remove($collection);
 
         $this->clearCache();
     }

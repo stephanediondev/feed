@@ -37,31 +37,31 @@ class ActionCategoryManager extends AbstractManager
         return new ActionCategory();
     }
 
-    public function persist(ActionCategory $data): ?int
+    public function persist(ActionCategory $actionCategory): ?int
     {
-        if ($data->getDateCreated() == null) {
+        if ($actionCategory->getDateCreated() == null) {
             $eventName = ActionCategoryEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $actionCategory->setDateCreated(new \Datetime());
         } else {
             $eventName = ActionCategoryEvent::UPDATED;
         }
 
-        $this->actionCategoryRepository->persist($data);
+        $this->actionCategoryRepository->persist($actionCategory);
 
-        $event = new ActionCategoryEvent($data);
+        $event = new ActionCategoryEvent($actionCategory);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $actionCategory->getId();
     }
 
-    public function remove(ActionCategory $data): void
+    public function remove(ActionCategory $actionCategory): void
     {
-        $event = new ActionCategoryEvent($data);
+        $event = new ActionCategoryEvent($actionCategory);
         $this->eventDispatcher->dispatch($event, ActionCategoryEvent::DELETED);
 
-        $this->actionCategoryRepository->remove($data);
+        $this->actionCategoryRepository->remove($actionCategory);
 
         $this->clearCache();
     }

@@ -37,32 +37,32 @@ class ConnectionManager extends AbstractManager
         return new Connection();
     }
 
-    public function persist(Connection $data): ?int
+    public function persist(Connection $connection): ?int
     {
-        if ($data->getDateCreated() == null) {
+        if ($connection->getDateCreated() == null) {
             $eventName = ConnectionEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $connection->setDateCreated(new \Datetime());
         } else {
             $eventName = ConnectionEvent::UPDATED;
         }
-        $data->setDateModified(new \Datetime());
+        $connection->setDateModified(new \Datetime());
 
-        $this->connectionRepository->persist($data);
+        $this->connectionRepository->persist($connection);
 
-        $event = new ConnectionEvent($data);
+        $event = new ConnectionEvent($connection);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $connection->getId();
     }
 
-    public function remove(Connection $data): void
+    public function remove(Connection $connection): void
     {
-        $event = new ConnectionEvent($data);
+        $event = new ConnectionEvent($connection);
         $this->eventDispatcher->dispatch($event, ConnectionEvent::DELETED);
 
-        $this->connectionRepository->remove($data);
+        $this->connectionRepository->remove($connection);
 
         $this->clearCache();
     }

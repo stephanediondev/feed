@@ -37,30 +37,30 @@ class ItemCategoryManager extends AbstractManager
         return new ItemCategory();
     }
 
-    public function persist(ItemCategory $data): ?int
+    public function persist(ItemCategory $itemCategory): ?int
     {
-        if ($data->getId() == null) {
+        if ($itemCategory->getId() == null) {
             $eventName = ItemCategoryEvent::CREATED;
         } else {
             $eventName = ItemCategoryEvent::UPDATED;
         }
 
-        $this->itemCategoryRepository->persist($data);
+        $this->itemCategoryRepository->persist($itemCategory);
 
-        $event = new ItemCategoryEvent($data);
+        $event = new ItemCategoryEvent($itemCategory);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $itemCategory->getId();
     }
 
-    public function remove(ItemCategory $data): void
+    public function remove(ItemCategory $itemCategory): void
     {
-        $event = new ItemCategoryEvent($data);
+        $event = new ItemCategoryEvent($itemCategory);
         $this->eventDispatcher->dispatch($event, ItemCategoryEvent::DELETED);
 
-        $this->itemCategoryRepository->remove($data);
+        $this->itemCategoryRepository->remove($itemCategory);
 
         $this->clearCache();
     }

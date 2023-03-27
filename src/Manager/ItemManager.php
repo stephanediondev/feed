@@ -39,32 +39,32 @@ class ItemManager extends AbstractManager
         return new Item();
     }
 
-    public function persist(Item $data): ?int
+    public function persist(Item $item): ?int
     {
-        if ($data->getDateCreated() == null) {
+        if ($item->getDateCreated() == null) {
             $eventName = ItemEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $item->setDateCreated(new \Datetime());
         } else {
             $eventName = ItemEvent::UPDATED;
         }
-        $data->setDateModified(new \Datetime());
+        $item->setDateModified(new \Datetime());
 
-        $this->itemRepository->persist($data);
+        $this->itemRepository->persist($item);
 
-        $event = new ItemEvent($data);
+        $event = new ItemEvent($item);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $item->getId();
     }
 
-    public function remove(Item $data): void
+    public function remove(Item $item): void
     {
-        $event = new ItemEvent($data);
+        $event = new ItemEvent($item);
         $this->eventDispatcher->dispatch($event, ItemEvent::DELETED);
 
-        $this->itemRepository->remove($data);
+        $this->itemRepository->remove($item);
 
         $this->clearCache();
     }

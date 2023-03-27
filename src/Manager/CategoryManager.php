@@ -45,31 +45,31 @@ class CategoryManager extends AbstractManager
         return new Category();
     }
 
-    public function persist(Category $data): ?int
+    public function persist(Category $category): ?int
     {
-        if ($data->getDateCreated() == null) {
+        if ($category->getDateCreated() == null) {
             $eventName = CategoryEvent::CREATED;
-            $data->setDateCreated(new \Datetime());
+            $category->setDateCreated(new \Datetime());
         } else {
             $eventName = CategoryEvent::UPDATED;
         }
 
-        $this->categoryRepository->persist($data);
+        $this->categoryRepository->persist($category);
 
-        $event = new CategoryEvent($data);
+        $event = new CategoryEvent($category);
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
 
-        return $data->getId();
+        return $category->getId();
     }
 
-    public function remove(Category $data): void
+    public function remove(Category $category): void
     {
-        $event = new CategoryEvent($data);
+        $event = new CategoryEvent($category);
         $this->eventDispatcher->dispatch($event, CategoryEvent::DELETED);
 
-        $this->categoryRepository->remove($data);
+        $this->categoryRepository->remove($category);
 
         $this->clearCache();
     }
