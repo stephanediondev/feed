@@ -547,11 +547,7 @@ function loadRoute(key, parameters) {
                         if (typeof dataReturn.unread !== 'undefined') {
                             var badge = 0;
                             if (dataReturn.unread > 0) {
-                                if (dataReturn.unread > 99) {
-                                    badge = '99+';
-                                } else {
-                                    badge = dataReturn.unread;
-                                }
+                                badge = dataReturn.unread;
                                 setBadge(badge);
                             } else {
                                 clearBadge();
