@@ -278,7 +278,7 @@ class CollectionManager extends AbstractManager
                         $tidy->parseString($content, $options, 'utf8');
                         $tidy->cleanRepair();
 
-                        $content = $this->cleanContent(strval($tidy), 'store');
+                        $content = $this->cleanContent(tidy_get_output($tidy), 'store');
                     } catch (Exception $e) {
                     }
                 } else {
