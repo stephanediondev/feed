@@ -279,12 +279,12 @@ class Feed
 
     public function isLinkSecure(): bool
     {
-        return substr($this->getLink(), 0, 6) == 'https:';
+        return str_starts_with($this->getLink(), 'https://');
     }
 
     public function isWebsiteSecure(): bool
     {
-        return substr($this->getWebsite(), 0, 6) == 'https:';
+        return str_starts_with($this->getWebsite(), 'https://');
     }
 
     /**

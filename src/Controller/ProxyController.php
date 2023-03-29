@@ -17,7 +17,7 @@ class ProxyController extends AbstractAppController
         if ($token = $request->query->get('token')) {
             $file = base64_decode(urldecode(strval($token)));
 
-            if ($file != '' && (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://')) {
+            if ($file != '' && (str_starts_with($file, 'http://') || str_starts_with($file, 'https://'))) {
                 $opts = [
                     'http' => [
                         'method' => 'GET',

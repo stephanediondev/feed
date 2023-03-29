@@ -183,7 +183,7 @@ abstract class AbstractManager
                                 }
 
                                 if ($node->tagName == 'img' && $case == 'display') {
-                                    if (substr($src, 0, 5) == 'http:') {
+                                    if (str_starts_with($src, 'http://')) {
                                         $token = urlencode(base64_encode($src));
                                         $node->setAttribute('src', 'app/icons/icon-32x32.png');
                                         $node->setAttribute('data-src', $this->router->generate('api_proxy', ['token' => $token], 0));
