@@ -42,10 +42,12 @@ abstract class AbstractAppController extends AbstractController
         if ($request->headers->get('Authorization')) {
             try {
                 $payloadjwtPayloadModel = JwtHelper::getPayload(str_replace('Bearer ', '', $request->headers->get('Authorization')));
-                $token = $payloadjwtPayloadModel->getJwtId();
+                if ($payloadjwtPayloadModel) {
+                    $token = $payloadjwtPayloadModel->getJwtId();
 
-                if ($connection = $this->connectionManager->getOne(['type' => $type, 'token' => $token])) {
-                    return $connection->getMember();
+                    if ($connection = $this->connectionManager->getOne(['type' => $type, 'token' => $token])) {
+                        return $connection->getMember();
+                    }
                 }
             } catch (\Exception $e) {
             }

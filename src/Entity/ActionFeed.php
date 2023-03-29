@@ -90,7 +90,7 @@ class ActionFeed
     public function toArray(): array
     {
         return [
-            'action' => $this->getAction()->toArray(),
+            'action' => $this->getAction() ? $this->getAction()->toArray() : null,
         ];
     }
 }

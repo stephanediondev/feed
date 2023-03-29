@@ -302,6 +302,7 @@ class Feed
             'language' => $this->getLanguage(),
             'direction' => $this->getDirection(),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
+            'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : null,
             'link_secure' => $this->isLinkSecure(),
             'website_secure' => $this->isWebsiteSecure(),
         ];

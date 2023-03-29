@@ -140,21 +140,25 @@ class FeedManager extends AbstractManager
         if (isset($obj->outline) == 1) {
             foreach ($obj->outline as $outline) {
                 if (isset($outline->outline) == 1) {
-                    if ($outline->attributes()->title) {
-                        $cat = strval($outline->attributes()->title);
-                        $data['categories'][] = $cat;
-                    } elseif ($outline->attributes()->text) {
-                        $cat = strval($outline->attributes()->text);
-                        $data['categories'][] = $cat;
+                    if ($outline->attributes()) {
+                        if ($outline->attributes()->title) {
+                            $cat = strval($outline->attributes()->title);
+                            $data['categories'][] = $cat;
+                        } elseif ($outline->attributes()->text) {
+                            $cat = strval($outline->attributes()->text);
+                            $data['categories'][] = $cat;
+                        }
                     }
                     $data = array_merge($data, $this->transformOpml($outline, $cat));
                 } else {
-                    $feed = new \stdClass();
-                    foreach ($outline->attributes() as $k => $attribute) {
-                        $feed->{$k} = strval($attribute);
+                    if ($outline->attributes()) {
+                        $feed = new \stdClass();
+                        foreach ($outline->attributes() as $k => $attribute) {
+                            $feed->{$k} = strval($attribute);
+                        }
+                        $feed->flr = $cat;
+                        $data['feeds'][] = $feed;
                     }
-                    $feed->flr = $cat;
-                    $data['feeds'][] = $feed;
                 }
             }
         }

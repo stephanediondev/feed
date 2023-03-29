@@ -133,13 +133,13 @@ class Connection
     {
         return [
             'id' => $this->getId(),
-            'member' => $this->getMember()->toArray(),
+            'member' => $this->getMember() ? $this->getMember()->toArray() : null,
             'type' => $this->getType(),
             'token' => $this->getToken(),
             'agent' => $this->getAgent(),
             'ip' => $this->getIp(),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
-            'date_modified' => $this->getDateModified()->format('Y-m-d H:i:s'),
+            'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : null,
         ];
     }
 }

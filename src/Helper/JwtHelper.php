@@ -12,19 +12,23 @@ class JwtHelper
 {
     public const ALGORITHM = 'RS512';
 
-    public static function createToken(JwtPayloadModel $jwtPayloadModel, string $privateKey = 'application.key'): string
+    public static function createToken(JwtPayloadModel $jwtPayloadModel, string $privateKey = 'application.key'): ?string
     {
-        $token = JWT::encode($jwtPayloadModel->toArray(), self::getPrivateKey($privateKey), self::ALGORITHM);
+        if ($key = self::getPrivateKey($privateKey)) {
+            return JWT::encode($jwtPayloadModel->toArray(), $key, self::ALGORITHM);
+        }
 
-        return $token;
+        return null;
     }
 
-    public static function getPayload(string $token, string $publicKey = 'application.pub'): JwtPayloadModel
+    public static function getPayload(string $token, string $publicKey = 'application.pub'): ?JwtPayloadModel
     {
-        $payload = JWT::decode($token, new Key(self::getPublicKey($publicKey), self::ALGORITHM));
-        $jwtPayloadModel = self::fromStdClass($payload);
+        if ($key = self::getPublicKey($publicKey)) {
+            $payload = JWT::decode($token, new Key($key, self::ALGORITHM));
+            return self::fromStdClass($payload);
+        }
 
-        return $jwtPayloadModel;
+        return null;
     }
 
     /**

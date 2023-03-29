@@ -115,7 +115,8 @@ class Collection
     {
         return [
             'id' => $this->getId(),
-            'date_created' => $this->getDateCreated(),
+            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
+            'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : null,
         ];
     }
 }

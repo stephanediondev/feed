@@ -296,23 +296,18 @@ class Item
      */
     public function toArray(): array
     {
-        if ($this->getAuthor()) {
-            $author = $this->getAuthor()->toArray();
-        } else {
-            $author = null;
-        }
-
         return [
             'id' => $this->getId(),
-            'feed' => $this->getFeed()->toArray(),
-            'author' => $author,
+            'feed' => $this->getFeed() ? $this->getFeed()->toArray() : null,
+            'author' => $this->getAuthor() ? $this->getAuthor()->toArray() : null,
             'title' => $this->getTitle(),
             'link' => $this->getLink(),
-            'date' => $this->getDate()->format('Y-m-d H:i:s'),
+            'date' => $this->getDate() ? $this->getDate()->format('Y-m-d H:i:s') : null,
             'content' => $this->getContent(),
             'latitude' => $this->getLatitude(),
             'longitude' => $this->getLongitude(),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
+            'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : null,
             'link_secure' => $this->isLinkSecure(),
         ];
     }

@@ -60,8 +60,8 @@ class FeedCategory
     public function toArray(): array
     {
         return [
-            'id' => $this->getCategory()->getId(),
-            'title' => $this->getCategory()->getTitle(),
+            'id' => $this->getCategory() ? $this->getCategory()->getId() : null,
+            'title' => $this->getCategory() ? $this->getCategory()->getTitle() : null,
         ];
     }
 }
