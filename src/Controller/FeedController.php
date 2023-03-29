@@ -14,6 +14,7 @@ use App\Manager\CollectionManager;
 use App\Manager\FeedManager;
 use App\Manager\MemberManager;
 use App\Model\ImportOpmlModel;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -382,9 +383,13 @@ class FeedController extends AbstractAppController
         $form->submit($request->request->all(), false);
 
         if ($form->isValid()) {
-            $obj_simplexml = simplexml_load_file($request->files->get('file'));
-            if ($obj_simplexml) {
-                $this->feedManager->import($memberConnected, $obj_simplexml->body);
+            if ($file = $request->files->get('file')) {
+                if ($file instanceof UploadedFile) {
+                    $obj_simplexml = simplexml_load_file($file->getPathname());
+                    if ($obj_simplexml) {
+                        $this->feedManager->import($memberConnected, $obj_simplexml->body);
+                    }
+                }
             }
         } else {
             $errors = $form->getErrors(true);
