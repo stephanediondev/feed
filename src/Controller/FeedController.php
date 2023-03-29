@@ -441,14 +441,20 @@ class FeedController extends AbstractAppController
             $feed = $this->feedManager->getOne(['id' => $feed['id']]);
 
             $title = $feed->getTitle();
-            $title = str_replace('&', '&amp;', $title);
-            $title = str_replace('""', '&quot;', $title);
+            if ($title) {
+                $title = str_replace('&', '&amp;', $title);
+                $title = str_replace('""', '&quot;', $title);
+            }
 
             $link = $feed->getLink();
-            $link = str_replace('&', '&amp;', $link);
+            if ($link) {
+                $link = str_replace('&', '&amp;', $link);
+            }
 
             $website = $feed->getWebsite();
-            $website = str_replace('&', '&amp;', $website);
+            if ($website) {
+                $website = str_replace('&', '&amp;', $website);
+            }
 
             $xml .= '<outline text="'.$title.'" title="'.$title.'" type="rss" xmlUrl="'.$link.'" htmlUrl="'.$website.'"/>';
             $xml .= "\r\n";
