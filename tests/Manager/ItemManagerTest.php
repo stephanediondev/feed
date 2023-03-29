@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Tests\Manager;
 
 use App\Entity\Item;
-use App\Manager\ItemManager;
 use App\Manager\FeedManager;
+use App\Manager\ItemManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ItemManagerTest extends KernelTestCase
