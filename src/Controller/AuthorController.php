@@ -128,16 +128,17 @@ class AuthorController extends AbstractAppController
 
             foreach ($pagination as $result) {
                 $author = $this->authorManager->getOne(['id' => $result['id']]);
+                if ($author) {
+                    $entry = $author->toArray();
 
-                $entry = $author->toArray();
-
-                if (true === isset($actions[$result['id']])) {
-                    foreach ($actions[$result['id']] as $action) {
-                        $entry[$action->getAction()->getTitle()] = true;
+                    if (true === isset($actions[$result['id']])) {
+                        foreach ($actions[$result['id']] as $action) {
+                            $entry[$action->getAction()->getTitle()] = true;
+                        }
                     }
-                }
 
-                $data['entries'][] = $entry;
+                    $data['entries'][] = $entry;
+                }
             }
         }
 

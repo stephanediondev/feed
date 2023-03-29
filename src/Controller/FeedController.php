@@ -141,20 +141,21 @@ class FeedController extends AbstractAppController
 
         foreach ($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
+            if ($feed) {
+                $entry = $feed->toArray();
 
-            $entry = $feed->toArray();
-
-            if (true === isset($actions[$result['id']])) {
-                foreach ($actions[$result['id']] as $action) {
-                    $entry[$action->getAction()->getTitle()] = true;
+                if (true === isset($actions[$result['id']])) {
+                    foreach ($actions[$result['id']] as $action) {
+                        $entry[$action->getAction()->getTitle()] = true;
+                    }
                 }
-            }
 
-            if (true === isset($categories[$result['id']])) {
-                $entry['categories'] = $categories[$result['id']];
-            }
+                if (true === isset($categories[$result['id']])) {
+                    $entry['categories'] = $categories[$result['id']];
+                }
 
-            $data['entries'][] = $entry;
+                $data['entries'][] = $entry;
+            }
         }
 
         return new JsonResponse($data);

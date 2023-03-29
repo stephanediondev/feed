@@ -152,24 +152,25 @@ class ItemController extends AbstractAppController
 
         foreach ($pagination as $result) {
             $item = $this->itemManager->getOne(['id' => $result['id']]);
+            if ($item) {
+                $entry = $item->toArray();
 
-            $entry = $item->toArray();
-
-            if (true === isset($actions[$result['id']])) {
-                foreach ($actions[$result['id']] as $action) {
-                    $entry[$action->getAction()->getTitle()] = true;
+                if (true === isset($actions[$result['id']])) {
+                    foreach ($actions[$result['id']] as $action) {
+                        $entry[$action->getAction()->getTitle()] = true;
+                    }
                 }
+
+                if (true === isset($categories[$result['id']])) {
+                    $entry['categories'] = $categories[$result['id']];
+                }
+
+                $entry['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
+
+                $entry['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
+
+                $data['entries'][] = $entry;
             }
-
-            if (true === isset($categories[$result['id']])) {
-                $entry['categories'] = $categories[$result['id']];
-            }
-
-            $entry['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
-
-            $entry['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
-
-            $data['entries'][] = $entry;
         }
 
         return new JsonResponse($data);

@@ -123,16 +123,17 @@ class CategoryController extends AbstractAppController
 
             foreach ($pagination as $result) {
                 $category = $this->categoryManager->getOne(['id' => $result['id']]);
+                if ($category) {
+                    $entry = $category->toArray();
 
-                $entry = $category->toArray();
-
-                if (true === isset($actions[$result['id']])) {
-                    foreach ($actions[$result['id']] as $action) {
-                        $entry[$action->getAction()->getTitle()] = true;
+                    if (true === isset($actions[$result['id']])) {
+                        foreach ($actions[$result['id']] as $action) {
+                            $entry[$action->getAction()->getTitle()] = true;
+                        }
                     }
-                }
 
-                $data['entries'][] = $entry;
+                    $data['entries'][] = $entry;
+                }
             }
         }
 

@@ -138,7 +138,7 @@ class Enclosure
 
     public function isLinkSecure(): bool
     {
-        return str_starts_with($this->getLink(), 'https://');
+        return $this->getLink() ? str_starts_with($this->getLink(), 'https://') : false;
     }
 
     /**
