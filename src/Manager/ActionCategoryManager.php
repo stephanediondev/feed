@@ -33,12 +33,7 @@ class ActionCategoryManager extends AbstractManager
         return $this->actionCategoryRepository->getList($parameters);
     }
 
-    public function init(): ActionCategory
-    {
-        return new ActionCategory();
-    }
-
-    public function persist(ActionCategory $actionCategory): ?int
+    public function persist(ActionCategory $actionCategory): void
     {
         if ($actionCategory->getDateCreated() == null) {
             $eventName = ActionCategoryEvent::CREATED;
@@ -53,8 +48,6 @@ class ActionCategoryManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $actionCategory->getId();
     }
 
     public function remove(ActionCategory $actionCategory): void

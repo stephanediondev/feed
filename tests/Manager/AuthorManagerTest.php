@@ -21,7 +21,7 @@ class AuthorManagerTest extends KernelTestCase
     public function testId(): void
     {
         $title = 'test-'.uniqid('', true);
-        $author = $this->authorManager->init();
+        $author = new Author();
         $author->setTitle($title);
 
         $author_id = $this->authorManager->persist($author);
@@ -39,7 +39,7 @@ class AuthorManagerTest extends KernelTestCase
     public function testTitle(): void
     {
         $title = 'test-'.uniqid('', true);
-        $author = $this->authorManager->init();
+        $author = new Author();
         $author->setTitle($title);
 
         $author_id = $this->authorManager->persist($author);

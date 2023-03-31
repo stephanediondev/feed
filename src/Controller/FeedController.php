@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Entity\Feed;
+use App\Entity\ActionFeed;
 use App\Form\Type\FeedType;
 use App\Form\Type\ImportOpmlType;
 use App\Manager\ActionFeedManager;
@@ -74,15 +76,19 @@ class FeedController extends AbstractAppController
         }
 
         if ($request->query->get('category')) {
-            $parameters['category'] = (int) $request->query->get('category');
-            $data['entry'] = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])->toArray();
-            $data['entry_entity'] = 'category';
+            if ($category = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])) {
+                $parameters['category'] = (int) $request->query->get('category');
+                $data['entry'] = $category->toArray();
+                $data['entry_entity'] = 'category';
+            }
         }
 
         if ($request->query->get('author')) {
-            $parameters['author'] = (int) $request->query->get('author');
-            $data['entry'] = $this->authorManager->getOne(['id' => (int) $request->query->get('author')])->toArray();
-            $data['entry_entity'] = 'author';
+            if ($author = $this->authorManager->getOne(['id' => (int) $request->query->get('author')])) {
+                $parameters['author'] = (int) $request->query->get('author');
+                $data['entry'] = $author->toArray();
+                $data['entry_entity'] = 'author';
+            }
         }
 
         if ($request->query->get('days')) {
@@ -168,24 +174,19 @@ class FeedController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $form = $this->createForm(FeedType::class, $this->feedManager->init());
+        $feed = new Feed();
+        $form = $this->createForm(FeedType::class, $feed);
 
         $form->submit($request->request->all(), false);
 
         if ($form->isValid()) {
-            $test = $this->feedManager->getOne(['link' => $form->getData()->getLink()]);
+            $this->feedManager->persist($form->getData());
 
-            if (!$test) {
-                $feed_id = $this->feedManager->persist($form->getData());
-                $resutlAction = $this->setAction('subscribe', $request, $feed_id);
+            $this->setAction('subscribe', $request, $feed->getId());
+            $this->collectionManager->start($feed->getId());
 
-                $this->collectionManager->start($feed_id);
-
-                return $resutlAction;
-            } else {
-                $data['entry'] = $test->toArray();
-                $data['entry_entity'] = 'feed';
-            }
+            $data['entry'] = $feed->toArray();
+            $data['entry_entity'] = 'feed';
         } else {
             $errors = $form->getErrors(true);
             foreach ($errors as $error) {
@@ -193,9 +194,10 @@ class FeedController extends AbstractAppController
                     $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
                 }
             }
+            return new JsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data);
+        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
     }
 
     #[Route('/feed/{id}', name: 'read', methods: ['GET'])]
@@ -315,6 +317,10 @@ class FeedController extends AbstractAppController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
+        if (!$action) {
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+        }
+
         if ($actionFeed = $this->actionFeedManager->getOne([
             'action' => $action,
             'feed' => $feed,
@@ -322,7 +328,7 @@ class FeedController extends AbstractAppController
         ])) {
             $this->actionFeedManager->remove($actionFeed);
 
-            $data['action'] = $action->getReverse()->getTitle();
+            $data['action'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
             $data['action_reverse'] = $action->getTitle();
 
             if ($action->getReverse()) {
@@ -332,7 +338,7 @@ class FeedController extends AbstractAppController
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionFeedReverse = $this->actionFeedManager->init();
+                    $actionFeedReverse = new ActionFeed();
                     $actionFeedReverse->setAction($action->getReverse());
                     $actionFeedReverse->setFeed($feed);
                     $actionFeedReverse->setMember($memberConnected);
@@ -340,14 +346,14 @@ class FeedController extends AbstractAppController
                 }
             }
         } else {
-            $actionFeed = $this->actionFeedManager->init();
+            $actionFeed = new ActionFeed();
             $actionFeed->setAction($action);
             $actionFeed->setFeed($feed);
             $actionFeed->setMember($memberConnected);
             $this->actionFeedManager->persist($actionFeed);
 
             $data['action'] = $action->getTitle();
-            $data['action_reverse'] = $action->getReverse()->getTitle();
+            $data['action_reverse'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
 
             if ($action->getReverse()) {
                 if ($actionFeedReverse = $this->actionFeedManager->getOne([

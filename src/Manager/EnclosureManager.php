@@ -33,12 +33,7 @@ class EnclosureManager extends AbstractManager
         return $this->enclosureRepository->getList($parameters);
     }
 
-    public function init(): Enclosure
-    {
-        return new Enclosure();
-    }
-
-    public function persist(Enclosure $enclosure): ?int
+    public function persist(Enclosure $enclosure): void
     {
         if ($enclosure->getDateCreated() == null) {
             $eventName = EnclosureEvent::CREATED;
@@ -53,8 +48,6 @@ class EnclosureManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $enclosure->getId();
     }
 
     public function remove(Enclosure $enclosure): void

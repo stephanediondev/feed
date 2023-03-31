@@ -21,7 +21,7 @@ class CategoryManagerTest extends KernelTestCase
     public function testId(): void
     {
         $title = 'test-'.uniqid('', true);
-        $category = $this->categoryManager->init();
+        $category = new Category();
         $category->setTitle($title);
 
         $category_id = $this->categoryManager->persist($category);
@@ -39,7 +39,7 @@ class CategoryManagerTest extends KernelTestCase
     public function testTitle(): void
     {
         $title = 'test-'.uniqid('', true);
-        $category = $this->categoryManager->init();
+        $category = new Category();
         $category->setTitle($title);
 
         $category_id = $this->categoryManager->persist($category);

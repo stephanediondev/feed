@@ -45,17 +45,7 @@ class CollectionManager extends AbstractManager
         return $this->collectionRepository->getList($parameters);
     }
 
-    public function init(): Collection
-    {
-        $collection = new Collection();
-        $collection->setFeeds(0);
-        $collection->setErrors(0);
-        $collection->setTime(0);
-        $collection->setMemory(0);
-        return $collection;
-    }
-
-    public function persist(Collection $collection): ?int
+    public function persist(Collection $collection): void
     {
         if ($collection->getDateCreated() === null) {
             $eventName = CollectionEvent::CREATED;
@@ -71,8 +61,6 @@ class CollectionManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $collection->getId();
     }
 
     public function remove(Collection $collection): void
@@ -104,15 +92,15 @@ class CollectionManager extends AbstractManager
         $resultSet = $stmt->executeQuery();
         $feeds_result = $resultSet->fetchAllAssociative();
 
-        $collection = $this->init();
+        $collection = new Collection();
         $collection->setFeeds(count($feeds_result));
-        $collection_id = $this->persist($collection);
+        $this->persist($collection);
 
         foreach ($feeds_result as $feed) {
             $feeds++;
 
             $insertCollectionFeed = [
-                'collection_id' => $collection_id,
+                'collection_id' => $collection->getId(),
                 'feed_id' => $feed['id'],
                 'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
             ];
@@ -156,9 +144,9 @@ class CollectionManager extends AbstractManager
                         $parse_url = parse_url($simplepieFeed->get_link());
 
                         $updateFeed = [];
-                        $updateFeed['title'] = $simplepieFeed->get_title() != '' ? $this->cleanTitle($simplepieFeed->get_title()) : '-';
-                        $updateFeed['website'] = $this->cleanWebsite($simplepieFeed->get_link());
-                        $updateFeed['link'] = $this->cleanLink($simplepieFeed->subscribe_url());
+                        $updateFeed['title'] = $simplepieFeed->get_title() ? $this->cleanTitle($simplepieFeed->get_title()) : '-';
+                        $updateFeed['website'] = $simplepieFeed->get_link() ? $this->cleanWebsite($simplepieFeed->get_link()) : null;
+                        $updateFeed['link'] = $simplepieFeed->subscribe_url() ? $this->cleanLink($simplepieFeed->subscribe_url()) : null;
                         $updateFeed['hostname'] = isset($parse_url['host']) ? $parse_url['host'] : null;
                         $updateFeed['description'] = $simplepieFeed->get_description();
 
@@ -237,7 +225,6 @@ class CollectionManager extends AbstractManager
     {
         foreach ($items as $simplepieItem) {
             $link = $this->cleanLink($simplepieItem->get_link());
-            $link = str_replace('http://www.lesnumeriques.com', 'https://www.lesnumeriques.com', $link);
 
             $sql = 'SELECT id FROM item WHERE link = :link';
             $stmt = $this->connection->prepare($sql);

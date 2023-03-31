@@ -39,12 +39,7 @@ class FeedManager extends AbstractManager
         return $this->feedRepository->getList($parameters);
     }
 
-    public function init(): Feed
-    {
-        return new Feed();
-    }
-
-    public function persist(Feed $feed): ?int
+    public function persist(Feed $feed): void
     {
         if ($feed->getDateCreated() == null) {
             $eventName = FeedEvent::CREATED;
@@ -60,8 +55,6 @@ class FeedManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $feed->getId();
     }
 
     public function remove(Feed $feed): void

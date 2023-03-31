@@ -33,12 +33,7 @@ class MemberManager extends AbstractManager
         return $this->memberRepository->getList($parameters);
     }
 
-    public function init(): Member
-    {
-        return new Member();
-    }
-
-    public function persist(Member $member): ?int
+    public function persist(Member $member): void
     {
         if ($member->getDateCreated() == null) {
             $eventName = MemberEvent::CREATED;
@@ -54,8 +49,6 @@ class MemberManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $member->getId();
     }
 
     public function remove(Member $member): void

@@ -33,12 +33,7 @@ class ActionItemManager extends AbstractManager
         return $this->actionItemRepository->getList($parameters);
     }
 
-    public function init(): ActionItem
-    {
-        return new ActionItem();
-    }
-
-    public function persist(ActionItem $actionItem): ?int
+    public function persist(ActionItem $actionItem): void
     {
         if ($actionItem->getDateCreated() == null) {
             $eventName = ActionItemEvent::CREATED;
@@ -53,8 +48,6 @@ class ActionItemManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $actionItem->getId();
     }
 
     public function remove(ActionItem $actionItem): void

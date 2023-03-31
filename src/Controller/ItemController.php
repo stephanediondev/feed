@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Entity\ActionItem;
 use App\Manager\ActionItemManager;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
@@ -65,21 +66,27 @@ class ItemController extends AbstractAppController
         }
 
         if ($request->query->get('feed')) {
-            $parameters['feed'] = (int) $request->query->get('feed');
-            $data['entry'] = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])->toArray();
-            $data['entry_entity'] = 'feed';
+            if ($feed = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])) {
+                $parameters['feed'] = (int) $request->query->get('feed');
+                $data['entry'] = $feed->toArray();
+                $data['entry_entity'] = 'feed';
+            }
         }
 
         if ($request->query->get('author')) {
-            $parameters['author'] = (int) $request->query->get('author');
-            $data['entry'] = $this->authorManager->getOne(['id' => (int) $request->query->get('author')])->toArray();
-            $data['entry_entity'] = 'author';
+            if ($author = $this->authorManager->getOne(['id' => (int) $request->query->get('author')])) {
+                $parameters['author'] = (int) $request->query->get('author');
+                $data['entry'] = $author->toArray();
+                $data['entry_entity'] = 'author';
+            }
         }
 
         if ($request->query->get('category')) {
-            $parameters['category'] = (int) $request->query->get('category');
-            $data['entry'] = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])->toArray();
-            $data['entry_entity'] = 'category';
+            if ($category = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])) {
+                $parameters['category'] = (int) $request->query->get('category');
+                $data['entry'] = $category->toArray();
+                $data['entry_entity'] = 'category';
+            }
         }
 
         if ($request->query->get('unread')) {
@@ -306,6 +313,10 @@ class ItemController extends AbstractAppController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
+        if (!$action) {
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+        }
+
         if ($actionItem = $this->actionItemManager->getOne([
             'action' => $action,
             'item' => $item,
@@ -313,7 +324,7 @@ class ItemController extends AbstractAppController
         ])) {
             $this->actionItemManager->remove($actionItem);
 
-            $data['action'] = $action->getReverse()->getTitle();
+            $data['action'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
             $data['action_reverse'] = $action->getTitle();
 
             if ($action->getReverse()) {
@@ -323,7 +334,7 @@ class ItemController extends AbstractAppController
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionItemReverse = $this->actionItemManager->init();
+                    $actionItemReverse = new ActionItem();
                     $actionItemReverse->setAction($action->getReverse());
                     $actionItemReverse->setItem($item);
                     $actionItemReverse->setMember($memberConnected);
@@ -331,14 +342,14 @@ class ItemController extends AbstractAppController
                 }
             }
         } else {
-            $actionItem = $this->actionItemManager->init();
+            $actionItem = new ActionItem();
             $actionItem->setAction($action);
             $actionItem->setItem($item);
             $actionItem->setMember($memberConnected);
             $this->actionItemManager->persist($actionItem);
 
             $data['action'] = $action->getTitle();
-            $data['action_reverse'] = $action->getReverse()->getTitle();
+            $data['action_reverse'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
 
             if ($action->getReverse()) {
                 if ($actionItemReverse = $this->actionItemManager->getOne([

@@ -33,12 +33,7 @@ class FeedCategoryManager extends AbstractManager
         return $this->feedCategoryRepository->getList($parameters);
     }
 
-    public function init(): FeedCategory
-    {
-        return new FeedCategory();
-    }
-
-    public function persist(FeedCategory $feedCategory): ?int
+    public function persist(FeedCategory $feedCategory): void
     {
         if ($feedCategory->getId() == null) {
             $eventName = FeedCategoryEvent::CREATED;
@@ -52,8 +47,6 @@ class FeedCategoryManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $feedCategory->getId();
     }
 
     public function remove(FeedCategory $feedCategory): void

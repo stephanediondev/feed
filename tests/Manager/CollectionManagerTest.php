@@ -20,7 +20,7 @@ class CollectionManagerTest extends KernelTestCase
 
     public function test(): void
     {
-        $collection = $this->collectionManager->init();
+        $collection = new Collection();
 
         $collection_id = $this->collectionManager->persist($collection);
 

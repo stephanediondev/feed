@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Entity\Connection;
+use App\Entity\Member;
 use App\Form\Type\LoginType;
 use App\Form\Type\MemberType;
 use App\Form\Type\PinboardType;
@@ -71,31 +73,28 @@ class MemberController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $status = JsonResponse::HTTP_UNAUTHORIZED;
-
-        $member = $this->memberManager->init();
+        $member = new Member();
         $form = $this->createForm(MemberType::class, $member, ['validation_groups' => ['insert']]);
 
         $form->submit($request->request->all());
 
-        $data[] = 'a';
-
         if ($form->isValid()) {
-            $test = $this->memberManager->getOne(['email' => $member->getEmail()]);
+            $member->setPassword($this->passwordHasher->hashPassword($member, $member->getPassword()));
+            $this->memberManager->persist($member);
 
-            if (!$test) {
-                $member->setPassword($this->passwordHasher->hashPassword($member, $member->getPassword()));
-
-                $member_id = $this->memberManager->persist($member);
-
-                $data[] = $form->getData()->getEmail();
-            } else {
-                $data[] = 'b';
-                $status = JsonResponse::HTTP_FORBIDDEN;
+            $data['entry'] = $member->toArray();
+            $data['entry_entity'] = 'member';
+        } else {
+            $errors = $form->getErrors(true);
+            foreach ($errors as $error) {
+                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
+                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                }
             }
+            return new JsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data, $status);
+        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
     }
 
     public function read(Request $request, int $id): JsonResponse
@@ -194,7 +193,7 @@ class MemberController extends AbstractAppController
                                         $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
 
                                         if (!$member) {
-                                            $member = $this->memberManager->init();
+                                            $member = new Member();
                                             $member->setEmail($login->getEmail());
                                         }
                                         $member->setPassword($this->passwordHasher->hashPassword($member, $login->getPassword()));
@@ -223,7 +222,7 @@ class MemberController extends AbstractAppController
                 if ($this->passwordHasher->isPasswordValid($member, $login->getPassword())) {
                     $identifier = JwtHelper::generateUniqueIdentifier();
 
-                    $connection = $this->connectionManager->init();
+                    $connection = new Connection();
                     $connection->setMember($member);
                     $connection->setType('login');
                     $connection->setToken($identifier);
@@ -377,7 +376,7 @@ class MemberController extends AbstractAppController
             if ($connection) {
                 $connection->setToken($pinboard->getToken());
             } else {
-                $connection = $this->connectionManager->init();
+                $connection = new Connection();
                 $connection->setMember($memberConnected);
                 $connection->setType('pinboard');
                 $connection->setToken($pinboard->getToken());
@@ -396,54 +395,6 @@ class MemberController extends AbstractAppController
                 }
             }
         }
-
-        return new JsonResponse($data);
-    }
-
-    public function notifier(Request $request): JsonResponse
-    {
-        $data = [];
-
-        $status = JsonResponse::HTTP_UNAUTHORIZED;
-
-        $login = new LoginModel();
-        $form = $this->createForm(LoginType::class, $login);
-
-        $form->submit($request->request->all());
-
-        if ($form->isValid()) {
-            $member = $this->memberManager->getOne(['email' => $login->getEmail()]);
-
-            if ($member) {
-                if ($this->passwordHasher->isPasswordValid($member, $login->getPassword())) {
-                    $connection = $this->connectionManager->init();
-                    $connection->setMember($member);
-                    $connection->setType('notifier');
-                    $connection->setToken(base64_encode(random_bytes(50)));
-                    $connection->setIp($request->getClientIp());
-                    $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
-
-                    $this->connectionManager->persist($connection);
-
-                    $data['entry'] = $connection->toArray();
-                    $data['entry_entity'] = 'connection';
-
-                    $status = JsonResponse::HTTP_UNAUTHORIZED;
-                }
-            }
-        }
-
-        return new JsonResponse($data, $status);
-    }
-
-    public function unread(Request $request): JsonResponse
-    {
-        $data = [];
-        if (!$memberConnected = $this->validateToken($request, 'notifier')) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
-        $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
 
         return new JsonResponse($data);
     }

@@ -33,12 +33,7 @@ class CollectionFeedManager extends AbstractManager
         return $this->collectionFeedRepository->getList($parameters);
     }
 
-    public function init(): CollectionFeed
-    {
-        return new CollectionFeed();
-    }
-
-    public function persist(CollectionFeed $collectionFeed): ?int
+    public function persist(CollectionFeed $collectionFeed): void
     {
         if ($collectionFeed->getDateCreated() == null) {
             $eventName = CollectionFeedEvent::CREATED;
@@ -53,8 +48,6 @@ class CollectionFeedManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $collectionFeed->getId();
     }
 
     public function remove(CollectionFeed $collectionFeed): void

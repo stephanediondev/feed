@@ -26,7 +26,7 @@ class ConnectionManagerTest extends KernelTestCase
     public function testId(): void
     {
         $token = 'test-'.uniqid('', true);
-        $connection = $this->connectionManager->init();
+        $connection = new Connection();
         $connection->setMember($this->memberManager->getOne());
         $connection->setType('test');
         $connection->setToken($token);
@@ -46,7 +46,7 @@ class ConnectionManagerTest extends KernelTestCase
     public function testToken(): void
     {
         $token = 'test-'.uniqid('', true);
-        $connection = $this->connectionManager->init();
+        $connection = new Connection();
         $connection->setMember($this->memberManager->getOne());
         $connection->setType('test');
         $connection->setToken($token);

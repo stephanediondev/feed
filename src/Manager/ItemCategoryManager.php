@@ -33,12 +33,7 @@ class ItemCategoryManager extends AbstractManager
         return $this->itemCategoryRepository->getList($parameters);
     }
 
-    public function init(): ItemCategory
-    {
-        return new ItemCategory();
-    }
-
-    public function persist(ItemCategory $itemCategory): ?int
+    public function persist(ItemCategory $itemCategory): void
     {
         if ($itemCategory->getId() == null) {
             $eventName = ItemCategoryEvent::CREATED;
@@ -52,8 +47,6 @@ class ItemCategoryManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $itemCategory->getId();
     }
 
     public function remove(ItemCategory $itemCategory): void

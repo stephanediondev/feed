@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Manager;
 
+use App\Entity\Feed;
 use App\Entity\Item;
 use App\Manager\FeedManager;
 use App\Manager\ItemManager;
@@ -25,13 +26,13 @@ class ItemManagerTest extends KernelTestCase
 
     public function test(): void
     {
-        $feed = $this->feedManager->init();
+        $feed = new Feed();
         $feed->setTitle('test-'.uniqid('', true));
         $feed->setLink('test-'.uniqid('', true));
 
         $feed_id = $this->feedManager->persist($feed);
 
-        $item = $this->itemManager->init();
+        $item = new Item();
         $item->setFeed($feed);
         $item->setTitle('test-'.uniqid('', true));
         $item->setLink('test-'.uniqid('', true));

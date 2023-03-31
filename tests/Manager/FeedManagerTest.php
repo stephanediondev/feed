@@ -20,7 +20,7 @@ class FeedManagerTest extends KernelTestCase
 
     public function test(): void
     {
-        $feed = $this->feedManager->init();
+        $feed = new Feed();
         $feed->setTitle('test-'.uniqid('', true));
         $feed->setLink('test-'.uniqid('', true));
 

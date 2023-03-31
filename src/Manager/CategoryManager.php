@@ -41,12 +41,7 @@ class CategoryManager extends AbstractManager
         return $this->categoryRepository->getList($parameters);
     }
 
-    public function init(): Category
-    {
-        return new Category();
-    }
-
-    public function persist(Category $category): ?int
+    public function persist(Category $category): void
     {
         if ($category->getDateCreated() == null) {
             $eventName = CategoryEvent::CREATED;
@@ -61,8 +56,6 @@ class CategoryManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $category->getId();
     }
 
     public function remove(Category $category): void

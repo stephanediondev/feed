@@ -35,12 +35,7 @@ class ItemManager extends AbstractManager
         return $this->itemRepository->getList($parameters);
     }
 
-    public function init(): Item
-    {
-        return new Item();
-    }
-
-    public function persist(Item $item): ?int
+    public function persist(Item $item): void
     {
         if ($item->getDateCreated() == null) {
             $eventName = ItemEvent::CREATED;
@@ -56,8 +51,6 @@ class ItemManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $item->getId();
     }
 
     public function remove(Item $item): void

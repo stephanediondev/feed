@@ -33,12 +33,7 @@ class ActionAuthorManager extends AbstractManager
         return $this->actionAuthorRepository->getList($parameters);
     }
 
-    public function init(): ActionAuthor
-    {
-        return new ActionAuthor();
-    }
-
-    public function persist(ActionAuthor $actionAuthor): ?int
+    public function persist(ActionAuthor $actionAuthor): void
     {
         if ($actionAuthor->getDateCreated() == null) {
             $eventName = ActionAuthorEvent::CREATED;
@@ -53,8 +48,6 @@ class ActionAuthorManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $actionAuthor->getId();
     }
 
     public function remove(ActionAuthor $actionAuthor): void

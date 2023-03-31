@@ -21,7 +21,7 @@ class ActionManagerTest extends KernelTestCase
     public function testId(): void
     {
         $title = 'test-'.uniqid('', true);
-        $action = $this->actionManager->init();
+        $action = new Action();
         $action->setTitle($title);
 
         $action_id = $this->actionManager->persist($action);
@@ -39,7 +39,7 @@ class ActionManagerTest extends KernelTestCase
     public function testTitle(): void
     {
         $title = 'test-'.uniqid('', true);
-        $action = $this->actionManager->init();
+        $action = new Action();
         $action->setTitle($title);
 
         $action_id = $this->actionManager->persist($action);

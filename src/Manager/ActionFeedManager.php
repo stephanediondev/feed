@@ -33,12 +33,7 @@ class ActionFeedManager extends AbstractManager
         return $this->actionFeedRepository->getList($parameters);
     }
 
-    public function init(): ActionFeed
-    {
-        return new ActionFeed();
-    }
-
-    public function persist(ActionFeed $actionFeed): ?int
+    public function persist(ActionFeed $actionFeed): void
     {
         if ($actionFeed->getDateCreated() == null) {
             $eventName = ActionFeedEvent::CREATED;
@@ -53,8 +48,6 @@ class ActionFeedManager extends AbstractManager
         $this->eventDispatcher->dispatch($event, $eventName);
 
         $this->clearCache();
-
-        return $actionFeed->getId();
     }
 
     public function remove(ActionFeed $actionFeed): void

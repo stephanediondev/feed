@@ -20,7 +20,7 @@ class MemberManagerTest extends KernelTestCase
 
     public function test(): void
     {
-        $member = $this->memberManager->init();
+        $member = new Member();
         $member->setEmail('test-'.uniqid('', true));
         $member->setPassword('test-'.uniqid('', true));
 

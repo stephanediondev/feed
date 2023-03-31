@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Entity\Author;
+use App\Entity\ActionAuthor;
 use App\Form\Type\AuthorType;
 use App\Manager\ActionAuthorManager;
 use App\Manager\ActionManager;
@@ -73,9 +75,11 @@ class AuthorController extends AbstractAppController
             }
 
             if ($request->query->get('feed')) {
-                $parameters['feed'] = (int) $request->query->get('feed');
-                $data['entry'] = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])->toArray();
-                $data['entry_entity'] = 'feed';
+                if ($feed = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])) {
+                    $parameters['feed'] = (int) $request->query->get('feed');
+                    $data['entry'] = $feed->toArray();
+                    $data['entry_entity'] = 'feed';
+                }
             }
 
             if ($request->query->get('days')) {
@@ -152,14 +156,15 @@ class AuthorController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $form = $this->createForm(AuthorType::class, $this->authorManager->init());
+        $author = new Author();
+        $form = $this->createForm(AuthorType::class, $author);
 
         $form->submit($request->request->all(), false);
 
         if ($form->isValid()) {
-            $author_id = $this->authorManager->persist($form->getData());
+            $this->authorManager->persist($form->getData());
 
-            $data['entry'] = $this->authorManager->getOne(['id' => $author_id])->toArray();
+            $data['entry'] = $author->toArray();
             $data['entry_entity'] = 'author';
         } else {
             $errors = $form->getErrors(true);
@@ -168,9 +173,10 @@ class AuthorController extends AbstractAppController
                     $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
                 }
             }
+            return new JsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data);
+        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
     }
 
     #[Route('/author/{id}', name: 'read', methods: ['GET'])]
@@ -258,6 +264,10 @@ class AuthorController extends AbstractAppController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
+        if (!$action) {
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+        }
+
         if ($actionAuthor = $this->actionAuthorManager->getOne([
             'action' => $action,
             'author' => $author,
@@ -265,7 +275,7 @@ class AuthorController extends AbstractAppController
         ])) {
             $this->actionAuthorManager->remove($actionAuthor);
 
-            $data['action'] = $action->getReverse()->getTitle();
+            $data['action'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
             $data['action_reverse'] = $action->getTitle();
 
             if ($action->getReverse()) {
@@ -275,7 +285,7 @@ class AuthorController extends AbstractAppController
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionAuthorReverse = $this->actionAuthorManager->init();
+                    $actionAuthorReverse = new ActionAuthor();
                     $actionAuthorReverse->setAction($action->getReverse());
                     $actionAuthorReverse->setAuthor($author);
                     $actionAuthorReverse->setMember($memberConnected);
@@ -283,14 +293,14 @@ class AuthorController extends AbstractAppController
                 }
             }
         } else {
-            $actionAuthor = $this->actionAuthorManager->init();
+            $actionAuthor = new ActionAuthor();
             $actionAuthor->setAction($action);
             $actionAuthor->setAuthor($author);
             $actionAuthor->setMember($memberConnected);
             $this->actionAuthorManager->persist($actionAuthor);
 
             $data['action'] = $action->getTitle();
-            $data['action_reverse'] = $action->getReverse()->getTitle();
+            $data['action_reverse'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
 
             if ($action->getReverse()) {
                 if ($actionAuthorReverse = $this->actionAuthorManager->getOne([

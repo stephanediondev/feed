@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Entity\Category;
+use App\Entity\ActionCategory;
 use App\Form\Type\CategoryType;
 use App\Manager\ActionCategoryManager;
 use App\Manager\ActionManager;
@@ -147,14 +149,15 @@ class CategoryController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $form = $this->createForm(CategoryType::class, $this->categoryManager->init());
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class, $category);
 
         $form->submit($request->request->all(), false);
 
         if ($form->isValid()) {
-            $category_id = $this->categoryManager->persist($form->getData());
+            $this->categoryManager->persist($form->getData());
 
-            $data['entry'] = $this->categoryManager->getOne(['id' => $category_id])->toArray();
+            $data['entry'] = $category->toArray();
             $data['entry_entity'] = 'category';
         } else {
             $errors = $form->getErrors(true);
@@ -163,9 +166,10 @@ class CategoryController extends AbstractAppController
                     $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
                 }
             }
+            return new JsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data);
+        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
     }
 
     #[Route('/category/{id}', name: 'read', methods: ['GET'])]
@@ -258,6 +262,10 @@ class CategoryController extends AbstractAppController
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
+        if (!$action) {
+            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+        }
+
         if ($actionCategory = $this->actionCategoryManager->getOne([
             'action' => $action,
             'category' => $category,
@@ -265,7 +273,7 @@ class CategoryController extends AbstractAppController
         ])) {
             $this->actionCategoryManager->remove($actionCategory);
 
-            $data['action'] = $action->getReverse()->getTitle();
+            $data['action'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
             $data['action_reverse'] = $action->getTitle();
 
             if ($action->getReverse()) {
@@ -275,7 +283,7 @@ class CategoryController extends AbstractAppController
                     'member' => $memberConnected,
                 ])) {
                 } else {
-                    $actionCategoryReverse = $this->actionCategoryManager->init();
+                    $actionCategoryReverse = new ActionCategory();
                     $actionCategoryReverse->setAction($action->getReverse());
                     $actionCategoryReverse->setCategory($category);
                     $actionCategoryReverse->setMember($memberConnected);
@@ -283,14 +291,14 @@ class CategoryController extends AbstractAppController
                 }
             }
         } else {
-            $actionCategory = $this->actionCategoryManager->init();
+            $actionCategory = new ActionCategory();
             $actionCategory->setAction($action);
             $actionCategory->setCategory($category);
             $actionCategory->setMember($memberConnected);
             $this->actionCategoryManager->persist($actionCategory);
 
             $data['action'] = $action->getTitle();
-            $data['action_reverse'] = $action->getReverse()->getTitle();
+            $data['action_reverse'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
 
             if ($action->getReverse()) {
                 if ($actionCategoryReverse = $this->actionCategoryManager->getOne([
