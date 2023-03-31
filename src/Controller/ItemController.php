@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -133,7 +134,7 @@ class ItemController extends AbstractAppController
         if ($memberConnected) {
             if ($request->query->get('unread')) {
                 $data['unread'] = $pagination->getTotalItemCount();
-            } else {
+            } elseif ($memberConnected->getId()) {
                 $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
             }
         }
@@ -281,7 +282,9 @@ class ItemController extends AbstractAppController
 
         $this->itemManager->readAll($parameters);
 
-        $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+        if ($memberConnected->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+        }
 
         return new JsonResponse($data);
     }
@@ -365,7 +368,7 @@ class ItemController extends AbstractAppController
         $data['entry'] = $item->toArray();
         $data['entry_entity'] = 'item';
 
-        if ($case == 'read') {
+        if ($case == 'read' && $memberConnected->getId()) {
             $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
         }
 

@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
-use App\Entity\Feed;
 use App\Entity\ActionFeed;
+use App\Entity\Feed;
 use App\Form\Type\FeedType;
 use App\Form\Type\ImportOpmlType;
 use App\Manager\ActionFeedManager;
@@ -256,7 +257,7 @@ class FeedController extends AbstractAppController
         if ($form->isValid()) {
             $this->feedManager->persist($form->getData());
 
-            $data['entry'] = $this->feedManager->getOne(['id' => $id])->toArray();
+            $data['entry'] = $feed->toArray();
             $data['entry_entity'] = 'feed';
         } else {
             $errors = $form->getErrors(true);
@@ -443,27 +444,26 @@ class FeedController extends AbstractAppController
         $xml .= '<body>';
         $xml .= "\r\n";
 
-        foreach ($feeds as $feed) {
-            $feed = $this->feedManager->getOne(['id' => $feed['id']]);
+        foreach ($feeds as $row) {
+            $feed = $this->feedManager->getOne(['id' => $row['id']]);
 
-            $title = $feed->getTitle();
-            if ($title) {
-                $title = str_replace('&', '&amp;', $title);
-                $title = str_replace('""', '&quot;', $title);
+            if ($feed) {
+                if ($title = $feed->getTitle()) {
+                    $title = str_replace('&', '&amp;', $title);
+                    $title = str_replace('""', '&quot;', $title);
+                }
+
+                if ($link = $feed->getLink()) {
+                    $link = str_replace('&', '&amp;', $link);
+                }
+
+                if ($website = $feed->getWebsite()) {
+                    $website = str_replace('&', '&amp;', $website);
+                }
+
+                $xml .= '<outline text="'.$title.'" title="'.$title.'" type="rss" xmlUrl="'.$link.'" htmlUrl="'.$website.'"/>';
+                $xml .= "\r\n";
             }
-
-            $link = $feed->getLink();
-            if ($link) {
-                $link = str_replace('&', '&amp;', $link);
-            }
-
-            $website = $feed->getWebsite();
-            if ($website) {
-                $website = str_replace('&', '&amp;', $website);
-            }
-
-            $xml .= '<outline text="'.$title.'" title="'.$title.'" type="rss" xmlUrl="'.$link.'" htmlUrl="'.$website.'"/>';
-            $xml .= "\r\n";
         }
         $xml .= '</body>';
         $xml .= "\r\n";

@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
-use App\Entity\Author;
 use App\Entity\ActionAuthor;
+use App\Entity\Author;
 use App\Form\Type\AuthorType;
 use App\Manager\ActionAuthorManager;
 use App\Manager\ActionManager;

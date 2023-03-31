@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
-use App\Entity\Category;
 use App\Entity\ActionCategory;
+use App\Entity\Category;
 use App\Form\Type\CategoryType;
 use App\Manager\ActionCategoryManager;
 use App\Manager\ActionManager;

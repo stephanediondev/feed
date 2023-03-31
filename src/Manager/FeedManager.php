@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Manager;
@@ -86,13 +87,13 @@ class FeedManager extends AbstractManager
                 if ($test) {
                     $feed_id = $test['id'];
                 } else {
-                    $parse_url = parse_url($obj->xmlUrl);
+                    $parseUrl = parse_url($obj->xmlUrl);
 
                     $insertFeed = [
                         'title' => $this->cleanTitle($obj->title),
                         'link' => $link,
                         'website' => $this->cleanWebsite($obj->htmlUrl),
-                        'hostname' => $parse_url['host'] ?? null,
+                        'hostname' => $parseUrl['host'] ?? null,
                         'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                         'date_modified' => (new \Datetime())->format('Y-m-d H:i:s'),
                     ];

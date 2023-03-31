@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Manager;
@@ -105,9 +106,9 @@ class CollectionManager extends AbstractManager
                 'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
             ];
 
-            $parse_url = parse_url($feed['link']);
+            $parseUrl = parse_url($feed['link']);
 
-            if (isset($parse_url['scheme']) == 0 || ($parse_url['scheme'] != 'http' && $parse_url['scheme'] != 'https')) {
+            if (isset($parseUrl['scheme']) == 0 || ($parseUrl['scheme'] != 'http' && $parseUrl['scheme'] != 'https')) {
                 $errors++;
                 $insertCollectionFeed['error'] = 'Unvalid scheme';
             } else {
@@ -141,22 +142,24 @@ class CollectionManager extends AbstractManager
                     if (!$simplepieFeed->error()) {
                         $this->setItems($feed, $simplepieFeed->get_items());
 
-                        $parse_url = parse_url($simplepieFeed->get_link());
+                        if ($simplepieFeed->get_link()) {
+                            $parseUrl = parse_url($simplepieFeed->get_link());
 
-                        $updateFeed = [];
-                        $updateFeed['title'] = $simplepieFeed->get_title() ? $this->cleanTitle($simplepieFeed->get_title()) : '-';
-                        $updateFeed['website'] = $simplepieFeed->get_link() ? $this->cleanWebsite($simplepieFeed->get_link()) : null;
-                        $updateFeed['link'] = $simplepieFeed->subscribe_url() ? $this->cleanLink($simplepieFeed->subscribe_url()) : null;
-                        $updateFeed['hostname'] = isset($parse_url['host']) ? $parse_url['host'] : null;
-                        $updateFeed['description'] = $simplepieFeed->get_description();
+                            $updateFeed = [];
+                            $updateFeed['title'] = $simplepieFeed->get_title() ? $this->cleanTitle($simplepieFeed->get_title()) : '-';
+                            $updateFeed['website'] = $simplepieFeed->get_link() ? $this->cleanWebsite($simplepieFeed->get_link()) : null;
+                            $updateFeed['link'] = $simplepieFeed->subscribe_url() ? $this->cleanLink($simplepieFeed->subscribe_url()) : null;
+                            $updateFeed['hostname'] = isset($parseUrl['host']) ? $parseUrl['host'] : null;
+                            $updateFeed['description'] = $simplepieFeed->get_description();
 
-                        $updateFeed['language'] = $simplepieFeed->get_language() ? substr($simplepieFeed->get_language(), 0, 2) : null;
+                            $updateFeed['language'] = $simplepieFeed->get_language() ? substr($simplepieFeed->get_language(), 0, 2) : null;
 
-                        $updateFeed['next_collection'] = $this->setNextCollection($feed);
+                            $updateFeed['next_collection'] = $this->setNextCollection($feed);
 
-                        $updateFeed['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
+                            $updateFeed['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
 
-                        $this->update('feed', $updateFeed, $feed['id']);
+                            $this->update('feed', $updateFeed, $feed['id']);
+                        }
                     }
                     $simplepieFeed->__destruct();
                     unset($simplepieFeed);
@@ -455,13 +458,13 @@ class CollectionManager extends AbstractManager
 
     public function toAscii(string $url): string
     {
-        $parse_url = parse_url($url);
-        if (!isset($parse_url['host'])) {
+        $parseUrl = parse_url($url);
+        if (!isset($parseUrl['host'])) {
             return $url;
         }
-        if (mb_detect_encoding($parse_url['host']) != 'ASCII') {
-            if ($idn = idn_to_ascii($parse_url['host'])) {
-                $url = str_replace($parse_url['host'], $idn, $url);
+        if (mb_detect_encoding($parseUrl['host']) != 'ASCII') {
+            if ($idn = idn_to_ascii($parseUrl['host'])) {
+                $url = str_replace($parseUrl['host'], $idn, $url);
             }
         }
         return $url;
