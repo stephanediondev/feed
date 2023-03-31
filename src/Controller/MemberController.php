@@ -77,7 +77,8 @@ class MemberController extends AbstractAppController
         $member = new Member();
         $form = $this->createForm(MemberType::class, $member, ['validation_groups' => ['insert']]);
 
-        $form->submit($request->request->all());
+        $content = $this->getContent($request);
+        $form->submit($content);
 
         if ($form->isValid()) {
             $member->setPassword($this->passwordHasher->hashPassword($member, $member->getPassword()));
@@ -171,7 +172,8 @@ class MemberController extends AbstractAppController
         $login = new LoginModel();
         $form = $this->createForm(LoginType::class, $login);
 
-        $form->submit($request->request->all());
+        $content = $this->getContent($request);
+        $form->submit($content);
 
         if ($form->isValid()) {
             if ($this->ldapEnabled) {
@@ -308,7 +310,8 @@ class MemberController extends AbstractAppController
         $profile = new ProfileModel();
         $form = $this->createForm(ProfileType::class, $profile);
 
-        $form->submit($request->request->all());
+        $content = $this->getContent($request);
+        $form->submit($content);
 
         if ($form->isValid()) {
             $memberConnected->setEmail($profile->getEmail());
@@ -369,7 +372,8 @@ class MemberController extends AbstractAppController
         $pinboard = new PinboardModel();
         $form = $this->createForm(PinboardType::class, $pinboard);
 
-        $form->submit($request->request->all());
+        $content = $this->getContent($request);
+        $form->submit($content);
 
         if ($form->isValid()) {
             $connection = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);

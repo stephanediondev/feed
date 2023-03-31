@@ -153,7 +153,8 @@ class CategoryController extends AbstractAppController
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
 
-        $form->submit($request->request->all(), false);
+        $content = $this->getContent($request);
+        $form->submit($content);
 
         if ($form->isValid()) {
             $this->categoryManager->persist($form->getData());

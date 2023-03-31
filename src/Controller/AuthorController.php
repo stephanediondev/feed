@@ -160,7 +160,8 @@ class AuthorController extends AbstractAppController
         $author = new Author();
         $form = $this->createForm(AuthorType::class, $author);
 
-        $form->submit($request->request->all(), false);
+        $content = $this->getContent($request);
+        $form->submit($content);
 
         if ($form->isValid()) {
             $this->authorManager->persist($form->getData());

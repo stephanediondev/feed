@@ -168,6 +168,7 @@ class FeedController extends AbstractAppController
         return new JsonResponse($data);
     }
 
+    #[Route(path: '/feeds', name: 'create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $data = [];
@@ -178,7 +179,8 @@ class FeedController extends AbstractAppController
         $feed = new Feed();
         $form = $this->createForm(FeedType::class, $feed);
 
-        $form->submit($request->request->all(), false);
+        $content = $this->getContent($request);
+        $form->submit($content);
 
         if ($form->isValid()) {
             $this->feedManager->persist($form->getData());
@@ -254,7 +256,8 @@ class FeedController extends AbstractAppController
 
         $form = $this->createForm(FeedType::class, $feed);
 
-        $form->submit($request->request->all(), false);
+        $content = $this->getContent($request);
+        $form->submit($content);
 
         if ($form->isValid()) {
             $this->feedManager->persist($form->getData());
@@ -390,7 +393,8 @@ class FeedController extends AbstractAppController
         $importOpml = new ImportOpmlModel();
         $form = $this->createForm(ImportOpmlType::class, $importOpml);
 
-        $form->submit($request->request->all(), false);
+        $content = $this->getContent($request);
+        $form->submit($content);
 
         if ($form->isValid()) {
             if ($file = $request->files->get('file')) {

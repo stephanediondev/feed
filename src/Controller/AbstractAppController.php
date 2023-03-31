@@ -38,6 +38,19 @@ abstract class AbstractAppController extends AbstractController
         $this->connectionManager = $connectionManager;
     }
 
+    protected function getContent(Request $request): ?array
+    {
+        if (Request::METHOD_POST == $request->getMethod() && stristr($request->headers->get('Content-Type'), 'multipart/form-data')) {
+            return $request->request->all();
+        } elseif (Request::METHOD_POST == $request->getMethod() && stristr($request->headers->get('Content-Type'), 'application/x-www-form-urlencoded')) {
+            return $request->request->all();
+        } elseif ($content = $request->getContent()) {
+            return json_decode($content, true);
+        }
+
+        return null;
+    }
+
     public function validateToken(Request $request, string $type = 'login'): ?Member
     {
         if ($request->headers->get('Authorization')) {
