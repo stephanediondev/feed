@@ -40,11 +40,9 @@ abstract class AbstractAppController extends AbstractController
 
     protected function getContent(Request $request): ?array
     {
-        if (Request::METHOD_POST == $request->getMethod() && stristr($request->headers->get('Content-Type'), 'multipart/form-data')) {
+        if (stristr($request->headers->get('Content-Type'), 'multipart/form-data') || stristr($request->headers->get('Content-Type'), 'application/x-www-form-urlencoded')) {
             return $request->request->all();
-        } elseif (Request::METHOD_POST == $request->getMethod() && stristr($request->headers->get('Content-Type'), 'application/x-www-form-urlencoded')) {
-            return $request->request->all();
-        } elseif ($content = $request->getContent()) {
+        } elseif (stristr($request->headers->get('Content-Type'), 'application/json') && $content = $request->getContent()) {
             return json_decode($content, true);
         }
 
