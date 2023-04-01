@@ -801,6 +801,33 @@ if (document.attachEvent ? document.readyState === 'complete' : document.readySt
     document.addEventListener('DOMContentLoaded', ready);
 }
 
+window.addEventListener('beforeinstallprompt', function(BeforeInstallPromptEvent) {
+    BeforeInstallPromptEvent.preventDefault();
+
+    var install = document.getElementById('install');
+
+    if (install) {
+        document.getElementById('install').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            BeforeInstallPromptEvent.userChoice
+            .then(function(AppBannerPromptResult) {
+                setToast({'title': 'Install', 'body': AppBannerPromptResult.outcome});
+            })
+            .catch(function(error) {
+            });
+
+            BeforeInstallPromptEvent.prompt();
+        });
+
+        install.parentNode.classList.remove('d-none');
+    }
+});
+
+window.addEventListener('appinstalled', function(appinstalled) {
+    setToast({'title': 'Install ', 'body': appinstalled});
+});
+
 var gKey = false;
 
 document.addEventListener('keyup', function(event) {
