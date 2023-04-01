@@ -310,10 +310,7 @@ function ready() {
                             });
                         }
                     }
-                    if (401 === response.status) {
-                        setSnackbar(i18next.t('error_401'));
-                    }
-                    if (403 === response.status) {
+                    if (401 === response.status || 403 === response.status) {
                         loadRoute('#login');
                     }
                     if (404 === response.status) {
@@ -508,7 +505,7 @@ function loadRoute(key, parameters) {
                 document.querySelector('main > .mdl-grid').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
             }
 
-            if (key !== '#401' && key !== '#404' && key !== '#500') {
+            if (key !== '#404' && key !== '#500') {
                 if (key !== window.location.hash) {
                     history.pushState({key: key}, null, key);
                     lastHistory = window.location.hash;
@@ -630,7 +627,7 @@ function loadRoute(key, parameters) {
                         }
                     });
                 }
-                if (403 === response.status) {
+                if (401 === response.status || 403 === response.status) {
                     removeCookie('token_signed');
                     $('body').removeClass('connected');
                     $('body').addClass('anonymous');

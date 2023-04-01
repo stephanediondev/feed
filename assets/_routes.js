@@ -3,10 +3,8 @@ routes['#login'] = {view: 'view-login', query: false, title: 'login'};
 routes['#logout'] = {view: 'view-logout', query: '/logout'};
 routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
 routes['#profile/connections'] = {view: 'view-profile-connections', query: '/profile/connections', title: 'profile'};
-routes['#401'] = {view: 'view-401', query: false, title: 'error_401'};
 routes['#404'] = {view: 'view-404', query: false, title: 'error_404'};
 routes['#500'] = {view: 'view-500', query: false, title: 'error_500'};
-routes['#status'] = {view: 'view-status', query: '/status', title: 'status'};
 
 //Feed
 routes['#feeds/recent'] = {view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?sortField=date_created&sortDirection=DESC', title: 'title.recent_feeds'};
