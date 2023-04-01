@@ -146,16 +146,9 @@ function ready() {
             event.preventDefault();
 
             if ($(this).hasClass('action-share') && 'share' in navigator) {
-                var target = $(this).attr('data-bs-target');
-                var dialog = $(target);
-                if (dialog) {
-                    dialog.removeClass('show');
-                }
-
                 navigator.share({
                     title: decodeURIComponent($(this).data('title')),
                     url: decodeURIComponent($(this).data('url'))
-                }).then(function() {
                 });
             } else {
                 const myModal = new bootstrap.Modal($(this).data('bs-target'), {});
@@ -242,7 +235,6 @@ function ready() {
                         window.open(choice, 'share');
                     }
                 }
-
 
             } else if (typeof id !== 'undefined' && id.indexOf('form-search-') !== -1) {
                 loadRoute(form.attr('action'), {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
