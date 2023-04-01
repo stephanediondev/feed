@@ -828,6 +828,14 @@ window.addEventListener('appinstalled', function(appinstalled) {
     setToast({'title': 'Install ', 'body': appinstalled});
 });
 
+window.addEventListener('online', function() {
+    setToast({'title': 'Status ', 'body': 'Online'});
+});
+
+window.addEventListener('offline', function() {
+    setToast({'title': 'Status ', 'body': 'Offline'});
+});
+
 var gKey = false;
 
 document.addEventListener('keyup', function(event) {
