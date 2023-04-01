@@ -157,6 +157,9 @@ function ready() {
                     url: decodeURIComponent($(this).data('url'))
                 }).then(function() {
                 });
+            } else {
+                const myModal = new bootstrap.Modal($(this).data('bs-target'), {});
+                myModal.show();
             }
         });
 

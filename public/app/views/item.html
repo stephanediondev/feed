@@ -17,7 +17,7 @@
             <a href="#items/unread" class="load-route mdl-button btn btn-primary btn-sm connected count-unread">{{trans 'button.unread_items'}}</a>
             <a href="#items/starred" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.starred_items'}}</a>
             <a href="#items/search" class="load-route mdl-button btn btn-primary btn-sm online">{{trans 'button.search_items'}}</a>
-            <button type="button" class="mdl-button btn btn-primary btn-sm dialog connected online" data-bs-toggle="modal" data-bs-target="#dialog-mark_all_as_read" title="{{trans 'shortcut_shift_a'}}">{{trans 'mark_all_as_read'}}</button>
+            <button type="button" class="mdl-button btn btn-primary btn-sm dialog connected online" data-bs-target="#dialog-mark_all_as_read" title="{{trans 'shortcut_shift_a'}}">{{trans 'mark_all_as_read'}}</button>
         </div>
 
         <div class="modal fade" id="dialog-mark_all_as_read" tabindex="-1" aria-labelledby="{{trans 'mark_all_as_read'}}" aria-hidden="true">
@@ -119,7 +119,7 @@
                 <a href="#item/action/star/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-star connected" title="s">{{trans 'star'}}</a>
             {{/if}}
 
-            <button type="button" class="mdl-button btn btn-primary btn-sm dialog action-share" data-bs-toggle="modal" data-bs-target="#dialog-share-{{ entry.id }}" data-title="{{ encode entry.title }}" data-url="{{ encode entry.link }}" title="{{trans 'shortcut_shift_s'}}">{{trans 'share'}}</button>
+            <button type="button" class="mdl-button btn btn-primary btn-sm dialog action-share" data-bs-target="#dialog-share-{{ entry.id }}" data-title="{{ encode entry.title }}" data-url="{{ encode entry.link }}" title="{{trans 'shortcut_shift_s'}}">{{trans 'share'}}</button>
         </div>
 
         <div class="modal fade" id="dialog-share-{{ entry.id }}" tabindex="-1" aria-labelledby="{{trans 'share'}}" aria-hidden="true">
