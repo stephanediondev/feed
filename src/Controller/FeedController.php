@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/api', name: 'api_feeds_')]
+#[Route(path: '/api', name: 'api_feeds_', priority: 15)]
 class FeedController extends AbstractAppController
 {
     private AuthorManager $authorManager;
@@ -302,7 +302,7 @@ class FeedController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    #[Route('/feed/action/subscribe/{id}', name: 'subscribe', methods: ['GET'])]
+    #[Route('/feed/action/subscribe/{id}', name: 'action_subscribe', methods: ['GET'])]
     public function actionSubscribe(Request $request, int $id): JsonResponse
     {
         return $this->setAction('subscribe', $request, $id);

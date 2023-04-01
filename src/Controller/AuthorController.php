@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/api', name: 'api_authors_')]
+#[Route(path: '/api', name: 'api_authors_', priority: 15)]
 class AuthorController extends AbstractAppController
 {
     private ActionManager $actionManager;
@@ -150,6 +150,7 @@ class AuthorController extends AbstractAppController
         return new JsonResponse($data);
     }
 
+    #[Route(path: '/aurhors', name: 'create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $data = [];
@@ -201,6 +202,7 @@ class AuthorController extends AbstractAppController
         return new JsonResponse($data);
     }
 
+    #[Route('/author/{id}', name: 'update', methods: ['PUT'])]
     public function update(Request $request, int $id): JsonResponse
     {
         $data = [];
@@ -220,6 +222,7 @@ class AuthorController extends AbstractAppController
         return new JsonResponse($data);
     }
 
+    #[Route('/author/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];

@@ -276,7 +276,12 @@ function ready() {
                     body = form.serialize();
                 }
 
-                fetch(apiUrl + form.data('query'), {
+                var url = apiUrl + form.data('query');
+                if (form.data('query') === '/login') {
+                    url = loginUrl;
+                }
+
+                fetch(url, {
                     method: form.attr('method'),
                     credentials: 'omit',
                     mode: 'cors',
@@ -766,12 +771,12 @@ if (language) {
 }
 
 var hostName = window.location.hostname;
-var apiUrl = '//' + hostName;
+var baseUrl = '//' + hostName;
 if (window.location.port) {
-    apiUrl += ':' + window.location.port;
+    baseUrl += ':' + window.location.port;
 }
-
-apiUrl += '/api';
+var loginUrl = baseUrl + '/login';
+var apiUrl = baseUrl + '/api';
 
 if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
     navigator.serviceWorker.register('serviceworker.js').then(function() {

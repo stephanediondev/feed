@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractAppController
 {
-    #[Route(path: '/', name: 'index', methods: ['GET'])]
+    #[Route(path: '/', name: 'index', methods: ['GET'], priority: 25)]
     public function index(): Response
     {
         $response = new Response();

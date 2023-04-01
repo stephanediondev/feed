@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/api', name: 'api_connections_')]
+#[Route(path: '/api', name: 'api_connections_', priority: 15)]
 class ConnectionController extends AbstractAppController
 {
     #[Route('/connection/{id}', name: 'delete', methods: ['DELETE'])]

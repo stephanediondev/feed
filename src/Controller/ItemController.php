@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/api', name: 'api_items_')]
+#[Route(path: '/api', name: 'api_items_', priority: 15)]
 class ItemController extends AbstractAppController
 {
     private ActionManager $actionManager;

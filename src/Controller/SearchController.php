@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/api', name: 'api_search_')]
+#[Route(path: '/api', name: 'api_search_', priority: 20)]
 class SearchController extends AbstractAppController
 {
     private const LIMIT = 20;

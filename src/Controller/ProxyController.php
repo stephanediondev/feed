@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/api', name: 'api_')]
+#[Route(path: '/api', name: 'api_', priority: 20)]
 class ProxyController extends AbstractAppController
 {
     #[Route(path: '/proxy', name: 'proxy', methods: ['GET'])]
