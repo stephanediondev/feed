@@ -1,3 +1,15 @@
+<script type="text/template" id="view-toast">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="{{ id }}">
+        <div class="toast-header">
+            <strong class="me-auto">{{ title }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            {{ body }}
+        </div>
+    </div>
+</script>
+
 <script type="text/template" id="view-navigation">
     <button class="action-up btn btn-lg btn-secondary" title="k"><i class="bi bi-chevron-up"></i></button>
     <button class="action-down btn btn-lg btn-secondary" title="j"><i class="bi bi-chevron-down"></i></button>
