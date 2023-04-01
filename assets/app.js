@@ -30,7 +30,14 @@ global.saveAs = saveAs;
 import {routes} from './_routes.js'
 
 function setBadge(value) {
-    document.querySelector('.count-unread').innerHTML = value;
+    let countUnread = $('.count-unread');
+    countUnread.text(value);
+
+    if (0 === value) {
+        countUnread.addClass('d-none');
+    } else {
+        countUnread.removeClass('d-none');
+    }
 
     if (navigator.setExperimentalAppBadge) {
         navigator.setExperimentalAppBadge(value).catch(function(error) {
@@ -38,14 +45,6 @@ function setBadge(value) {
     } else if (navigator.setAppBadge) {
         navigator.setAppBadge(value).catch(function(error) {
         });
-    }
-}
-
-function clearBadge() {
-    document.querySelector('.count-unread').innerHTML = 0;
-
-    if (navigator.clearAppBadge) {
-        navigator.clearAppBadge();
     }
 }
 
@@ -522,13 +521,7 @@ function loadRoute(key, parameters) {
                         }
 
                         if (typeof dataReturn.unread !== 'undefined') {
-                            var badge = 0;
-                            if (dataReturn.unread > 0) {
-                                badge = dataReturn.unread;
-                                setBadge(badge);
-                            } else {
-                                clearBadge();
-                            }
+                            setBadge(parseInt(dataReturn.unread));
                         }
 
                         if (route.view) {
