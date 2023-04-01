@@ -348,13 +348,6 @@ function ready() {
     });
 }
 
-function getMomentLocale(languageFinal) {
-    return fetch('node_modules/moment/locale/' + languageFinal + '.js').then(function(response) {
-        moment.locale(languageFinal);
-    }).catch(function(err) {
-    });
-}
-
 function getTranslation(languageFinal) {
     return fetch('app/translations/' + languageFinal + '.json').then(function(response) {
         if (response.ok) {
@@ -797,10 +790,6 @@ var languages = ['en', 'fr'];
 var languageFinal = 'en';
 if (languages.indexOf(language)) {
     languageFinal = language;
-}
-
-if (languageFinal !== 'en') {
-    readyPromises.push(getMomentLocale(languageFinal));
 }
 
 readyPromises.push(getTranslation(languageFinal));
