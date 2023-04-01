@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Controller\AbstractAppController;
 use App\Entity\ActionFeed;
 use App\Entity\Feed;
+use App\Entity\Member;
 use App\Form\Type\FeedType;
 use App\Form\Type\ImportOpmlType;
 use App\Manager\ActionFeedManager;
@@ -49,31 +50,21 @@ class FeedController extends AbstractAppController
     public function index(Request $request): JsonResponse
     {
         $data = [];
-        $memberConnected = $this->validateToken($request);
 
         $parameters = [];
 
         if ($request->query->get('witherrors')) {
-            if (!$memberConnected) {
-                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-            }
             $parameters['witherrors'] = true;
         }
 
         if ($request->query->get('subscribed')) {
-            if (!$memberConnected) {
-                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-            }
             $parameters['subscribed'] = true;
-            $parameters['member'] = $memberConnected;
+            $parameters['member'] = $this->getUser();
         }
 
         if ($request->query->get('unsubscribed')) {
-            if (!$memberConnected) {
-                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-            }
             $parameters['unsubscribed'] = true;
-            $parameters['member'] = $memberConnected;
+            $parameters['member'] = $this->getUser();
         }
 
         if ($request->query->get('category')) {
@@ -134,13 +125,13 @@ class FeedController extends AbstractAppController
             $ids[] = $result['id'];
         }
 
-        $results = $this->actionFeedManager->getList(['member' => $memberConnected, 'feeds' => $ids])->getResult();
+        $results = $this->actionFeedManager->getList(['member' => $this->getUser(), 'feeds' => $ids])->getResult();
         $actions = [];
         foreach ($results as $actionFeed) {
             $actions[$actionFeed->getFeed()->getId()][] = $actionFeed;
         }
 
-        $results = $this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feeds' => $ids])->getResult();
+        $results = $this->categoryManager->feedCategoryManager->getList(['member' => $this->getUser(), 'feeds' => $ids])->getResult();
         $categories = [];
         foreach ($results as $feedCategory) {
             $categories[$feedCategory->getFeed()->getId()][] = $feedCategory->toArray();
@@ -172,9 +163,6 @@ class FeedController extends AbstractAppController
     public function create(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
         $feed = new Feed();
         $form = $this->createForm(FeedType::class, $feed);
@@ -209,7 +197,6 @@ class FeedController extends AbstractAppController
     public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
-        $memberConnected = $this->validateToken($request);
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
@@ -217,10 +204,10 @@ class FeedController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $actions = $this->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+        $actions = $this->actionFeedManager->getList(['member' => $this->getUser(), 'feed' => $feed])->getResult();
 
         $categories = [];
-        foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
+        foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $this->getUser(), 'feed' => $feed])->getResult() as $feedCategory) {
             $categories[] = $feedCategory->toArray();
         }
 
@@ -244,9 +231,6 @@ class FeedController extends AbstractAppController
     public function update(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
@@ -280,11 +264,8 @@ class FeedController extends AbstractAppController
     public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
-        if (!$memberConnected->getAdministrator()) {
+        if (false === $this->isGranted('ROLE_ADMIN')) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -311,7 +292,8 @@ class FeedController extends AbstractAppController
     private function setAction(string $case, Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -330,7 +312,7 @@ class FeedController extends AbstractAppController
         if ($actionFeed = $this->actionFeedManager->getOne([
             'action' => $action,
             'feed' => $feed,
-            'member' => $memberConnected,
+            'member' => $this->getUser(),
         ])) {
             $this->actionFeedManager->remove($actionFeed);
 
@@ -341,13 +323,13 @@ class FeedController extends AbstractAppController
                 if ($actionFeedReverse = $this->actionFeedManager->getOne([
                     'action' => $action->getReverse(),
                     'feed' => $feed,
-                    'member' => $memberConnected,
+                    'member' => $this->getUser(),
                 ])) {
                 } else {
                     $actionFeedReverse = new ActionFeed();
                     $actionFeedReverse->setAction($action->getReverse());
                     $actionFeedReverse->setFeed($feed);
-                    $actionFeedReverse->setMember($memberConnected);
+                    $actionFeedReverse->setMember($this->getUser());
                     $this->actionFeedManager->persist($actionFeedReverse);
                 }
             }
@@ -355,7 +337,7 @@ class FeedController extends AbstractAppController
             $actionFeed = new ActionFeed();
             $actionFeed->setAction($action);
             $actionFeed->setFeed($feed);
-            $actionFeed->setMember($memberConnected);
+            $actionFeed->setMember($this->getUser());
             $this->actionFeedManager->persist($actionFeed);
 
             $data['action'] = $action->getTitle();
@@ -365,7 +347,7 @@ class FeedController extends AbstractAppController
                 if ($actionFeedReverse = $this->actionFeedManager->getOne([
                     'action' => $action->getReverse(),
                     'feed' => $feed,
-                    'member' => $memberConnected,
+                    'member' => $this->getUser(),
                 ])) {
                     $this->actionFeedManager->remove($actionFeedReverse);
                 }
@@ -375,8 +357,8 @@ class FeedController extends AbstractAppController
         $data['entry'] = $feed->toArray();
         $data['entry_entity'] = 'feed';
 
-        if ($case == 'subscribe' && $memberConnected->getId()) {
-            $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+        if ($case == 'subscribe' && $this->getUser()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
         }
 
         return new JsonResponse($data);
@@ -386,7 +368,8 @@ class FeedController extends AbstractAppController
     public function import(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -401,7 +384,7 @@ class FeedController extends AbstractAppController
                 if ($file instanceof UploadedFile) {
                     $obj_simplexml = simplexml_load_file($file->getPathname());
                     if ($obj_simplexml) {
-                        $this->feedManager->import($memberConnected, $obj_simplexml->body);
+                        $this->feedManager->import($this->getUser(), $obj_simplexml->body);
                     }
                 }
             }
@@ -421,14 +404,15 @@ class FeedController extends AbstractAppController
     public function export(Request $request): Response
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $parameters = [];
         if ('your_subscriptions' == $request->request->get('choice')) {
             $parameters['subscribed'] = true;
-            $parameters['member'] = $memberConnected;
+            $parameters['member'] = $this->getUser();
         }
         $parameters['sortField'] = 'fed.dateCreated';
         $parameters['sortDirection'] = 'ASC';
@@ -443,7 +427,7 @@ class FeedController extends AbstractAppController
         $xml .= "\r\n";
         $xml .= '<docs>http://dev.opml.org/spec2.html</docs>';
         $xml .= "\r\n";
-        $xml .= '<ownerEmail>'.$memberConnected->getEmail().'</ownerEmail>';
+        $xml .= '<ownerEmail>'.$this->getUser()->getEmail().'</ownerEmail>';
         $xml .= "\r\n";
         $xml .= '</head>';
         $xml .= "\r\n";

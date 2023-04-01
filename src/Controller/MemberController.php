@@ -30,11 +30,8 @@ class MemberController extends AbstractAppController
     public function create(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
-        if (!$memberConnected->getAdministrator()) {
+        if (false === $this->isGranted('ROLE_ADMIN')) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -66,11 +63,8 @@ class MemberController extends AbstractAppController
     public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
-        if (!$memberConnected->getAdministrator()) {
+        if (false === $this->isGranted('ROLE_ADMIN')) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -90,11 +84,8 @@ class MemberController extends AbstractAppController
     public function update(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
-        if (!$memberConnected->getAdministrator()) {
+        if (false === $this->isGranted('ROLE_ADMIN')) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -111,11 +102,8 @@ class MemberController extends AbstractAppController
     public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
-        if (!$memberConnected->getAdministrator()) {
+        if (false === $this->isGranted('ROLE_ADMIN')) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 

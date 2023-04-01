@@ -120,7 +120,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = [];
         if ($this->getAdministrator()) {
-            $roles[] = 'ROLE_ADMINISTRATOR';
+            $roles[] = 'ROLE_ADMIN';
         } else {
             $roles[] = 'ROLE_USER';
         }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Entity\Member;
 use App\Form\Type\ProfileType;
 use App\Manager\MemberManager;
 use App\Model\ProfileModel;
@@ -30,17 +31,18 @@ class ProfileController extends AbstractAppController
     public function index(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
-        $pinboard = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
+        $pinboard = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $this->getUser()]);
 
         if ($pinboard) {
             $data['pinboard'] = $pinboard->toArray();
         }
 
-        $data['entry'] = $memberConnected->toArray();
+        $data['entry'] = $this->getUser()->toArray();
         $data['entry_entity'] = 'member';
 
         return new JsonResponse($data);
@@ -50,13 +52,14 @@ class ProfileController extends AbstractAppController
     public function profileConnections(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $data['entries'] = [];
 
-        foreach ($this->connectionManager->getList(['member' => $memberConnected])->getResult() as $connection) {
+        foreach ($this->connectionManager->getList(['member' => $this->getUser()])->getResult() as $connection) {
             $entry = $connection->toArray();
             if ($connection->getIp() == $request->getClientIp()) {
                 $entry['currentIp'] = true;
@@ -67,7 +70,7 @@ class ProfileController extends AbstractAppController
             $data['entries'][] = $entry;
         }
 
-        $data['entry'] = $memberConnected->toArray();
+        $data['entry'] = $this->getUser()->toArray();
         $data['entry_entity'] = 'member';
 
         $data['entries_entity'] = 'connection';
@@ -78,7 +81,8 @@ class ProfileController extends AbstractAppController
     public function profileUpdate(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -89,12 +93,12 @@ class ProfileController extends AbstractAppController
         $form->submit($content);
 
         if ($form->isValid()) {
-            $memberConnected->setEmail($profile->getEmail());
+            $this->getUser()->setEmail($profile->getEmail());
             if ($profile->getPassword()) {
-                $memberConnected->setPassword($this->passwordHasher->hashPassword($memberConnected, $profile->getPassword()));
+                $this->getUser()->setPassword($this->passwordHasher->hashPassword($this->getUser(), $profile->getPassword()));
             }
 
-            $this->memberManager->persist($memberConnected);
+            $this->memberManager->persist($this->getUser());
         } else {
             $errors = $form->getErrors(true);
             foreach ($errors as $error) {
@@ -104,7 +108,7 @@ class ProfileController extends AbstractAppController
             }
         }
 
-        $data['entry'] = $memberConnected->toArray();
+        $data['entry'] = $this->getUser()->toArray();
         $data['entry_entity'] = 'member';
 
         return new JsonResponse($data);

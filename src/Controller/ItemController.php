@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use App\Entity\ActionItem;
+use App\Entity\Member;
 use App\Manager\ActionItemManager;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
@@ -43,22 +44,19 @@ class ItemController extends AbstractAppController
     public function index(Request $request): JsonResponse
     {
         $data = [];
-        $memberConnected = $this->validateToken($request);
+
+        if (false === $this->getUser() instanceof Member) {
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+        }
 
         $parameters = [];
-        $parameters['member'] = $memberConnected;
+        $parameters['member'] = $this->getUser();
 
         if ($request->query->get('starred')) {
-            if (!$memberConnected) {
-                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-            }
             $parameters['starred'] = $request->query->get('starred');
         }
 
         if ($request->query->get('unread')) {
-            if (!$memberConnected) {
-                return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-            }
             $parameters['unread'] = (bool) $request->query->get('unread');
         }
 
@@ -131,12 +129,10 @@ class ItemController extends AbstractAppController
             $data['entries_page_next'] = $pageNext;
         }
 
-        if ($memberConnected) {
-            if ($request->query->get('unread')) {
-                $data['unread'] = $pagination->getTotalItemCount();
-            } elseif ($memberConnected->getId()) {
-                $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
-            }
+        if ($request->query->get('unread')) {
+            $data['unread'] = $pagination->getTotalItemCount();
+        } elseif ($this->getUser()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
         }
 
         $data['entries'] = [];
@@ -146,13 +142,13 @@ class ItemController extends AbstractAppController
             $ids[] = $result['id'];
         }
 
-        $results = $this->actionItemManager->getList(['member' => $memberConnected, 'items' => $ids])->getResult();
+        $results = $this->actionItemManager->getList(['member' => $this->getUser(), 'items' => $ids])->getResult();
         $actions = [];
         foreach ($results as $actionItem) {
             $actions[$actionItem->getItem()->getId()][] = $actionItem;
         }
 
-        $results = $this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'items' => $ids])->getResult();
+        $results = $this->categoryManager->itemCategoryManager->getList(['member' => $this->getUser(), 'items' => $ids])->getResult();
         $categories = [];
         foreach ($results as $itemCategory) {
             $categories[$itemCategory->getItem()->getId()][] = $itemCategory->toArray();
@@ -188,7 +184,6 @@ class ItemController extends AbstractAppController
     public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
-        $memberConnected = $this->validateToken($request);
 
         $item = $this->itemManager->getOne(['id' => $id]);
 
@@ -196,10 +191,10 @@ class ItemController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $actions = $this->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
+        $actions = $this->actionItemManager->getList(['member' => $this->getUser(), 'item' => $item])->getResult();
 
         $categories = [];
-        foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
+        foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $this->getUser(), 'item' => $item])->getResult() as $itemCategory) {
             $categories[] = $itemCategory->toArray();
         }
 
@@ -221,11 +216,8 @@ class ItemController extends AbstractAppController
     public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
-        if (!$memberConnected->getAdministrator()) {
+        if (false === $this->isGranted('ROLE_ADMIN')) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -247,12 +239,13 @@ class ItemController extends AbstractAppController
     public function markallasread(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $parameters = [];
-        $parameters['member'] = $memberConnected;
+        $parameters['member'] = $this->getUser();
 
         $parameters['unread'] = (bool) $request->query->get('unread');
 
@@ -282,8 +275,8 @@ class ItemController extends AbstractAppController
 
         $this->itemManager->readAll($parameters);
 
-        if ($memberConnected->getId()) {
-            $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+        if ($this->getUser()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
         }
 
         return new JsonResponse($data);
@@ -304,7 +297,8 @@ class ItemController extends AbstractAppController
     private function setAction(string $case, Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -323,7 +317,7 @@ class ItemController extends AbstractAppController
         if ($actionItem = $this->actionItemManager->getOne([
             'action' => $action,
             'item' => $item,
-            'member' => $memberConnected,
+            'member' => $this->getUser(),
         ])) {
             $this->actionItemManager->remove($actionItem);
 
@@ -334,13 +328,13 @@ class ItemController extends AbstractAppController
                 if ($actionItemReverse = $this->actionItemManager->getOne([
                     'action' => $action->getReverse(),
                     'item' => $item,
-                    'member' => $memberConnected,
+                    'member' => $this->getUser(),
                 ])) {
                 } else {
                     $actionItemReverse = new ActionItem();
                     $actionItemReverse->setAction($action->getReverse());
                     $actionItemReverse->setItem($item);
-                    $actionItemReverse->setMember($memberConnected);
+                    $actionItemReverse->setMember($this->getUser());
                     $this->actionItemManager->persist($actionItemReverse);
                 }
             }
@@ -348,7 +342,7 @@ class ItemController extends AbstractAppController
             $actionItem = new ActionItem();
             $actionItem->setAction($action);
             $actionItem->setItem($item);
-            $actionItem->setMember($memberConnected);
+            $actionItem->setMember($this->getUser());
             $this->actionItemManager->persist($actionItem);
 
             $data['action'] = $action->getTitle();
@@ -358,7 +352,7 @@ class ItemController extends AbstractAppController
                 if ($actionItemReverse = $this->actionItemManager->getOne([
                     'action' => $action->getReverse(),
                     'item' => $item,
-                    'member' => $memberConnected,
+                    'member' => $this->getUser(),
                 ])) {
                     $this->actionItemManager->remove($actionItemReverse);
                 }
@@ -368,8 +362,8 @@ class ItemController extends AbstractAppController
         $data['entry'] = $item->toArray();
         $data['entry_entity'] = 'item';
 
-        if ($case == 'read' && $memberConnected->getId()) {
-            $data['unread'] = $this->memberManager->countUnread($memberConnected->getId());
+        if ($case == 'read' && $this->getUser()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
         }
 
         return new JsonResponse($data);

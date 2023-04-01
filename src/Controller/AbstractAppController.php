@@ -52,25 +52,6 @@ abstract class AbstractAppController extends AbstractController
         return null;
     }
 
-    public function validateToken(Request $request, string $type = 'login'): ?Member
-    {
-        if ($request->headers->get('Authorization')) {
-            try {
-                $payloadjwtPayloadModel = JwtHelper::getPayload(str_replace('Bearer ', '', $request->headers->get('Authorization')));
-                if ($payloadjwtPayloadModel) {
-                    $token = $payloadjwtPayloadModel->getJwtId();
-
-                    if ($connection = $this->connectionManager->getOne(['type' => $type, 'token' => $token])) {
-                        return $connection->getMember();
-                    }
-                }
-            } catch (\Exception $e) {
-            }
-        }
-
-        return null;
-    }
-
     /**
      * @return PaginationInterface<mixed>
      */

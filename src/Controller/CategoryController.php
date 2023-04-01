@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Controller\AbstractAppController;
 use App\Entity\ActionCategory;
 use App\Entity\Category;
+use App\Entity\Member;
 use App\Form\Type\CategoryType;
 use App\Manager\ActionCategoryManager;
 use App\Manager\ActionManager;
@@ -33,15 +34,14 @@ class CategoryController extends AbstractAppController
     public function index(Request $request): JsonResponse
     {
         $data = [];
-        $memberConnected = $this->validateToken($request);
 
         $parameters = [];
 
         if ($request->query->get('trendy')) {
             $parameters['trendy'] = true;
 
-            if ($memberConnected) {
-                $parameters['member'] = $memberConnected;
+            if ($this->getUser()) {
+                $parameters['member'] = $this->getUser();
             }
 
             $results = $this->categoryManager->getList($parameters);
@@ -65,11 +65,8 @@ class CategoryController extends AbstractAppController
             }
         } else {
             if ($request->query->get('excluded')) {
-                if (!$memberConnected) {
-                    return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-                }
                 $parameters['excluded'] = true;
-                $parameters['member'] = $memberConnected;
+                $parameters['member'] = $this->getUser();
             }
 
             if ($request->query->get('usedbyfeeds')) {
@@ -118,7 +115,7 @@ class CategoryController extends AbstractAppController
                 $ids[] = $result['id'];
             }
 
-            $results = $this->actionCategoryManager->getList(['member' => $memberConnected, 'categories' => $ids])->getResult();
+            $results = $this->actionCategoryManager->getList(['member' => $this->getUser(), 'categories' => $ids])->getResult();
             $actions = [];
             foreach ($results as $actionCategory) {
                 $actions[$actionCategory->getCategory()->getId()][] = $actionCategory;
@@ -147,9 +144,6 @@ class CategoryController extends AbstractAppController
     public function create(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -179,9 +173,6 @@ class CategoryController extends AbstractAppController
     public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
@@ -189,7 +180,7 @@ class CategoryController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
-        $actions = $this->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
+        $actions = $this->actionCategoryManager->getList(['member' => $this->getUser(), 'category' => $category])->getResult();
 
         $data['entry'] = $category->toArray();
         foreach ($actions as $action) {
@@ -204,9 +195,6 @@ class CategoryController extends AbstractAppController
     public function update(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
@@ -224,11 +212,8 @@ class CategoryController extends AbstractAppController
     public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
-        if (!$memberConnected->getAdministrator()) {
+        if (false === $this->isGranted('ROLE_ADMIN')) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -255,7 +240,8 @@ class CategoryController extends AbstractAppController
     private function setAction(string $case, Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -274,7 +260,7 @@ class CategoryController extends AbstractAppController
         if ($actionCategory = $this->actionCategoryManager->getOne([
             'action' => $action,
             'category' => $category,
-            'member' => $memberConnected,
+            'member' => $this->getUser(),
         ])) {
             $this->actionCategoryManager->remove($actionCategory);
 
@@ -285,13 +271,13 @@ class CategoryController extends AbstractAppController
                 if ($actionCategoryReverse = $this->actionCategoryManager->getOne([
                     'action' => $action->getReverse(),
                     'category' => $category,
-                    'member' => $memberConnected,
+                    'member' => $this->getUser(),
                 ])) {
                 } else {
                     $actionCategoryReverse = new ActionCategory();
                     $actionCategoryReverse->setAction($action->getReverse());
                     $actionCategoryReverse->setCategory($category);
-                    $actionCategoryReverse->setMember($memberConnected);
+                    $actionCategoryReverse->setMember($this->getUser());
                     $this->actionCategoryManager->persist($actionCategoryReverse);
                 }
             }
@@ -299,7 +285,7 @@ class CategoryController extends AbstractAppController
             $actionCategory = new ActionCategory();
             $actionCategory->setAction($action);
             $actionCategory->setCategory($category);
-            $actionCategory->setMember($memberConnected);
+            $actionCategory->setMember($this->getUser());
             $this->actionCategoryManager->persist($actionCategory);
 
             $data['action'] = $action->getTitle();
@@ -309,7 +295,7 @@ class CategoryController extends AbstractAppController
                 if ($actionCategoryReverse = $this->actionCategoryManager->getOne([
                     'action' => $action->getReverse(),
                     'category' => $category,
-                    'member' => $memberConnected,
+                    'member' => $this->getUser(),
                 ])) {
                     $this->actionCategoryManager->remove($actionCategoryReverse);
                 }

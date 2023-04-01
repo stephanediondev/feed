@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use App\Entity\Connection;
+use App\Entity\Member;
 use App\Form\Type\PinboardType;
 use App\Model\PinboardModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +19,8 @@ class PinboardController extends AbstractAppController
     public function pinboard(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -29,13 +31,13 @@ class PinboardController extends AbstractAppController
         $form->submit($content);
 
         if ($form->isValid()) {
-            $connection = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $memberConnected]);
+            $connection = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $this->getUser()]);
 
             if ($connection) {
                 $connection->setToken($pinboard->getToken());
             } else {
                 $connection = new Connection();
-                $connection->setMember($memberConnected);
+                $connection->setMember($this->getUser());
                 $connection->setType('pinboard');
                 $connection->setToken($pinboard->getToken());
                 $connection->setIp($request->getClientIp());

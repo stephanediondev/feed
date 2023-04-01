@@ -73,9 +73,6 @@ class SearchController extends AbstractAppController
     private function getResults(Request $request, string $type): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
         $sortFields = ['date.sort', '_score', 'title.sort'];
         $sortDirection = ['asc', 'desc'];
@@ -178,10 +175,10 @@ class SearchController extends AbstractAppController
                         case 'feed':
                             $feed = $this->feedManager->getOne(['id' => $hit['_id']]);
                             if ($feed) {
-                                $actions = $this->actionFeedManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult();
+                                $actions = $this->actionFeedManager->getList(['member' => $this->getUser(), 'feed' => $feed])->getResult();
 
                                 $categories = [];
-                                foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $memberConnected, 'feed' => $feed])->getResult() as $feedCategory) {
+                                foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $this->getUser(), 'feed' => $feed])->getResult() as $feedCategory) {
                                     $categories[] = $feedCategory->toArray();
                                 }
 
@@ -203,7 +200,7 @@ class SearchController extends AbstractAppController
                         case 'category':
                             $category = $this->categoryManager->getOne(['id' => $hit['_id']]);
                             if ($category) {
-                                $actions = $this->actionCategoryManager->getList(['member' => $memberConnected, 'category' => $category])->getResult();
+                                $actions = $this->actionCategoryManager->getList(['member' => $this->getUser(), 'category' => $category])->getResult();
 
                                 $entry = $category->toArray();
                                 $entry['score'] = $hit['_score'];
@@ -222,7 +219,7 @@ class SearchController extends AbstractAppController
                         case 'author':
                             $author = $this->authorManager->getOne(['id' => $hit['_id']]);
                             if ($author) {
-                                $actions = $this->actionAuthorManager->getList(['member' => $memberConnected, 'author' => $author])->getResult();
+                                $actions = $this->actionAuthorManager->getList(['member' => $this->getUser(), 'author' => $author])->getResult();
 
                                 $entry = $author->toArray();
                                 $entry['score'] = $hit['_score'];
@@ -241,10 +238,10 @@ class SearchController extends AbstractAppController
                         case 'item':
                             $item = $this->itemManager->getOne(['id' => $hit['_id']]);
                             if ($item) {
-                                $actions = $this->actionItemManager->getList(['member' => $memberConnected, 'item' => $item])->getResult();
+                                $actions = $this->actionItemManager->getList(['member' => $this->getUser(), 'item' => $item])->getResult();
 
                                 $categories = [];
-                                foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $memberConnected, 'item' => $item])->getResult() as $itemCategory) {
+                                foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $this->getUser(), 'item' => $item])->getResult() as $itemCategory) {
                                     $categories[] = $itemCategory->toArray();
                                 }
 

@@ -147,7 +147,7 @@ class CollectionManager extends AbstractManager
 
                             $updateFeed = [];
                             $updateFeed['title'] = $simplepieFeed->get_title() ? $this->cleanTitle($simplepieFeed->get_title()) : '-';
-                            $updateFeed['website'] = $simplepieFeed->get_link() ? $this->cleanWebsite($simplepieFeed->get_link()) : null;
+                            $updateFeed['website'] = $this->cleanWebsite($simplepieFeed->get_link());
                             $updateFeed['link'] = $simplepieFeed->subscribe_url() ? $this->cleanLink($simplepieFeed->subscribe_url()) : null;
                             $updateFeed['hostname'] = isset($parseUrl['host']) ? $parseUrl['host'] : null;
                             $updateFeed['description'] = $simplepieFeed->get_description();

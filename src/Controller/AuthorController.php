@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Controller\AbstractAppController;
 use App\Entity\ActionAuthor;
 use App\Entity\Author;
+use App\Entity\Member;
 use App\Form\Type\AuthorType;
 use App\Manager\ActionAuthorManager;
 use App\Manager\ActionManager;
@@ -36,15 +37,14 @@ class AuthorController extends AbstractAppController
     public function index(Request $request): JsonResponse
     {
         $data = [];
-        $memberConnected = $this->validateToken($request);
 
         $parameters = [];
 
         if ($request->query->get('trendy')) {
             $parameters['trendy'] = true;
 
-            if ($memberConnected) {
-                $parameters['member'] = $memberConnected;
+            if ($this->getUser()) {
+                $parameters['member'] = $this->getUser();
             }
 
             $results = $this->authorManager->getList($parameters);
@@ -68,11 +68,8 @@ class AuthorController extends AbstractAppController
             }
         } else {
             if ($request->query->get('excluded')) {
-                if (!$memberConnected) {
-                    return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-                }
                 $parameters['excluded'] = true;
-                $parameters['member'] = $memberConnected;
+                $parameters['member'] = $this->getUser();
             }
 
             if ($request->query->get('feed')) {
@@ -125,7 +122,7 @@ class AuthorController extends AbstractAppController
                 $ids[] = $result['id'];
             }
 
-            $results = $this->actionAuthorManager->getList(['member' => $memberConnected, 'authors' => $ids])->getResult();
+            $results = $this->actionAuthorManager->getList(['member' => $this->getUser(), 'authors' => $ids])->getResult();
             $actions = [];
             foreach ($results as $actionAuthor) {
                 $actions[$actionAuthor->getAuthor()->getId()][] = $actionAuthor;
@@ -154,9 +151,6 @@ class AuthorController extends AbstractAppController
     public function create(Request $request): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
         $author = new Author();
         $form = $this->createForm(AuthorType::class, $author);
@@ -186,9 +180,6 @@ class AuthorController extends AbstractAppController
     public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            //return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
         $author = $this->authorManager->getOne(['id' => $id]);
 
@@ -206,9 +197,6 @@ class AuthorController extends AbstractAppController
     public function update(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
         $author = $this->authorManager->getOne(['id' => $id]);
 
@@ -226,11 +214,8 @@ class AuthorController extends AbstractAppController
     public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
-        if (!$memberConnected->getAdministrator()) {
+        if (false === $this->isGranted('ROLE_ADMIN')) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -257,7 +242,8 @@ class AuthorController extends AbstractAppController
     private function setAction(string $case, Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
+
+        if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
@@ -276,7 +262,7 @@ class AuthorController extends AbstractAppController
         if ($actionAuthor = $this->actionAuthorManager->getOne([
             'action' => $action,
             'author' => $author,
-            'member' => $memberConnected,
+            'member' => $this->getUser(),
         ])) {
             $this->actionAuthorManager->remove($actionAuthor);
 
@@ -287,13 +273,13 @@ class AuthorController extends AbstractAppController
                 if ($actionAuthorReverse = $this->actionAuthorManager->getOne([
                     'action' => $action->getReverse(),
                     'author' => $author,
-                    'member' => $memberConnected,
+                    'member' => $this->getUser(),
                 ])) {
                 } else {
                     $actionAuthorReverse = new ActionAuthor();
                     $actionAuthorReverse->setAction($action->getReverse());
                     $actionAuthorReverse->setAuthor($author);
-                    $actionAuthorReverse->setMember($memberConnected);
+                    $actionAuthorReverse->setMember($this->getUser());
                     $this->actionAuthorManager->persist($actionAuthorReverse);
                 }
             }
@@ -301,7 +287,7 @@ class AuthorController extends AbstractAppController
             $actionAuthor = new ActionAuthor();
             $actionAuthor->setAction($action);
             $actionAuthor->setAuthor($author);
-            $actionAuthor->setMember($memberConnected);
+            $actionAuthor->setMember($this->getUser());
             $this->actionAuthorManager->persist($actionAuthor);
 
             $data['action'] = $action->getTitle();
@@ -311,7 +297,7 @@ class AuthorController extends AbstractAppController
                 if ($actionAuthorReverse = $this->actionAuthorManager->getOne([
                     'action' => $action->getReverse(),
                     'author' => $author,
-                    'member' => $memberConnected,
+                    'member' => $this->getUser(),
                 ])) {
                     $this->actionAuthorManager->remove($actionAuthorReverse);
                 }

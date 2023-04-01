@@ -16,11 +16,8 @@ class ConnectionController extends AbstractAppController
     public function delete(Request $request, int $id): JsonResponse
     {
         $data = [];
-        if (!$memberConnected = $this->validateToken($request)) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
 
-        $connection = $this->connectionManager->getOne(['id' => $id, 'member' => $memberConnected]);
+        $connection = $this->connectionManager->getOne(['id' => $id, 'member' => $this->getUser()]);
 
         if (!$connection) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
