@@ -4,24 +4,22 @@
 </script>
 
 <script type="text/template" id="view-aside">
-    <li class="fs-5 nav-item"><a href="#items/recent" class="dropdown-item load-route" title="{{trans 'shortcut_g_then_a'}}">{{trans 'title.recent_items'}}</a></li>
+    <li class="fs-5 nav-item connected"><a href="#items/recent" class="dropdown-item load-route" title="{{trans 'shortcut_g_then_a'}}">{{trans 'title.recent_items'}}</a></li>
     <li class="fs-5 nav-item connected">
         <a href="#items/unread" class="dropdown-item load-route" title="{{trans 'shortcut_g_then_u'}}">{{trans 'title.unread_items'}}
             <span class="count-unread badge rounded-pill bg-danger"></span>
         </a>
     </li>
     <li class="fs-5 nav-item connected"><a href="#items/starred" class="dropdown-item load-route" title="{{trans 'shortcut_g_then_s'}}">{{trans 'title.starred_items'}}</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li class="fs-5 nav-item"><a href="#feeds/recent" class="dropdown-item load-route">{{trans 'title.recent_feeds'}}</a></li>
+    <li class="connected"><hr class="dropdown-divider"></li>
+    <li class="fs-5 nav-item connected"><a href="#feeds/recent" class="dropdown-item load-route">{{trans 'title.recent_feeds'}}</a></li>
     <li class="fs-5 nav-item connected"><a href="#feeds/subscribed" class="dropdown-item load-route">{{trans 'title.subscribed_feeds'}}</a></li>
     <li class="fs-5 nav-item connected"><a href="#feeds/witherrors" class="dropdown-item load-route">{{trans 'title.feeds_witherrors'}}</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li class="fs-5 nav-item"><a href="#categories/trendy" class="dropdown-item load-route">{{trans 'title.trendy_categories'}}</a></li>
-    <li class="fs-5 nav-item"><a href="#authors/trendy" class="dropdown-item load-route">{{trans 'title.trendy_authors'}}</a></li>
+    <li><hr class="dropdown-divider connected"></li>
+    <li class="fs-5 nav-item connected"><a href="#categories/trendy" class="dropdown-item load-route">{{trans 'title.trendy_categories'}}</a></li>
+    <li class="fs-5 nav-item connected"><a href="#authors/trendy" class="dropdown-item load-route">{{trans 'title.trendy_authors'}}</a></li>
     <li class="connected"><hr class="dropdown-divider"></li>
     <li class="fs-5 nav-item connected"><a href="#profile" class="dropdown-item load-route">{{trans 'profile'}}</a></li>
-    <li class="fs-5 nav-item connected administrator"><a href="#status" class="dropdown-item load-route">{{trans 'status'}}</a></li>
-    <li><hr class="dropdown-divider"></li>
     <li class="fs-5 nav-item anonymous"><a href="#login" class="dropdown-item load-route">{{trans 'login'}}</a>
     <li class="fs-5 nav-item connected"><a href="#logout" class="dropdown-item load-route">{{trans 'logout'}}</a></li>
 </script>
@@ -187,230 +185,4 @@
             </div>
         </form>
     </div>
-</script>
-
-<script type="text/template" id="view-status">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="status">
-        <div class="mdl-card__title mb-3">
-            <h1 class="mdl-card__title-text fs-5">
-                Server
-            </h1>
-        </div>
-        <div class="mdl-card__supporting-text">
-            <p>
-                <span class="label">{{trans 'SERVER_ADDR'}}</span>
-                {{ _server.SERVER_ADDR }}
-            </p>
-            <p>
-                <span class="label">{{trans 'HTTP_HOST'}}</span>
-                {{ _server.HTTP_HOST }}
-            </p>
-            <p>
-                <span class="label">{{trans 'SERVER_NAME'}}</span>
-                {{ _server.SERVER_NAME }}
-            </p>
-            {{#if _server.HTTPS }}
-                <p>
-                    <span class="label">{{trans 'HTTPS'}}</span>
-                    {{ _server.HTTPS }}
-                </p>
-            {{/if}}
-        </div>
-    </div>
-
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="status">
-        <div class="mdl-card__title mb-3">
-            <h1 class="mdl-card__title-text fs-5">
-                Webserver
-            </h1>
-        </div>
-        <div class="mdl-card__supporting-text">
-            <p>
-                <span class="label">{{trans 'SERVER_SOFTWARE'}}</span>
-                {{ _server.SERVER_SOFTWARE }}
-            </p>
-            <p>
-                <span class="label">{{trans 'DOCUMENT_ROOT'}}</span>
-                {{ _server.DOCUMENT_ROOT }}
-            </p>
-            <p>
-                <span class="label">{{trans 'get_current_user'}}</span>
-                {{ function.get_current_user }}
-            </p>
-        </div>
-    </div>
-
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="status">
-        <div class="mdl-card__title mb-3">
-            <h1 class="mdl-card__title-text fs-5">
-                Language
-            </h1>
-        </div>
-        <div class="mdl-card__supporting-text">
-            <p>
-                <span class="label">{{trans 'php_sapi_name'}}</span>
-                {{ function.php_sapi_name }}
-            </p>
-            <p>
-                <span class="label">{{trans 'phpversion'}}</span>
-                {{ function.phpversion }}
-            </p>
-            <p>
-                <span class="label">{{trans 'symfony'}}</span>
-                {{ symfony }}
-            </p>
-        </div>
-    </div>
-
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="status">
-        <div class="mdl-card__title mb-3">
-            <h1 class="mdl-card__title-text fs-5">
-                Extensions
-            </h1>
-        </div>
-        <div class="mdl-card__supporting-text">
-            <p>
-                <span class="label">{{trans 'gmp'}}</span>
-                {{ extension.gmp }}
-            </p>
-            <p>
-                <span class="label">{{trans 'mbstring'}}</span>
-                {{ extension.mbstring }}
-            </p>
-            <p>
-                <span class="label">{{trans 'iconv'}}</span>
-                {{ extension.iconv }}
-            </p>
-            <p>
-                <span class="label">{{trans 'apcu'}}</span>
-                {{ extension.apcu }}
-            </p>
-            <p>
-                <span class="label">{{trans 'tidy'}}</span>
-                {{ extension.tidy }}
-            </p>
-            <p>
-                <span class="label">{{trans 'dom'}}</span>
-                {{ extension.dom }}
-            </p>
-        </div>
-    </div>
-
-    {{#if search.enabled }}
-        <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="search-cluster">
-            <div class="mdl-card__title mb-3">
-                <h1 class="mdl-card__title-text fs-5">
-                    Cluster (Elastic Search)
-                </h1>
-            </div>
-            <div class="mdl-card__supporting-text">
-                <p>
-                    <span class="label">name</span>
-                    {{ search.health.cluster_name }}
-                </p>
-                <p>
-                    <span class="label">status</span>
-                    {{ search.health.status }}
-                </p>
-                <p>
-                    <span class="label">number_of_nodes</span>
-                    {{ search.health.number_of_nodes }}
-                </p>
-                <p>
-                    <span class="label">active_primary_shards</span>
-                    {{ search.health.active_primary_shards }}
-                </p>
-                <p>
-                    <span class="label">active_shards</span>
-                    {{ search.health.active_shards }}
-                </p>
-            </div>
-        </div>
-
-        {{#if search.nodes }}
-            {{#each search.nodes.nodes as |node node_index|}}
-                <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="search-node-{{ node.name }}">
-                    <div class="mdl-card__title mb-3">
-                        <h1 class="mdl-card__title-text fs-5">
-                            Node (Elastic Search)
-                        </h1>
-                    </div>
-                    <div class="mdl-card__supporting-text">
-                        <p>
-                            <span class="label">name</span>
-                            {{ node.name }}
-                        </p>
-                        <p>
-                            <span class="label">master</span>
-                            {{ node.settings.node.master }}
-                        </p>
-                        <p>
-                            <span class="label">data</span>
-                            {{ node.settings.node.data }}
-                        </p>
-                        <p>
-                            <span class="label">ip</span>
-                            {{ node.ip }}
-                        </p>
-                        <p>
-                            <span class="label">version</span>
-                            {{ node.version }}
-                        </p>
-                        <p>
-                            <span class="label">os.pretty_name</span>
-                            {{ node.os.pretty_name }}
-                        </p>
-                        <p>
-                            <span class="label">os.arch</span>
-                            {{ node.os.arch }}
-                        </p>
-                        <p>
-                            <span class="label">os.version</span>
-                            {{ node.os.version }}
-                        </p>
-                    </div>
-                </div>
-            {{/each}}
-        {{/if}}
-
-        {{#each types as |type type_index|}}
-            <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="search-type-{{ type_index }}">
-                <div class="mdl-card__title mb-3">
-                    <h1 class="mdl-card__title-text fs-5">
-                        Index (Elastic Search)
-                    </h1>
-                </div>
-                <div class="mdl-card__supporting-text">
-                    <p>
-                        <span class="label">name</span>
-                        {{ type.index }}_{{ type_index }}
-                    </p>
-                    <p>
-                        <span class="label">primaries.store.size_in_bytes</span>
-                        {{ type.search._all.primaries.store.size_in_bytes }}
-                    </p>
-                    <p>
-                        <span class="label">primaries.docs.count</span>
-                        {{ type.search._all.primaries.docs.count }}
-                    </p>
-                    <p>
-                        <span class="label">primaries.docs.deleted</span>
-                        {{ type.search._all.primaries.docs.deleted }}
-                    </p>
-                    <p>
-                        <span class="label">primaries.search.query_total</span>
-                        {{ type.search._all.primaries.search.query_total }}
-                    </p>
-                    <p>
-                        <span class="label">primaries.search.fetch_total</span>
-                        {{ type.search._all.primaries.search.fetch_total }}
-                    </p>
-                    <p>
-                        <span class="label">Database count</span>
-                        {{ type.database }}
-                    </p>
-                </div>
-            </div>
-        {{/each}}
-    {{/if}}
 </script>

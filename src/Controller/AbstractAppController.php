@@ -38,6 +38,9 @@ abstract class AbstractAppController extends AbstractController
         $this->connectionManager = $connectionManager;
     }
 
+    /**
+     * @return ?array<mixed>
+     */
     protected function getContent(Request $request): ?array
     {
         if (stristr($request->headers->get('Content-Type'), 'multipart/form-data') || stristr($request->headers->get('Content-Type'), 'application/x-www-form-urlencoded')) {
