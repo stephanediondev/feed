@@ -805,7 +805,7 @@ window.addEventListener('beforeinstallprompt', function(BeforeInstallPromptEvent
 
             BeforeInstallPromptEvent.userChoice
             .then(function(AppBannerPromptResult) {
-                setToast({'title': 'Install', 'body': AppBannerPromptResult.outcome});
+                setToast({'title': i18next.t('install'), 'body': AppBannerPromptResult.outcome});
             })
             .catch(function(error) {
             });
@@ -818,15 +818,15 @@ window.addEventListener('beforeinstallprompt', function(BeforeInstallPromptEvent
 });
 
 window.addEventListener('appinstalled', function(appinstalled) {
-    setToast({'title': 'Install ', 'body': appinstalled});
+    setToast({'title': i18next.t('install'), 'body': appinstalled});
 });
 
 window.addEventListener('online', function() {
-    setToast({'title': 'Status ', 'body': 'Online'});
+    setToast({'title': i18next.t('install'), 'body': 'Online'});
 });
 
 window.addEventListener('offline', function() {
-    setToast({'title': 'Status ', 'body': 'Offline'});
+    setToast({'title': i18next.t('install'), 'body': 'Offline'});
 });
 
 var gKey = false;

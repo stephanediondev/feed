@@ -25,6 +25,8 @@
     "cancel": "Cancel",
     "more": "More",
     "search": "Search",
+    "install": "Install",
+    "status": "Status",
 
     "subscribe": "Subscribe",
     "unsubscribe": "Unsubscribe",
@@ -66,7 +68,8 @@
     "connections": "Connections",
 
     "field": {
-        "title": "Title"
+        "title": "Title",
+        "token": "Token"
     },
 
     "title": {
