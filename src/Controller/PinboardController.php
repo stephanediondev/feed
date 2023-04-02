@@ -8,6 +8,7 @@ use App\Controller\AbstractAppController;
 use App\Entity\Connection;
 use App\Entity\Member;
 use App\Form\Type\PinboardType;
+use App\Helper\DeviceDetectorHelper;
 use App\Model\PinboardModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/api', name: 'api_pinboard_', priority: 20)]
 class PinboardController extends AbstractAppController
 {
+    #[Route('/pinboard', name: 'index', methods: ['POST'])]
     public function pinboard(Request $request): JsonResponse
     {
         $data = [];
@@ -36,12 +38,13 @@ class PinboardController extends AbstractAppController
             if ($connection) {
                 $connection->setToken($pinboard->getToken());
             } else {
+                $extraFields = DeviceDetectorHelper::asArray($request);
+
                 $connection = new Connection();
                 $connection->setMember($this->getUser());
                 $connection->setType('pinboard');
                 $connection->setToken($pinboard->getToken());
-                $connection->setIp($request->getClientIp());
-                $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
+                $connection->setExtraFields($extraFields);
             }
             $this->connectionManager->persist($connection);
 
