@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Trait\Entity\ExtraFieldsEntityTrait;
 use App\Repository\ConnectionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: "member_id", columns: ["member_id"])]
 class Connection
 {
+    use ExtraFieldsEntityTrait;
+
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
     private ?int $id = null;
 
@@ -21,12 +24,6 @@ class Connection
 
     #[ORM\Column(name: "token", type: "string", length: 255, nullable: false)]
     private ?String $token = null;
-
-    #[ORM\Column(name: "ip", type: "string", length: 255, nullable: true)]
-    private ?String $ip = null;
-
-    #[ORM\Column(name: "agent", type: "string", length: 255, nullable: true)]
-    private ?String $agent = null;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
@@ -67,30 +64,6 @@ class Connection
         return $this;
     }
 
-    public function getIp(): ?string
-    {
-        return $this->ip;
-    }
-
-    public function setIp(?string $ip): self
-    {
-        $this->ip = $ip;
-
-        return $this;
-    }
-
-    public function getAgent(): ?string
-    {
-        return $this->agent;
-    }
-
-    public function setAgent(?string $agent): self
-    {
-        $this->agent = $agent;
-
-        return $this;
-    }
-
     public function getDateCreated(): ?\DateTimeInterface
     {
         return $this->dateCreated;
@@ -127,6 +100,11 @@ class Connection
         return $this;
     }
 
+    public function getIp(): ?string
+    {
+        return $this->getExtraField('ip');
+    }
+
     /**
      * @return array<mixed>
      */
@@ -137,10 +115,16 @@ class Connection
             'member' => $this->getMember() ? $this->getMember()->toArray() : null,
             'type' => $this->getType(),
             'token' => $this->getToken(),
-            'agent' => $this->getAgent(),
-            'ip' => $this->getIp(),
+            'ip' => $this->getExtraField('ip'),
+            'hostname' => $this->getExtraField('hostname'),
+            'client' => $this->getExtraField('client'),
+            'os' => $this->getExtraField('os'),
+            'device' => $this->getExtraField('device'),
+            'brand' => $this->getExtraField('brand'),
+            'model' => $this->getExtraField('model'),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
             'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : null,
+            'extra_fields' => $this->getExtraFields(),
         ];
     }
 }

@@ -64,9 +64,6 @@ class ProfileController extends AbstractAppController
             if ($connection->getIp() == $request->getClientIp()) {
                 $entry['currentIp'] = true;
             }
-            if ($connection->getAgent() == $request->server->get('HTTP_USER_AGENT')) {
-                $entry['currentAgent'] = true;
-            }
             $data['entries'][] = $entry;
         }
 

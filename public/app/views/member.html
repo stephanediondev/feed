@@ -133,11 +133,11 @@
             </div>
             <div class="mdl-card__supporting-text">
                 <p>
-                    {{#if connection.currentAgent }}
-                        <strong>{{ connection.agent }}</strong>
-                    {{else}}
-                        {{ connection.agent }}
-                    {{/if}}
+                    {{ connection.brand }} {{ connection.model }} ({{ connection.device }})
+                </p>
+
+                <p>
+                    {{ connection.os }} / {{ connection.client }}
                 </p>
             </div>
             <div class="mdl-card__actions text-end mt-3 mdl-card--border online">

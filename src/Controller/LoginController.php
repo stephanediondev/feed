@@ -8,6 +8,7 @@ use App\Controller\AbstractAppController;
 use App\Entity\Connection;
 use App\Entity\Member;
 use App\Form\Type\LoginType;
+use App\Helper\DeviceDetectorHelper;
 use App\Helper\JwtHelper;
 use App\Manager\MemberManager;
 use App\Model\JwtPayloadModel;
@@ -119,12 +120,13 @@ class LoginController extends AbstractAppController
                 if ($this->passwordHasher->isPasswordValid($member, $login->getPassword())) {
                     $identifier = JwtHelper::generateUniqueIdentifier();
 
+                    $extraFields = DeviceDetectorHelper::asArray($request);
+
                     $connection = new Connection();
                     $connection->setMember($member);
                     $connection->setType('login');
                     $connection->setToken($identifier);
-                    $connection->setIp($request->getClientIp());
-                    $connection->setAgent($request->server->get('HTTP_USER_AGENT'));
+                    $connection->setExtraFields($extraFields);
 
                     $this->connectionManager->persist($connection);
 
