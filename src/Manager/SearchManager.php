@@ -275,7 +275,7 @@ class SearchManager extends AbstractManager
         return null;
     }
 
-    public function init(): void
+    public function create(): void
     {
         if ($this->getEnabled()) {
             $body = [
@@ -399,7 +399,7 @@ class SearchManager extends AbstractManager
         }
     }
 
-    public function reset(): void
+    public function remove(): void
     {
         if ($this->getEnabled()) {
             $path = '/'.$this->getIndex();

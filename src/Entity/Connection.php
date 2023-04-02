@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Trait\Entity\ExtraFieldsEntityTrait;
 use App\Repository\ConnectionRepository;
+use App\Trait\Entity\ExtraFieldsEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ConnectionRepository::class)]

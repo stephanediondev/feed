@@ -4,9 +4,9 @@ namespace App\Security;
 
 use App\Helper\JwtHelper;
 use App\Manager\ConnectionManager;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\AccessToken\AccessTokenHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class ApiAccessTokenHandler implements AccessTokenHandlerInterface
 {

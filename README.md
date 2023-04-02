@@ -40,6 +40,14 @@ yarn install
 yarn run build
 ```
 
+## Elasticsearch
+
+Edit parameters ```ELASTICSEARCH_*```
+
+```
+bin/console app:elasticsearch:create
+```
+
 ## Commands
 
 ```
