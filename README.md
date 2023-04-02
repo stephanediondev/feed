@@ -47,9 +47,10 @@ crontab -e
 ```
 
 ```
-# m h dom mon dow command
+# minute (0 - 59) | hour (0 - 23) | day of month (1 - 31) | month (1 - 12) | day of week (1 - 7) | command
 0 * * * * cd /path-to-installation && bin/console app:collection
 #30 * * * * cd /path-to-installation && bin/console app:elasticsearch
+#0 0 * * 7 cd /path-to-installation && bin/console app:maxmind:update
 ```
 
 # Update
