@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Controller\AbstractAppController;
 use App\Entity\Member;
 use App\Form\Type\ProfileType;
+use App\Helper\JwtHelper;
 use App\Manager\MemberManager;
 use App\Model\ProfileModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,10 +60,24 @@ class ProfileController extends AbstractAppController
 
         $data['entries'] = [];
 
+        $currentToken = null;
+        if ($request->headers->get('Authorization')) {
+            try {
+                $payloadjwtPayloadModel = JwtHelper::getPayload(str_replace('Bearer ', '', $request->headers->get('Authorization')));
+                if ($payloadjwtPayloadModel) {
+                    $currentToken = $payloadjwtPayloadModel->getJwtId();
+                }
+            } catch (\Exception $e) {
+            }
+        }
+
         foreach ($this->connectionManager->getList(['member' => $this->getUser()])->getResult() as $connection) {
             $entry = $connection->toArray();
             if ($connection->getIp() == $request->getClientIp()) {
                 $entry['currentIp'] = true;
+            }
+            if ($currentToken && $connection->getToken() == $currentToken) {
+                $entry['currentToken'] = true;
             }
             $data['entries'][] = $entry;
         }

@@ -124,11 +124,11 @@
         <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="connection-{{ connection.id }}">
             <div class="mdl-card__title mb-3">
                 <h1 class="mdl-card__title-text fs-5">
-                    {{ connection.type }}
+                    {{#if connection.currentToken }}<i class="bi bi-star-fill"></i> {{/if}}{{ connection.type }}
                 </h1>
                 <div class="mdl-card__subtitle-text">
                     <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ connection.date_modified }}"></span></span>
-                    <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-wifi"></i> {{#if connection.currentIp }}<strong>{{ connection.ip }}</strong>{{else}}{{ connection.ip }}{{/if}}</span>
+                    <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-reception-4"></i> {{#if connection.currentIp }}<strong>{{ connection.ip }}</strong>{{else}}{{ connection.ip }}{{/if}}</span>
                 </div>
             </div>
             <div class="mdl-card__supporting-text">
@@ -142,7 +142,7 @@
             </div>
             <div class="mdl-card__actions text-end mt-3 mdl-card--border online">
                 <form action="#profile/connections" data-query="/connection/{{ connection.id }}" method="DELETE">
-                    <button type="submit" class="mdl-button btn btn-primary btn-sm">{{trans 'delete'}}</button>
+                    <button type="submit" class="mdl-button btn {{#if connection.currentToken }}btn-danger{{else}}btn-primary{{/if}} btn-sm">{{trans 'delete'}}</button>
                 </form>
             </div>
         </div>
