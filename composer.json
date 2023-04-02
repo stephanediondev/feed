@@ -12,6 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
         "firebase/php-jwt": "^6.4",
+        "geoip2/geoip2": "^2.13",
         "knplabs/knp-paginator-bundle": "*",
         "matomo/device-detector": "^6.1",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -45,6 +46,7 @@
         "symfony/web-link": "6.2.*",
         "symfony/webpack-encore-bundle": "*",
         "symfony/yaml": "6.2.*",
+        "tronovav/geoip2-update": "^2.1",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },

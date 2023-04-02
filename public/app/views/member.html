@@ -129,6 +129,12 @@
                 <div class="mdl-card__subtitle-text">
                     <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ connection.date_modified }}"></span></span>
                     <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-reception-4"></i> {{#if connection.currentIp }}<strong>{{ connection.ip }}</strong>{{else}}{{ connection.ip }}{{/if}}</span>
+                    {{#if connection.address }}<span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-geo-alt-fill"></i> {{ connection.address }}</span>{{/if}}
+                    {{#if connection.latitude }}
+                        {{#if connection.longitude }}
+                            <a class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap" target="_blank" href="https://www.google.com/maps?q={{ connection.latitude }},{{ connection.longitude }}&oe=UTF-8&ie=UTF-8"><i class="bi bi-geo-alt-fill"></i> {{ connection.latitude }},{{ connection.longitude }}</a>
+                        {{/if}}
+                {{/if}}
                 </div>
             </div>
             <div class="mdl-card__supporting-text">

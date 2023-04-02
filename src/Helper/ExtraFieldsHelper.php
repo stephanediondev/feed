@@ -11,6 +11,9 @@ final class ExtraFieldsHelper
     public const TYPE_FLOAT = 'float';
     public const TYPE_STRING = 'string';
 
+    /**
+     * @param array<mixed> $fields
+     */
     public static function getPath(string $path, ?array $fields = [], ?string $type = null): mixed
     {
         $elements = explode('.', $path);
@@ -29,6 +32,9 @@ final class ExtraFieldsHelper
         }
     }
 
+    /**
+     * @param array<mixed> $fields
+     */
     public static function setPath(string $path, mixed $value, ?array &$fields = []): void
     {
         $elements = explode('.', $path);

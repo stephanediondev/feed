@@ -10,6 +10,7 @@ use App\Entity\Member;
 use App\Form\Type\LoginType;
 use App\Helper\DeviceDetectorHelper;
 use App\Helper\JwtHelper;
+use App\Helper\MaxmindHelper;
 use App\Manager\MemberManager;
 use App\Model\JwtPayloadModel;
 use App\Model\LoginModel;
@@ -23,6 +24,8 @@ class LoginController extends AbstractAppController
     private MemberManager $memberManager;
 
     private UserPasswordHasherInterface $passwordHasher;
+
+    private bool $maxmindEnabled;
 
     private bool $ldapEnabled = false;
 
@@ -42,10 +45,11 @@ class LoginController extends AbstractAppController
 
     private string $ldapSearchGroupAdmin = 'cn=admingroup';
 
-    public function __construct(MemberManager $memberManager, UserPasswordHasherInterface $passwordHasher, bool $ldapEnabled, string $ldapServer, int $ldapPort, int $ldapProtocol, string $ldapRootDn, string $ldapRootPw, string $ldapBaseDn, string $ldapSearchUser, string $ldapSearchGroupAdmin)
+    public function __construct(MemberManager $memberManager, UserPasswordHasherInterface $passwordHasher, bool $maxmindEnabled, bool $ldapEnabled, string $ldapServer, int $ldapPort, int $ldapProtocol, string $ldapRootDn, string $ldapRootPw, string $ldapBaseDn, string $ldapSearchUser, string $ldapSearchGroupAdmin)
     {
         $this->memberManager = $memberManager;
         $this->passwordHasher = $passwordHasher;
+        $this->maxmindEnabled = $maxmindEnabled;
         $this->ldapEnabled = $ldapEnabled;
         $this->ldapServer = $ldapServer;
         $this->ldapPort = $ldapPort;
@@ -121,6 +125,11 @@ class LoginController extends AbstractAppController
                     $identifier = JwtHelper::generateUniqueIdentifier();
 
                     $extraFields = DeviceDetectorHelper::asArray($request);
+
+                    if ($extraFields['ip'] && '127.0.0.1' != $extraFields['ip'] && true === $this->maxmindEnabled) {
+                        $data = MaxmindHelper::get($extraFields['ip']);
+                        $extraFields = array_merge($extraFields, $data);
+                    }
 
                     $connection = new Connection();
                     $connection->setMember($member);

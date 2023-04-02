@@ -110,6 +110,17 @@ class Connection
      */
     public function toArray(): array
     {
+        $address = [];
+        if ($this->getExtraField('city')) {
+            $address[] = $this->getExtraField('city');
+        }
+        if ($this->getExtraField('subdivision')) {
+            $address[] = $this->getExtraField('subdivision');
+        }
+        if ($this->getExtraField('country')) {
+            $address[] = $this->getExtraField('country');
+        }
+
         return [
             'id' => $this->getId(),
             'member' => $this->getMember() ? $this->getMember()->toArray() : null,
@@ -122,6 +133,9 @@ class Connection
             'device' => $this->getExtraField('device'),
             'brand' => $this->getExtraField('brand'),
             'model' => $this->getExtraField('model'),
+            'address' => 0 < count($address) ? implode(', ', $address) : null,
+            'latitude' => $this->getExtraField('latitude'),
+            'longitude' => $this->getExtraField('longitude'),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
             'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : null,
             'extra_fields' => $this->getExtraFields(),

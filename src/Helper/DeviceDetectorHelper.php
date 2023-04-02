@@ -27,7 +27,9 @@ final class DeviceDetectorHelper
             $deviceDetector = new DeviceDetectorModel();
             if ($clientIp) {
                 $deviceDetector->setIp($clientIp);
-                $deviceDetector->setHostname(gethostbyaddr($clientIp));
+                if ($hostbyaddr = gethostbyaddr($clientIp)) {
+                    $deviceDetector->setHostname($hostbyaddr);
+                }
             }
             if (true === is_array($client) && true === array_key_exists('name', $client) && true === array_key_exists('version', $client)) {
                 $deviceDetector->setClient($client['name'].' '.$client['version']);
@@ -44,6 +46,9 @@ final class DeviceDetectorHelper
         return null;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public static function asArray(Request $request): array
     {
         $extraFields = [];
