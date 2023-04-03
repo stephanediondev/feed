@@ -74,7 +74,7 @@ class LoginController extends AbstractAppController
         $content = $this->getContent($request);
         $form->submit($content);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && $login->getEmail() && $login->getPassword()) {
             if ($this->ldapEnabled) {
                 $ldapConnect = ldap_connect($this->ldapServer, $this->ldapPort);
                 if ($ldapConnect) {
