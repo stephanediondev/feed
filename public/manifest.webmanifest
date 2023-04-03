@@ -1,7 +1,11 @@
 {
     "name": "Stéphane Dion - feed",
     "short_name": "feed",
-    "categories": ["news", "productivity", "utilities"],
+    "categories": [
+        "news",
+        "productivity",
+        "utilities"
+    ],
     "orientation": "any",
     "shortcuts": [
         {
@@ -60,7 +64,11 @@
         }
     ],
     "start_url": ".",
-    "display_override": ["fullscreen", "minimal-ui"],
+    "display_override": [
+        "window-control-overlay",
+        "fullscreen",
+        "minimal-ui"
+    ],
     "display": "standalone",
     "background_color": "#3f51b5",
     "theme_color": "#3f51b5"
