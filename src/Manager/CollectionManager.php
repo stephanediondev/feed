@@ -140,14 +140,16 @@ class CollectionManager extends AbstractManager
                     }
 
                     if (!$simplepieFeed->error()) {
-                        $this->setItems($feed, $simplepieFeed->get_items());
+                        if ($items = $simplepieFeed->get_items()) {
+                            $this->setItems($feed, $items);
+                        }
 
-                        if ($simplepieFeed->get_link()) {
-                            $parseUrl = parse_url($simplepieFeed->get_link());
+                        if ($website = $simplepieFeed->get_link()) {
+                            $parseUrl = parse_url($website);
 
                             $updateFeed = [];
                             $updateFeed['title'] = $simplepieFeed->get_title() ? $this->cleanTitle($simplepieFeed->get_title()) : '-';
-                            $updateFeed['website'] = $this->cleanWebsite($simplepieFeed->get_link());
+                            $updateFeed['website'] = $this->cleanWebsite($website);
                             $updateFeed['link'] = $simplepieFeed->subscribe_url() ? $this->cleanLink($simplepieFeed->subscribe_url()) : null;
                             $updateFeed['hostname'] = isset($parseUrl['host']) ? $parseUrl['host'] : null;
                             $updateFeed['description'] = $simplepieFeed->get_description();
@@ -227,95 +229,97 @@ class CollectionManager extends AbstractManager
     public function setItems(array $feed, array $items): void
     {
         foreach ($items as $simplepieItem) {
-            $link = $this->cleanLink($simplepieItem->get_link());
+            if ($link = $simplepieItem->get_link()) {
+                $link = $this->cleanLink($link);
 
-            $sql = 'SELECT id FROM item WHERE link = :link';
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindValue('link', $link);
-            $resultSet = $stmt->executeQuery();
-            $result = $resultSet->fetchAssociative();
+                $sql = 'SELECT id FROM item WHERE link = :link';
+                $stmt = $this->connection->prepare($sql);
+                $stmt->bindValue('link', $link);
+                $resultSet = $stmt->executeQuery();
+                $result = $resultSet->fetchAssociative();
 
-            if ($result) {
-                break;
-            }
-
-            $insertItem = [];
-
-            $insertItem['feed_id'] = $feed['id'];
-
-            if ($simplepieItem->get_title()) {
-                $insertItem['title'] = $this->cleanTitle($simplepieItem->get_title());
-            } else {
-                $insertItem['title'] = '-';
-            }
-
-            $insertItem['author_id'] = $this->setAuthorSimplePie($simplepieItem);
-
-            $insertItem['link'] = $link;
-
-            if ($content = $simplepieItem->get_content()) {
-                if (class_exists('Tidy')) {
-                    try {
-                        $options = [
-                            'output-xhtml' => true,
-                            'clean' => true,
-                            'wrap-php' => true,
-                            'doctype' => 'omit',
-                            'show-body-only' => true,
-                            'drop-proprietary-attributes' => true,
-                        ];
-                        $tidy = new \tidy();
-                        $tidy->parseString($content, $options, 'utf8');
-                        $tidy->cleanRepair();
-
-                        $content = $this->cleanContent(tidy_get_output($tidy), 'store');
-                    } catch (Exception $e) {
-                    }
-                } else {
-                    $content = str_replace('<div', '<p', $content);
-                    $content = str_replace('</div>', '</p>', $content);
+                if ($result) {
+                    break;
                 }
 
-                if ($content != '') {
-                    $insertItem['content']  = $content;
+                $insertItem = [];
+
+                $insertItem['feed_id'] = $feed['id'];
+
+                if ($simplepieItem->get_title()) {
+                    $insertItem['title'] = $this->cleanTitle($simplepieItem->get_title());
+                } else {
+                    $insertItem['title'] = '-';
+                }
+
+                $insertItem['author_id'] = $this->setAuthorSimplePie($simplepieItem);
+
+                $insertItem['link'] = $link;
+
+                if ($content = $simplepieItem->get_content()) {
+                    if (class_exists('Tidy')) {
+                        try {
+                            $options = [
+                                'output-xhtml' => true,
+                                'clean' => true,
+                                'wrap-php' => true,
+                                'doctype' => 'omit',
+                                'show-body-only' => true,
+                                'drop-proprietary-attributes' => true,
+                            ];
+                            $tidy = new \tidy();
+                            $tidy->parseString($content, $options, 'utf8');
+                            $tidy->cleanRepair();
+
+                            $content = $this->cleanContent(tidy_get_output($tidy), 'store');
+                        } catch (Exception $e) {
+                        }
+                    } else {
+                        $content = str_replace('<div', '<p', $content);
+                        $content = str_replace('</div>', '</p>', $content);
+                    }
+
+                    if ($content != '') {
+                        $insertItem['content']  = $content;
+                    } else {
+                        $insertItem['content'] = '-';
+                    }
                 } else {
                     $insertItem['content'] = '-';
                 }
-            } else {
-                $insertItem['content'] = '-';
-            }
 
-            if ($simplepieItem->get_latitude() && $simplepieItem->get_longitude()) {
-                $insertItem['latitude'] = $simplepieItem->get_latitude();
-                $insertItem['longitude'] = $simplepieItem->get_longitude();
-            }
-
-            $dateReference = (new \Datetime())->format('Y-m-d H:i:s');
-
-            if ($date = $simplepieItem->get_gmdate('Y-m-d H:i:s')) {
-                if ($date > $dateReference) {
-                    $insertItem['date'] = $dateReference;
-                } else {
-                    $insertItem['date'] = $date;
+                if ($simplepieItem->get_latitude() && $simplepieItem->get_longitude()) {
+                    $insertItem['latitude'] = $simplepieItem->get_latitude();
+                    $insertItem['longitude'] = $simplepieItem->get_longitude();
                 }
-            } else {
-                $insertItem['date'] = $dateReference;
+
+                $dateReference = (new \Datetime())->format('Y-m-d H:i:s');
+
+                if ($date = $simplepieItem->get_gmdate('Y-m-d H:i:s')) {
+                    if ($date > $dateReference) {
+                        $insertItem['date'] = $dateReference;
+                    } else {
+                        $insertItem['date'] = $date;
+                    }
+                } else {
+                    $insertItem['date'] = $dateReference;
+                }
+
+                $insertItem['date_created'] = $dateReference;
+                $insertItem['date_modified'] = $dateReference;
+
+                $item_id = $this->insert('item', $insertItem);
+
+                if ($categories = $simplepieItem->get_categories()) {
+                    $this->setCategories($item_id, $categories);
+                }
+
+                if ($enclosures = $simplepieItem->get_enclosures()) {
+                    $this->setEnclosures($item_id, $enclosures);
+                }
+
+                unset($simplepieItem);
             }
-
-            $insertItem['date_created'] = $dateReference;
-            $insertItem['date_modified'] = $dateReference;
-
-            $item_id = $this->insert('item', $insertItem);
-
-            if ($categories = $simplepieItem->get_categories()) {
-                $this->setCategories($item_id, $categories);
-            }
-
-            if ($enclosures = $simplepieItem->get_enclosures()) {
-                $this->setEnclosures($item_id, $enclosures);
-            }
-
-            unset($simplepieItem);
         }
     }
 
