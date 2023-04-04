@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Helper\CleanHelper;
 use App\Manager\ActionAuthorManager;
 use App\Manager\ActionCategoryManager;
 use App\Manager\ActionFeedManager;
@@ -253,7 +254,7 @@ class SearchController extends AbstractAppController
                                 $entry['categories'] = $categories;
                                 $entry['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
 
-                                $entry['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
+                                $entry['content'] = CleanHelper::cleanContent($item->getContent(), 'display');
 
                                 $data['entries'][] = $entry;
                             } else {

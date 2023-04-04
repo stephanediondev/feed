@@ -6,6 +6,7 @@ namespace App\Manager;
 
 use App\Entity\Collection;
 use App\Event\CollectionEvent;
+use App\Helper\CleanHelper;
 use App\Manager\AbstractManager;
 use App\Repository\CollectionRepository;
 use SimplePie\SimplePie;
@@ -148,9 +149,9 @@ class CollectionManager extends AbstractManager
                             $parseUrl = parse_url($website);
 
                             $updateFeed = [];
-                            $updateFeed['title'] = $simplepieFeed->get_title() ? $this->cleanTitle($simplepieFeed->get_title()) : '-';
-                            $updateFeed['website'] = $this->cleanWebsite($website);
-                            $updateFeed['link'] = $simplepieFeed->subscribe_url() ? $this->cleanLink($simplepieFeed->subscribe_url()) : null;
+                            $updateFeed['title'] = $simplepieFeed->get_title() ? CleanHelper::cleanTitle($simplepieFeed->get_title()) : '-';
+                            $updateFeed['website'] = CleanHelper::cleanWebsite($website);
+                            $updateFeed['link'] = $simplepieFeed->subscribe_url() ? CleanHelper::cleanLink($simplepieFeed->subscribe_url()) : null;
                             $updateFeed['hostname'] = isset($parseUrl['host']) ? $parseUrl['host'] : null;
                             $updateFeed['description'] = $simplepieFeed->get_description();
 
@@ -230,7 +231,7 @@ class CollectionManager extends AbstractManager
     {
         foreach ($items as $simplepieItem) {
             if ($link = $simplepieItem->get_link()) {
-                $link = $this->cleanLink($link);
+                $link = CleanHelper::cleanLink($link);
 
                 $sql = 'SELECT id FROM item WHERE link = :link';
                 $stmt = $this->connection->prepare($sql);
@@ -247,7 +248,7 @@ class CollectionManager extends AbstractManager
                 $insertItem['feed_id'] = $feed['id'];
 
                 if ($simplepieItem->get_title()) {
-                    $insertItem['title'] = $this->cleanTitle($simplepieItem->get_title());
+                    $insertItem['title'] = CleanHelper::cleanTitle($simplepieItem->get_title());
                 } else {
                     $insertItem['title'] = '-';
                 }
@@ -271,7 +272,7 @@ class CollectionManager extends AbstractManager
                             $tidy->parseString($content, $options, 'utf8');
                             $tidy->cleanRepair();
 
-                            $content = $this->cleanContent(tidy_get_output($tidy), 'store');
+                            $content = CleanHelper::cleanContent(tidy_get_output($tidy), 'store');
                         } catch (Exception $e) {
                         }
                     } else {
@@ -341,7 +342,7 @@ class CollectionManager extends AbstractManager
         $author_id = null;
 
         if ($name != '') {
-            $title = $this->cleanTitle($name);
+            $title = CleanHelper::cleanTitle($name);
 
             $cacheItem = $this->cacheDriver->getItem('readerself.author_title.'.(new AsciiSlugger())->slug($title));
 
@@ -384,14 +385,14 @@ class CollectionManager extends AbstractManager
                         $categoriesPart = explode(',', $simplepieCategory->get_label());
                         foreach ($categoriesPart as $title) {
                             $title = mb_strtolower($title, 'UTF-8');
-                            $title = $this->cleanTitle($title);
+                            $title = CleanHelper::cleanTitle($title);
                             if ($title != '') {
                                 $titles[] = $title;
                             }
                         }
                     } else {
                         $title = mb_strtolower($simplepieCategory->get_label(), 'UTF-8');
-                        $title = $this->cleanTitle($title);
+                        $title = CleanHelper::cleanTitle($title);
                         if ($title != '') {
                             $titles[] = $title;
                         }
@@ -433,7 +434,7 @@ class CollectionManager extends AbstractManager
             $links = [];
             foreach ($enclosures as $simplepieEnclosure) {
                 if ($simplepieEnclosure->get_link() && $simplepieEnclosure->get_type()) {
-                    $link = $this->cleanLink($simplepieEnclosure->get_link());
+                    $link = CleanHelper::cleanLink($simplepieEnclosure->get_link());
 
                     if (substr($link, -2) == '?#') {
                         $link = substr($link, 0, -2);

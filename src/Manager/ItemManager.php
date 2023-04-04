@@ -79,7 +79,7 @@ class ItemManager extends AbstractManager
                     $token = urlencode(base64_encode($src));
                     $enclosures[$index_enclosures]['link'] = 'app/icons/icon-32x32.png';
                     $enclosures[$index_enclosures]['link_origin'] = $src;
-                    $enclosures[$index_enclosures]['proxy'] = $this->router->generate('api_proxy', ['token' => $token], 0);
+                    $enclosures[$index_enclosures]['proxy'] = '/proxy/?token='.$token;
                 }
                 $index_enclosures++;
             }

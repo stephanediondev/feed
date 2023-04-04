@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Controller\AbstractAppController;
 use App\Entity\ActionItem;
 use App\Entity\Member;
+use App\Helper\CleanHelper;
 use App\Manager\ActionItemManager;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
@@ -171,7 +172,7 @@ class ItemController extends AbstractAppController
 
                 $entry['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
 
-                $entry['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
+                $entry['content'] = CleanHelper::cleanContent($item->getContent(), 'display');
 
                 $data['entries'][] = $entry;
             }
@@ -205,7 +206,7 @@ class ItemController extends AbstractAppController
         $data['entry']['categories'] = $categories;
         $data['entry']['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
 
-        $data['entry']['content'] = $this->itemManager->cleanContent($item->getContent(), 'display');
+        $data['entry']['content'] = CleanHelper::cleanContent($item->getContent(), 'display');
 
         $data['entry_entity'] = 'item';
 

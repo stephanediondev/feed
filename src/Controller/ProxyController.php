@@ -9,10 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/api', name: 'api_', priority: 20)]
 class ProxyController extends AbstractAppController
 {
-    #[Route(path: '/proxy', name: 'proxy', methods: ['GET'])]
+    #[Route(path: '/proxy', name: 'proxy', methods: ['GET'], priority: 20)]
     public function index(Request $request): ?Response
     {
         if ($token = $request->query->get('token')) {

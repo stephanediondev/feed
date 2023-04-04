@@ -7,8 +7,8 @@ namespace App\Manager;
 use App\Entity\Feed;
 use App\Entity\Member;
 use App\Event\FeedEvent;
+use App\Helper\CleanHelper;
 use App\Manager\AbstractManager;
-use App\Manager\CollectionManager;
 use App\Repository\FeedRepository;
 use SimpleXMLElement;
 
@@ -76,7 +76,7 @@ class FeedManager extends AbstractManager
             $action_id = 3;
 
             foreach ($data['feeds'] as $obj) {
-                $link = $this->cleanLink($obj->xmlUrl);
+                $link = CleanHelper::cleanLink($obj->xmlUrl);
 
                 $sql = 'SELECT id FROM feed WHERE link = :link';
                 $stmt = $this->connection->prepare($sql);
@@ -90,9 +90,9 @@ class FeedManager extends AbstractManager
                     $parseUrl = parse_url($obj->xmlUrl);
 
                     $insertFeed = [
-                        'title' => $this->cleanTitle($obj->title),
+                        'title' => CleanHelper::cleanTitle($obj->title),
                         'link' => $link,
-                        'website' => $this->cleanWebsite($obj->htmlUrl),
+                        'website' => CleanHelper::cleanWebsite($obj->htmlUrl),
                         'hostname' => $parseUrl['host'] ?? null,
                         'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                         'date_modified' => (new \Datetime())->format('Y-m-d H:i:s'),
