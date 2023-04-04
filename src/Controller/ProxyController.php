@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProxyController extends AbstractAppController
 {
-    #[Route(path: '/proxy', name: 'proxy', methods: ['GET'], priority: 20)]
+    #[Route(path: '/proxy', name: 'proxy', methods: ['GET'], priority: 25)]
     public function index(Request $request): ?Response
     {
         if ($token = $request->query->get('token')) {
