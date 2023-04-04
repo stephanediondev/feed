@@ -77,7 +77,7 @@
                 {{#if entry.enclosures }}
                     {{#each entry.enclosures as |enclosure enclosure_index|}}
                         {{#equal enclosure.type_group 'image' }}
-                            <p><img src="{{ enclosure.link }}" alt=""{{#if enclosure.proxy }} data-src="{{ enclosure.proxy }}" data-src-origin="{{ enclosure.link_origin }}" class="proxy"{{/if}}></p>
+                            <p><img src="{{ enclosure.link }}" alt="" loading="lazy"></p>
                         {{/equal}}
 
                         {{#equal enclosure.type_group 'video' }}

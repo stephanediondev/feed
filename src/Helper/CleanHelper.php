@@ -91,10 +91,7 @@ final class CleanHelper
                                 if ($node->tagName == 'img' && $case == 'display') {
                                     if (str_starts_with($src, 'http://')) {
                                         $token = urlencode(base64_encode($src));
-                                        $node->setAttribute('src', 'app/icons/icon-32x32.png');
-                                        $node->setAttribute('data-src', '/proxy?token='.$token);
-                                        $node->setAttribute('data-src-origin', $src);
-                                        $node->setAttribute('class', 'proxy');
+                                        $node->setAttribute('src', '/proxy?token='.$token);
                                     }
 
                                     $node->removeAttribute('srcset');

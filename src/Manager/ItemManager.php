@@ -75,11 +75,9 @@ class ItemManager extends AbstractManager
             $src = $enclosure->getLink();
             if ($item->getContent() && $src && !strstr($item->getContent(), $src)) {
                 $enclosures[$index_enclosures] = $enclosure->toArray();
-                if (!$enclosure->isLinkSecure() && $request->server->get('HTTPS') == 'on' && $enclosure->getTypeGroup() == 'image') {
+                if (!$enclosure->isLinkSecure() && $enclosure->getTypeGroup() == 'image') {
                     $token = urlencode(base64_encode($src));
-                    $enclosures[$index_enclosures]['link'] = 'app/icons/icon-32x32.png';
-                    $enclosures[$index_enclosures]['link_origin'] = $src;
-                    $enclosures[$index_enclosures]['proxy'] = '/proxy/?token='.$token;
+                    $enclosures[$index_enclosures]['link'] = '/proxy?token='.$token;
                 }
                 $index_enclosures++;
             }

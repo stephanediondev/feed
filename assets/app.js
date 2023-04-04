@@ -562,15 +562,6 @@ function loadRoute(key, parameters) {
                                 $('body').addClass('no_entries');
                             }
 
-                            $('main > .mdl-grid').find('img.proxy').each(function() {
-                                var img = $(this);
-                                if (img.data('src')) {
-                                    $(this).attr('src', $(this).attr('data-src'));
-                                    $(this).removeAttr('data-src');
-                                    $(this).removeClass('proxy');
-                                }
-                            });
-
                             $('main > .mdl-grid').find('.timeago').each(function() {
                                 var result = moment( $(this).data('date') ).add(timezone, 'hours');
                                 $(this).attr('title', result.format('LLLL'));
