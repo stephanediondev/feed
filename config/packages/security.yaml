@@ -18,6 +18,7 @@ security:
             lazy: true
             provider: app_member_provider
             stateless: true
+            access_denied_handler: App\Security\ApiAccessDeniedHandler
             access_token:
                 token_handler: App\Security\ApiAccessTokenHandler
 
