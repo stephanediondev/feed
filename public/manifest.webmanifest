@@ -63,10 +63,11 @@
             "type": "image/png"
         }
     ],
-    "start_url": ".",
+    "id": "/",
+    "start_url": "/",
+    "scope": "/",
     "display_override": [
         "window-control-overlay",
-        "fullscreen",
         "minimal-ui"
     ],
     "display": "standalone",
