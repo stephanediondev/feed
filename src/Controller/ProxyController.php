@@ -14,6 +14,8 @@ class ProxyController extends AbstractAppController
     #[Route(path: '/proxy', name: 'proxy', methods: ['GET'], priority: 25)]
     public function index(Request $request): ?Response
     {
+        $response = new Response();
+
         if ($token = $request->query->get('token')) {
             $file = base64_decode(urldecode(strval($token)));
 
@@ -30,8 +32,8 @@ class ProxyController extends AbstractAppController
                 if ($content = file_get_contents($file, false, $context)) {
                     $contentType = (new \finfo(FILEINFO_MIME))->buffer($content);
 
-                    $response = new Response();
                     $response->setContent($content);
+                    $response->setStatusCode(Response::HTTP_OK);
                     if ($contentType) {
                         $response->headers->set('Content-Type', $contentType);
                     }
@@ -41,6 +43,7 @@ class ProxyController extends AbstractAppController
             }
         }
 
-        return null;
+        $response->setStatusCode(Response::HTTP_NOT_FOUND);
+        return $response;
     }
 }
