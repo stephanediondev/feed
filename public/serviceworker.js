@@ -2,8 +2,9 @@ var LOG_ENABLED = true;
 var FETCH_ENABLED = true;
 var FETCH_EXCLUDE = [
     '/#',
-    '/api/',
-    '/_wdt/',
+    '/api',
+    '/proxy',
+    '/_wdt',
 ];
 var VERSION = '1.0';
 var CACHE_KEY = 'feed-v' + VERSION;
