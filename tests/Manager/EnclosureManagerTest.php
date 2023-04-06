@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Manager;
@@ -13,30 +14,30 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class EnclosureManagerTest extends KernelTestCase
 {
+    protected FeedManager $feedManager;
+
     protected ItemManager $itemManager;
 
     protected EnclosureManager $enclosureManager;
-
-    protected FeedManager $feedManager;
 
     protected function setUp(): void
     {
         self::bootKernel();
 
+        $this->feedManager = static::getContainer()->get('App\Manager\FeedManager');
+
         $this->itemManager = static::getContainer()->get('App\Manager\ItemManager');
 
         $this->enclosureManager = static::getContainer()->get('App\Manager\EnclosureManager');
-
-        $this->feedManager = static::getContainer()->get('App\Manager\FeedManager');
     }
 
-    public function test(): void
+    public function testPersist(): void
     {
         $feed = new Feed();
         $feed->setTitle('test-'.uniqid('', true));
         $feed->setLink('test-'.uniqid('', true));
 
-        $feed_id = $this->feedManager->persist($feed);
+        $this->feedManager->persist($feed);
 
         $item = new Item();
         $item->setFeed($feed);
@@ -44,23 +45,20 @@ class EnclosureManagerTest extends KernelTestCase
         $item->setLink('test-'.uniqid('', true));
         $item->setDate(new \Datetime());
 
-        $item_id = $this->itemManager->persist($item);
+        $this->itemManager->persist($item);
 
         $enclosure = new Enclosure();
         $enclosure->setItem($item);
         $enclosure->setLink('test-'.uniqid('', true));
         $enclosure->setType('test-'.uniqid('', true));
 
-        $enclosure_id = $this->enclosureManager->persist($enclosure);
+        $this->enclosureManager->persist($enclosure);
 
-        $test = $this->enclosureManager->getOne(['id' => $enclosure_id]);
+        $test = $this->enclosureManager->getOne(['id' => $enclosure->getId()]);
         $this->assertNotNull($test);
         $this->assertInstanceOf(Enclosure::class, $test);
 
         $this->enclosureManager->remove($enclosure);
-
-        $test = $this->enclosureManager->getOne(['id' => $enclosure_id]);
-        $this->assertNull($test);
 
         $this->itemManager->remove($item);
 

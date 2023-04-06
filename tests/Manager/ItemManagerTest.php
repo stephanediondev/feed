@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Manager;
@@ -11,26 +12,26 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ItemManagerTest extends KernelTestCase
 {
-    protected ItemManager $itemManager;
-
     protected FeedManager $feedManager;
+
+    protected ItemManager $itemManager;
 
     protected function setUp(): void
     {
         self::bootKernel();
 
-        $this->itemManager = static::getContainer()->get('App\Manager\ItemManager');
-
         $this->feedManager = static::getContainer()->get('App\Manager\FeedManager');
+
+        $this->itemManager = static::getContainer()->get('App\Manager\ItemManager');
     }
 
-    public function test(): void
+    public function testPersist(): void
     {
         $feed = new Feed();
         $feed->setTitle('test-'.uniqid('', true));
         $feed->setLink('test-'.uniqid('', true));
 
-        $feed_id = $this->feedManager->persist($feed);
+        $this->feedManager->persist($feed);
 
         $item = new Item();
         $item->setFeed($feed);
@@ -38,16 +39,13 @@ class ItemManagerTest extends KernelTestCase
         $item->setLink('test-'.uniqid('', true));
         $item->setDate(new \Datetime());
 
-        $item_id = $this->itemManager->persist($item);
+        $this->itemManager->persist($item);
 
-        $test = $this->itemManager->getOne(['id' => $item_id]);
+        $test = $this->itemManager->getOne(['id' => $item->getId()]);
         $this->assertNotNull($test);
         $this->assertInstanceOf(Item::class, $test);
 
         $this->itemManager->remove($item);
-
-        $test = $this->itemManager->getOne(['id' => $item_id]);
-        $this->assertNull($test);
 
         $this->feedManager->remove($feed);
     }

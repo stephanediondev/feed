@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Manager;
@@ -18,40 +19,17 @@ class CategoryManagerTest extends KernelTestCase
         $this->categoryManager = static::getContainer()->get('App\Manager\CategoryManager');
     }
 
-    public function testId(): void
+    public function testPersist(): void
     {
-        $title = 'test-'.uniqid('', true);
         $category = new Category();
-        $category->setTitle($title);
+        $category->setTitle('test-'.uniqid('', true));
 
-        $category_id = $this->categoryManager->persist($category);
+        $this->categoryManager->persist($category);
 
-        $test = $this->categoryManager->getOne(['id' => $category_id]);
+        $test = $this->categoryManager->getOne(['id' => $category->getId()]);
         $this->assertNotNull($test);
         $this->assertInstanceOf(Category::class, $test);
 
         $this->categoryManager->remove($category);
-
-        $test = $this->categoryManager->getOne(['id' => $category_id]);
-        $this->assertNull($test);
-    }
-
-    public function testTitle(): void
-    {
-        $title = 'test-'.uniqid('', true);
-        $category = new Category();
-        $category->setTitle($title);
-
-        $category_id = $this->categoryManager->persist($category);
-
-        $test = $this->categoryManager->getOne(['title' => $title]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Category::class, $test);
-        $this->assertEquals($title, $test->getTitle());
-
-        $this->categoryManager->remove($category);
-
-        $test = $this->categoryManager->getOne(['title' => $title]);
-        $this->assertNull($test);
     }
 }

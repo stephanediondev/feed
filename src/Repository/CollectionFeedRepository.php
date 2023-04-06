@@ -28,7 +28,7 @@ class CollectionFeedRepository extends AbstractRepository
         $query->leftJoin('col_fed.collection', 'col');
 
         if (isset($parameters['id']) == 1) {
-            $query->andWhere('col.id = :id');
+            $query->andWhere('col_fed.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 

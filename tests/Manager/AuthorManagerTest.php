@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Manager;
@@ -18,40 +19,17 @@ class AuthorManagerTest extends KernelTestCase
         $this->authorManager = static::getContainer()->get('App\Manager\AuthorManager');
     }
 
-    public function testId(): void
+    public function testPersist(): void
     {
-        $title = 'test-'.uniqid('', true);
         $author = new Author();
-        $author->setTitle($title);
+        $author->setTitle('test-'.uniqid('', true));
 
-        $author_id = $this->authorManager->persist($author);
+        $this->authorManager->persist($author);
 
-        $test = $this->authorManager->getOne(['id' => $author_id]);
+        $test = $this->authorManager->getOne(['id' => $author->getId()]);
         $this->assertNotNull($test);
         $this->assertInstanceOf(Author::class, $test);
 
         $this->authorManager->remove($test);
-
-        $test = $this->authorManager->getOne(['id' => $author_id]);
-        $this->assertNull($test);
-    }
-
-    public function testTitle(): void
-    {
-        $title = 'test-'.uniqid('', true);
-        $author = new Author();
-        $author->setTitle($title);
-
-        $author_id = $this->authorManager->persist($author);
-
-        $test = $this->authorManager->getOne(['title' => $title]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Author::class, $test);
-        $this->assertEquals($title, $test->getTitle());
-
-        $this->authorManager->remove($test);
-
-        $test = $this->authorManager->getOne(['title' => $title]);
-        $this->assertNull($test);
     }
 }

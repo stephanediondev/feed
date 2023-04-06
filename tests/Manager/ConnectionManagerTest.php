@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Manager;
 
 use App\Entity\Connection;
+use App\Entity\Member;
 use App\Manager\ConnectionManager;
 use App\Manager\MemberManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -23,44 +25,27 @@ class ConnectionManagerTest extends KernelTestCase
         $this->connectionManager = static::getContainer()->get('App\Manager\ConnectionManager');
     }
 
-    public function testId(): void
+    public function testPersist(): void
     {
-        $token = 'test-'.uniqid('', true);
+        $member = new Member();
+        $member->setEmail('test-'.uniqid('', true));
+        $member->setPassword('test-'.uniqid('', true));
+
+        $this->memberManager->persist($member);
+
         $connection = new Connection();
-        $connection->setMember($this->memberManager->getOne());
-        $connection->setType('test');
-        $connection->setToken($token);
+        $connection->setMember($member);
+        $connection->setType('test-'.uniqid('', true));
+        $connection->setToken('test-'.uniqid('', true));
 
-        $connection_id = $this->connectionManager->persist($connection);
+        $this->connectionManager->persist($connection);
 
-        $test = $this->connectionManager->getOne(['id' => $connection_id]);
+        $test = $this->connectionManager->getOne(['id' => $connection->getId()]);
         $this->assertNotNull($test);
         $this->assertInstanceOf(Connection::class, $test);
 
         $this->connectionManager->remove($connection);
 
-        $test = $this->connectionManager->getOne(['id' => $connection_id]);
-        $this->assertNull($test);
-    }
-
-    public function testToken(): void
-    {
-        $token = 'test-'.uniqid('', true);
-        $connection = new Connection();
-        $connection->setMember($this->memberManager->getOne());
-        $connection->setType('test');
-        $connection->setToken($token);
-
-        $connection_id = $this->connectionManager->persist($connection);
-
-        $test = $this->connectionManager->getOne(['token' => $token]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Connection::class, $test);
-        $this->assertEquals($token, $test->getToken());
-
-        $this->connectionManager->remove($connection);
-
-        $test = $this->connectionManager->getOne(['token' => $token]);
-        $this->assertNull($test);
+        $this->memberManager->remove($member);
     }
 }

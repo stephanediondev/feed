@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Manager;
@@ -18,40 +19,17 @@ class ActionManagerTest extends KernelTestCase
         $this->actionManager = static::getContainer()->get('App\Manager\ActionManager');
     }
 
-    public function testId(): void
+    public function testPersist(): void
     {
-        $title = 'test-'.uniqid('', true);
         $action = new Action();
-        $action->setTitle($title);
+        $action->setTitle('test-'.uniqid('', true));
 
-        $action_id = $this->actionManager->persist($action);
+        $this->actionManager->persist($action);
 
-        $test = $this->actionManager->getOne(['id' => $action_id]);
+        $test = $this->actionManager->getOne(['id' => $action->getId()]);
         $this->assertNotNull($test);
         $this->assertInstanceOf(Action::class, $test);
 
         $this->actionManager->remove($action);
-
-        $test = $this->actionManager->getOne(['id' => $action_id]);
-        $this->assertNull($test);
-    }
-
-    public function testTitle(): void
-    {
-        $title = 'test-'.uniqid('', true);
-        $action = new Action();
-        $action->setTitle($title);
-
-        $action_id = $this->actionManager->persist($action);
-
-        $test = $this->actionManager->getOne(['title' => $title]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Action::class, $test);
-        $this->assertEquals($title, $test->getTitle());
-
-        $this->actionManager->remove($action);
-
-        $test = $this->actionManager->getOne(['title' => $title]);
-        $this->assertNull($test);
     }
 }

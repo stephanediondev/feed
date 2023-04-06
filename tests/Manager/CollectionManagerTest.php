@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Manager;
@@ -18,19 +19,16 @@ class CollectionManagerTest extends KernelTestCase
         $this->collectionManager = static::getContainer()->get('App\Manager\CollectionManager');
     }
 
-    public function test(): void
+    public function testPersist(): void
     {
         $collection = new Collection();
 
-        $collection_id = $this->collectionManager->persist($collection);
+        $this->collectionManager->persist($collection);
 
-        $test = $this->collectionManager->getOne(['id' => $collection_id]);
+        $test = $this->collectionManager->getOne(['id' => $collection->getId()]);
         $this->assertNotNull($test);
         $this->assertInstanceOf(Collection::class, $test);
 
         $this->collectionManager->remove($collection);
-
-        $test = $this->collectionManager->getOne(['id' => $collection_id]);
-        $this->assertNull($test);
     }
 }

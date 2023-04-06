@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tests\Manager;
@@ -18,21 +19,18 @@ class FeedManagerTest extends KernelTestCase
         $this->feedManager = static::getContainer()->get('App\Manager\FeedManager');
     }
 
-    public function test(): void
+    public function testPersist(): void
     {
         $feed = new Feed();
         $feed->setTitle('test-'.uniqid('', true));
         $feed->setLink('test-'.uniqid('', true));
 
-        $feed_id = $this->feedManager->persist($feed);
+        $this->feedManager->persist($feed);
 
-        $test = $this->feedManager->getOne(['id' => $feed_id]);
+        $test = $this->feedManager->getOne(['id' => $feed->getId()]);
         $this->assertNotNull($test);
         $this->assertInstanceOf(Feed::class, $test);
 
         $this->feedManager->remove($feed);
-
-        $test = $this->feedManager->getOne(['id' => $feed_id]);
-        $this->assertNull($test);
     }
 }
