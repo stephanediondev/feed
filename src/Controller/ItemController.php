@@ -46,6 +46,8 @@ class ItemController extends AbstractAppController
     {
         $data = [];
 
+        $this->denyAccessUnlessGranted('LIST', 'item');
+
         if (false === $this->getUser() instanceof Member) {
             return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
@@ -192,6 +194,8 @@ class ItemController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('READ', $item);
+
         $actions = $this->actionItemManager->getList(['member' => $this->getUser(), 'item' => $item])->getResult();
 
         $categories = [];
@@ -218,15 +222,13 @@ class ItemController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->isGranted('ROLE_ADMIN')) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $item = $this->itemManager->getOne(['id' => $id]);
 
         if (!$item) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
+
+        $this->denyAccessUnlessGranted('DELETE', $item);
 
         $data['entry'] = $item->toArray();
         $data['entry_entity'] = 'item';

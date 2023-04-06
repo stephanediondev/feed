@@ -31,9 +31,7 @@ class MemberController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->isGranted('ROLE_ADMIN')) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
+        $this->denyAccessUnlessGranted('CREATE', 'member');
 
         $member = new Member();
         $form = $this->createForm(MemberType::class, $member, ['validation_groups' => ['insert']]);
@@ -64,15 +62,13 @@ class MemberController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->isGranted('ROLE_ADMIN')) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if (!$member) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
+
+        $this->denyAccessUnlessGranted('READ', $member);
 
         $data['entry'] = $member->toArray();
         $data['entry_entity'] = 'member';
@@ -85,15 +81,13 @@ class MemberController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->isGranted('ROLE_ADMIN')) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if (!$member) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
+
+        $this->denyAccessUnlessGranted('UPDATE', $member);
 
         return new JsonResponse($data);
     }
@@ -103,15 +97,13 @@ class MemberController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->isGranted('ROLE_ADMIN')) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if (!$member) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
+
+        $this->denyAccessUnlessGranted('DELETE', $member);
 
         return new JsonResponse($data);
     }

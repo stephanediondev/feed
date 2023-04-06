@@ -35,6 +35,8 @@ class CategoryController extends AbstractAppController
     {
         $data = [];
 
+        $this->denyAccessUnlessGranted('LIST', 'category');
+
         $parameters = [];
 
         if ($request->query->get('trendy')) {
@@ -145,6 +147,8 @@ class CategoryController extends AbstractAppController
     {
         $data = [];
 
+        $this->denyAccessUnlessGranted('CREATE', 'category');
+
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
 
@@ -180,6 +184,8 @@ class CategoryController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('READ', $category);
+
         $actions = $this->actionCategoryManager->getList(['member' => $this->getUser(), 'category' => $category])->getResult();
 
         $data['entry'] = $category->toArray();
@@ -202,6 +208,8 @@ class CategoryController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('UPDATE', $category);
+
         $data['entry'] = $category->toArray();
         $data['entry_entity'] = 'category';
 
@@ -213,15 +221,13 @@ class CategoryController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->isGranted('ROLE_ADMIN')) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
+
+        $this->denyAccessUnlessGranted('DELETE', $category);
 
         $data['entry'] = $category->toArray();
         $data['entry_entity'] = 'category';

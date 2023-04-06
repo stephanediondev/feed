@@ -38,6 +38,8 @@ class AuthorController extends AbstractAppController
     {
         $data = [];
 
+        $this->denyAccessUnlessGranted('LIST', 'author');
+
         $parameters = [];
 
         if ($request->query->get('trendy')) {
@@ -147,10 +149,12 @@ class AuthorController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    #[Route(path: '/aurhors', name: 'create', methods: ['POST'])]
+    #[Route(path: '/authors', name: 'create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
         $data = [];
+
+        $this->denyAccessUnlessGranted('CREATE', 'author');
 
         $author = new Author();
         $form = $this->createForm(AuthorType::class, $author);
@@ -187,6 +191,8 @@ class AuthorController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('READ', $author);
+
         $data['entry'] = $author->toArray();
         $data['entry_entity'] = 'author';
 
@@ -204,6 +210,8 @@ class AuthorController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('UPDATE', $author);
+
         $data['entry'] = $author->toArray();
         $data['entry_entity'] = 'author';
 
@@ -215,15 +223,13 @@ class AuthorController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->isGranted('ROLE_ADMIN')) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
+
+        $this->denyAccessUnlessGranted('DELETE', $author);
 
         $data['entry'] = $author->toArray();
         $data['entry_entity'] = 'author';

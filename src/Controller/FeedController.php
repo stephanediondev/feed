@@ -51,6 +51,8 @@ class FeedController extends AbstractAppController
     {
         $data = [];
 
+        $this->denyAccessUnlessGranted('LIST', 'feed');
+
         $parameters = [];
 
         if ($request->query->get('witherrors')) {
@@ -164,6 +166,8 @@ class FeedController extends AbstractAppController
     {
         $data = [];
 
+        $this->denyAccessUnlessGranted('CREATE', 'feed');
+
         $feed = new Feed();
         $form = $this->createForm(FeedType::class, $feed);
 
@@ -204,6 +208,8 @@ class FeedController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('READ', $feed);
+
         $actions = $this->actionFeedManager->getList(['member' => $this->getUser(), 'feed' => $feed])->getResult();
 
         $categories = [];
@@ -238,6 +244,8 @@ class FeedController extends AbstractAppController
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('UPDATE', $feed);
+
         $form = $this->createForm(FeedType::class, $feed);
 
         $content = $this->getContent($request);
@@ -265,15 +273,13 @@ class FeedController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->isGranted('ROLE_ADMIN')) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if (!$feed) {
             return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
+
+        $this->denyAccessUnlessGranted('DELETE', $feed);
 
         $data['entry'] = $feed->toArray();
         $data['entry_entity'] = 'feed';
