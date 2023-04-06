@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/api', name: 'api_profile_', priority: 20)]
+#[Route(path: '/api/profile', name: 'api_profile_', priority: 20)]
 class ProfileController extends AbstractAppController
 {
     private MemberManager $memberManager;
@@ -28,7 +28,7 @@ class ProfileController extends AbstractAppController
         $this->passwordHasher = $passwordHasher;
     }
 
-    #[Route(path: '/profile', name: 'index', methods: ['GET'])]
+    #[Route(path: '', name: 'index', methods: ['GET'])]
     public function index(Request $request): JsonResponse
     {
         $data = [];
@@ -49,8 +49,8 @@ class ProfileController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    #[Route(path: '/profile/connections', name: 'connections', methods: ['GET'])]
-    public function profileConnections(Request $request): JsonResponse
+    #[Route(path: '/connections', name: 'connections', methods: ['GET'])]
+    public function connections(Request $request): JsonResponse
     {
         $data = [];
 
@@ -90,7 +90,8 @@ class ProfileController extends AbstractAppController
         return new JsonResponse($data);
     }
 
-    public function profileUpdate(Request $request): JsonResponse
+    #[Route(path: '', name: 'update', methods: ['PUT'])]
+    public function update(Request $request): JsonResponse
     {
         $data = [];
 
