@@ -110,6 +110,25 @@ function ready() {
             }
         });
 
+        if (typeof Notification !== 'undefined') {
+            if ('granted' !== Notification.permission) {
+                var enableNotifications = document.getElementById('enable_notifications');
+
+                if (enableNotifications) {
+                    enableNotifications.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        Notification.requestPermission().then(function (permission) {
+                            if ('granted' === Notification.permission) {
+                                enableNotifications.parentNode.classList.add('d-none');
+                            }
+                        });
+                    });
+
+                    enableNotifications.parentNode.classList.remove('d-none');
+                }
+            }
+        }
+
         if (window.location.hash) {
             loadRoute(window.location.hash);
         } else {
@@ -726,8 +745,6 @@ function getDate() {
 
 var readyPromises = [];
 
-//var applicationServerKey;
-
 var files = [
     'app/views/misc.html',
     'app/views/member.html',
@@ -791,7 +808,7 @@ window.addEventListener('beforeinstallprompt', function(BeforeInstallPromptEvent
     var install = document.getElementById('install');
 
     if (install) {
-        document.getElementById('install').addEventListener('click', function(event) {
+        install.addEventListener('click', function(event) {
             event.preventDefault();
 
             BeforeInstallPromptEvent.userChoice
