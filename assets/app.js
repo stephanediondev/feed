@@ -29,6 +29,12 @@ global.saveAs = saveAs;
 
 import {routes} from './_routes.js'
 
+var serviceWorkerEnabled = false;
+
+if ('serviceWorker' in navigator && window.location.protocol == 'https:') {
+    serviceWorkerEnabled = true;
+}
+
 function setBadge(value) {
     let countUnread = $('.count-unread');
     countUnread.text(value);
@@ -110,23 +116,26 @@ function ready() {
             }
         });
 
-        if (typeof Notification !== 'undefined') {
-            if ('granted' !== Notification.permission) {
-                var enableNotifications = document.getElementById('enable_notifications');
+        if (serviceWorkerEnabled) {
+            navigator.serviceWorker.ready
+            .then(function(ServiceWorkerRegistration) {
+                if ('pushManager' in ServiceWorkerRegistration) {
+                    ServiceWorkerRegistration.pushManager.permissionState({userVisibleOnly: true})
+                    .then(function(permissionState) {
+                        if ('granted' !== permissionState) {
+                            var enableNotifications = document.getElementById('enable_notifications');
+                            if (enableNotifications) {
+                                enableNotifications.addEventListener('click', function(event) {
+                                    event.preventDefault();
+                                    pushManagerSubscribe();
+                                });
 
-                if (enableNotifications) {
-                    enableNotifications.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        Notification.requestPermission().then(function (permission) {
-                            if ('granted' === Notification.permission) {
-                                enableNotifications.parentNode.classList.add('d-none');
+                                enableNotifications.parentNode.classList.remove('d-none');
                             }
-                        });
+                        }
                     });
-
-                    enableNotifications.parentNode.classList.remove('d-none');
                 }
-            }
+            });
         }
 
         if (window.location.hash) {
@@ -740,6 +749,44 @@ function getDate() {
             i = '0' + i;
         }
         return i;
+    }
+}
+
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (var i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+
+function pushManagerSubscribe() {
+    if (serviceWorkerEnabled) {
+        navigator.serviceWorker.ready
+        .then(function(ServiceWorkerRegistration) {
+            if ('pushManager' in ServiceWorkerRegistration) {
+                ServiceWorkerRegistration.pushManager.permissionState({userVisibleOnly: true}).then(function(permissionState) {
+                    if (permissionState == 'prompt' || permissionState == 'granted') {
+                        ServiceWorkerRegistration.pushManager.subscribe({applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true})
+                        .then(function(PushSubscription) {
+                            if (PushSubscription && 'object' === typeof PushSubscription) {
+                                var enableNotifications = document.getElementById('enable_notifications');
+                                enableNotifications.parentNode.classList.add('d-none');
+                            }
+                        })
+                        .catch(function(err) {
+                        });
+                    }
+                });
+            }
+        });
     }
 }
 

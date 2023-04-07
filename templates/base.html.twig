@@ -67,6 +67,9 @@
 </div>
 
 {% block encore_entry_script %}
+    <script type="text/javascript">
+        var applicationServerKey = '{{ vapidPublicKey }}';
+    </script>
     {{ encore_entry_script_tags('app') }}
 {% endblock %}
 </body>
