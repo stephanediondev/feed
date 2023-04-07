@@ -7,8 +7,8 @@ namespace App\Tests\Manager;
 use App\Entity\Collection;
 use App\Entity\CollectionFeed;
 use App\Entity\Feed;
-use App\Manager\CollectionManager;
 use App\Manager\CollectionFeedManager;
+use App\Manager\CollectionManager;
 use App\Manager\FeedManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
