@@ -24,6 +24,43 @@
             "description": "List of subcribed feeds"
         }
     ],
+    "screenshots": [
+        {
+            "src": "screenshots/ipad-homescreen.jpg",
+            "sizes": "1536x2048",
+            "platform": "ipados",
+            "type": "image/jpeg",
+            "label": "iPad homescreen"
+        },
+        {
+            "src": "screenshots/ipad-item-light.png",
+            "sizes": "1536x2048",
+            "platform": "ipados",
+            "type": "image/png",
+            "label": "iPad item light"
+        },
+        {
+            "src": "screenshots/ipad-item-dark.png",
+            "sizes": "1536x2048",
+            "platform": "ipados",
+            "type": "image/png",
+            "label": "iPad item dark"
+        },
+        {
+            "src": "screenshots/ipad-item-share.png",
+            "sizes": "1536x2048",
+            "platform": "ipados",
+            "type": "image/png",
+            "label": "iPad item share"
+        },
+        {
+            "src": "screenshots/ipad-feeds-search.png",
+            "sizes": "1536x2048",
+            "platform": "ipados",
+            "type": "image/png",
+            "label": "iPad feed searh"
+        }
+    ],
     "icons": [
         {
             "src": "app/icons/icon-16x16.png",
