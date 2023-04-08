@@ -4,7 +4,9 @@ var FETCH_EXCLUDE = [
     '/#',
     '/api',
     '/login',
+    '/forgotpassword',
     '/proxy',
+    '/_profiler',
     '/_wdt',
 ];
 var VERSION = '1.0';
