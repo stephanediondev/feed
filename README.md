@@ -86,5 +86,5 @@ yarn run build
 
 # Screenshots
 
-![iPad item dark](public/screenshots/ipad-item-dark.png)
-![iPad feeds search](public/screenshots/ipad-feeds-search.png)
+![iPad item dark](assets/images/screenshots/ipad-item-dark.png)
+![iPad feeds search](assets/images/screenshots/ipad-feeds-search.png)
