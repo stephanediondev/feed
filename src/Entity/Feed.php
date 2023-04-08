@@ -288,6 +288,11 @@ class Feed
         return $this->getWebsite() ? str_starts_with($this->getWebsite(), 'https://') : false;
     }
 
+    public function getIconUrl(): string
+    {
+        return 'https://www.google.com/s2/favicons?domain='.$this->getHostname().'&alt=feed';
+    }
+
     /**
      * @return array<mixed>
      */
@@ -299,6 +304,7 @@ class Feed
             'link' => $this->getLink(),
             'website' => $this->getWebsite(),
             'hostname' => $this->getHostname(),
+            'icon_url' => $this->getIconUrl(),
             'description' => $this->getDescription(),
             'language' => $this->getLanguage(),
             'direction' => $this->getDirection(),

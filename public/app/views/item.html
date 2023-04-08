@@ -49,7 +49,7 @@
     <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative item" id="item-{{ entry.id }}" dir="{{ entry.feed.direction }}">
         <div class="mdl-card__title mb-3">
             <h1 class="mdl-card__title-text fs-5">
-                <a title="{{trans 'shortcut_v'}}" class="favicon" href="{{ entry.link }}" {{#if entry.feed.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.feed.hostname }}&amp;alt=feed);"{{/if}}>
+                <a title="{{trans 'shortcut_v'}}" class="favicon" href="{{ entry.link }}" {{#if entry.feed.hostname }} style="background-image:url({{ entry.feed.icon_url }});"{{/if}}>
                     {{ entry.title }}
                 </a>
             </h1>

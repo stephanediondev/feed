@@ -67,7 +67,7 @@ self.addEventListener('fetch', function(FetchEvent) {
     }
 
     var url = new URL(FetchEvent.request.url);
-    if (self.location.origin !== url.origin) {
+    if (self.location.origin !== url.origin && FetchEvent.request.url.indexOf('www.google.com/s2/favicons') === -1) {
         sendLog('excluded: ' + FetchEvent.request.url);
         return;
     }

@@ -112,7 +112,7 @@
     <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="feed-{{ entry.id }}" dir="{{ entry.direction }}">
         <div class="mdl-card__title mb-3">
             <h1 class="mdl-card__title-text fs-5">
-                <a href="#feed/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>
+                <a href="#feed/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url({{ entry.icon_url }});"{{/if}}>
                     {{ entry.title }}
                 </a>
             </h1>
@@ -162,7 +162,7 @@
 
     <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="feed" dir="{{ entry.direction }}">
         <div class="mdl-card__title mb-3">
-            <h1 class="favicon mdl-card__title-text fs-5"{{#if entry.hostname }} style="background-image:url(https://www.google.com/s2/favicons?domain={{ entry.hostname }}&amp;alt=feed);"{{/if}}>
+            <h1 class="favicon mdl-card__title-text fs-5"{{#if entry.hostname }} style="background-image:url({{ entry.icon_url }});"{{/if}}>
                 {{ entry.title }}
             </h1>
             <div class="mdl-card__subtitle-text">
