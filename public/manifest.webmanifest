@@ -90,10 +90,6 @@
     "id": "/",
     "start_url": "/",
     "scope": "/",
-    "display_override": [
-        "window-control-overlay",
-        "minimal-ui"
-    ],
     "display": "standalone",
     "background_color": "#3f51b5",
     "theme_color": "#3f51b5"
