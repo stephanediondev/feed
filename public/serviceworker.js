@@ -3,32 +3,48 @@ var FETCH_ENABLED = true;
 var FETCH_EXCLUDE = [
     '/#',
     '/api',
+    '/login',
     '/proxy',
     '/_wdt',
 ];
 var VERSION = '1.0';
 var CACHE_KEY = 'feed-v' + VERSION;
-var CACHE_FILES = [
-];
 
 self.addEventListener('install', function(InstallEvent) {
-    self.skipWaiting();
-
     if ('waitUntil' in InstallEvent) {
-        InstallEvent.waitUntil(function() {
-            cacheAddAll();
-        });
+        InstallEvent.waitUntil(
+            caches.open(CACHE_KEY)
+            .then(function(cache) {
+                return fetch('/build/manifest.json')
+                .then(function(Response) {
+                    return Response.json();
+                }).then(function(json) {
+                    let files = [];
+                    files.push('/');
+                    sendLog('added to cache storage: /');
+                    for (const key in json) {
+                        files.push(json[key]);
+                        sendLog('added to cache storage: ' + json[key]);
+                    }
+                    return cache.addAll(files);
+                });
+            })
+            .then(function() {
+                return self.skipWaiting();
+            })
+        );
     }
 });
 
 self.addEventListener('activate', function(ExtendableEvent) {
     if ('waitUntil' in ExtendableEvent) {
         ExtendableEvent.waitUntil(
-            caches.keys().then(function(cacheNames) {
+            caches.keys()
+            .then(function(cacheNames) {
                 return Promise.all(
                     cacheNames.map(function(cacheName) {
                         if (cacheName !== CACHE_KEY) {
-                            sendLog('delete cache storage ' + cacheName);
+                            sendLog('delete cache storage: ' + cacheName);
                             return caches.delete(cacheName);
                         }
                     })
@@ -45,34 +61,38 @@ self.addEventListener('fetch', function(FetchEvent) {
         return;
     }
 
-    if ('only-if-cached' === FetchEvent.request.cache && 'same-origin' !== FetchEvent.request.mode) {
+    if ('GET' !== FetchEvent.request.method) {
+        sendLog('excluded: ' + FetchEvent.request.method + ' ' + FetchEvent.request.url);
         return;
     }
 
     var url = new URL(FetchEvent.request.url);
     if (self.location.origin !== url.origin) {
-        sendLog('excluded ' + FetchEvent.request.url);
+        sendLog('excluded: ' + FetchEvent.request.url);
         return;
     }
 
     var fetchAllowed = true;
     FETCH_EXCLUDE.forEach(function(item, i) {
         if (FetchEvent.request.url.indexOf(item) !== -1) {
-            sendLog('excluded ' + FetchEvent.request.url);
+            sendLog('excluded: ' + FetchEvent.request.url);
             fetchAllowed = false;
         }
     });
 
     if (true === fetchAllowed) {
         FetchEvent.respondWith(
-            caches.open(CACHE_KEY).then(function(cache) {
-                return cache.match(FetchEvent.request).then(function(Response) {
+            caches.open(CACHE_KEY)
+            .then(function(cache) {
+                return cache.match(FetchEvent.request)
+                .then(function(Response) {
                     if (Response) {
-                        sendLog('found in cache storage ' + FetchEvent.request.url);
+                        sendLog('found in cache storage: ' + FetchEvent.request.url);
                         return Response;
                     }
-                    return fetch(FetchEvent.request).then(function(Response) {
-                        sendLog('added to cache storage ' + FetchEvent.request.url);
+                    return fetch(FetchEvent.request)
+                    .then(function(Response) {
+                        sendLog('added to cache storage: ' + FetchEvent.request.url);
                         cache.put(FetchEvent.request, Response.clone());
                         return Response;
                     });
@@ -81,14 +101,6 @@ self.addEventListener('fetch', function(FetchEvent) {
         );
     }
 });
-
-function cacheAddAll() {
-    caches.delete(CACHE_KEY);
-    return caches.open(CACHE_KEY).then(function(cache) {
-        sendLog('set cache storage ' + CACHE_KEY);
-        return cache.addAll(CACHE_FILES);
-    });
-}
 
 function sendLog(log) {
     if (LOG_ENABLED) {
