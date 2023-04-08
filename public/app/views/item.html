@@ -6,9 +6,9 @@
                     <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a> /
                 {{/if}}
                 {{#if current_title }}
-                    {{trans current_title}} (<span class="count">{{ entries_total }}</span>)
+                    {{trans current_title}} <span class="badge bg-light text-dark count">{{ entries_total }}</span>
                 {{else}}
-                    {{trans 'title.items'}} ({{ entries_total }})
+                    {{trans 'title.items'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
                 {{/if}}
             </h1>
         </div>
@@ -29,9 +29,9 @@
                                 {{ entry.title }} ({{trans entry_entity}})<br>
                             {{/if}}
                             {{#if current_title }}
-                                {{trans current_title}} ({{ entries_total }})
+                                {{trans current_title}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
                             {{else}}
-                                {{trans 'title.items'}} ({{ entries_total }})
+                                {{trans 'title.items'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
                             {{/if}}
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

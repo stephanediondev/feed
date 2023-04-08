@@ -574,7 +574,7 @@ function loadRoute(key, parameters) {
                                 }
 
                                 if (route.title) {
-                                    window.document.title = i18next.t(route.title) + ' (' + dataReturn.entries_total + ')';
+                                    window.document.title = i18next.t(route.title) + ' [' + dataReturn.entries_total + ']';
                                 }
                                 $('.count').text(dataReturn.entries_total);
 

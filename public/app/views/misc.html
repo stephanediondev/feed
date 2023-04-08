@@ -80,7 +80,7 @@
             <div class="mdl-card__title mb-3">
                 <h1 class="mdl-card__title-text fs-5">
                 {{#if entries_total }}
-                    {{trans 'title.search_feeds'}} ({{ entries_total }})
+                    {{trans 'title.search_feeds'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
                 {{else}}
                     {{trans 'title.search_feeds'}}
                 {{/if}}
@@ -112,7 +112,7 @@
             <div class="mdl-card__title mb-3">
                 <h1 class="mdl-card__title-text fs-5">
                 {{#if entries_total }}
-                    {{trans 'title.search_categories'}} ({{ entries_total }})
+                    {{trans 'title.search_categories'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
                 {{else}}
                     {{trans 'title.search_categories'}}
                 {{/if}}
@@ -143,7 +143,7 @@
             <div class="mdl-card__title mb-3">
                 <h1 class="mdl-card__title-text fs-5">
                 {{#if entries_total }}
-                    {{trans 'title.search_items'}} ({{ entries_total }})
+                    {{trans 'title.search_items'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
                 {{else}}
                     {{trans 'title.search_items'}}
                 {{/if}}
@@ -174,7 +174,7 @@
             <div class="mdl-card__title mb-3">
                 <h1 class="mdl-card__title-text fs-5">
                 {{#if entries_total }}
-                    {{trans 'title.search_authors'}} ({{ entries_total }})
+                    {{trans 'title.search_authors'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
                 {{else}}
                     {{trans 'title.search_authors'}}
                 {{/if}}
