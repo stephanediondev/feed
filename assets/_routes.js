@@ -1,5 +1,6 @@
 const routes = [];
 routes['#login'] = {view: 'view-login', query: false, title: 'login'};
+routes['#forgotpassword'] = {view: 'view-forgotpassword', query: false, title: 'forgotpassword'};
 routes['#logout'] = {view: 'view-logout', query: '/logout'};
 routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
 routes['#profile/connections'] = {view: 'view-profile-connections', query: '/profile/connections', title: 'profile'};

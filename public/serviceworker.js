@@ -4,6 +4,7 @@ var FETCH_EXCLUDE = [
     '/#',
     '/api',
     '/login',
+    '/forgotpassword',
     '/proxy',
     '/_wdt',
 ];

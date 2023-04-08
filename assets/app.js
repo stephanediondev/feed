@@ -289,6 +289,9 @@ function ready() {
                 if (form.data('query') === '/login') {
                     url = loginUrl;
                 }
+                if (form.data('query') === '/forgotpassword') {
+                    url = forgotpasswordUrl;
+                }
 
                 fetch(url, {
                     method: form.attr('method'),
@@ -817,6 +820,7 @@ if (window.location.port) {
     baseUrl += ':' + window.location.port;
 }
 var loginUrl = baseUrl + '/login';
+var forgotpasswordUrl = baseUrl + '/forgotpassword';
 var apiUrl = baseUrl + '/api';
 
 if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
