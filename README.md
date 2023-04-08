@@ -40,6 +40,14 @@ yarn install
 yarn run build
 ```
 
+## Notifications
+
+Edit parameters ```VAPID_*```
+
+```
+bin/console app:generate-vapid
+```
+
 ## Elasticsearch
 
 Edit parameters ```ELASTICSEARCH_*```
