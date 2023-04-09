@@ -134,13 +134,17 @@
         </div>
         {{/if}}
         <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-            <a href="#authors/feed/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'title.authors'}}</a>
-            <a href="#items/feed/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'title.items'}}</a>
-            {{#if entry.subscribe }}
-                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm connected online">{{trans 'unsubscribe'}}</a>
-            {{else}}
-                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm connected online">{{trans 'subscribe'}}</a>
-            {{/if}}
+            <p>
+                <a href="#authors/feed/{{ entry.id }}" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'title.authors'}}</a>
+                <a href="#items/feed/{{ entry.id }}" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'title.items'}}</a>
+            </p>
+            <p>
+                {{#if entry.subscribe }}
+                    <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm connected online">{{trans 'unsubscribe'}}</a>
+                {{else}}
+                    <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm connected online">{{trans 'subscribe'}}</a>
+                {{/if}}
+            </p>
         </div>
     </div>
 </script>
@@ -201,17 +205,19 @@
             {{/if}}
         </div>
         <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-            <a href="#authors/feed/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'title.authors'}}</a>
-            <a href="#items/feed/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'title.items'}}</a>
-            {{#if entry.subscribe }}
-                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm connected online">{{trans 'unsubscribe'}}</a>
-            {{else}}
-                <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm connected online">{{trans 'subscribe'}}</a>
-            {{/if}}
-
-            <button type="button" class="mdl-button btn btn-primary btn-sm dialog online administrator" data-bs-target="#dialog-update-{{ entry.id }}">{{trans 'update'}}</button>
-
-            <button type="button" class="mdl-button btn btn-primary btn-sm dialog online administrator" data-bs-target="#dialog-delete-{{ entry.id }}">{{trans 'delete'}}</button>
+            <p>
+                <a href="#authors/feed/{{ entry.id }}" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'title.authors'}}</a>
+                <a href="#items/feed/{{ entry.id }}" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'title.items'}}</a>
+            </p>
+            <p>
+                {{#if entry.subscribe }}
+                    <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm connected online">{{trans 'unsubscribe'}}</a>
+                {{else}}
+                    <a href="#feed/action/subscribe/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm connected online">{{trans 'subscribe'}}</a>
+                {{/if}}
+                <button type="button" class="mdl-button btn btn-primary btn-sm dialog online administrator" data-bs-target="#dialog-update-{{ entry.id }}">{{trans 'update'}}</button>
+                <button type="button" class="mdl-button btn btn-primary btn-sm dialog online administrator" data-bs-target="#dialog-delete-{{ entry.id }}">{{trans 'delete'}}</button>
+            </p>
         </div>
 
         <div class="modal fade" id="dialog-update-{{ entry.id }}" tabindex="-1" aria-labelledby="{{trans 'update'}}" aria-hidden="true">

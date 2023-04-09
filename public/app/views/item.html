@@ -108,22 +108,23 @@
             </div>
         </div>
         <div class="mdl-card__actions text-end mt-3 mdl-card--border online">
-            {{#if entry.read }}
-                <a href="#item/action/read/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-read read connected" title="m">{{trans 'unread'}}</a>
-            {{else}}
-                {{#if entry.read_all }}
+            <p>
+                {{#if entry.read }}
                     <a href="#item/action/read/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-read read connected" title="m">{{trans 'unread'}}</a>
                 {{else}}
-                    <a href="#item/action/read/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-read connected" title="m">{{trans 'read'}}</a>
+                    {{#if entry.read_all }}
+                        <a href="#item/action/read/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-read read connected" title="m">{{trans 'unread'}}</a>
+                    {{else}}
+                        <a href="#item/action/read/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-read connected" title="m">{{trans 'read'}}</a>
+                    {{/if}}
                 {{/if}}
-            {{/if}}
-            {{#if entry.star }}
-                <a href="#item/action/star/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-star connected" title="s">{{trans 'unstar'}}</a>
-            {{else}}
-                <a href="#item/action/star/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-star connected" title="s">{{trans 'star'}}</a>
-            {{/if}}
-
-            <button type="button" class="mdl-button btn btn-primary btn-sm dialog action-share" data-bs-target="#dialog-share-{{ entry.id }}" data-title="{{ encode entry.title }}" data-url="{{ encode entry.link }}" title="{{trans 'shortcut_shift_s'}}">{{trans 'share'}}</button>
+                {{#if entry.star }}
+                    <a href="#item/action/star/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-star connected" title="s">{{trans 'unstar'}}</a>
+                {{else}}
+                    <a href="#item/action/star/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-star connected" title="s">{{trans 'star'}}</a>
+                {{/if}}
+                <button type="button" class="mdl-button btn btn-primary btn-sm dialog action-share" data-bs-target="#dialog-share-{{ entry.id }}" data-title="{{ encode entry.title }}" data-url="{{ encode entry.link }}" title="{{trans 'shortcut_shift_s'}}">{{trans 'share'}}</button>
+            </p>
         </div>
 
         <div class="modal fade" id="dialog-share-{{ entry.id }}" tabindex="-1" aria-labelledby="{{trans 'share'}}" aria-hidden="true">
