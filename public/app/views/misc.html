@@ -11,8 +11,9 @@
 </script>
 
 <script type="text/template" id="view-navigation">
-    <button class="action-up btn btn-lg btn-secondary" title="k"><i class="bi bi-chevron-up"></i></button>
-    <button class="action-down btn btn-lg btn-secondary" title="j"><i class="bi bi-chevron-down"></i></button>
+    <button class="action-up btn btn-secondary position-relative" title="k"><i class="bi bi-chevron-up"></i></button>
+    <a href="#items/unread" class="load-route btn btn-secondary position-relative" title="r"><i class="bi bi-eye-slash-fill"></i><span class="count-unread z-3 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span></a>
+    <button class="action-down btn btn-secondary position-relative" title="j"><i class="bi bi-chevron-down"></i></button>
 </script>
 
 <script type="text/template" id="view-aside">
@@ -75,18 +76,17 @@
 </script>
 
 <script type="text/template" id="view-search-feeds">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="search-feeds">
-        <form action="#feeds/search/result" method="GET" id="form-search-feeds">
-            <div class="mdl-card__title mb-3">
-                <h1 class="mdl-card__title-text fs-5">
-                {{#if entries_total }}
-                    {{trans 'title.search_feeds'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
-                {{else}}
-                    {{trans 'title.search_feeds'}}
-                {{/if}}
-                </h1>
-            </div>
-            <div class="mdl-card__supporting-text">
+    <div class="mdl-card row position-relative" id="search-feeds">
+        <div class="mdl-card__title col-xl-6 col-12">
+            <h1 class="mdl-card__title-text fs-5">
+            {{#if entries_total }}
+                {{trans 'title.search_feeds'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
+            {{else}}
+                {{trans 'title.search_feeds'}}
+            {{/if}}
+            </h1>
+
+            <form action="#feeds/search/result" method="GET" id="form-search-feeds">
                 <p>
                     <label for="q" class="form-label required">{{trans 'q'}}</label>
                     <input type="text" class="form-control" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
@@ -94,31 +94,32 @@
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
                 </p>
-            </div>
-            <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-                <a href="#feeds/recent" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'button.recent_feeds'}}</a>
-                <a href="#feeds/subscribed" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.subscribed_feeds'}}</a>
-                <a href="#feeds/unsubscribed" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.unsubscribed_feeds'}}</a>
-                <a href="#feeds/witherrors" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.feeds_witherrors'}}</a>
-                <a href="#feeds/search" class="load-route mdl-button btn btn-primary btn-sm online">{{trans 'button.search_feeds'}}</a>
-            </div>
-        </form>
+            </form>
+        </div>
+        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
+            <p>
+                <a href="#feeds/recent" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.recent_feeds'}}</a>
+                <a href="#feeds/subscribed" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.subscribed_feeds'}}</a>
+                <a href="#feeds/unsubscribed" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.unsubscribed_feeds'}}</a>
+                <a href="#feeds/witherrors" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.feeds_witherrors'}}</a>
+                <a href="#feeds/search" class="load-route mdl-button btn btn-secondary btn-sm online">{{trans 'button.search_feeds'}}</a>
+            </p>
+        </div>
     </div>
 </script>
 
 <script type="text/template" id="view-search-categories">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="search-categories">
-        <form action="#categories/search/result" method="GET" id="form-search-categories">
-            <div class="mdl-card__title mb-3">
-                <h1 class="mdl-card__title-text fs-5">
-                {{#if entries_total }}
-                    {{trans 'title.search_categories'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
-                {{else}}
-                    {{trans 'title.search_categories'}}
-                {{/if}}
-                </h1>
-            </div>
-            <div class="mdl-card__supporting-text">
+    <div class="mdl-card row position-relative" id="search-categories">
+        <div class="mdl-card__title col-xl-6 col-12">
+            <h1 class="mdl-card__title-text fs-5">
+            {{#if entries_total }}
+                {{trans 'title.search_categories'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
+            {{else}}
+                {{trans 'title.search_categories'}}
+            {{/if}}
+            </h1>
+
+            <form action="#categories/search/result" method="GET" id="form-search-categories">
                 <p>
                     <label for="q" class="form-label required">{{trans 'q'}}</label>
                     <input type="text" class="form-control" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
@@ -126,30 +127,31 @@
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
                 </p>
-            </div>
-            <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-                <a href="#categories/trendy" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'button.trendy_categories'}}</a>
-                <a href="#categories/excluded" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.excluded_categories'}}</a>
-                <a href="#categories/usedbyfeeds" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'button.categories_usedbyfeeds'}}</a>
-                <a href="#categories/search" class="load-route mdl-button btn btn-primary btn-sm online">{{trans 'button.search_categories'}}</a>
-            </div>
-        </form>
+            </form>
+        </div>
+        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
+            <p>
+                <a href="#categories/trendy" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.trendy_categories'}}</a>
+                <a href="#categories/excluded" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.excluded_categories'}}</a>
+                <a href="#categories/usedbyfeeds" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.categories_usedbyfeeds'}}</a>
+                <a href="#categories/search" class="load-route mdl-button btn btn-secondary btn-sm online">{{trans 'button.search_categories'}}</a>
+            </p>
+        </div>
     </div>
 </script>
 
 <script type="text/template" id="view-search-items">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="search-items">
-        <form action="#items/search/result" method="GET" id="form-search-items">
-            <div class="mdl-card__title mb-3">
-                <h1 class="mdl-card__title-text fs-5">
-                {{#if entries_total }}
-                    {{trans 'title.search_items'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
-                {{else}}
-                    {{trans 'title.search_items'}}
-                {{/if}}
-                </h1>
-            </div>
-            <div class="mdl-card__supporting-text">
+    <div class="mdl-card row position-relative" id="search-items">
+        <div class="mdl-card__title col-xl-6 col-12">
+            <h1 class="mdl-card__title-text fs-5">
+            {{#if entries_total }}
+                {{trans 'title.search_items'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
+            {{else}}
+                {{trans 'title.search_items'}}
+            {{/if}}
+            </h1>
+
+            <form action="#items/search/result" method="GET" id="form-search-items">
                 <p>
                     <label for="q" class="form-label required">{{trans 'q'}}</label>
                     <input type="text" class="form-control" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
@@ -157,30 +159,31 @@
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
                 </p>
-            </div>
-            <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-                <a href="#items/recent" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'button.recent_items'}}</a>
-                <a href="#items/unread" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.unread_items'}}</a>
-                <a href="#items/starred" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.starred_items'}}</a>
-                <a href="#items/search" class="load-route mdl-button btn btn-primary btn-sm online">{{trans 'button.search_items'}}</a>
-            </div>
-        </form>
+            </form>
+        </div>
+        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
+            <p>
+                <a href="#items/recent" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.recent_items'}}</a>
+                <a href="#items/unread" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.unread_items'}}</a>
+                <a href="#items/starred" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.starred_items'}}</a>
+                <a href="#items/search" class="load-route mdl-button btn btn-secondary btn-sm online">{{trans 'button.search_items'}}</a>
+            </p>
+        </div>
     </div>
 </script>
 
 <script type="text/template" id="view-search-authors">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="search-authors">
-        <form action="#authors/search/result" method="GET" id="form-search-authors">
-            <div class="mdl-card__title mb-3">
-                <h1 class="mdl-card__title-text fs-5">
-                {{#if entries_total }}
-                    {{trans 'title.search_authors'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
-                {{else}}
-                    {{trans 'title.search_authors'}}
-                {{/if}}
-                </h1>
-            </div>
-            <div class="mdl-card__supporting-text">
+    <div class="mdl-card row position-relative" id="search-authors">
+        <div class="mdl-card__title col-xl-6 col-12">
+            <h1 class="mdl-card__title-text fs-5">
+            {{#if entries_total }}
+                {{trans 'title.search_authors'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
+            {{else}}
+                {{trans 'title.search_authors'}}
+            {{/if}}
+            </h1>
+
+            <form action="#authors/search/result" method="GET" id="form-search-authors">
                 <p>
                     <label for="q" class="form-label required">{{trans 'q'}}</label>
                     <input type="text" class="form-control" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
@@ -188,11 +191,13 @@
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
                 </p>
-            </div>
-            <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-                <a href="#authors/trendy" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'button.trendy_authors'}}</a>
-                <a href="#authors/search" class="load-route mdl-button btn btn-primary btn-sm online">{{trans 'button.search_authors'}}</a>
-            </div>
-        </form>
+            </form>
+        </div>
+        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
+            <p>
+                <a href="#authors/trendy" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.trendy_authors'}}</a>
+                <a href="#authors/search" class="load-route mdl-button btn btn-secondary btn-sm online">{{trans 'button.search_authors'}}</a>
+            </p>
+        </div>
     </div>
 </script>

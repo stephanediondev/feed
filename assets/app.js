@@ -37,7 +37,11 @@ if ('serviceWorker' in navigator && window.location.protocol == 'https:') {
 
 function setBadge(value) {
     let countUnread = $('.count-unread');
-    countUnread.text(value);
+    if (99 < value) {
+        countUnread.text('99+');
+    } else {
+        countUnread.text(value);
+    }
 
     if (0 === value) {
         countUnread.addClass('d-none');
@@ -227,6 +231,11 @@ function ready() {
                 ref.removeClass('expand');
                 ref.addClass('collapse');
             }
+        });
+
+        $(document).on('click', '.action-reload', function(event) {
+            event.preventDefault();
+            reload();
         });
 
         $(document).on('click', '.action-up', function(event) {
@@ -677,6 +686,12 @@ function scrollTo(anchor) {
     $('.mdl-layout__content').scrollTo(anchor);
 }
 
+function reload() {
+    if (window.location.hash) {
+        loadRoute(window.location.hash);
+    }
+}
+
 function itemUp() {
     var item = document.querySelector('.mdl-grid .card-selected');
     if (null !== item) {
@@ -1007,9 +1022,7 @@ document.addEventListener('keydown', function(event) {
 
         //r
         } else if (keycode === 82) {
-            if (window.location.hash) {
-                loadRoute(window.location.hash);
-            }
+            reload();
         }
     }
 });

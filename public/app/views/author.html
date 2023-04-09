@@ -1,6 +1,6 @@
 <script type="text/template" id="view-authors">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="title-entries">
-        <div class="mdl-card__title mb-3">
+    <div class="mdl-card row position-relative" id="title-entries">
+        <div class="mdl-card__title col-xl-6 col-12">
             <h1 class="mdl-card__title-text fs-5">
                 {{#if entry }}
                     <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a> /
@@ -12,25 +12,29 @@
                 {{/if}}
             </h1>
         </div>
-        <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-            <a href="#authors/trendy" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'button.trendy_authors'}}</a>
-            <a href="#authors/excluded" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.excluded_authors'}}</a>
-            <a href="#authors/search" class="load-route mdl-button btn btn-primary btn-sm online">{{trans 'button.search_authors'}}</a>
+        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
+            <p>
+                <a href="#authors/trendy" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.trendy_authors'}}</a>
+                <a href="#authors/excluded" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.excluded_authors'}}</a>
+                <a href="#authors/search" class="load-route mdl-button btn btn-secondary btn-sm online">{{trans 'button.search_authors'}}</a>
+            </p>
         </div>
     </div>
 </script>
 
 <script type="text/template" id="view-authors-trendy">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="title-entries">
-        <div class="mdl-card__title mb-3">
+    <div class="mdl-card row position-relative" id="title-entries">
+        <div class="mdl-card__title col-xl-6 col-12">
             <h1 class="mdl-card__title-text fs-5">
                 {{trans current_title}}
             </h1>
         </div>
-        <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-            <a href="#authors/trendy" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'button.trendy_authors'}}</a>
-            <a href="#authors/excluded" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.excluded_authors'}}</a>
-            <a href="#authors/search" class="load-route mdl-button btn btn-primary btn-sm online">{{trans 'button.search_authors'}}</a>
+        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
+            <p>
+                <a href="#authors/trendy" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.trendy_authors'}}</a>
+                <a href="#authors/excluded" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.excluded_authors'}}</a>
+                <a href="#authors/search" class="load-route mdl-button btn btn-secondary btn-sm online">{{trans 'button.search_authors'}}</a>
+            </p>
         </div>
     </div>
 
@@ -80,16 +84,18 @@
 </script>
 
 <script type="text/template" id="view-author-read">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="authors">
-        <div class="mdl-card__title mb-3">
+    <div class="mdl-card row position-relative" id="authors">
+        <div class="mdl-card__title col-xl-6 col-12">
             <h1 class="mdl-card__title-text fs-5">
                 {{trans 'title.authors'}}
             </h1>
         </div>
-        <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-            <a href="#authors/trendy" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'button.trendy_authors'}}</a>
-            <a href="#authors/excluded" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.excluded_authors'}}</a>
-            <a href="#authors/search" class="load-route mdl-button btn btn-primary btn-sm online">{{trans 'button.search_authors'}}</a>
+        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
+            <p>
+                <a href="#authors/trendy" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.trendy_authors'}}</a>
+                <a href="#authors/excluded" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.excluded_authors'}}</a>
+                <a href="#authors/search" class="load-route mdl-button btn btn-secondary btn-sm online">{{trans 'button.search_authors'}}</a>
+            </p>
         </div>
     </div>
 

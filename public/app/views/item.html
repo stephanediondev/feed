@@ -1,6 +1,6 @@
 <script type="text/template" id="view-items">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="title-entries">
-        <div class="mdl-card__title mb-3">
+    <div class="mdl-card row position-relative" id="title-entries">
+        <div class="mdl-card__title col-xl-6 col-12">
             <h1 class="mdl-card__title-text fs-5">
                 {{#if entry }}
                     <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a> /
@@ -12,12 +12,16 @@
                 {{/if}}
             </h1>
         </div>
-        <div class="mdl-card__actions text-end mt-3 mdl-card--border">
-            <a href="#items/recent" class="load-route mdl-button btn btn-primary btn-sm">{{trans 'button.recent_items'}}</a>
-            <a href="#items/unread" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.unread_items'}}</a>
-            <a href="#items/starred" class="load-route mdl-button btn btn-primary btn-sm connected">{{trans 'button.starred_items'}}</a>
-            <a href="#items/search" class="load-route mdl-button btn btn-primary btn-sm online">{{trans 'button.search_items'}}</a>
-            <button type="button" class="mdl-button btn btn-primary btn-sm dialog connected online" data-bs-target="#dialog-mark_all_as_read" title="{{trans 'shortcut_shift_a'}}">{{trans 'mark_all_as_read'}}</button>
+        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
+            <p>
+                <a href="#items/recent" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.recent_items'}}</a>
+                <a href="#items/unread" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.unread_items'}}</a>
+                <a href="#items/starred" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.starred_items'}}</a>
+                <a href="#items/search" class="load-route mdl-button btn btn-secondary btn-sm online">{{trans 'button.search_items'}}</a>
+            </p>
+            <p>
+                <button type="button" class="mdl-button btn btn-primary btn-sm dialog connected online" data-bs-target="#dialog-mark_all_as_read" title="{{trans 'shortcut_shift_a'}}">{{trans 'mark_all_as_read'}}</button>
+            </p>
         </div>
 
         <div class="modal fade" id="dialog-mark_all_as_read" tabindex="-1" aria-labelledby="{{trans 'mark_all_as_read'}}" aria-hidden="true">
