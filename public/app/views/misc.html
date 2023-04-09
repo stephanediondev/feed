@@ -12,7 +12,7 @@
 
 <script type="text/template" id="view-navigation">
     <button class="action-up btn btn-secondary position-relative" title="k"><i class="bi bi-chevron-up"></i></button>
-    <a href="#items/unread" class="load-route btn btn-secondary position-relative" title="r"><i class="bi bi-eye-slash-fill"></i><span class="count-unread z-3 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span></a>
+    <a href="#items/unread" class="action-unread load-route btn btn-secondary position-relative" title="r"><i class="bi bi-eye-slash-fill"></i><span class="count-unread z-3 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span></a>
     <button class="action-down btn btn-secondary position-relative" title="j"><i class="bi bi-chevron-down"></i></button>
 </script>
 
@@ -31,6 +31,7 @@
     <li class="fs-5 nav-item connected"><a href="#profile" class="dropdown-item load-route">{{trans 'profile'}}</a></li>
     <li class="fs-5 nav-item anonymous"><a href="#login" class="dropdown-item load-route">{{trans 'login'}}</a>
     <li class="fs-5 nav-item connected"><a href="#logout" class="dropdown-item load-route">{{trans 'logout'}}</a></li>
+    <li><hr class="dropdown-divider"></li>
     <li class="fs-5 nav-item d-none"><a href="#" class="dropdown-item" id="install">{{trans 'install'}}</a></li>
     <li class="fs-5 nav-item d-none"><a href="#" class="dropdown-item" id="enable_notifications">{{trans 'enable_notifications'}}</a></li>
     <li class="fs-5 nav-item "><a href="#" class="dropdown-item action-reload">{{trans 'reload'}}</a></li>
