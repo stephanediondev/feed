@@ -30,6 +30,7 @@
     "add": "Add",
     "update": "Update",
     "delete": "Delete",
+    "submit": "Submit",
 
     "refresh": "Refresh",
     "up": "&nbsp;&nbsp;Up&nbsp;&nbsp;",
@@ -87,6 +88,9 @@
     },
 
     "title": {
+        "add_feed": "Add a feed",
+        "import_feeds": "Import feed",
+        "export_feeds": "Export feeds",
         "feeds": "Feeds",
         "items": "Items",
         "categories": "Categories",

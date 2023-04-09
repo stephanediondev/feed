@@ -108,8 +108,8 @@ function ready() {
         var templateAside = getTemplate('view-aside');
         document.querySelector('.mdl-layout__drawer').innerHTML = templateAside();
 
-        var templateShortcuts = getTemplate('view-shortcuts');
-        document.querySelector('body').insertAdjacentHTML('beforeend', templateShortcuts());
+        var templateDialogs = getTemplate('view-dialogs');
+        document.querySelector('body').insertAdjacentHTML('beforeend', templateDialogs());
 
         setPositions();
 

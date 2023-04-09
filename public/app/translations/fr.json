@@ -30,6 +30,7 @@
     "add": "Ajouter",
     "update": "Modifier",
     "delete": "Supprimer",
+    "submit": "Soumettre",
 
     "refresh": "Recharg.",
     "up": "Préc.",
@@ -87,6 +88,9 @@
     },
 
     "title": {
+        "add_feed": "Ajouter un flux",
+        "import_feeds": "Importer des flux",
+        "export_feeds": "Exporter les flux",
         "feeds": "Flux",
         "items": "Items",
         "categories": "Catégories",
