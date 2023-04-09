@@ -35,6 +35,41 @@
     <li class="fs-5 nav-item d-none"><a href="#" class="dropdown-item" id="install">{{trans 'install'}}</a></li>
     <li class="fs-5 nav-item d-none"><a href="#" class="dropdown-item" id="enable_notifications">{{trans 'enable_notifications'}}</a></li>
     <li class="fs-5 nav-item "><a href="#" class="dropdown-item action-reload">{{trans 'reload'}}</a></li>
+    <li class="fs-5 nav-item "><a href="#" class="dropdown-item dialog" data-bs-target="#dialog-shortcuts">{{trans 'shortcuts'}}</a></li>
+</script>
+
+<script type="text/template" id="view-shortcuts">
+    <div class="modal fade" id="dialog-shortcuts" tabindex="-1" aria-labelledby="shortcuts" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        {{trans 'shortcuts'}}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>{{trans 'shortcut_esc'}}</li>
+                        <li>{{trans 'shortcut_help'}}</li>
+                        <li>{{trans 'shortcut_r'}}</li>
+                        <li>{{trans 'shortcut_t'}}</li>
+                        <li>{{trans 'shortcut_k'}}</li>
+                        <li>{{trans 'shortcut_j'}}</li>
+                        <li>{{trans 'shortcut_v'}}</li>
+                        <li>{{trans 'shortcut_m'}}</li>
+                        <li>{{trans 'shortcut_s'}}</li>
+                        <li>{{trans 'shortcut_g_then_a'}}</li>
+                        <li>{{trans 'shortcut_g_then_u'}}</li>
+                        <li>{{trans 'shortcut_g_then_s'}}</li>
+                        <li>{{trans 'shortcut_g_then_f'}}</li>
+                        <li>{{trans 'shortcut_shift_a'}}</li>
+                        <li>{{trans 'shortcut_a'}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="view-401">

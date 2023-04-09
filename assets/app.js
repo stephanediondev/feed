@@ -108,6 +108,9 @@ function ready() {
         var templateAside = getTemplate('view-aside');
         document.querySelector('.mdl-layout__drawer').innerHTML = templateAside();
 
+        var templateShortcuts = getTemplate('view-shortcuts');
+        document.querySelector('body').insertAdjacentHTML('beforeend', templateShortcuts());
+
         setPositions();
 
         window.addEventListener('resize', function() {
@@ -918,86 +921,66 @@ document.addEventListener('keydown', function(event) {
     var keycode = event.which || event.keyCode;
 
     if ($(event.target).parents('form').length === 0) {
-        //g then a
+        //g then a: go to all items
         if (gKey && keycode === 65) {
             loadRoute('#items/recent');
 
-        //g then u
+        //g then u: go to unread items
         } else if (gKey && keycode === 85) {
             loadRoute('#items/unread');
 
-        //g then s
+        //g then s: go to starred items
         } else if (gKey && keycode === 83) {
             loadRoute('#items/starred');
 
-        //g then f
+        //g then f: go to all feeds
         } else if (gKey && keycode === 70) {
             loadRoute('#feeds/recent');
 
-        //g then c
-        } else if (gKey && keycode === 67) {
-            loadRoute('#categories/recent');
-
-        //t
+        //t: back to top
         } else if (keycode === 84) {
             event.preventDefault();
             scrollTo('#top');
 
-        //2
-        } else if (keycode === 50) {
-            event.preventDefault();
-            if (itemsDisplay === 'collapse') {
-                itemsExpand();
-            }
-
-        //v
+        //v: view original from selected item
         } else if (keycode === 86) {
             var href = $('.mdl-grid .card-selected').find('h1').find('a').attr('href');
             var name = $('.mdl-grid .card-selected').attr('id');
             window.open(href, 'window_' + name);
 
-        //m
+        //m: read / unread selected item
         } else if (keycode === 77 && $('body').hasClass('connected') && $('body').hasClass('online')) {
             if ($('.mdl-grid .card-selected').length > 0) {
                 $('.mdl-grid .card-selected').find('.action-read').trigger('click');
             }
 
-        //shift + s
+        //shift + s: share selected item
         } else if (event.shiftKey && keycode === 83) {
             if ($('.mdl-grid .card-selected').length > 0) {
                 $('.mdl-grid .card-selected').find('.action-share').trigger('click');
             }
 
-        //s
+        //s: star / unstar selected item
         } else if (keycode === 83 && $('body').hasClass('connected') && $('body').hasClass('online')) {
             if ($('.mdl-grid .card-selected').length > 0) {
                 $('.mdl-grid .card-selected').find('.action-star').trigger('click');
             }
 
-        //o or enter
-        } else if (keycode === 79 || keycode === 13) {
-            if ($('.mdl-grid .card-selected').length > 0) {
-                var ref = $( '#' + $('.mdl-grid .card-selected').attr('id') );
-                if (ref.hasClass('collapse')) {
-                    ref.removeClass('collapse');
-                    ref.addClass('expand');
-                } else {
-                    ref.removeClass('expand');
-                    ref.addClass('collapse');
-                }
-                //$('.mdl-grid .card-selected').find('.action-toggle-unit').trigger('click');
+        } else if (keycode === 65 && $('body').hasClass('connected') && $('body').hasClass('online')) {
+            //shift + a: dialog mark all as read
+            if (event.shiftKey) {
+                const myModal = new bootstrap.Modal('#dialog-mark_all_as_read', {});
+                myModal.show();
+            //a: add a feed
+            } else {
+                const myModal = new bootstrap.Modal('#dialog-add_feed', {});
+                myModal.show();
             }
 
-        } else if (keycode === 65 && $('body').hasClass('connected') && $('body').hasClass('online')) {
-            //shift + a
-            if (event.shiftKey) {
-                if ($('#dialog-mark_all_as_read').length > 0) {
-                    $('#dialog-mark_all_as_read').trigger('click');
-                }
-            //a
-            } else {
-                //loadRoute('#feed/create');
-            }
+        //h or ? : open shortcuts dialog
+        } else if(keycode == 72 || keycode == 188) {
+            const myModal = new bootstrap.Modal('#dialog-shortcuts', {});
+            myModal.show();
 
         //slash
         } else if (keycode === 191) {
@@ -1012,15 +995,15 @@ document.addEventListener('keydown', function(event) {
         //nothing when ctrl + k
         } else if (event.ctrlKey && keycode === 75) {
 
-        //k or p or shift + space
+        //k or p or shift + space: up / previous item
         } else if (keycode === 75 || keycode === 80 || (keycode === 32 && event.shiftKey)) {
             itemUp();
 
-        //j or n or space
+        //j or n or space: down / next item
         } else if (keycode === 74 || keycode === 78|| keycode === 32) {
             itemDown();
 
-        //r
+        //r: reload
         } else if (keycode === 82) {
             reload();
         }
