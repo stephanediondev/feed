@@ -41,6 +41,7 @@
     "search": "Search",
     "install": "Install",
     "enable_notifications": "Enable notifications",
+    "disable_notifications": "Disable notifications",
     "reload": "Reload",
 
     "subscribe": "Subscribe",

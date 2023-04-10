@@ -127,16 +127,29 @@ function ready() {
             navigator.serviceWorker.ready
             .then(function(ServiceWorkerRegistration) {
                 if ('pushManager' in ServiceWorkerRegistration) {
-                    ServiceWorkerRegistration.pushManager.permissionState({userVisibleOnly: true})
-                    .then(function(permissionState) {
-                        if ('granted' !== permissionState) {
-                            var enableNotifications = document.getElementById('enable_notifications');
-                            if (enableNotifications) {
-                                enableNotifications.addEventListener('click', function(event) {
-                                    event.preventDefault();
-                                    pushManagerSubscribe();
-                                });
+                    ServiceWorkerRegistration.pushManager.getSubscription()
+                    .then(function(PushSubscription) {
+                        var disableNotifications = document.getElementById('disable_notifications');
+                        if (disableNotifications) {
+                            disableNotifications.addEventListener('click', function(event) {
+                                event.preventDefault();
+                                pushManagerUnsubscribe();
+                            });
 
+                            if (PushSubscription && 'object' === typeof PushSubscription) {
+                                disableNotifications.parentNode.classList.remove('d-none');
+                            }
+                        }
+
+                        var enableNotifications = document.getElementById('enable_notifications');
+                        if (enableNotifications) {
+                            enableNotifications.addEventListener('click', function(event) {
+                                event.preventDefault();
+                                pushManagerSubscribe();
+                            });
+
+                            if (PushSubscription && 'object' === typeof PushSubscription) {
+                            } else {
                                 enableNotifications.parentNode.classList.remove('d-none');
                             }
                         }
@@ -795,16 +808,127 @@ function pushManagerSubscribe() {
                         ServiceWorkerRegistration.pushManager.subscribe({applicationServerKey: urlBase64ToUint8Array(applicationServerKey), userVisibleOnly: true})
                         .then(function(PushSubscription) {
                             if (PushSubscription && 'object' === typeof PushSubscription) {
+                                sendSubscribe(PushSubscription);
+
                                 var enableNotifications = document.getElementById('enable_notifications');
                                 enableNotifications.parentNode.classList.add('d-none');
+
+                                var disableNotifications = document.getElementById('disable_notifications');
+                                disableNotifications.parentNode.classList.remove('d-none');
                             }
                         })
-                        .catch(function(err) {
+                        .catch(function(error) {
                         });
                     }
                 });
             }
         });
+    }
+}
+
+function pushManagerUnsubscribe() {
+    if (serviceWorkerEnabled) {
+        navigator.serviceWorker.ready
+        .then(function(ServiceWorkerRegistration) {
+            if ('pushManager' in ServiceWorkerRegistration) {
+                ServiceWorkerRegistration.pushManager.getSubscription()
+                .then(function(PushSubscription) {
+                    if (PushSubscription && 'object' === typeof PushSubscription) {
+                        PushSubscription.unsubscribe()
+                        .then(function() {
+                            sendUnbscribe(PushSubscription);
+
+                            var disableNotifications = document.getElementById('disable_notifications');
+                            disableNotifications.parentNode.classList.add('d-none');
+
+                            var enableNotifications = document.getElementById('enable_notifications');
+                            enableNotifications.parentNode.classList.remove('d-none');
+                        })
+                        .catch(function(error) {
+                        });
+                    }
+                });
+            }
+        });
+    }
+}
+
+function sendSubscribe(PushSubscription) {
+    if (PushSubscription && 'object' === typeof PushSubscription) {
+        var toJSON = PushSubscription.toJSON();
+
+        var body = {
+            'endpoint': PushSubscription.endpoint,
+            'public_key': toJSON.keys.p256dh,
+            'authentication_secret': toJSON.keys.auth,
+            'content_encoding': (PushManager.supportedContentEncodings || ['aesgcm'])[0],
+        };
+
+        var headers = new Headers({
+            'Authorization': 'Bearer ' + getCookie('token_signed'),
+            'Content-Type': 'application/json'
+        });
+
+        var url = apiUrl + '/push/create';
+
+        fetch(url, {
+            method: 'POST',
+            credentials: 'omit',
+            mode: 'cors',
+            headers: headers,
+            body: JSON.stringify(body)
+        }).then(function(response) {
+            if (response.ok && 200 === response.status) {
+            }
+            if (401 === response.status || 403 === response.status) {
+                loadRoute('#login');
+            }
+            if (404 === response.status) {
+                setToast({'title': i18next.t('error_404')});
+            }
+            if (500 === response.status) {
+                setToast({'title': i18next.t('error_500')});
+            }
+        }).catch(function(err) {
+        });
+
+    }
+}
+
+function sendUnbscribe(PushSubscription) {
+    if (PushSubscription && 'object' === typeof PushSubscription) {
+        var body = {
+            'endpoint': PushSubscription.endpoint,
+        };
+
+        var headers = new Headers({
+            'Authorization': 'Bearer ' + getCookie('token_signed'),
+            'Content-Type': 'application/json'
+        });
+
+        var url = apiUrl + '/push/delete';
+
+        fetch(url, {
+            method: 'POST',
+            credentials: 'omit',
+            mode: 'cors',
+            headers: headers,
+            body: JSON.stringify(body)
+        }).then(function(response) {
+            if (response.ok && 200 === response.status) {
+            }
+            if (401 === response.status || 403 === response.status) {
+                loadRoute('#login');
+            }
+            if (404 === response.status) {
+                setToast({'title': i18next.t('error_404')});
+            }
+            if (500 === response.status) {
+                setToast({'title': i18next.t('error_500')});
+            }
+        }).catch(function(err) {
+        });
+
     }
 }
 

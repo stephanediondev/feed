@@ -22,7 +22,7 @@ class Connection
     #[ORM\Column(name: "type", type: "string", length: 255, nullable: false)]
     private ?String $type = null;
 
-    #[ORM\Column(name: "token", type: "string", length: 255, nullable: false)]
+    #[ORM\Column(name: "token", type: "string", length: 1000, nullable: false)]
     private ?String $token = null;
 
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
