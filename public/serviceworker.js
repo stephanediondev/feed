@@ -9,7 +9,7 @@ var FETCH_EXCLUDE = [
     '/_profiler',
     '/_wdt',
 ];
-var VERSION = '1.0';
+var VERSION = '1.1';
 var CACHE_KEY = 'feed-v' + VERSION;
 
 self.addEventListener('install', function(InstallEvent) {
@@ -103,6 +103,25 @@ self.addEventListener('fetch', function(FetchEvent) {
         );
     }
 });
+
+self.addEventListener('push', function(PushEvent) {
+    if ('waitUntil' in PushEvent) {
+        if (PushEvent.data) {
+            var json = PushEvent.data.json();
+            PushEvent.waitUntil(setBadge(json.countunread));
+        }
+    }
+});
+
+function setBadge(value) {
+    if (navigator.setExperimentalAppBadge) {
+        navigator.setExperimentalAppBadge(value).catch(function(error) {
+        });
+    } else if (navigator.setAppBadge) {
+        navigator.setAppBadge(value).catch(function(error) {
+        });
+    }
+}
 
 function sendLog(log) {
     if (LOG_ENABLED) {
