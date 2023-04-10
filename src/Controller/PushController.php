@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use App\Entity\Connection;
+use App\Entity\Member;
 use App\Form\Type\PushType;
 use App\Form\Type\PushUnsubscribeType;
 use App\Helper\DeviceDetectorHelper;
@@ -29,6 +30,10 @@ class PushController extends AbstractAppController
     public function create(Request $request): JsonResponse
     {
         $data = [];
+
+        if (false === $this->getUser() instanceof Member) {
+            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+        }
 
         $status = JsonResponse::HTTP_UNAUTHORIZED;
 

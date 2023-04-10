@@ -132,7 +132,9 @@ class ItemController extends AbstractAppController
             $data['entries_page_next'] = $pageNext;
         }
 
-        $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
+        if ($this->getUser()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
+        }
 
         $data['entries'] = [];
 
@@ -274,7 +276,9 @@ class ItemController extends AbstractAppController
 
         $this->itemManager->readAll($parameters);
 
-        $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
+        if ($this->getUser()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
+        }
 
         return new JsonResponse($data);
     }
@@ -359,7 +363,7 @@ class ItemController extends AbstractAppController
         $data['entry'] = $item->toArray();
         $data['entry_entity'] = 'item';
 
-        if ($case == 'read') {
+        if ($case == 'read' && $this->getUser()->getId()) {
             $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
         }
 
