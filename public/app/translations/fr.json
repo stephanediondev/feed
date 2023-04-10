@@ -43,6 +43,9 @@
     "enable_notifications": "Activer les notifications",
     "disable_notifications": "Désactiver les notifications",
     "reload": "Recharger",
+    "notifications": "Notifications",
+    "notifications_enabled": "Notifications activées",
+    "notifications_disabled": "Notifications désactivées",
 
     "subscribe": "Souscrire",
     "unsubscribe": "Désinscrire",

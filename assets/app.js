@@ -879,6 +879,7 @@ function sendSubscribe(PushSubscription) {
             body: JSON.stringify(body)
         }).then(function(response) {
             if (response.ok && 200 === response.status) {
+                setToast({'title': i18next.t('notifications'), 'body': i18next.t('notifications_enabled')});
             }
             if (401 === response.status || 403 === response.status) {
                 loadRoute('#login');
@@ -916,6 +917,7 @@ function sendUnbscribe(PushSubscription) {
             body: JSON.stringify(body)
         }).then(function(response) {
             if (response.ok && 200 === response.status) {
+                setToast({'title': i18next.t('notifications'), 'body': i18next.t('notifications_disabled')});
             }
             if (401 === response.status || 403 === response.status) {
                 loadRoute('#login');
