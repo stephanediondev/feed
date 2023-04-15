@@ -34,7 +34,7 @@ class ProfileController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $pinboard = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $this->getUser()]);
@@ -46,7 +46,7 @@ class ProfileController extends AbstractAppController
         $data['entry'] = $this->getUser()->toArray();
         $data['entry_entity'] = 'member';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route(path: '/connections', name: 'connections', methods: ['GET'])]
@@ -55,7 +55,7 @@ class ProfileController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $data['entries'] = [];
@@ -87,7 +87,7 @@ class ProfileController extends AbstractAppController
 
         $data['entries_entity'] = 'connection';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route(path: '', name: 'update', methods: ['PUT'])]
@@ -96,7 +96,7 @@ class ProfileController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $profile = new ProfileModel();
@@ -113,17 +113,13 @@ class ProfileController extends AbstractAppController
 
             $this->memberManager->persist($this->getUser());
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $data['entry'] = $this->getUser()->toArray();
         $data['entry_entity'] = 'member';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }

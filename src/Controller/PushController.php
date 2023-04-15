@@ -32,7 +32,7 @@ class PushController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $status = JsonResponse::HTTP_UNAUTHORIZED;
@@ -69,7 +69,7 @@ class PushController extends AbstractAppController
             $status = JsonResponse::HTTP_OK;
         }
 
-        return new JsonResponse($data, $status);
+        return $this->jsonResponse($data, $status);
     }
 
     #[Route(path: '/push/delete', name: 'delete', methods: ['POST'], priority: 20)]
@@ -93,6 +93,6 @@ class PushController extends AbstractAppController
             $status = JsonResponse::HTTP_OK;
         }
 
-        return new JsonResponse($data, $status);
+        return $this->jsonResponse($data, $status);
     }
 }

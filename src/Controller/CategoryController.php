@@ -140,7 +140,7 @@ class CategoryController extends AbstractAppController
             }
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route(path: '/categories', name: 'create', methods: ['POST'])]
@@ -162,16 +162,11 @@ class CategoryController extends AbstractAppController
             $data['entry'] = $category->toArray();
             $data['entry_entity'] = 'category';
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
-            return new JsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
+        return $this->jsonResponse($data, JsonResponse::HTTP_CREATED);
     }
 
     #[Route('/category/{id}', name: 'read', methods: ['GET'])]
@@ -182,7 +177,7 @@ class CategoryController extends AbstractAppController
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('READ', $category);
@@ -195,7 +190,7 @@ class CategoryController extends AbstractAppController
         }
         $data['entry_entity'] = 'category';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/category/{id}', name: 'update', methods: ['PUT'])]
@@ -206,7 +201,7 @@ class CategoryController extends AbstractAppController
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('UPDATE', $category);
@@ -222,15 +217,11 @@ class CategoryController extends AbstractAppController
             $data['entry'] = $category->toArray();
             $data['entry_entity'] = 'category';
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/category/{id}', name: 'delete', methods: ['DELETE'])]
@@ -241,7 +232,7 @@ class CategoryController extends AbstractAppController
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('DELETE', $category);
@@ -251,7 +242,7 @@ class CategoryController extends AbstractAppController
 
         $this->categoryManager->remove($category);
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/category/action/exclude/{id}', name: 'action_exclude', methods: ['GET'])]
@@ -265,19 +256,19 @@ class CategoryController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
         if (!$action) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         if ($actionCategory = $this->actionCategoryManager->getOne([
@@ -328,6 +319,6 @@ class CategoryController extends AbstractAppController
         $data['entry'] = $category->toArray();
         $data['entry_entity'] = 'category';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }

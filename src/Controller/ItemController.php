@@ -52,7 +52,7 @@ class ItemController extends AbstractAppController
         $this->denyAccessUnlessGranted('LIST', 'item');
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $filters = new QueryParameterFilterModel($request->query->all('filter'));
@@ -173,7 +173,7 @@ class ItemController extends AbstractAppController
             }
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/item/{id}', name: 'read', methods: ['GET'])]
@@ -184,7 +184,7 @@ class ItemController extends AbstractAppController
         $item = $this->itemManager->getOne(['id' => $id]);
 
         if (!$item) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('READ', $item);
@@ -207,7 +207,7 @@ class ItemController extends AbstractAppController
 
         $data['entry_entity'] = 'item';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/item/{id}', name: 'delete', methods: ['DELETE'])]
@@ -218,7 +218,7 @@ class ItemController extends AbstractAppController
         $item = $this->itemManager->getOne(['id' => $id]);
 
         if (!$item) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('DELETE', $item);
@@ -228,7 +228,7 @@ class ItemController extends AbstractAppController
 
         $this->itemManager->remove($item);
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/items/markallasread', name: 'markallasread', methods: ['GET'])]
@@ -237,7 +237,7 @@ class ItemController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $filters = new QueryParameterFilterModel($request->query->all('filter'));
@@ -277,7 +277,7 @@ class ItemController extends AbstractAppController
             $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/item/action/read/{id}', name: 'action_read', methods: ['GET'])]
@@ -297,19 +297,19 @@ class ItemController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $item = $this->itemManager->getOne(['id' => $id]);
 
         if (!$item) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
         if (!$action) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         if ($actionItem = $this->actionItemManager->getOne([
@@ -364,6 +364,6 @@ class ItemController extends AbstractAppController
             $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }

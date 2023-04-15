@@ -23,7 +23,7 @@ class PinboardController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $pinboard = new PinboardModel();
@@ -51,14 +51,10 @@ class PinboardController extends AbstractAppController
             $data['entry'] = $connection->toArray();
             $data['entry_entity'] = 'connection';
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }

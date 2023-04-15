@@ -20,7 +20,7 @@ class ConnectionController extends AbstractAppController
         $connection = $this->connectionManager->getOne(['id' => $id, 'member' => $this->getUser()]);
 
         if (!$connection) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $data['entry'] = $connection->toArray();
@@ -28,6 +28,6 @@ class ConnectionController extends AbstractAppController
 
         $this->connectionManager->remove($connection);
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }

@@ -247,6 +247,6 @@ class SearchController extends AbstractAppController
             }
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }

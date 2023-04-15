@@ -147,7 +147,7 @@ class AuthorController extends AbstractAppController
             }
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route(path: '/authors', name: 'create', methods: ['POST'])]
@@ -169,16 +169,11 @@ class AuthorController extends AbstractAppController
             $data['entry'] = $author->toArray();
             $data['entry_entity'] = 'author';
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
-            return new JsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
+        return $this->jsonResponse($data, JsonResponse::HTTP_CREATED);
     }
 
     #[Route('/author/{id}', name: 'read', methods: ['GET'])]
@@ -189,7 +184,7 @@ class AuthorController extends AbstractAppController
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('READ', $author);
@@ -197,7 +192,7 @@ class AuthorController extends AbstractAppController
         $data['entry'] = $author->toArray();
         $data['entry_entity'] = 'author';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/author/{id}', name: 'update', methods: ['PUT'])]
@@ -208,7 +203,7 @@ class AuthorController extends AbstractAppController
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('UPDATE', $author);
@@ -224,15 +219,11 @@ class AuthorController extends AbstractAppController
             $data['entry'] = $author->toArray();
             $data['entry_entity'] = 'author';
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/author/{id}', name: 'delete', methods: ['DELETE'])]
@@ -243,7 +234,7 @@ class AuthorController extends AbstractAppController
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('DELETE', $author);
@@ -253,7 +244,7 @@ class AuthorController extends AbstractAppController
 
         $this->authorManager->remove($author);
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/author/action/exclude/{id}', name: 'action_exclude', methods: ['GET'])]
@@ -267,19 +258,19 @@ class AuthorController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
         if (!$action) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         if ($actionAuthor = $this->actionAuthorManager->getOne([
@@ -330,6 +321,6 @@ class AuthorController extends AbstractAppController
         $data['entry'] = $author->toArray();
         $data['entry_entity'] = 'author';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }
