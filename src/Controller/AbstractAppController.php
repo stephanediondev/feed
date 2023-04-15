@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Member;
-use App\Helper\JwtHelper;
 use App\Manager\ConnectionManager;
+use App\Model\QueryParameterPageModel;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -57,16 +56,24 @@ abstract class AbstractAppController extends AbstractController
     /**
      * @return PaginationInterface<mixed>
      */
-    public function paginateAbstract(?QueryBuilder $queryBuilder, int $page, ?int $limit = 20): PaginationInterface
+    public function paginateAbstract(?QueryBuilder $queryBuilder): PaginationInterface
     {
-        /*if ($this->request) {
-            $page = intval($this->request->query->get('page_'.$parameterName));
-        }*/
+        $pageNumber = 1;
+        $pageSize = 20;
 
-        if (0 === $page) {
-            $page = 1;
+        if ($this->request) {
+            $page = new QueryParameterPageModel($this->request->query->all('page'));
+
+            if ($page->getNumber() && $page->getSize()) {
+                $pageNumber = $page->getNumber();
+                $pageSize = $page->getSize();
+            }
         }
 
-        return $this->paginator->paginate($queryBuilder, $page, $limit, []);
+        return $this->paginator->paginate($queryBuilder, $pageNumber, $pageSize, [
+            'pageParameterName' => 'page_',
+            'sortFieldParameterName' => 'sort_field_',
+            'sortDirectionParameterName' => 'sort_direction_',
+        ]);
     }
 }

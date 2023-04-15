@@ -289,7 +289,7 @@ function ready() {
                 }
 
             } else if (typeof id !== 'undefined' && id.indexOf('form-search-') !== -1) {
-                loadRoute(form.attr('action'), {page: 1, q: encodeURIComponent( form.find('input[name="q"]').val() )});
+                loadRoute(form.attr('action'), {page: 1, q: encodeURIComponent( form.find('input[name="filter[query]"]').val() )});
 
             } else if (form.data('query')) {
                 var headers = new Headers({
@@ -511,16 +511,16 @@ function loadRoute(key, parameters) {
             url = apiUrl + route.query;
             if (parameters.page) {
                 if (url.indexOf('?') !== -1) {
-                    url = url + '&page=' + parameters.page;
+                    url = url + '&page[number]=' + parameters.page;
                 } else {
-                    url = url + '?page=' + parameters.page;
+                    url = url + '?page[number]=' + parameters.page;
                 }
             }
             if (parameters.q) {
                 if (url.indexOf('?') !== -1) {
-                    url = url + '&q=' + parameters.q;
+                    url = url + '&filter[query]=' + parameters.q;
                 } else {
-                    url = url + '?q=' + parameters.q;
+                    url = url + '?filter[query]=' + parameters.q;
                 }
             }
             if (replaceId) {
@@ -1111,8 +1111,8 @@ document.addEventListener('keydown', function(event) {
         //slash
         } else if (keycode === 191) {
             event.preventDefault();
-            if ($('input[name="q"]').length > 0) {
-                $('input[name="q"]').focus();
+            if ($('input[name="filter[query]"]').length > 0) {
+                $('input[name="filter[query]"]').focus();
             }
 
         //nothing when meta + k
