@@ -35,6 +35,36 @@ if ('serviceWorker' in navigator && window.location.protocol == 'https:') {
     serviceWorkerEnabled = true;
 }
 
+function handleBadResponse(response) {
+    if (400 === response.status) {
+        setToast({'title': i18next.t('error_400')});
+    }
+
+    if (401 === response.status) {
+        removeCookie('token_signed');
+        $('body').removeClass('connected');
+        $('body').addClass('anonymous');
+        loadRoute('#login');
+        setToast({'title': i18next.t('error_401')});
+    }
+
+    if (403 === response.status) {
+        setToast({'title': i18next.t('error_403')});
+    }
+
+    if (404 === response.status) {
+        setToast({'title': i18next.t('error_404')});
+    }
+
+    if (405 === response.status) {
+        setToast({'title': i18next.t('error_405')});
+    }
+
+    if (500 === response.status) {
+        setToast({'title': i18next.t('error_500')});
+    }
+}
+
 function setBadge(value) {
     let countUnread = $('.count-unread');
     if (99 < value) {
@@ -346,15 +376,8 @@ function ready() {
                                 loadRoute(form.attr('action'));
                             });
                         }
-                    }
-                    if (401 === response.status || 403 === response.status) {
-                        loadRoute('#login');
-                    }
-                    if (404 === response.status) {
-                        setToast({'title': i18next.t('error_404')});
-                    }
-                    if (500 === response.status) {
-                        setToast({'title': i18next.t('error_500')});
+                    } else {
+                        handleBadResponse(response);
                     }
                 }).catch(function(err) {
                 });
@@ -641,27 +664,16 @@ function loadRoute(key, parameters) {
                             setToast({'title': i18next.t('logout')});
                         }
                     });
-                }
-                if (401 === response.status || 403 === response.status) {
-                    removeCookie('token_signed');
-                    $('body').removeClass('connected');
-                    $('body').addClass('anonymous');
-                    loadRoute('#login');
-                    setToast({'title': i18next.t('logout')});
-                }
-                if (404 === response.status) {
-                    loadRoute('#404');
-                }
-                if (500 === response.status) {
-                    loadRoute('#500');
+                } else {
+                    handleBadResponse(response);
                 }
             }).catch(function(err) {
             });
         } else {
-            loadRoute('#404');
+            setToast({'title': i18next.t('error_404')});
         }
     } else {
-        loadRoute('#404');
+        setToast({'title': i18next.t('error_404')});
     }
 }
 
@@ -880,15 +892,8 @@ function sendSubscribe(PushSubscription) {
         }).then(function(response) {
             if (response.ok && 200 === response.status) {
                 setToast({'title': i18next.t('notifications'), 'body': i18next.t('notifications_enabled')});
-            }
-            if (401 === response.status || 403 === response.status) {
-                loadRoute('#login');
-            }
-            if (404 === response.status) {
-                setToast({'title': i18next.t('error_404')});
-            }
-            if (500 === response.status) {
-                setToast({'title': i18next.t('error_500')});
+            } else {
+                handleBadResponse(response);
             }
         }).catch(function(err) {
         });
@@ -918,15 +923,8 @@ function sendUnbscribe(PushSubscription) {
         }).then(function(response) {
             if (response.ok && 200 === response.status) {
                 setToast({'title': i18next.t('notifications'), 'body': i18next.t('notifications_disabled')});
-            }
-            if (401 === response.status || 403 === response.status) {
-                loadRoute('#login');
-            }
-            if (404 === response.status) {
-                setToast({'title': i18next.t('error_404')});
-            }
-            if (500 === response.status) {
-                setToast({'title': i18next.t('error_500')});
+            } else {
+                handleBadResponse(response);
             }
         }).catch(function(err) {
         });

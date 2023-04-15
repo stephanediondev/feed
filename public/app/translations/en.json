@@ -18,9 +18,12 @@
 
     "shortcuts": "Shortcuts",
 
-    "error_401": "Error 401",
-    "error_404": "Error 404",
-    "error_500": "Error 500",
+    "error_400": "Bad Request",
+    "error_403": "Forbidden",
+    "error_404": "Not Found",
+    "error_405": "Method Not Allowed",
+    "error_500": "Internal Server Error",
+    "error_503": "Service Unavailable",
 
     "login": "Login",
     "logout": "Logout",
