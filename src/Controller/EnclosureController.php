@@ -28,7 +28,7 @@ class EnclosureController extends AbstractAppController
         $enclosure = $this->enclosureManager->getOne(['id' => $id]);
 
         if (!$enclosure) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('DELETE', $enclosure);
@@ -38,6 +38,6 @@ class EnclosureController extends AbstractAppController
 
         $this->enclosureManager->remove($enclosure);
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }

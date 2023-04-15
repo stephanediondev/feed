@@ -153,6 +153,6 @@ class LoginController extends AbstractAppController
             }
         }
 
-        return new JsonResponse($data, $status);
+        return $this->jsonResponse($data, $status);
     }
 }

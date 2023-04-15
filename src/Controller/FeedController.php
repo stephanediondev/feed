@@ -159,7 +159,7 @@ class FeedController extends AbstractAppController
             }
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route(path: '/feeds', name: 'create', methods: ['POST'])]
@@ -186,16 +186,11 @@ class FeedController extends AbstractAppController
             $data['entry'] = $feed->toArray();
             $data['entry_entity'] = 'feed';
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
-            return new JsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
+        return $this->jsonResponse($data, JsonResponse::HTTP_CREATED);
     }
 
     #[Route('/feed/{id}', name: 'read', methods: ['GET'])]
@@ -206,7 +201,7 @@ class FeedController extends AbstractAppController
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if (!$feed) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('READ', $feed);
@@ -231,7 +226,7 @@ class FeedController extends AbstractAppController
         $data['entry']['collections'] = $collections;
         $data['entry_entity'] = 'feed';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/feed/{id}', name: 'update', methods: ['PUT'])]
@@ -242,7 +237,7 @@ class FeedController extends AbstractAppController
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if (!$feed) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('UPDATE', $feed);
@@ -258,15 +253,11 @@ class FeedController extends AbstractAppController
             $data['entry'] = $feed->toArray();
             $data['entry_entity'] = 'feed';
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/feed/{id}', name: 'delete', methods: ['DELETE'])]
@@ -277,7 +268,7 @@ class FeedController extends AbstractAppController
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if (!$feed) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('DELETE', $feed);
@@ -287,7 +278,7 @@ class FeedController extends AbstractAppController
 
         $this->feedManager->remove($feed);
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/feed/action/subscribe/{id}', name: 'action_subscribe', methods: ['GET'])]
@@ -301,19 +292,19 @@ class FeedController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
         if (!$feed) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $action = $this->actionManager->getOne(['title' => $case]);
 
         if (!$action) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         if ($actionFeed = $this->actionFeedManager->getOne([
@@ -368,7 +359,7 @@ class FeedController extends AbstractAppController
             $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route(path: '/feeds/import', name: 'import', methods: ['POST'])]
@@ -377,7 +368,7 @@ class FeedController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $importOpml = new ImportOpmlModel();
@@ -396,15 +387,11 @@ class FeedController extends AbstractAppController
                 }
             }
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route(path: '/feeds/export', name: 'export', methods: ['POST'])]
@@ -413,7 +400,7 @@ class FeedController extends AbstractAppController
         $data = [];
 
         if (false === $this->getUser() instanceof Member) {
-            return new JsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
+            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
         }
 
         $parameters = [];

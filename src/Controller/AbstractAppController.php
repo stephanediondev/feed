@@ -11,8 +11,10 @@ use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Form\FormInterface;
 
 abstract class AbstractAppController extends AbstractController
 {
@@ -35,6 +37,50 @@ abstract class AbstractAppController extends AbstractController
         $this->paginator = $paginator;
         $this->translator = $translator;
         $this->connectionManager = $connectionManager;
+    }
+
+    /**
+     * @param array<mixed> $data
+     */
+    protected function jsonResponse(array $data, int $status = JsonResponse::HTTP_OK): JsonResponse
+    {
+        $data['meta']['datetime'] = (new \Datetime())->format('Y-m-d H:i:s');
+        $data['meta']['timezone'] = date_default_timezone_get();
+
+        $response = new JsonResponse($data, $status);
+        return $response;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    protected function getFormErrors(FormInterface $form): array
+    {
+        $data = [
+            'errors' => [],
+        ];
+        foreach ($form->getErrors(true) as $error) {
+            if ('data' == $error->getOrigin()->getName()) {
+                $data['errors'][] = [
+                    'status' => '400',
+                    'source' => [
+                        'pointer' => '/data',
+                    ],
+                    'title' => $error->getMessage(),
+                ];
+            } else {
+                $data['errors'][] = [
+                    'status' => '400',
+                    'source' => [
+                        'pointer' => '/data/attributes/'.$error->getOrigin()->getName(),
+                    ],
+                    'title' => 'Invalid attribute',
+                    'detail' => $error->getMessage(),
+                ];
+            }
+        }
+
+        return $data;
     }
 
     /**

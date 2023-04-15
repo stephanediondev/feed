@@ -37,6 +37,6 @@ class LogoutController extends AbstractAppController
             throw new AccessDeniedHttpException();
         }
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }

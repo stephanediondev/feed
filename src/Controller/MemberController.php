@@ -46,16 +46,11 @@ class MemberController extends AbstractAppController
             $data['entry'] = $member->toArray();
             $data['entry_entity'] = 'member';
         } else {
-            $errors = $form->getErrors(true);
-            foreach ($errors as $error) {
-                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
-                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
-                }
-            }
-            return new JsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
+        return $this->jsonResponse($data, JsonResponse::HTTP_CREATED);
     }
 
     public function read(Request $request, int $id): JsonResponse
@@ -65,7 +60,7 @@ class MemberController extends AbstractAppController
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if (!$member) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('READ', $member);
@@ -73,7 +68,7 @@ class MemberController extends AbstractAppController
         $data['entry'] = $member->toArray();
         $data['entry_entity'] = 'member';
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/member/{id}', name: 'update', methods: ['PUT'])]
@@ -84,12 +79,12 @@ class MemberController extends AbstractAppController
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if (!$member) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('UPDATE', $member);
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 
     #[Route('/member/{id}', name: 'delete', methods: ['DELETE'])]
@@ -100,11 +95,11 @@ class MemberController extends AbstractAppController
         $member = $this->memberManager->getOne(['id' => $id]);
 
         if (!$member) {
-            return new JsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
         $this->denyAccessUnlessGranted('DELETE', $member);
 
-        return new JsonResponse($data);
+        return $this->jsonResponse($data);
     }
 }
