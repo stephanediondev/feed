@@ -14,7 +14,7 @@ final class Version20230410131624 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'increase token column length (for push endpoint)';
     }
 
     public function up(Schema $schema): void
