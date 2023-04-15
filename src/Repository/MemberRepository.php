@@ -49,11 +49,15 @@ class MemberRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('fed');
+        $query->addSelect('mbr');
         $query->from(Member::class, 'mbr');
 
         $query->addOrderBy('mbr.email');
         $query->groupBy('mbr.id');
+
+        if (true === isset($parameters['returnQueryBuilder']) && true === $parameters['returnQueryBuilder']) {
+            return $query;
+        }
 
         $getQuery = $query->getQuery();
         return $getQuery;

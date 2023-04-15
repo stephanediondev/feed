@@ -14,7 +14,6 @@ use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
 use App\Manager\FeedManager;
 use App\Model\QueryParameterFilterModel;
-use App\Model\QueryParameterPageModel;
 use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

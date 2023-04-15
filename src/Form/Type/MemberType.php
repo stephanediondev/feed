@@ -9,17 +9,37 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class MemberType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('email', EmailType::class);
-
-        $builder->add('plainPassword', PasswordType::class, [
-            'mapped' => false,
+        $builder->add('email', EmailType::class, [
+            'required' => true,
+            'constraints' => [
+                new NotBlank(),
+                new Email(),
+            ],
         ]);
+
+        if (Request::METHOD_POST === $options['request_method']) {
+            $builder->add('plainPassword', PasswordType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ]);
+        }
+
+        if (Request::METHOD_PUT === $options['request_method']) {
+            $builder->add('plainPassword', PasswordType::class, [
+                'required' => false,
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -27,6 +47,7 @@ class MemberType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Member::class,
             'csrf_protection' => false,
+            'request_method' => null,
         ]);
     }
 }

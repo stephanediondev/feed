@@ -44,18 +44,32 @@ class EnclosureRepository extends AbstractRepository
         $em = $this->getEntityManager();
 
         $query = $em->createQueryBuilder();
-        $query->addSelect('enr');
+        $query->addSelect('enr', 'itm');
         $query->from(Enclosure::class, 'enr');
+        $query->leftJoin('enr.item', 'itm');
 
         if (isset($parameters['item']) == 1) {
             $query->andWhere('enr.item = :item');
             $query->setParameter(':item', $parameters['item']);
         }
 
+        if (isset($parameters['days']) == 1) {
+            $query->andWhere('itm.date > :date');
+            $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
+        }
+
+        if (isset($parameters['type']) == 1) {
+            $query->andWhere('enr.type = :type');
+            $query->setParameter(':type', $parameters['type']);
+        }
+
         $query->groupBy('enr.id');
 
-        $getQuery = $query->getQuery();
+        if (true === isset($parameters['returnQueryBuilder']) && true === $parameters['returnQueryBuilder']) {
+            return $query;
+        }
 
+        $getQuery = $query->getQuery();
         return $getQuery;
     }
 

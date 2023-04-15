@@ -13,7 +13,6 @@ use App\Manager\ActionCategoryManager;
 use App\Manager\ActionManager;
 use App\Manager\CategoryManager;
 use App\Model\QueryParameterFilterModel;
-use App\Model\QueryParameterPageModel;
 use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

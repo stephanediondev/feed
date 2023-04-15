@@ -22,13 +22,12 @@ class MemberVoter extends AbstractVoter
         }
 
         switch ($attribute) {
-            case 'CREATE':
-            case 'READ':
-            case 'UPDATE':
             case 'DELETE':
-                return $this->security->isGranted('ROLE_ADMIN');
+                if ($user->getId() === $subject->getId()) {
+                    return false;
+                }
         }
 
-        return true;
+        return $this->security->isGranted('ROLE_ADMIN');
     }
 }
