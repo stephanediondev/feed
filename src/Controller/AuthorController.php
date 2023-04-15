@@ -13,6 +13,9 @@ use App\Manager\ActionAuthorManager;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
 use App\Manager\FeedManager;
+use App\Model\QueryParameterFilterModel;
+use App\Model\QueryParameterPageModel;
+use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,9 +43,11 @@ class AuthorController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'author');
 
+        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+
         $parameters = [];
 
-        if ($request->query->get('trendy')) {
+        if ($filters->getBool('trendy')) {
             $parameters['trendy'] = true;
 
             if ($this->getUser()) {
@@ -69,50 +74,46 @@ class AuthorController extends AbstractAppController
                 $data['entries'][$k]['percent'] = $percent;
             }
         } else {
-            if ($request->query->get('excluded')) {
+            if ($filters->getBool('excluded')) {
                 $parameters['excluded'] = true;
                 $parameters['member'] = $this->getUser();
             }
 
-            if ($request->query->get('feed')) {
-                if ($feed = $this->feedManager->getOne(['id' => (int) $request->query->get('feed')])) {
-                    $parameters['feed'] = (int) $request->query->get('feed');
+            if ($filters->getInt('feed')) {
+                if ($feed = $this->feedManager->getOne(['id' => $filters->getInt('feed')])) {
+                    $parameters['feed'] = $filters->getInt('feed');
                     $data['entry'] = $feed->toArray();
                     $data['entry_entity'] = 'feed';
                 }
             }
 
-            if ($request->query->get('days')) {
-                $parameters['days'] = (int) $request->query->get('days');
+            if ($filters->getInt('days')) {
+                $parameters['days'] = $filters->getInt('days');
             }
 
-            $fields = ['title' => 'aut.title', 'date_created' => 'aut.dateCreated'];
-            if ($request->query->get('sortField') && array_key_exists(strval($request->query->get('sortField')), $fields)) {
-                $parameters['sortField'] = $fields[$request->query->get('sortField')];
-            } else {
-                $parameters['sortField'] = 'aut.title';
-            }
+            $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
 
-            $directions = ['ASC', 'DESC'];
-            if ($request->query->get('sortDirection') && in_array($request->query->get('sortDirection'), $directions)) {
-                $parameters['sortDirection'] = $request->query->get('sortDirection');
+            if ($sort) {
+                $parameters['sortDirection'] = $sort['direction'];
+                $parameters['sortField'] = $sort['field'];
             } else {
                 $parameters['sortDirection'] = 'ASC';
+                $parameters['sortField'] = 'aut.title';
             }
 
             $parameters['returnQueryBuilder'] = true;
 
-            $pagination = $this->paginateAbstract($this->authorManager->getList($parameters), $page = intval($request->query->getInt('page', 1)), intval($request->query->getInt('perPage', 20)));
+            $pagination = $this->paginateAbstract($this->authorManager->getList($parameters));
 
             $data['entries_entity'] = 'author';
             $data['entries_total'] = $pagination->getTotalItemCount();
             $data['entries_pages'] = $pages = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
-            $data['entries_page_current'] = $page;
-            $pagePrevious = $page - 1;
+            $data['entries_page_current'] = $pagination->getCurrentPageNumber();
+            $pagePrevious = $pagination->getCurrentPageNumber() - 1;
             if ($pagePrevious >= 1) {
                 $data['entries_page_previous'] = $pagePrevious;
             }
-            $pageNext = $page + 1;
+            $pageNext = $pagination->getCurrentPageNumber() + 1;
             if ($pageNext <= $pages) {
                 $data['entries_page_next'] = $pageNext;
             }
@@ -212,8 +213,24 @@ class AuthorController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('UPDATE', $author);
 
-        $data['entry'] = $author->toArray();
-        $data['entry_entity'] = 'author';
+        $form = $this->createForm(AuthorType::class, $author);
+
+        $content = $this->getContent($request);
+        $form->submit($content);
+
+        if ($form->isValid()) {
+            $this->authorManager->persist($form->getData());
+
+            $data['entry'] = $author->toArray();
+            $data['entry_entity'] = 'author';
+        } else {
+            $errors = $form->getErrors(true);
+            foreach ($errors as $error) {
+                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
+                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                }
+            }
+        }
 
         return new JsonResponse($data);
     }

@@ -15,6 +15,9 @@ use App\Manager\CategoryManager;
 use App\Manager\FeedManager;
 use App\Manager\ItemManager;
 use App\Manager\SearchManager;
+use App\Model\QueryParameterFilterModel;
+use App\Model\QueryParameterPageModel;
+use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,8 +25,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: '/api', name: 'api_search_', priority: 20)]
 class SearchController extends AbstractAppController
 {
-    private const LIMIT = 20;
-
     private ActionFeedManager $actionFeedManager;
     private ActionAuthorManager $actionAuthorManager;
     private ActionCategoryManager $actionCategoryManager;
@@ -75,26 +76,23 @@ class SearchController extends AbstractAppController
     {
         $data = [];
 
-        $sortFields = ['date.sort', '_score', 'title.sort'];
-        $sortDirection = ['asc', 'desc'];
+        $filters = new QueryParameterFilterModel($request->query->all('filter'));
 
-        if ($request->query->get('q')) {
-            $page = $request->query->getInt('page', 1);
+        if ($filters->get('query')) {
+            $page = new QueryParameterPageModel($request->query->all('page'));
 
-            if (!array_key_exists(strval($request->query->get('sortField')), $sortFields)) {
-                $sortField = '_score';
+            $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+
+            if ($sort) {
+                $sortDirection = $sort['direction'];
+                $sortField = strtolower($sort['field']);
             } else {
-                $sortField = $request->query->get('sortField');
-            }
-            if (!array_key_exists(strval($request->query->get('sortDirection')), $sortDirection)) {
                 $sortDirection = 'desc';
-            } else {
-                $sortDirection = $request->query->get('sortDirection');
+                $sortField = '_score';
             }
 
-            $size = self::LIMIT;
-            $from = ($size * $page) - self::LIMIT;
-            $path = '/'.$this->searchManager->getIndex().'_'.$type.'/_search?size='.intval($size).'&from='.intval($from);
+            $from = ($page->getSize() * $page->getNumber()) - $page->getSize();
+            $path = '/'.$this->searchManager->getIndex().'_'.$type.'/_search?size='.$page->getSize().'&from='.intval($from);
 
             $body = [];
             $body['sort'] = [
@@ -124,30 +122,10 @@ class SearchController extends AbstractAppController
                 $body['query'] = [
                     'query_string' => [
                         'fields' => $fields,
-                        'query' => $request->query->get('q'),
+                        'query' => $filters->get('query'),
                     ],
                 ];
             }
-
-            /*if(!$parameters->get('page')->getAttribute('all_languages')) {
-                $body['filter'] = array(
-                    'term' => array(
-                        'feed.language' => 'en',
-                    ),
-                );
-            }*/
-
-            /*if($request->query->get('date_from') && $request->query->get('date_to')) {
-                $body['filter'] = array(
-                    'range' => array(
-                        'date.sort' => array(
-                            'gte' => $request->query->get('date_from'),
-                            'lte' => $request->query->get('date_to'),
-                            'format' => 'YYYY-MM-DD',
-                        ),
-                    ),
-                );
-            }*/
 
             $result = $this->searchManager->query('GET', $path, $body);
 
@@ -158,13 +136,13 @@ class SearchController extends AbstractAppController
                 } else {
                     $data['entries_total'] = $result['hits']['total'];
                 }
-                $data['entries_pages'] = $pages = ceil($data['entries_total'] / self::LIMIT);
-                $data['entries_page_current'] = $page;
-                $pagePrevious = $page - 1;
+                $data['entries_pages'] = $pages = ceil($data['entries_total'] / $page->getSize());
+                $data['entries_page_current'] = $page->getNumber();
+                $pagePrevious = $page->getNumber() - 1;
                 if ($pagePrevious >= 1) {
                     $data['entries_page_previous'] = $pagePrevious;
                 }
-                $pageNext = $page + 1;
+                $pageNext = $page->getNumber() + 1;
                 if ($pageNext <= $pages) {
                     $data['entries_page_next'] = $pageNext;
                 }
