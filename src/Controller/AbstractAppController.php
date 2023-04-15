@@ -60,23 +60,25 @@ abstract class AbstractAppController extends AbstractController
             'errors' => [],
         ];
         foreach ($form->getErrors(true) as $error) {
-            if ('data' == $error->getOrigin()->getName()) {
-                $data['errors'][] = [
-                    'status' => '400',
-                    'source' => [
-                        'pointer' => '/data',
-                    ],
-                    'title' => $error->getMessage(),
-                ];
-            } else {
-                $data['errors'][] = [
-                    'status' => '400',
-                    'source' => [
-                        'pointer' => '/data/attributes/'.$error->getOrigin()->getName(),
-                    ],
-                    'title' => 'Invalid attribute',
-                    'detail' => $error->getMessage(),
-                ];
+            if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
+                if ('data' == $error->getOrigin()->getName()) {
+                    $data['errors'][] = [
+                        'status' => '400',
+                        'source' => [
+                            'pointer' => '/data',
+                        ],
+                        'title' => $error->getMessage(),
+                    ];
+                } else {
+                    $data['errors'][] = [
+                        'status' => '400',
+                        'source' => [
+                            'pointer' => '/data/attributes/'.$error->getOrigin()->getName(),
+                        ],
+                        'title' => 'Invalid attribute',
+                        'detail' => $error->getMessage(),
+                    ];
+                }
             }
         }
 
