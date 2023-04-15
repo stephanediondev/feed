@@ -20,6 +20,25 @@ class EnclosureController extends AbstractAppController
         $this->enclosureManager = $enclosureManager;
     }
 
+    #[Route('/enclosure/{id}', name: 'read', methods: ['GET'])]
+    public function read(Request $request, int $id): JsonResponse
+    {
+        $data = [];
+
+        $enclosure = $this->enclosureManager->getOne(['id' => $id]);
+
+        if (!$enclosure) {
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $this->denyAccessUnlessGranted('READ', $enclosure);
+
+        $data['entry'] = $enclosure->toArray();
+        $data['entry_entity'] = 'enclosure';
+
+        return $this->jsonResponse($data);
+    }
+
     #[Route('/enclosure/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(Request $request, int $id): JsonResponse
     {

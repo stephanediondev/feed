@@ -312,6 +312,8 @@ class ItemController extends AbstractAppController
             return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $item);
+
         if ($actionItem = $this->actionItemManager->getOne([
             'action' => $action,
             'item' => $item,

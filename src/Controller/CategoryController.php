@@ -271,6 +271,8 @@ class CategoryController extends AbstractAppController
             return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $category);
+
         if ($actionCategory = $this->actionCategoryManager->getOne([
             'action' => $action,
             'category' => $category,

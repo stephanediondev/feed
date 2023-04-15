@@ -153,6 +153,9 @@ class Enclosure
             'type' => $this->getType(),
             'type_group' => $this->getTypeGroup(),
             'link_secure' => $this->isLinkSecure(),
+            'length' => $this->getLength(),
+            'width' => $this->getWidth(),
+            'height' => $this->getHeight(),
         ];
     }
 }

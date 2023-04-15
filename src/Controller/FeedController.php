@@ -307,6 +307,8 @@ class FeedController extends AbstractAppController
             return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $feed);
+
         if ($actionFeed = $this->actionFeedManager->getOne([
             'action' => $action,
             'feed' => $feed,

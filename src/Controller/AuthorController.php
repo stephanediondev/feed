@@ -273,6 +273,8 @@ class AuthorController extends AbstractAppController
             return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
         }
 
+        $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $author);
+
         if ($actionAuthor = $this->actionAuthorManager->getOne([
             'action' => $action,
             'author' => $author,
