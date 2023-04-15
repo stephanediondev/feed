@@ -206,8 +206,8 @@
 
             <form action="#feeds/search/result" method="GET" id="form-search-feeds">
                 <p>
-                    <label for="q" class="form-label required">{{trans 'q'}}</label>
-                    <input type="text" class="form-control" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <label for="query" class="form-label required">{{trans 'query'}}</label>
+                    <input type="text" class="form-control" id="query" name="filter[query]" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
@@ -239,8 +239,8 @@
 
             <form action="#categories/search/result" method="GET" id="form-search-categories">
                 <p>
-                    <label for="q" class="form-label required">{{trans 'q'}}</label>
-                    <input type="text" class="form-control" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <label for="query" class="form-label required">{{trans 'query'}}</label>
+                    <input type="text" class="form-control" id="query" name="filter[query]" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
@@ -271,8 +271,8 @@
 
             <form action="#items/search/result" method="GET" id="form-search-items">
                 <p>
-                    <label for="q" class="form-label required">{{trans 'q'}}</label>
-                    <input type="text" class="form-control" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <label for="query" class="form-label required">{{trans 'query'}}</label>
+                    <input type="text" class="form-control" id="query" name="filter[query]" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
@@ -303,8 +303,8 @@
 
             <form action="#authors/search/result" method="GET" id="form-search-authors">
                 <p>
-                    <label for="q" class="form-label required">{{trans 'q'}}</label>
-                    <input type="text" class="form-control" id="q" name="q" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <label for="query" class="form-label required">{{trans 'query'}}</label>
+                    <input type="text" class="form-control" id="query" name="filter[query]" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>

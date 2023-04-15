@@ -18,6 +18,9 @@ use App\Manager\CollectionManager;
 use App\Manager\FeedManager;
 use App\Manager\MemberManager;
 use App\Model\ImportOpmlModel;
+use App\Model\QueryParameterFilterModel;
+use App\Model\QueryParameterPageModel;
+use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,69 +56,67 @@ class FeedController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'feed');
 
+        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+
         $parameters = [];
 
-        if ($request->query->get('witherrors')) {
+        if ($filters->getBool('witherrors')) {
             $parameters['witherrors'] = true;
         }
 
-        if ($request->query->get('subscribed')) {
+        if ($filters->getBool('subscribed')) {
             $parameters['subscribed'] = true;
             $parameters['member'] = $this->getUser();
         }
 
-        if ($request->query->get('unsubscribed')) {
+        if ($filters->getBool('unsubscribed')) {
             $parameters['unsubscribed'] = true;
             $parameters['member'] = $this->getUser();
         }
 
-        if ($request->query->get('category')) {
-            if ($category = $this->categoryManager->getOne(['id' => (int) $request->query->get('category')])) {
-                $parameters['category'] = (int) $request->query->get('category');
+        if ($filters->getInt('category')) {
+            if ($category = $this->categoryManager->getOne(['id' => $filters->getInt('category')])) {
+                $parameters['category'] = $filters->getInt('category');
                 $data['entry'] = $category->toArray();
                 $data['entry_entity'] = 'category';
             }
         }
 
-        if ($request->query->get('author')) {
-            if ($author = $this->authorManager->getOne(['id' => (int) $request->query->get('author')])) {
-                $parameters['author'] = (int) $request->query->get('author');
+        if ($filters->getInt('author')) {
+            if ($author = $this->authorManager->getOne(['id' => $filters->getInt('author')])) {
+                $parameters['author'] = $filters->getInt('author');
                 $data['entry'] = $author->toArray();
                 $data['entry_entity'] = 'author';
             }
         }
 
-        if ($request->query->get('days')) {
-            $parameters['days'] = (int) $request->query->get('days');
+        if ($filters->getInt('days')) {
+            $parameters['days'] = $filters->getInt('days');
         }
 
-        $fields = ['title' => 'fed.title', 'date_created' => 'fed.dateCreated'];
-        if ($request->query->get('sortField') && array_key_exists(strval($request->query->get('sortField')), $fields)) {
-            $parameters['sortField'] = $fields[$request->query->get('sortField')];
-        } else {
-            $parameters['sortField'] = 'fed.title';
-        }
+        $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
 
-        $directions = ['ASC', 'DESC'];
-        if ($request->query->get('sortDirection') && in_array($request->query->get('sortDirection'), $directions)) {
-            $parameters['sortDirection'] = $request->query->get('sortDirection');
+        if ($sort) {
+            $parameters['sortDirection'] = $sort['direction'];
+            $parameters['sortField'] = $sort['field'];
         } else {
             $parameters['sortDirection'] = 'ASC';
+            $parameters['sortField'] = 'fed.title';
         }
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($this->feedManager->getList($parameters), $page = intval($request->query->getInt('page', 1)), intval($request->query->getInt('perPage', 20)));
+        $pagination = $this->paginateAbstract($this->feedManager->getList($parameters));
 
         $data['entries_entity'] = 'feed';
         $data['entries_total'] = $pagination->getTotalItemCount();
         $data['entries_pages'] = $pages = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
-        $data['entries_page_current'] = $page;
-        $pagePrevious = $page - 1;
+        $data['entries_page_current'] = $pagination->getCurrentPageNumber();
+        $pagePrevious = $pagination->getCurrentPageNumber() - 1;
         if ($pagePrevious >= 1) {
             $data['entries_page_previous'] = $pagePrevious;
         }
-        $pageNext = $page + 1;
+        $pageNext = $pagination->getCurrentPageNumber() + 1;
         if ($pageNext <= $pages) {
             $data['entries_page_next'] = $pageNext;
         }

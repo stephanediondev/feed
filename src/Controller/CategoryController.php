@@ -12,6 +12,9 @@ use App\Form\Type\CategoryType;
 use App\Manager\ActionCategoryManager;
 use App\Manager\ActionManager;
 use App\Manager\CategoryManager;
+use App\Model\QueryParameterFilterModel;
+use App\Model\QueryParameterPageModel;
+use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,9 +40,11 @@ class CategoryController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'category');
 
+        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+
         $parameters = [];
 
-        if ($request->query->get('trendy')) {
+        if ($filters->getBool('trendy')) {
             $parameters['trendy'] = true;
 
             if ($this->getUser()) {
@@ -66,46 +71,42 @@ class CategoryController extends AbstractAppController
                 $data['entries'][$k]['percent'] = $percent;
             }
         } else {
-            if ($request->query->get('excluded')) {
+            if ($filters->getBool('excluded')) {
                 $parameters['excluded'] = true;
                 $parameters['member'] = $this->getUser();
             }
 
-            if ($request->query->get('usedbyfeeds')) {
+            if ($filters->getBool('usedbyfeeds')) {
                 $parameters['usedbyfeeds'] = true;
             }
 
-            if ($request->query->get('days')) {
-                $parameters['days'] = (int) $request->query->get('days');
+            if ($filters->getInt('days')) {
+                $parameters['days'] = $filters->getInt('days');
             }
 
-            $fields = ['title' => 'cat.title', 'date_created' => 'cat.dateCreated'];
-            if ($request->query->get('sortField') && array_key_exists(strval($request->query->get('sortField')), $fields)) {
-                $parameters['sortField'] = $fields[$request->query->get('sortField')];
-            } else {
-                $parameters['sortField'] = 'cat.title';
-            }
+            $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
 
-            $directions = ['ASC', 'DESC'];
-            if ($request->query->get('sortDirection') && in_array($request->query->get('sortDirection'), $directions)) {
-                $parameters['sortDirection'] = $request->query->get('sortDirection');
+            if ($sort) {
+                $parameters['sortDirection'] = $sort['direction'];
+                $parameters['sortField'] = $sort['field'];
             } else {
                 $parameters['sortDirection'] = 'ASC';
+                $parameters['sortField'] = 'cat.title';
             }
 
             $parameters['returnQueryBuilder'] = true;
 
-            $pagination = $this->paginateAbstract($this->categoryManager->getList($parameters), $page = intval($request->query->getInt('page', 1)), intval($request->query->getInt('perPage', 20)));
+            $pagination = $this->paginateAbstract($this->categoryManager->getList($parameters));
 
             $data['entries_entity'] = 'category';
             $data['entries_total'] = $pagination->getTotalItemCount();
             $data['entries_pages'] = $pages = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
-            $data['entries_page_current'] = $page;
-            $pagePrevious = $page - 1;
+            $data['entries_page_current'] = $pagination->getCurrentPageNumber();
+            $pagePrevious = $pagination->getCurrentPageNumber() - 1;
             if ($pagePrevious >= 1) {
                 $data['entries_page_previous'] = $pagePrevious;
             }
-            $pageNext = $page + 1;
+            $pageNext = $pagination->getCurrentPageNumber() + 1;
             if ($pageNext <= $pages) {
                 $data['entries_page_next'] = $pageNext;
             }
@@ -210,8 +211,24 @@ class CategoryController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('UPDATE', $category);
 
-        $data['entry'] = $category->toArray();
-        $data['entry_entity'] = 'category';
+        $form = $this->createForm(CategoryType::class, $category);
+
+        $content = $this->getContent($request);
+        $form->submit($content);
+
+        if ($form->isValid()) {
+            $this->categoryManager->persist($form->getData());
+
+            $data['entry'] = $category->toArray();
+            $data['entry_entity'] = 'category';
+        } else {
+            $errors = $form->getErrors(true);
+            foreach ($errors as $error) {
+                if (method_exists($error, 'getOrigin') && method_exists($error, 'getMessage')) {
+                    $data['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+                }
+            }
+        }
 
         return new JsonResponse($data);
     }

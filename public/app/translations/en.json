@@ -31,6 +31,7 @@
     "update": "Update",
     "delete": "Delete",
     "submit": "Submit",
+    "query": "Query",
 
     "refresh": "Refresh",
     "up": "&nbsp;&nbsp;Up&nbsp;&nbsp;",
