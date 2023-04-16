@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Tests\Manager;
 
 use App\Entity\Action;
+use App\Entity\ActionItem;
 use App\Entity\Feed;
 use App\Entity\Item;
-use App\Entity\ActionItem;
+use App\Manager\ActionItemManager;
 use App\Manager\ActionManager;
 use App\Manager\FeedManager;
 use App\Manager\ItemManager;
-use App\Manager\ActionItemManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ActionItemManagerTest extends KernelTestCase

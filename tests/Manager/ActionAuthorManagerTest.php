@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Manager;
 
 use App\Entity\Action;
-use App\Entity\Author;
 use App\Entity\ActionAuthor;
+use App\Entity\Author;
+use App\Manager\ActionAuthorManager;
 use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
-use App\Manager\ActionAuthorManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ActionAuthorManagerTest extends KernelTestCase

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Manager;
 
 use App\Entity\Action;
-use App\Entity\Feed;
 use App\Entity\ActionFeed;
+use App\Entity\Feed;
+use App\Manager\ActionFeedManager;
 use App\Manager\ActionManager;
 use App\Manager\FeedManager;
-use App\Manager\ActionFeedManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ActionFeedManagerTest extends KernelTestCase

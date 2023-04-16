@@ -8,8 +8,8 @@ use App\Entity\Category;
 use App\Entity\Feed;
 use App\Entity\FeedCategory;
 use App\Manager\CategoryManager;
-use App\Manager\FeedManager;
 use App\Manager\FeedCategoryManager;
+use App\Manager\FeedManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class FeedCategoryManagerTest extends KernelTestCase

@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Tests\Manager;
 
 use App\Entity\Category;
-use App\Entity\Item;
 use App\Entity\Feed;
+use App\Entity\Item;
 use App\Entity\ItemCategory;
-use App\Manager\ItemManager;
 use App\Manager\CategoryManager;
 use App\Manager\FeedManager;
 use App\Manager\ItemCategoryManager;
+use App\Manager\ItemManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ItemCategoryManagerTest extends KernelTestCase

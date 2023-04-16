@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Manager;
 
 use App\Entity\Action;
-use App\Entity\Category;
 use App\Entity\ActionCategory;
+use App\Entity\Category;
+use App\Manager\ActionCategoryManager;
 use App\Manager\ActionManager;
 use App\Manager\CategoryManager;
-use App\Manager\ActionCategoryManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ActionCategoryManagerTest extends KernelTestCase
