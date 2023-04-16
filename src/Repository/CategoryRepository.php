@@ -27,12 +27,12 @@ class CategoryRepository extends AbstractRepository
         $query->addSelect('cat');
         $query->from(Category::class, 'cat');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('cat.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['title']) == 1) {
+        if (true === isset($parameters['title'])) {
             $query->andWhere('cat.title = :title');
             $query->setParameter(':title', $parameters['title']);
         }
@@ -50,7 +50,7 @@ class CategoryRepository extends AbstractRepository
     {
         $em = $this->getEntityManager();
 
-        if (isset($parameters['trendy']) == 1 && $parameters['trendy']) {
+        if (true === isset($parameters['trendy']) && $parameters['trendy']) {
             if (isset($parameters['member'])) {
                 $exclude = 'AND cat.id NOT IN( SELECT category_id FROM action_category WHERE member_id = :member_id AND action_id = :action_id )';
             } else {
@@ -86,21 +86,21 @@ SQL;
         $query->addSelect('cat.id');
         $query->from(Category::class, 'cat');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('cat.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['excluded']) == 1 && $parameters['excluded']) {
+        if (true === isset($parameters['excluded']) && $parameters['excluded']) {
             $query->andWhere('cat.id IN (SELECT IDENTITY(excluded.category) FROM '.ActionCategory::class.' AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
             $query->setParameter(':member', $parameters['member']);
         }
 
-        if (isset($parameters['usedbyfeeds']) == 1 && $parameters['usedbyfeeds']) {
+        if (true === isset($parameters['usedbyfeeds']) && $parameters['usedbyfeeds']) {
             $query->andWhere('cat.id IN (SELECT IDENTITY(feed.category) FROM '.FeedCategory::class.' AS feed)');
         }
 
-        if (isset($parameters['days']) == 1) {
+        if (true === isset($parameters['days'])) {
             $query->andWhere('cat.dateCreated > :date');
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }

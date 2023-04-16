@@ -27,7 +27,7 @@ class CollectionFeedRepository extends AbstractRepository
         $query->leftJoin('col_fed.feed', 'fed');
         $query->leftJoin('col_fed.collection', 'col');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('col_fed.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
@@ -51,17 +51,17 @@ class CollectionFeedRepository extends AbstractRepository
         $query->leftJoin('col_fed.feed', 'fed');
         $query->leftJoin('col_fed.collection', 'col');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('col_fed.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['feed']) == 1) {
+        if (true === isset($parameters['feed'])) {
             $query->andWhere('col_fed.feed = :feed');
             $query->setParameter(':feed', $parameters['feed']);
         }
 
-        if (isset($parameters['error_notnull']) == 1 && $parameters['error_notnull']) {
+        if (true === isset($parameters['error_notnull']) && $parameters['error_notnull']) {
             $query->andWhere('col_fed.error IS NOT NULL');
         }
 

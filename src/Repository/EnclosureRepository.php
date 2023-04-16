@@ -25,7 +25,7 @@ class EnclosureRepository extends AbstractRepository
         $query->addSelect('enr');
         $query->from(Enclosure::class, 'enr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('enr.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
@@ -48,22 +48,22 @@ class EnclosureRepository extends AbstractRepository
         $query->from(Enclosure::class, 'enr');
         $query->leftJoin('enr.item', 'itm');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('enr.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['item']) == 1) {
+        if (true === isset($parameters['item'])) {
             $query->andWhere('enr.item = :item');
             $query->setParameter(':item', $parameters['item']);
         }
 
-        if (isset($parameters['days']) == 1) {
+        if (true === isset($parameters['days'])) {
             $query->andWhere('itm.date > :date');
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }
 
-        if (isset($parameters['type']) == 1) {
+        if (true === isset($parameters['type'])) {
             $query->andWhere('enr.type = :type');
             $query->setParameter(':type', $parameters['type']);
         }

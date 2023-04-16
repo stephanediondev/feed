@@ -131,9 +131,9 @@ class FeedManager extends AbstractManager
             'feeds' => [],
             'categories' => [],
         ];
-        if (isset($obj->outline) == 1) {
+        if (true === isset($obj->outline)) {
             foreach ($obj->outline as $outline) {
-                if (isset($outline->outline) == 1) {
+                if (true === isset($outline->outline)) {
                     if ($outline->attributes()) {
                         if ($outline->attributes()->title) {
                             $cat = strval($outline->attributes()->title);

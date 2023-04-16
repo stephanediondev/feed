@@ -109,7 +109,7 @@ class CollectionManager extends AbstractManager
 
             $parseUrl = parse_url($feed['link']);
 
-            if (isset($parseUrl['scheme']) == 0 || ($parseUrl['scheme'] != 'http' && $parseUrl['scheme'] != 'https')) {
+            if (false === isset($parseUrl['scheme']) || ($parseUrl['scheme'] != 'http' && $parseUrl['scheme'] != 'https')) {
                 $errors++;
                 $insertCollectionFeed['error'] = 'Unvalid scheme';
             } else {

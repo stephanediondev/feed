@@ -129,7 +129,7 @@ class SearchController extends AbstractAppController
 
             $result = $this->searchManager->query('GET', $path, $body);
 
-            if (isset($result['hits']['hits']) == 1) {
+            if (true === isset($result['hits']['hits'])) {
                 $data['entries_entity'] = $type;
                 if (true == isset($result['hits']['total']['value'])) {
                     $data['entries_total'] = $result['hits']['total']['value'];

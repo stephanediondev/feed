@@ -25,12 +25,12 @@ class MemberRepository extends AbstractRepository
         $query->addSelect('mbr');
         $query->from(Member::class, 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('mbr.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['email']) == 1) {
+        if (true === isset($parameters['email'])) {
             $query->andWhere('mbr.email = :email');
             $query->setParameter(':email', $parameters['email']);
         }
@@ -52,7 +52,7 @@ class MemberRepository extends AbstractRepository
         $query->addSelect('mbr');
         $query->from(Member::class, 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('mbr.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }

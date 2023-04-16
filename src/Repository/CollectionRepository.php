@@ -25,7 +25,7 @@ class CollectionRepository extends AbstractRepository
         $query->addSelect('col');
         $query->from(Collection::class, 'col');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('col.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
@@ -47,7 +47,7 @@ class CollectionRepository extends AbstractRepository
         $query->addSelect('col');
         $query->from(Collection::class, 'col');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('col.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }

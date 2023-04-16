@@ -30,7 +30,7 @@ class ItemRepository extends AbstractRepository
         $query->leftJoin('itm.feed', 'fed');
         $query->leftJoin('itm.author', 'aut');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('itm.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
@@ -52,30 +52,30 @@ class ItemRepository extends AbstractRepository
         $query->addSelect('itm.id');
         $query->from(Item::class, 'itm');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('itm.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['feed']) == 1) {
+        if (true === isset($parameters['feed'])) {
             $query->andWhere('itm.feed = :feed');
             $query->setParameter(':feed', $parameters['feed']);
         }
 
-        if (isset($parameters['author']) == 1) {
+        if (true === isset($parameters['author'])) {
             $query->andWhere('itm.author = :author');
             $query->setParameter(':author', $parameters['author']);
         }
 
-        if (isset($parameters['category']) == 1) {
+        if (true === isset($parameters['category'])) {
             $query->andWhere('itm.id IN (SELECT IDENTITY(category.item) FROM '.ItemCategory::class.' AS category WHERE category.category = :category)');
             $query->setParameter(':category', $parameters['category']);
         }
 
-        if (isset($parameters['member']) == 1 && $parameters['member']) {
+        if (true === isset($parameters['member']) && $parameters['member']) {
             $memberSet = false;
 
-            if (isset($parameters['unread']) == 1 && $parameters['unread']) {
+            if (true === isset($parameters['unread']) && $parameters['unread']) {
                 $memberSet = true;
 
                 $query->leftJoin('itm.actions', 'act_itm');
@@ -85,7 +85,7 @@ class ItemRepository extends AbstractRepository
                 //$query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM '.ActionItem::class.' AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
             }
 
-            if (isset($parameters['starred']) == 1 && $parameters['starred']) {
+            if (true === isset($parameters['starred']) && $parameters['starred']) {
                 $memberSet = true;
 
                 $query->leftJoin('itm.actions', 'act_itm');
@@ -99,17 +99,17 @@ class ItemRepository extends AbstractRepository
             }
         }
 
-        if (isset($parameters['geolocation']) == 1 && $parameters['geolocation']) {
+        if (true === isset($parameters['geolocation']) && $parameters['geolocation']) {
             $query->andWhere('itm.latitude IS NOT NULL');
             $query->andWhere('itm.longitude IS NOT NULL');
         }
 
-        if (isset($parameters['days']) == 1) {
+        if (true === isset($parameters['days'])) {
             $query->andWhere('itm.date > :date');
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }
 
-        if (isset($parameters['age']) == 1) {
+        if (true === isset($parameters['age'])) {
             $query->andWhere('itm.date < :date');
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }

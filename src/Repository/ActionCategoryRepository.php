@@ -28,22 +28,22 @@ class ActionCategoryRepository extends AbstractRepository
         $query->leftJoin('act_cat.category', 'cat');
         $query->leftJoin('act_cat.member', 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act_cat.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['action']) == 1) {
+        if (true === isset($parameters['action'])) {
             $query->andWhere('act_cat.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
-        if (isset($parameters['category']) == 1) {
+        if (true === isset($parameters['category'])) {
             $query->andWhere('act_cat.category = :category');
             $query->setParameter(':category', $parameters['category']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('act_cat.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
@@ -68,27 +68,27 @@ class ActionCategoryRepository extends AbstractRepository
         $query->leftJoin('act_cat.category', 'cat');
         $query->leftJoin('act_cat.member', 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act_cat.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['action']) == 1) {
+        if (true === isset($parameters['action'])) {
             $query->andWhere('act_cat.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
-        if (isset($parameters['category']) == 1) {
+        if (true === isset($parameters['category'])) {
             $query->andWhere('act_cat.category = :category');
             $query->setParameter(':category', $parameters['category']);
         }
 
-        if (isset($parameters['categories']) == 1) {
+        if (true === isset($parameters['categories'])) {
             $query->andWhere('act_cat.category IN (:categories)');
             $query->setParameter(':categories', $parameters['categories']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('act_cat.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }

@@ -28,7 +28,7 @@ class ItemCategoryRepository extends AbstractRepository
         $query->leftJoin('itm_cat.item', 'itm');
         $query->leftJoin('itm_cat.category', 'cat');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('itm_cat.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
@@ -52,27 +52,27 @@ class ItemCategoryRepository extends AbstractRepository
         $query->leftJoin('itm_cat.item', 'itm');
         $query->leftJoin('itm_cat.category', 'cat');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('itm_cat.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['item']) == 1) {
+        if (true === isset($parameters['item'])) {
             $query->andWhere('itm_cat.item = :item');
             $query->setParameter(':item', $parameters['item']);
         }
 
-        if (isset($parameters['items']) == 1) {
+        if (true === isset($parameters['items'])) {
             $query->andWhere('itm_cat.item IN (:items)');
             $query->setParameter(':items', $parameters['items']);
         }
 
-        if (isset($parameters['category']) == 1) {
+        if (true === isset($parameters['category'])) {
             $query->andWhere('itm_cat.category = :category');
             $query->setParameter(':category', $parameters['category']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('cat.id NOT IN (SELECT IDENTITY(exclude.category) FROM '.ActionCategory::class.' AS exclude WHERE exclude.member = :member AND exclude.action = 5)');
             $query->setParameter(':member', $parameters['member']);
         }

@@ -25,22 +25,22 @@ class ConnectionRepository extends AbstractRepository
         $query->addSelect('cnt');
         $query->from(Connection::class, 'cnt');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('cnt.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('cnt.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 
-        if (isset($parameters['type']) == 1) {
+        if (true === isset($parameters['type'])) {
             $query->andWhere('cnt.type = :type');
             $query->setParameter(':type', $parameters['type']);
         }
 
-        if (isset($parameters['token']) == 1) {
+        if (true === isset($parameters['token'])) {
             if (str_starts_with($parameters['token'], 'Bearer ')) {
                 $parameters['token'] = substr($parameters['token'], 7);
             }
@@ -66,22 +66,22 @@ class ConnectionRepository extends AbstractRepository
         $query->from(Connection::class, 'cnt');
         $query->leftJoin('cnt.member', 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('cnt.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('cnt.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
 
-        if (isset($parameters['type']) == 1) {
+        if (true === isset($parameters['type'])) {
             $query->andWhere('cnt.type = :type');
             $query->setParameter(':type', $parameters['type']);
         }
 
-        if (isset($parameters['days']) == 1) {
+        if (true === isset($parameters['days'])) {
             $query->andWhere('cnt.dateCreated > :date');
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }

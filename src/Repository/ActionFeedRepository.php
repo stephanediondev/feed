@@ -28,22 +28,22 @@ class ActionFeedRepository extends AbstractRepository
         $query->leftJoin('act_fed.feed', 'fed');
         $query->leftJoin('act_fed.member', 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act_fed.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['action']) == 1) {
+        if (true === isset($parameters['action'])) {
             $query->andWhere('act_fed.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
-        if (isset($parameters['feed']) == 1) {
+        if (true === isset($parameters['feed'])) {
             $query->andWhere('act_fed.feed = :feed');
             $query->setParameter(':feed', $parameters['feed']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('act_fed.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
@@ -68,27 +68,27 @@ class ActionFeedRepository extends AbstractRepository
         $query->leftJoin('act_fed.feed', 'fed');
         $query->leftJoin('act_fed.member', 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act_fed.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['action']) == 1) {
+        if (true === isset($parameters['action'])) {
             $query->andWhere('act_fed.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
-        if (isset($parameters['feed']) == 1) {
+        if (true === isset($parameters['feed'])) {
             $query->andWhere('act_fed.feed = :feed');
             $query->setParameter(':feed', $parameters['feed']);
         }
 
-        if (isset($parameters['feeds']) == 1) {
+        if (true === isset($parameters['feeds'])) {
             $query->andWhere('act_fed.feed IN (:feeds)');
             $query->setParameter(':feeds', $parameters['feeds']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('act_fed.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }

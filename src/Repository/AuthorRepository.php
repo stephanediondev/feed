@@ -27,12 +27,12 @@ class AuthorRepository extends AbstractRepository
         $query->addSelect('aut');
         $query->from(Author::class, 'aut');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('aut.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['title']) == 1) {
+        if (true === isset($parameters['title'])) {
             $query->andWhere('aut.title = :title');
             $query->setParameter(':title', $parameters['title']);
         }
@@ -50,7 +50,7 @@ class AuthorRepository extends AbstractRepository
     {
         $em = $this->getEntityManager();
 
-        if (isset($parameters['trendy']) == 1 && $parameters['trendy']) {
+        if (true === isset($parameters['trendy']) && $parameters['trendy']) {
             if (isset($parameters['member'])) {
                 $exclude = 'AND aut.id NOT IN( SELECT author_id FROM action_author WHERE member_id = :member_id AND action_id = :action_id )';
             } else {
@@ -85,22 +85,22 @@ SQL;
         $query->addSelect('aut.id');
         $query->from(Author::class, 'aut');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('aut.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['excluded']) == 1 && $parameters['excluded']) {
+        if (true === isset($parameters['excluded']) && $parameters['excluded']) {
             $query->andWhere('aut.id IN (SELECT IDENTITY(excluded.author) FROM '.ActionAuthor::class.' AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
             $query->setParameter(':member', $parameters['member']);
         }
 
-        if (isset($parameters['feed']) == 1) {
+        if (true === isset($parameters['feed'])) {
             $query->andWhere('aut.id IN (SELECT IDENTITY(item.author) FROM '.Item::class.' AS item WHERE item.feed = :feed)');
             $query->setParameter(':feed', $parameters['feed']);
         }
 
-        if (isset($parameters['days']) == 1) {
+        if (true === isset($parameters['days'])) {
             $query->andWhere('aut.dateCreated > :date');
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }

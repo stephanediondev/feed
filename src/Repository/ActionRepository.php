@@ -25,12 +25,12 @@ class ActionRepository extends AbstractRepository
         $query->addSelect('act');
         $query->from(Action::class, 'act');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['title']) == 1) {
+        if (true === isset($parameters['title'])) {
             $query->andWhere('act.title = :title');
             $query->setParameter(':title', $parameters['title']);
         }
@@ -52,7 +52,7 @@ class ActionRepository extends AbstractRepository
         $query->addSelect('act');
         $query->from(Action::class, 'act');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }

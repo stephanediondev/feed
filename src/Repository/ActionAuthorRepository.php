@@ -28,22 +28,22 @@ class ActionAuthorRepository extends AbstractRepository
         $query->leftJoin('act_aut.author', 'aut');
         $query->leftJoin('act_aut.member', 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act_aut.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['action']) == 1) {
+        if (true === isset($parameters['action'])) {
             $query->andWhere('act_aut.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
-        if (isset($parameters['author']) == 1) {
+        if (true === isset($parameters['author'])) {
             $query->andWhere('act_aut.author = :author');
             $query->setParameter(':author', $parameters['author']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('act_aut.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
@@ -68,27 +68,27 @@ class ActionAuthorRepository extends AbstractRepository
         $query->leftJoin('act_aut.author', 'aut');
         $query->leftJoin('act_aut.member', 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act_aut.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['action']) == 1) {
+        if (true === isset($parameters['action'])) {
             $query->andWhere('act_aut.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
-        if (isset($parameters['author']) == 1) {
+        if (true === isset($parameters['author'])) {
             $query->andWhere('act_aut.author = :author');
             $query->setParameter(':author', $parameters['author']);
         }
 
-        if (isset($parameters['authors']) == 1) {
+        if (true === isset($parameters['authors'])) {
             $query->andWhere('act_aut.author IN (:authors)');
             $query->setParameter(':authors', $parameters['authors']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('act_aut.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }

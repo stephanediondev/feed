@@ -28,22 +28,22 @@ class ActionItemRepository extends AbstractRepository
         $query->leftJoin('act_itm.item', 'itm');
         $query->leftJoin('act_itm.member', 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act_itm.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['action']) == 1) {
+        if (true === isset($parameters['action'])) {
             $query->andWhere('act_itm.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
-        if (isset($parameters['item']) == 1) {
+        if (true === isset($parameters['item'])) {
             $query->andWhere('act_itm.item = :item');
             $query->setParameter(':item', $parameters['item']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('act_itm.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
@@ -68,27 +68,27 @@ class ActionItemRepository extends AbstractRepository
         $query->leftJoin('act_itm.item', 'itm');
         $query->leftJoin('act_itm.member', 'mbr');
 
-        if (isset($parameters['id']) == 1) {
+        if (true === isset($parameters['id'])) {
             $query->andWhere('act_itm.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 
-        if (isset($parameters['action']) == 1) {
+        if (true === isset($parameters['action'])) {
             $query->andWhere('act_itm.action = :action');
             $query->setParameter(':action', $parameters['action']);
         }
 
-        if (isset($parameters['item']) == 1) {
+        if (true === isset($parameters['item'])) {
             $query->andWhere('act_itm.item = :item');
             $query->setParameter(':item', $parameters['item']);
         }
 
-        if (isset($parameters['items']) == 1) {
+        if (true === isset($parameters['items'])) {
             $query->andWhere('act_itm.item IN (:items)');
             $query->setParameter(':items', $parameters['items']);
         }
 
-        if (isset($parameters['member']) == 1) {
+        if (true === isset($parameters['member'])) {
             $query->andWhere('act_itm.member = :member');
             $query->setParameter(':member', $parameters['member']);
         }
