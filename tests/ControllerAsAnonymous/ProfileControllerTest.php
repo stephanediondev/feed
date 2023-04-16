@@ -3,10 +3,11 @@
 namespace App\Tests\ControllerAsAnonymous;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 class ProfileControllerTest extends WebTestCase
 {
-    protected $client;
+    protected KernelBrowser $client;
 
     protected function setUp(): void
     {
