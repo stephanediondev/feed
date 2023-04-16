@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Manager;
 
+use App\Entity\Connection;
 use App\Manager\ConnectionManager;
 use App\Manager\MemberManager;
 use Minishlink\WebPush\Subscription;
@@ -29,7 +30,7 @@ class PushManager
 
     public function sendNotifications(): void
     {
-        if ($subscriptions = $this->connectionManager->getList(['type' => 'push'])->getResult()) {
+        if ($subscriptions = $this->connectionManager->getList(['type' => Connection::TYPE_PUSH])->getResult()) {
             $apiKeys = [
                 'VAPID' => [
                     'subject' => 'https://github.com/stephanediondev/feed',
@@ -68,7 +69,7 @@ class PushManager
                 $endpoint = $report->getRequest()->getUri()->__toString();
 
                 if (false === $report->isSuccess() && true === $report->isSubscriptionExpired()) {
-                    if ($connection = $this->connectionManager->getOne(['type' => 'push', 'token' => $endpoint])) {
+                    if ($connection = $this->connectionManager->getOne(['type' => Connection::TYPE_PUSH, 'token' => $endpoint])) {
                         $this->connectionManager->remove($connection);
                     }
                 }

@@ -71,8 +71,22 @@ class ConnectionRepository extends AbstractRepository
             $query->setParameter(':member', $parameters['member']);
         }
 
+        if (isset($parameters['type']) == 1) {
+            $query->andWhere('cnt.type = :type');
+            $query->setParameter(':type', $parameters['type']);
+        }
+
+        if (isset($parameters['days']) == 1) {
+            $query->andWhere('cnt.dateCreated > :date');
+            $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
+        }
+
         $query->addOrderBy('cnt.dateModified', 'DESC');
         $query->groupBy('cnt.id');
+
+        if (true === isset($parameters['returnQueryBuilder']) && true === $parameters['returnQueryBuilder']) {
+            return $query;
+        }
 
         $getQuery = $query->getQuery();
         return $getQuery;

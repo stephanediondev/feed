@@ -133,7 +133,7 @@ class LoginController extends AbstractAppController
 
                     $connection = new Connection();
                     $connection->setMember($member);
-                    $connection->setType('login');
+                    $connection->setType(Connection::TYPE_LOGIN);
                     $connection->setToken($identifier);
                     $connection->setExtraFields($extraFields);
 

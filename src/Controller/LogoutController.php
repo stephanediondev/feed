@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Entity\Connection;
 use App\Helper\JwtHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ class LogoutController extends AbstractAppController
                 if ($payloadjwtPayloadModel) {
                     $token = $payloadjwtPayloadModel->getJwtId();
 
-                    if ($connection = $this->connectionManager->getOne(['type' => 'login', 'token' => $token])) {
+                    if ($connection = $this->connectionManager->getOne(['type' => Connection::TYPE_LOGIN, 'token' => $token])) {
                         $data['entry'] = $connection->toArray();
                         $data['entry_entity'] = 'connection';
 

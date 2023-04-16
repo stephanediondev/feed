@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use App\Entity\Connection;
-use App\Entity\Member;
 use App\Form\Type\PushType;
 use App\Form\Type\PushUnsubscribeType;
 use App\Helper\DeviceDetectorHelper;
@@ -53,7 +52,7 @@ class PushController extends AbstractAppController
 
             $connection = new Connection();
             $connection->setMember($this->getMember());
-            $connection->setType('push');
+            $connection->setType(Connection::TYPE_PUSH);
             $connection->setToken($push->getEndpoint());
             $connection->setExtraFields($extraFields);
 
@@ -82,7 +81,7 @@ class PushController extends AbstractAppController
         $form->submit($content);
 
         if ($form->isValid()) {
-            if ($connection = $this->connectionManager->getOne(['type' => 'push', 'token' => $push->getEndpoint()])) {
+            if ($connection = $this->connectionManager->getOne(['type' => Connection::TYPE_PUSH, 'token' => $push->getEndpoint()])) {
                 $this->connectionManager->remove($connection);
             }
 

@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\Connection;
 use App\Helper\JwtHelper;
 use App\Manager\ConnectionManager;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -29,7 +30,7 @@ class ApiAccessTokenHandler implements AccessTokenHandlerInterface
             throw new BadCredentialsException('Invalid token.');
         }
 
-        $connection = $this->connectionManager->getOne(['type' => 'login', 'token' => $payloadjwtPayloadModel->getJwtId()]);
+        $connection = $this->connectionManager->getOne(['type' => Connection::TYPE_LOGIN, 'token' => $payloadjwtPayloadModel->getJwtId()]);
 
         if (null === $connection) {
             throw new BadCredentialsException('Token not found.');

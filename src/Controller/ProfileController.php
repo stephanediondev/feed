@@ -70,7 +70,7 @@ class ProfileController extends AbstractAppController
             if ($connection->getIp() == $request->getClientIp()) {
                 $entry['currentIp'] = true;
             }
-            if ($currentToken && $connection->getToken() == $currentToken) {
+            if ($currentToken && $connection->getToken() === $currentToken) {
                 $entry['currentToken'] = true;
             }
             $data['entries'][] = $entry;

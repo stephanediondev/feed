@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use App\Entity\Connection;
-use App\Entity\Member;
 use App\Form\Type\PinboardType;
 use App\Helper\DeviceDetectorHelper;
 use App\Model\PinboardModel;
@@ -38,7 +37,7 @@ class PinboardController extends AbstractAppController
 
                 $connection = new Connection();
                 $connection->setMember($this->getMember());
-                $connection->setType('pinboard');
+                $connection->setType(Connection::TYPE_PINBOARD);
                 $connection->setToken($pinboard->getToken());
                 $connection->setExtraFields($extraFields);
             }

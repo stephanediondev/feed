@@ -16,6 +16,10 @@ class Connection
 {
     use ExtraFieldsEntityTrait;
 
+    public const TYPE_LOGIN = 'login';
+    public const TYPE_PUSH = 'push';
+    public const TYPE_PINBOARD = 'pinboard';
+
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
     private ?int $id = null;
 
@@ -138,7 +142,6 @@ class Connection
             'longitude' => $this->getExtraField('longitude'),
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
             'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : null,
-            'extra_fields' => $this->getExtraFields(),
         ];
     }
 }
