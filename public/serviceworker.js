@@ -1,3 +1,5 @@
+var VERSION = '1.0';
+var CACHE_KEY = 'feed-v' + VERSION;
 var LOG_ENABLED = true;
 var FETCH_ENABLED = true;
 var FETCH_EXCLUDE = [
@@ -9,8 +11,6 @@ var FETCH_EXCLUDE = [
     '/_profiler',
     '/_wdt',
 ];
-var VERSION = '1.1';
-var CACHE_KEY = 'feed-v' + VERSION;
 
 self.addEventListener('install', function(InstallEvent) {
     if ('waitUntil' in InstallEvent) {

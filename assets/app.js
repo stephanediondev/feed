@@ -962,15 +962,17 @@ if (window.location.port) {
 var loginUrl = baseUrl + '/login';
 var apiUrl = baseUrl + '/api';
 
-if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
-    navigator.serviceWorker.register('serviceworker.js').then(function() {
+if (serviceWorkerEnabled) {
+    navigator.serviceWorker.register('serviceworker.js').then(function(ServiceWorkerRegistration) {
+        ServiceWorkerRegistration.addEventListener('updatefound', function() {
+            setToast({'title': i18next.t('new_version_available')});
+            reload();
+        });
     }).catch(function() {
     });
 }
 
 explainConnection();
-
-var snackbarContainer = document.querySelector('.mdl-snackbar');
 
 var languages = ['en', 'fr'];
 var languageFinal = 'en';
