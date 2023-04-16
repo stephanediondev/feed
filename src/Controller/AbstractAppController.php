@@ -15,7 +15,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class AbstractAppController extends AbstractController
 {
@@ -23,20 +22,17 @@ abstract class AbstractAppController extends AbstractController
 
     protected PaginatorInterface $paginator;
 
-    protected TranslatorInterface $translator;
-
     protected ConnectionManager $connectionManager;
 
     /**
      * @required
      */
-    public function setRequired(RequestStack $requestStack, PaginatorInterface $paginator, TranslatorInterface $translator, ConnectionManager $connectionManager): void
+    public function setRequired(RequestStack $requestStack, PaginatorInterface $paginator, ConnectionManager $connectionManager): void
     {
         date_default_timezone_set('UTC');
 
         $this->request = $requestStack->getMainRequest();
         $this->paginator = $paginator;
-        $this->translator = $translator;
         $this->connectionManager = $connectionManager;
     }
 
