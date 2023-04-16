@@ -38,6 +38,10 @@
     "required": "Required",
     "new_version_installed": "New version installed",
 
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_auto": "Auto",
+
     "refresh": "Refresh",
     "up": "&nbsp;&nbsp;Up&nbsp;&nbsp;",
     "down": "Down",

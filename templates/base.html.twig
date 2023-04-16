@@ -29,10 +29,10 @@
 <nav class="navbar navbar-expand-lg fixed-bottom bg-body-tertiary">
     <div class="container-fluid">
         <div class="dropup">
-            <button class="btn btn-lg dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown" aria-label="Menu" aria-expanded="false">
+            <button class="btn btn-lg dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-label="Menu left" aria-expanded="false">
                 <i class="bi bi-list"></i>
             </button>
-            <ul class="mdl-layout__drawer dropdown-menu">
+            <ul class="dropdown-menu" id="menu-left">
             </ul>
         </div>
 
@@ -40,17 +40,10 @@
         </div>
 
         <div class="dropup">
-            <button class="btn btn-lg dropdown-toggle theme-icon-active" href="#" role="button" data-bs-toggle="dropdown" aria-label="Select theme" aria-expanded="false"><i></i></button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li class="fs-5">
-                    <button type="button" class="btn-lg dropdown-item d-flex align-items-center" data-bs-theme-value="light"><i class="bi bi-brightness-high"></i>&nbsp;Light</button>
-                </li>
-                <li class="fs-5">
-                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark"><i class="bi bi-moon-stars-fill"></i>&nbsp;Dark</button>
-                </li>
-                <li class="fs-5">
-                    <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto"><i class="bi bi-circle-half"></i>&nbsp;Auto</button>
-                </li>
+            <button class="btn btn-lg dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-label="Menu right" aria-expanded="false">
+                <i class="bi bi-gear-fill"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" id="menu-right">
             </ul>
         </div>
     </div>

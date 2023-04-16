@@ -38,6 +38,10 @@
     "required": "Obligatoire",
     "new_version_installed": "Nouvelle version installée",
 
+    "theme_light": "Clair",
+    "theme_dark": "Sombre",
+    "theme_auto": "Auto",
+
     "refresh": "Recharg.",
     "up": "Préc.",
     "down": "Suiv.",

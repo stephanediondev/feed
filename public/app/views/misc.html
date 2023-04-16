@@ -16,7 +16,7 @@
     <button class="action-down btn btn-secondary position-relative" title="j"><i class="bi bi-chevron-down"></i></button>
 </script>
 
-<script type="text/template" id="view-aside">
+<script type="text/template" id="view-menu-left">
     <li class="fs-5 nav-item connected"><a href="#items/recent" class="dropdown-item load-route" title="{{trans 'shortcut_g_then_a'}}">{{trans 'title.recent_items'}}</a></li>
     <li class="fs-5 nav-item connected"><a href="#items/unread" class="dropdown-item load-route" title="{{trans 'shortcut_g_then_u'}}">{{trans 'title.unread_items'}}</a></li>
     <li class="fs-5 nav-item connected"><a href="#items/starred" class="dropdown-item load-route" title="{{trans 'shortcut_g_then_s'}}">{{trans 'title.starred_items'}}</a></li>
@@ -31,12 +31,24 @@
     <li class="fs-5 nav-item connected"><a href="#profile" class="dropdown-item load-route">{{trans 'profile'}}</a></li>
     <li class="fs-5 nav-item anonymous"><a href="#login" class="dropdown-item load-route">{{trans 'login'}}</a>
     <li class="fs-5 nav-item connected"><a href="#logout" class="dropdown-item load-route">{{trans 'logout'}}</a></li>
+</script>
+
+<script type="text/template" id="view-menu-right">
+    <li class="fs-5 nav-item d-none"><a href="#" class="dropdown-item" id="install"><i class="bi bi-download"></i>&nbsp;{{trans 'install'}}</a></li>
+    <li class="fs-5 nav-item connected d-none"><a href="#" class="dropdown-item" id="enable_notifications"><i class="bi bi-bell"></i>&nbsp;{{trans 'enable_notifications'}}</a></li>
+    <li class="fs-5 nav-item connected d-none"><a href="#" class="dropdown-item" id="disable_notifications"><i class="bi bi-bell-slash"></i>&nbsp;{{trans 'disable_notifications'}}</a></li>
+    <li class="fs-5 nav-item"><a href="#" class="dropdown-item action-reload"><i class="bi bi-arrow-clockwise"></i>&nbsp;{{trans 'reload'}}</a></li>
+    <li class="fs-5 nav-item connected"><a href="#" class="dropdown-item dialog" data-bs-target="#dialog-shortcuts"><i class="bi bi-alt"></i>&nbsp;{{trans 'shortcuts'}}</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li class="fs-5 nav-item d-none"><a href="#" class="dropdown-item" id="install">{{trans 'install'}}</a></li>
-    <li class="fs-5 nav-item connected d-none"><a href="#" class="dropdown-item" id="enable_notifications">{{trans 'enable_notifications'}}</a></li>
-    <li class="fs-5 nav-item connected d-none"><a href="#" class="dropdown-item" id="disable_notifications">{{trans 'disable_notifications'}}</a></li>
-    <li class="fs-5 nav-item"><a href="#" class="dropdown-item action-reload">{{trans 'reload'}}</a></li>
-    <li class="fs-5 nav-item connected"><a href="#" class="dropdown-item dialog" data-bs-target="#dialog-shortcuts">{{trans 'shortcuts'}}</a></li>
+    <li class="fs-5 nav-item">
+        <a href="#" class="dropdown-item" data-bs-theme-value="light"><i class="bi bi-brightness-high"></i>&nbsp;{{trans 'theme_light'}}</a>
+    </li>
+    <li class="fs-5 nav-item">
+        <a href="#" class="dropdown-item" data-bs-theme-value="dark"><i class="bi bi-moon-stars-fill"></i>&nbsp;{{trans 'theme_dark'}}</a>
+    </li>
+    <li class="fs-5 nav-item">
+        <a href="#" class="dropdown-item" data-bs-theme-value="auto"><i class="bi bi-circle-half"></i>&nbsp;{{trans 'theme_auto'}}</a>
+    </li>
 </script>
 
 <script type="text/template" id="view-dialogs">
