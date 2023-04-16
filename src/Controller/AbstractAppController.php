@@ -131,6 +131,10 @@ abstract class AbstractAppController extends AbstractController
         ]);
     }
 
+    /**
+     * @param PaginationInterface<mixed> $pagination
+     * @return array<mixed>
+     */
     public function getEntriesInfo(PaginationInterface $pagination): array
     {
         $data = [];
