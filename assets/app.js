@@ -373,6 +373,7 @@ function ready() {
 
                                     setToast({'title': i18next.t('login')});
                                 }
+                                $('.modal-backdrop').remove();
                                 loadRoute(form.attr('action'));
                             });
                         }

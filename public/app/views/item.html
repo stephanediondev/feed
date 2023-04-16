@@ -41,7 +41,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-footer">
-                        <a href="{{ current_key_markallasread }}" class="load-route mdl-button btn btn-primary btn-lg" data-bs-dismiss="modal">{{trans 'mark_all_as_read'}}</a>
+                        <a href="{{ current_key_markallasread }}" class="load-route mdl-button btn btn-primary btn-lg">{{trans 'mark_all_as_read'}}</a>
                     </div>
                 </div>
             </div>
@@ -139,44 +139,44 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-email" class="form-check-input" name="share-{{ entry.id }}" value="mailto:?subject={{ encode entry.title }}&body={{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-email" class="form-check-input" required name="share-{{ entry.id }}" value="mailto:?subject={{ encode entry.title }}&body={{ encode entry.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-email">Email</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-evernote" class="form-check-input" name="share-{{ entry.id }}" value="https://www.evernote.com/clip.action?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
+                            <input type="radio" id="share-{{ entry.id }}-evernote" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.evernote.com/clip.action?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-evernote">Evernote</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-facebook" class="form-check-input" name="share-{{ entry.id }}" value="https://www.facebook.com/sharer.php?u={{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-facebook" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.facebook.com/sharer.php?u={{ encode entry.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-facebook">Facebook</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-gmail" class="form-check-input" name="share-{{ entry.id }}" value="https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to&su={{ encode entry.title }}&body={{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-gmail" class="form-check-input" required name="share-{{ entry.id }}" value="https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to&su={{ encode entry.title }}&body={{ encode entry.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-gmail">Gmail</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-instapaper" class="form-check-input" name="share-{{ entry.id }}" value="https://www.instapaper.com/e2?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
+                            <input type="radio" id="share-{{ entry.id }}-instapaper" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.instapaper.com/e2?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-instapaper">Instapaper</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-linkedin" class="form-check-input" name="share-{{ entry.id }}" value="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-linkedin" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ encode entry.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-linkedin">LinkedIn</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-pocket" class="form-check-input" name="share-{{ entry.id }}" value="https://getpocket.com/edit?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
+                            <input type="radio" id="share-{{ entry.id }}-pocket" class="form-check-input" required name="share-{{ entry.id }}" value="https://getpocket.com/edit?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-pocket">Pocket</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-tumblr" class="form-check-input" name="share-{{ entry.id }}" value="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&amp;url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
+                            <input type="radio" id="share-{{ entry.id }}-tumblr" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&amp;url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-tumblr">Tumblr</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-twitter" class="form-check-input" name="share-{{ entry.id }}" value="https://twitter.com/intent/tweet?source=webclient&amp;text={{ encode entry.title }}+{{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-twitter" class="form-check-input" required name="share-{{ entry.id }}" value="https://twitter.com/intent/tweet?source=webclient&amp;text={{ encode entry.title }}+{{ encode entry.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-twitter">Twitter</label>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="mdl-button btn btn-primary btn-lg" data-bs-dismiss="modal">{{trans 'share'}}</button>
+                        <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'share'}}</button>
                     </div>
                     </form>
                 </div>
