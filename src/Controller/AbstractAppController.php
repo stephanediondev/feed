@@ -130,4 +130,22 @@ abstract class AbstractAppController extends AbstractController
             'sortDirectionParameterName' => 'sort_direction_',
         ]);
     }
+
+    public function getEntriesInfo(PaginationInterface $pagination): array
+    {
+        $data = [];
+        $data['entries_total'] = $pagination->getTotalItemCount();
+        $data['entries_pages'] = $pages = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
+        $data['entries_page_current'] = $pagination->getCurrentPageNumber();
+        $pagePrevious = $pagination->getCurrentPageNumber() - 1;
+        if ($pagePrevious >= 1) {
+            $data['entries_page_previous'] = $pagePrevious;
+        }
+        $pageNext = $pagination->getCurrentPageNumber() + 1;
+        if ($pageNext <= $pages) {
+            $data['entries_page_next'] = $pageNext;
+        }
+
+        return $data;
+    }
 }

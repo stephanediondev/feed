@@ -105,17 +105,7 @@ class AuthorController extends AbstractAppController
             $pagination = $this->paginateAbstract($this->authorManager->getList($parameters));
 
             $data['entries_entity'] = 'author';
-            $data['entries_total'] = $pagination->getTotalItemCount();
-            $data['entries_pages'] = $pages = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
-            $data['entries_page_current'] = $pagination->getCurrentPageNumber();
-            $pagePrevious = $pagination->getCurrentPageNumber() - 1;
-            if ($pagePrevious >= 1) {
-                $data['entries_page_previous'] = $pagePrevious;
-            }
-            $pageNext = $pagination->getCurrentPageNumber() + 1;
-            if ($pageNext <= $pages) {
-                $data['entries_page_next'] = $pageNext;
-            }
+            $data = array_merge($data, $this->getEntriesInfo($pagination));
 
             $data['entries'] = [];
 

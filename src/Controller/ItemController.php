@@ -110,17 +110,7 @@ class ItemController extends AbstractAppController
         $pagination = $this->paginateAbstract($this->itemManager->getList($parameters));
 
         $data['entries_entity'] = 'item';
-        $data['entries_total'] = $pagination->getTotalItemCount();
-        $data['entries_pages'] = $pages = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
-        $data['entries_page_current'] = $pagination->getCurrentPageNumber();
-        $pagePrevious = $pagination->getCurrentPageNumber() - 1;
-        if ($pagePrevious >= 1) {
-            $data['entries_page_previous'] = $pagePrevious;
-        }
-        $pageNext = $pagination->getCurrentPageNumber() + 1;
-        if ($pageNext <= $pages) {
-            $data['entries_page_next'] = $pageNext;
-        }
+        $data = array_merge($data, $this->getEntriesInfo($pagination));
 
         if ($this->getMember() && $this->getMember()->getId()) {
             $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
