@@ -36,7 +36,7 @@
     "submit": "Soumettre",
     "query": "Requête",
     "required": "Obligatoire",
-    "new_version_available": "Nouvelle version disponible",
+    "new_version_installed": "Nouvelle version installée",
 
     "refresh": "Recharg.",
     "up": "Préc.",

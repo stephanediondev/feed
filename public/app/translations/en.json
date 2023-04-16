@@ -36,7 +36,7 @@
     "submit": "Submit",
     "query": "Query",
     "required": "Required",
-    "new_version_available": "New version available",
+    "new_version_installed": "New version installed",
 
     "refresh": "Refresh",
     "up": "&nbsp;&nbsp;Up&nbsp;&nbsp;",

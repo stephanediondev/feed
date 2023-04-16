@@ -52,6 +52,7 @@ self.addEventListener('activate', function(ExtendableEvent) {
                     })
                 );
             }).then(function() {
+                messageToClient('new-version-installed', VERSION);
                 return self.clients.claim();
             })
         );
@@ -121,6 +122,15 @@ function setBadge(value) {
         navigator.setAppBadge(value).catch(function(error) {
         });
     }
+}
+
+function messageToClient(type, content) {
+    self.clients.matchAll()
+    .then(function(clients) {
+        clients.map(function(client) {
+            client.postMessage({type: type, content: content});
+        });
+    });
 }
 
 function sendLog(log) {
