@@ -871,9 +871,9 @@ function sendSubscribe(PushSubscription) {
 
         var body = {
             'endpoint': PushSubscription.endpoint,
-            'public_key': toJSON.keys.p256dh,
-            'authentication_secret': toJSON.keys.auth,
-            'content_encoding': (PushManager.supportedContentEncodings || ['aesgcm'])[0],
+            'publicKey': toJSON.keys.p256dh,
+            'authenticationSecret': toJSON.keys.auth,
+            'contentEncoding': (PushManager.supportedContentEncodings || ['aesgcm'])[0],
         };
 
         var headers = new Headers({

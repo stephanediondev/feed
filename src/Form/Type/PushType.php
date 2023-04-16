@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Model\PushModel;
+use App\Entity\Connection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -17,24 +17,28 @@ class PushType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('endpoint', TextType::class, [
+            'property_path' => 'token',
             'constraints' => [
                 new NotBlank(),
             ],
         ]);
 
-        $builder->add('public_key', TextType::class, [
+        $builder->add('publicKey', TextType::class, [
+            'property_path' => 'extra_fields[public_key]',
             'constraints' => [
                 new NotBlank(),
             ],
         ]);
 
-        $builder->add('authentication_secret', PasswordType::class, [
+        $builder->add('authenticationSecret', PasswordType::class, [
+            'property_path' => 'extra_fields[authentication_secret]',
             'constraints' => [
                 new NotBlank(),
             ],
         ]);
 
-        $builder->add('content_encoding', TextType::class, [
+        $builder->add('contentEncoding', TextType::class, [
+            'property_path' => 'extra_fields[content_encoding]',
             'constraints' => [
                 new NotBlank(),
             ],
@@ -44,7 +48,7 @@ class PushType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => PushModel::class,
+            'data_class' => Connection::class,
             'csrf_protection' => false,
         ]);
     }

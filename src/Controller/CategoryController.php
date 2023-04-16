@@ -288,8 +288,6 @@ class CategoryController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'category');
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
-
         $parameters = [];
 
         $parameters['trendy'] = true;

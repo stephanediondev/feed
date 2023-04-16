@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Entity\ActionItem;
+use App\Entity\Connection;
 use App\Event\ActionItemEvent;
 use App\Manager\ConnectionManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -48,7 +49,7 @@ class PinboardSubscriber implements EventSubscriberInterface
     {
         $member = $actionItem->getMember();
 
-        if ($connection = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $member])) {
+        if ($connection = $this->connectionManager->getOne(['type' => Connection::TYPE_PINBOARD, 'member' => $member])) {
             $item = $actionItem->getItem();
 
             if ($item) {

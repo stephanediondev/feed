@@ -7,10 +7,8 @@ namespace App\Controller;
 use App\Controller\AbstractAppController;
 use App\Entity\Connection;
 use App\Form\Type\PushType;
-use App\Form\Type\PushUnsubscribeType;
 use App\Helper\DeviceDetectorHelper;
 use App\Helper\MaxmindHelper;
-use App\Model\PushModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,10 +28,8 @@ class PushController extends AbstractAppController
     {
         $data = [];
 
-        $status = JsonResponse::HTTP_UNAUTHORIZED;
-
-        $push = new PushModel();
-        $form = $this->createForm(PushType::class, $push);
+        $connection = new Connection();
+        $form = $this->createForm(PushType::class, $connection);
 
         $content = $this->getContent($request);
         $form->submit($content);
@@ -46,25 +42,19 @@ class PushController extends AbstractAppController
                 $extraFields = array_merge($extraFields, $data);
             }
 
-            $extraFields['public_key'] = $push->getPublicKey();
-            $extraFields['authentication_secret'] = $push->getAuthenticationSecret();
-            $extraFields['content_encoding'] = $push->getContentEncoding();
-
-            $connection = new Connection();
             $connection->setMember($this->getMember());
             $connection->setType(Connection::TYPE_PUSH);
-            $connection->setToken($push->getEndpoint());
-            $connection->setExtraFields($extraFields);
 
             $this->connectionManager->persist($connection);
 
             $data['entry'] = $connection->toArray();
             $data['entry_entity'] = 'connection';
-
-            $status = JsonResponse::HTTP_OK;
+        } else {
+            $data = $this->getFormErrors($form);
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return $this->jsonResponse($data, $status);
+        return $this->jsonResponse($data);
     }
 
     #[Route(path: '/push/delete', name: 'delete', methods: ['POST'], priority: 20)]
@@ -72,22 +62,30 @@ class PushController extends AbstractAppController
     {
         $data = [];
 
-        $status = JsonResponse::HTTP_UNAUTHORIZED;
-
-        $push = new PushModel();
-        $form = $this->createForm(PushUnsubscribeType::class, $push);
-
         $content = $this->getContent($request);
-        $form->submit($content);
 
-        if ($form->isValid()) {
-            if ($connection = $this->connectionManager->getOne(['type' => Connection::TYPE_PUSH, 'token' => $push->getEndpoint()])) {
+        if (true === isset($content['endpoint']) && '' !== $content['endpoint']) {
+            if ($connection = $this->connectionManager->getOne(['type' => Connection::TYPE_PUSH, 'token' => $content['endpoint'], 'member' => $this->getMember()])) {
+                $data['entry'] = $connection->toArray();
+                $data['entry_entity'] = 'connection';
+
                 $this->connectionManager->remove($connection);
+            } else {
+                return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
             }
+        } else {
+            $data['errors'][] = [
+                'status' => '400',
+                'source' => [
+                    'pointer' => '/data/attributes/endpoint',
+                ],
+                'title' => 'Invalid attribute',
+                'detail' => 'This value should not be blank.',
+            ];
 
-            $status = JsonResponse::HTTP_OK;
+            return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        return $this->jsonResponse($data, $status);
+        return $this->jsonResponse($data);
     }
 }

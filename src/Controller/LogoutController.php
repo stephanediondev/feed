@@ -26,7 +26,7 @@ class LogoutController extends AbstractAppController
                 if ($payloadjwtPayloadModel) {
                     $token = $payloadjwtPayloadModel->getJwtId();
 
-                    if ($connection = $this->connectionManager->getOne(['type' => Connection::TYPE_LOGIN, 'token' => $token])) {
+                    if ($connection = $this->connectionManager->getOne(['type' => Connection::TYPE_LOGIN, 'token' => $token, 'member' => $this->getMember()])) {
                         $data['entry'] = $connection->toArray();
                         $data['entry_entity'] = 'connection';
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
-use App\Entity\Member;
+use App\Entity\Connection;
 use App\Form\Type\ProfileType;
 use App\Helper\JwtHelper;
 use App\Manager\MemberManager;
@@ -33,7 +33,7 @@ class ProfileController extends AbstractAppController
     {
         $data = [];
 
-        $pinboard = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $this->getMember()]);
+        $pinboard = $this->connectionManager->getOne(['type' => Connection::TYPE_PINBOARD, 'member' => $this->getMember()]);
 
         if ($pinboard) {
             $data['pinboard'] = $pinboard->toArray();

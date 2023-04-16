@@ -290,8 +290,6 @@ class AuthorController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'author');
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
-
         $parameters = [];
 
         $parameters['trendy'] = true;
