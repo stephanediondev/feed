@@ -738,9 +738,7 @@ function scrollTo(anchor) {
 }
 
 function reload() {
-    if (window.location.hash) {
-        loadRoute(window.location.hash);
-    }
+    document.location.reload();
 }
 
 function itemUp() {
@@ -989,7 +987,7 @@ if (serviceWorkerEnabled) {
 
     navigator.serviceWorker.addEventListener('message', function(MessageEvent) {
         if (MessageEvent.data.type == 'new-version-installed') {
-            setToast({'title': i18next.t('new_version_installed'), 'body': MessageEvent.data.content});
+            //setToast({'title': i18next.t('new_version_installed'), 'body': MessageEvent.data.content});
             reload();
         }
     });
