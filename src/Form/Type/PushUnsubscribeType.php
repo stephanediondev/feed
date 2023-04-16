@@ -15,22 +15,11 @@ class PushUnsubscribeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $fields = [];
-        $fields[] = 'endpoint';
-
-        foreach ($fields as $field) {
-            switch ($field) {
-                case 'endpoint':
-                    $builder->add('endpoint', TextType::class, [
-                        'label' => 'endpoint',
-                        'required' => true,
-                        'constraints' => [
-                            new NotBlank(),
-                        ],
-                    ]);
-                    break;
-            }
-        }
+        $builder->add('endpoint', TextType::class, [
+            'constraints' => [
+                new NotBlank(),
+            ],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -39,10 +28,5 @@ class PushUnsubscribeType extends AbstractType
             'data_class' => PushModel::class,
             'csrf_protection' => false,
         ]);
-    }
-
-    public function getBlockPrefix(): string
-    {
-        return 'data';
     }
 }

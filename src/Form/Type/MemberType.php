@@ -19,7 +19,6 @@ class MemberType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('email', EmailType::class, [
-            'required' => true,
             'constraints' => [
                 new NotBlank(),
                 new Email(),
@@ -28,7 +27,6 @@ class MemberType extends AbstractType
 
         if (Request::METHOD_POST === $options['request_method']) {
             $builder->add('plainPassword', PasswordType::class, [
-                'required' => true,
                 'constraints' => [
                     new NotBlank(),
                 ],
@@ -36,9 +34,7 @@ class MemberType extends AbstractType
         }
 
         if (Request::METHOD_PUT === $options['request_method']) {
-            $builder->add('plainPassword', PasswordType::class, [
-                'required' => false,
-            ]);
+            $builder->add('plainPassword', PasswordType::class);
         }
     }
 

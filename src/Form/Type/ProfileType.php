@@ -18,20 +18,15 @@ class ProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('email', EmailType::class, [
-            'required' => true,
             'constraints' => [
                 new NotBlank(),
                 new Email(),
             ],
         ]);
 
-        $builder->add('password', PasswordType::class, [
-            'required' => false,
-        ]);
+        $builder->add('password', PasswordType::class);
 
-        $builder->add('passwordConfirm', PasswordType::class, [
-            'required' => false,
-        ]);
+        $builder->add('passwordConfirm', PasswordType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

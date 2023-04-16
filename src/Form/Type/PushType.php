@@ -16,58 +16,29 @@ class PushType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $fields = [];
-        $fields[] = 'endpoint';
-        $fields[] = 'public_key';
-        $fields[] = 'authentication_secret';
-        $fields[] = 'content_encoding';
+        $builder->add('endpoint', TextType::class, [
+            'constraints' => [
+                new NotBlank(),
+            ],
+        ]);
 
-        foreach ($fields as $field) {
-            switch ($field) {
-                case 'endpoint':
-                    $builder->add('endpoint', TextType::class, [
-                        'label' => 'endpoint',
-                        'required' => true,
-                        'constraints' => [
-                            new NotBlank(),
-                        ],
-                    ]);
-                    break;
-                case 'public_key':
-                    $builder->add('public_key', TextType::class, [
-                        'label' => 'public_key',
-                        'required' => true,
-                        'constraints' => [
-                            new NotBlank(),
-                        ],
-                        'attr' => [
-                            'autocomplete' => 'nope',
-                        ],
-                    ]);
-                    break;
-                case 'authentication_secret':
-                    $builder->add('authentication_secret', PasswordType::class, [
-                        'label' => 'authentication_secret',
-                        'required' => true,
-                        'constraints' => [
-                            new NotBlank(),
-                        ],
-                        'attr' => [
-                            'autocomplete' => 'new-password',
-                        ],
-                    ]);
-                    break;
-                case 'content_encoding':
-                    $builder->add('content_encoding', TextType::class, [
-                        'label' => 'content_encoding',
-                        'required' => true,
-                        'constraints' => [
-                            new NotBlank(),
-                        ],
-                    ]);
-                    break;
-            }
-        }
+        $builder->add('public_key', TextType::class, [
+            'constraints' => [
+                new NotBlank(),
+            ],
+        ]);
+
+        $builder->add('authentication_secret', PasswordType::class, [
+            'constraints' => [
+                new NotBlank(),
+            ],
+        ]);
+
+        $builder->add('content_encoding', TextType::class, [
+            'constraints' => [
+                new NotBlank(),
+            ],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -76,10 +47,5 @@ class PushType extends AbstractType
             'data_class' => PushModel::class,
             'csrf_protection' => false,
         ]);
-    }
-
-    public function getBlockPrefix(): string
-    {
-        return 'data';
     }
 }
