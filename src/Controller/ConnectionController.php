@@ -17,7 +17,7 @@ class ConnectionController extends AbstractAppController
     {
         $data = [];
 
-        $connection = $this->connectionManager->getOne(['id' => $id, 'member' => $this->getUser()]);
+        $connection = $this->connectionManager->getOne(['id' => $id, 'member' => $this->getMember()]);
 
         if (!$connection) {
             return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);

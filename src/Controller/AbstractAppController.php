@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Member;
 use App\Manager\ConnectionManager;
 use App\Model\QueryParameterPageModel;
 use Doctrine\ORM\QueryBuilder;
@@ -37,6 +38,15 @@ abstract class AbstractAppController extends AbstractController
         $this->paginator = $paginator;
         $this->translator = $translator;
         $this->connectionManager = $connectionManager;
+    }
+
+    protected function getMember(): ?Member
+    {
+        if (true === $this->getUser() instanceof Member) {
+            return $this->getUser();
+        }
+
+        return null;
     }
 
     /**

@@ -5,7 +5,6 @@ namespace App\Security\Voter;
 use App\Entity\Member;
 use App\Security\Voter\AbstractVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class MemberVoter extends AbstractVoter
 {
@@ -17,7 +16,7 @@ class MemberVoter extends AbstractVoter
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
-        if (!$user instanceof UserInterface) {
+        if (false === $user instanceof Member) {
             return false;
         }
 

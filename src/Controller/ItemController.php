@@ -50,14 +50,10 @@ class ItemController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'item');
 
-        if (false === $this->getUser() instanceof Member) {
-            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $filters = new QueryParameterFilterModel($request->query->all('filter'));
 
         $parameters = [];
-        $parameters['member'] = $this->getUser();
+        $parameters['member'] = $this->getMember();
 
         if ($filters->getBool('starred')) {
             $parameters['starred'] = true;
@@ -126,8 +122,8 @@ class ItemController extends AbstractAppController
             $data['entries_page_next'] = $pageNext;
         }
 
-        if ($this->getUser()->getId()) {
-            $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
+        if ($this->getMember() && $this->getMember()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
         }
 
         $data['entries'] = [];
@@ -137,13 +133,13 @@ class ItemController extends AbstractAppController
             $ids[] = $result['id'];
         }
 
-        $results = $this->actionItemManager->getList(['member' => $this->getUser(), 'items' => $ids])->getResult();
+        $results = $this->actionItemManager->getList(['member' => $this->getMember(), 'items' => $ids])->getResult();
         $actions = [];
         foreach ($results as $actionItem) {
             $actions[$actionItem->getItem()->getId()][] = $actionItem;
         }
 
-        $results = $this->categoryManager->itemCategoryManager->getList(['member' => $this->getUser(), 'items' => $ids])->getResult();
+        $results = $this->categoryManager->itemCategoryManager->getList(['member' => $this->getMember(), 'items' => $ids])->getResult();
         $categories = [];
         foreach ($results as $itemCategory) {
             $categories[$itemCategory->getItem()->getId()][] = $itemCategory->toArray();
@@ -188,10 +184,10 @@ class ItemController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('READ', $item);
 
-        $actions = $this->actionItemManager->getList(['member' => $this->getUser(), 'item' => $item])->getResult();
+        $actions = $this->actionItemManager->getList(['member' => $this->getMember(), 'item' => $item])->getResult();
 
         $categories = [];
-        foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $this->getUser(), 'item' => $item])->getResult() as $itemCategory) {
+        foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $this->getMember(), 'item' => $item])->getResult() as $itemCategory) {
             $categories[] = $itemCategory->toArray();
         }
 
@@ -235,15 +231,11 @@ class ItemController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->getUser() instanceof Member) {
-            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $filters = new QueryParameterFilterModel($request->query->all('filter'));
 
         $parameters = [];
 
-        $parameters['member'] = $this->getUser();
+        $parameters['member'] = $this->getMember();
 
         $parameters['unread'] = true;
 
@@ -272,8 +264,8 @@ class ItemController extends AbstractAppController
 
         $this->itemManager->readAll($parameters);
 
-        if ($this->getUser()->getId()) {
-            $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
+        if ($this->getMember() && $this->getMember()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
         }
 
         return $this->jsonResponse($data);
@@ -295,10 +287,6 @@ class ItemController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->getUser() instanceof Member) {
-            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $item = $this->itemManager->getOne(['id' => $id]);
 
         if (!$item) {
@@ -316,7 +304,7 @@ class ItemController extends AbstractAppController
         if ($actionItem = $this->actionItemManager->getOne([
             'action' => $action,
             'item' => $item,
-            'member' => $this->getUser(),
+            'member' => $this->getMember(),
         ])) {
             $this->actionItemManager->remove($actionItem);
 
@@ -327,13 +315,13 @@ class ItemController extends AbstractAppController
                 if ($actionItemReverse = $this->actionItemManager->getOne([
                     'action' => $action->getReverse(),
                     'item' => $item,
-                    'member' => $this->getUser(),
+                    'member' => $this->getMember(),
                 ])) {
                 } else {
                     $actionItemReverse = new ActionItem();
                     $actionItemReverse->setAction($action->getReverse());
                     $actionItemReverse->setItem($item);
-                    $actionItemReverse->setMember($this->getUser());
+                    $actionItemReverse->setMember($this->getMember());
                     $this->actionItemManager->persist($actionItemReverse);
                 }
             }
@@ -341,7 +329,7 @@ class ItemController extends AbstractAppController
             $actionItem = new ActionItem();
             $actionItem->setAction($action);
             $actionItem->setItem($item);
-            $actionItem->setMember($this->getUser());
+            $actionItem->setMember($this->getMember());
             $this->actionItemManager->persist($actionItem);
 
             $data['action'] = $action->getTitle();
@@ -351,7 +339,7 @@ class ItemController extends AbstractAppController
                 if ($actionItemReverse = $this->actionItemManager->getOne([
                     'action' => $action->getReverse(),
                     'item' => $item,
-                    'member' => $this->getUser(),
+                    'member' => $this->getMember(),
                 ])) {
                     $this->actionItemManager->remove($actionItemReverse);
                 }
@@ -361,8 +349,8 @@ class ItemController extends AbstractAppController
         $data['entry'] = $item->toArray();
         $data['entry_entity'] = 'item';
 
-        if ($case == 'read' && $this->getUser()->getId()) {
-            $data['unread'] = $this->memberManager->countUnread($this->getUser()->getId());
+        if ($case == 'read' && $this->getMember() && $this->getMember()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
         }
 
         return $this->jsonResponse($data);

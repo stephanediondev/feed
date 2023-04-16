@@ -31,10 +31,6 @@ class PushController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->getUser() instanceof Member) {
-            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $status = JsonResponse::HTTP_UNAUTHORIZED;
 
         $push = new PushModel();
@@ -56,7 +52,7 @@ class PushController extends AbstractAppController
             $extraFields['content_encoding'] = $push->getContentEncoding();
 
             $connection = new Connection();
-            $connection->setMember($this->getUser());
+            $connection->setMember($this->getMember());
             $connection->setType('push');
             $connection->setToken($push->getEndpoint());
             $connection->setExtraFields($extraFields);

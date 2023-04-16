@@ -22,10 +22,6 @@ class PinboardController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->getUser() instanceof Member) {
-            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $pinboard = new PinboardModel();
         $form = $this->createForm(PinboardType::class, $pinboard);
 
@@ -33,7 +29,7 @@ class PinboardController extends AbstractAppController
         $form->submit($content);
 
         if ($form->isValid()) {
-            $connection = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $this->getUser()]);
+            $connection = $this->connectionManager->getOne(['type' => 'pinboard', 'member' => $this->getMember()]);
 
             if ($connection) {
                 $connection->setToken($pinboard->getToken());
@@ -41,7 +37,7 @@ class PinboardController extends AbstractAppController
                 $extraFields = DeviceDetectorHelper::asArray($request);
 
                 $connection = new Connection();
-                $connection->setMember($this->getUser());
+                $connection->setMember($this->getMember());
                 $connection->setType('pinboard');
                 $connection->setToken($pinboard->getToken());
                 $connection->setExtraFields($extraFields);

@@ -75,7 +75,7 @@ class MemberController extends AbstractAppController
         $content = $this->getContent($request);
         $form->submit($content);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && $member->getPlainPassword()) {
             $member->setPassword($this->passwordHasher->hashPassword($member, $member->getPlainPassword()));
             $this->memberManager->persist($member);
 

@@ -46,8 +46,8 @@ class CategoryController extends AbstractAppController
         if ($filters->getBool('trendy')) {
             $parameters['trendy'] = true;
 
-            if ($this->getUser()) {
-                $parameters['member'] = $this->getUser();
+            if ($this->getMember()) {
+                $parameters['member'] = $this->getMember();
             }
 
             $results = $this->categoryManager->getList($parameters);
@@ -72,7 +72,7 @@ class CategoryController extends AbstractAppController
         } else {
             if ($filters->getBool('excluded')) {
                 $parameters['excluded'] = true;
-                $parameters['member'] = $this->getUser();
+                $parameters['member'] = $this->getMember();
             }
 
             if ($filters->getBool('usedbyfeeds')) {
@@ -117,7 +117,7 @@ class CategoryController extends AbstractAppController
                 $ids[] = $result['id'];
             }
 
-            $results = $this->actionCategoryManager->getList(['member' => $this->getUser(), 'categories' => $ids])->getResult();
+            $results = $this->actionCategoryManager->getList(['member' => $this->getMember(), 'categories' => $ids])->getResult();
             $actions = [];
             foreach ($results as $actionCategory) {
                 $actions[$actionCategory->getCategory()->getId()][] = $actionCategory;
@@ -181,7 +181,7 @@ class CategoryController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('READ', $category);
 
-        $actions = $this->actionCategoryManager->getList(['member' => $this->getUser(), 'category' => $category])->getResult();
+        $actions = $this->actionCategoryManager->getList(['member' => $this->getMember(), 'category' => $category])->getResult();
 
         $data['entry'] = $category->toArray();
         foreach ($actions as $action) {
@@ -254,10 +254,6 @@ class CategoryController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->getUser() instanceof Member) {
-            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $category = $this->categoryManager->getOne(['id' => $id]);
 
         if (!$category) {
@@ -275,7 +271,7 @@ class CategoryController extends AbstractAppController
         if ($actionCategory = $this->actionCategoryManager->getOne([
             'action' => $action,
             'category' => $category,
-            'member' => $this->getUser(),
+            'member' => $this->getMember(),
         ])) {
             $this->actionCategoryManager->remove($actionCategory);
 
@@ -286,13 +282,13 @@ class CategoryController extends AbstractAppController
                 if ($actionCategoryReverse = $this->actionCategoryManager->getOne([
                     'action' => $action->getReverse(),
                     'category' => $category,
-                    'member' => $this->getUser(),
+                    'member' => $this->getMember(),
                 ])) {
                 } else {
                     $actionCategoryReverse = new ActionCategory();
                     $actionCategoryReverse->setAction($action->getReverse());
                     $actionCategoryReverse->setCategory($category);
-                    $actionCategoryReverse->setMember($this->getUser());
+                    $actionCategoryReverse->setMember($this->getMember());
                     $this->actionCategoryManager->persist($actionCategoryReverse);
                 }
             }
@@ -300,7 +296,7 @@ class CategoryController extends AbstractAppController
             $actionCategory = new ActionCategory();
             $actionCategory->setAction($action);
             $actionCategory->setCategory($category);
-            $actionCategory->setMember($this->getUser());
+            $actionCategory->setMember($this->getMember());
             $this->actionCategoryManager->persist($actionCategory);
 
             $data['action'] = $action->getTitle();
@@ -310,7 +306,7 @@ class CategoryController extends AbstractAppController
                 if ($actionCategoryReverse = $this->actionCategoryManager->getOne([
                     'action' => $action->getReverse(),
                     'category' => $category,
-                    'member' => $this->getUser(),
+                    'member' => $this->getMember(),
                 ])) {
                     $this->actionCategoryManager->remove($actionCategoryReverse);
                 }

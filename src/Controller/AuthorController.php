@@ -49,8 +49,8 @@ class AuthorController extends AbstractAppController
         if ($filters->getBool('trendy')) {
             $parameters['trendy'] = true;
 
-            if ($this->getUser()) {
-                $parameters['member'] = $this->getUser();
+            if ($this->getMember()) {
+                $parameters['member'] = $this->getMember();
             }
 
             $results = $this->authorManager->getList($parameters);
@@ -75,7 +75,7 @@ class AuthorController extends AbstractAppController
         } else {
             if ($filters->getBool('excluded')) {
                 $parameters['excluded'] = true;
-                $parameters['member'] = $this->getUser();
+                $parameters['member'] = $this->getMember();
             }
 
             if ($filters->getInt('feed')) {
@@ -124,7 +124,7 @@ class AuthorController extends AbstractAppController
                 $ids[] = $result['id'];
             }
 
-            $results = $this->actionAuthorManager->getList(['member' => $this->getUser(), 'authors' => $ids])->getResult();
+            $results = $this->actionAuthorManager->getList(['member' => $this->getMember(), 'authors' => $ids])->getResult();
             $actions = [];
             foreach ($results as $actionAuthor) {
                 $actions[$actionAuthor->getAuthor()->getId()][] = $actionAuthor;
@@ -256,10 +256,6 @@ class AuthorController extends AbstractAppController
     {
         $data = [];
 
-        if (false === $this->getUser() instanceof Member) {
-            return $this->jsonResponse($data, JsonResponse::HTTP_FORBIDDEN);
-        }
-
         $author = $this->authorManager->getOne(['id' => $id]);
 
         if (!$author) {
@@ -277,7 +273,7 @@ class AuthorController extends AbstractAppController
         if ($actionAuthor = $this->actionAuthorManager->getOne([
             'action' => $action,
             'author' => $author,
-            'member' => $this->getUser(),
+            'member' => $this->getMember(),
         ])) {
             $this->actionAuthorManager->remove($actionAuthor);
 
@@ -288,13 +284,13 @@ class AuthorController extends AbstractAppController
                 if ($actionAuthorReverse = $this->actionAuthorManager->getOne([
                     'action' => $action->getReverse(),
                     'author' => $author,
-                    'member' => $this->getUser(),
+                    'member' => $this->getMember(),
                 ])) {
                 } else {
                     $actionAuthorReverse = new ActionAuthor();
                     $actionAuthorReverse->setAction($action->getReverse());
                     $actionAuthorReverse->setAuthor($author);
-                    $actionAuthorReverse->setMember($this->getUser());
+                    $actionAuthorReverse->setMember($this->getMember());
                     $this->actionAuthorManager->persist($actionAuthorReverse);
                 }
             }
@@ -302,7 +298,7 @@ class AuthorController extends AbstractAppController
             $actionAuthor = new ActionAuthor();
             $actionAuthor->setAction($action);
             $actionAuthor->setAuthor($author);
-            $actionAuthor->setMember($this->getUser());
+            $actionAuthor->setMember($this->getMember());
             $this->actionAuthorManager->persist($actionAuthor);
 
             $data['action'] = $action->getTitle();
@@ -312,7 +308,7 @@ class AuthorController extends AbstractAppController
                 if ($actionAuthorReverse = $this->actionAuthorManager->getOne([
                     'action' => $action->getReverse(),
                     'author' => $author,
-                    'member' => $this->getUser(),
+                    'member' => $this->getMember(),
                 ])) {
                     $this->actionAuthorManager->remove($actionAuthorReverse);
                 }
