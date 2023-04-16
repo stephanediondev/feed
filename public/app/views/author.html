@@ -47,6 +47,9 @@
                     </a>
                 </h1>
             </div>
+            <div class="mdl-card__subtitle-text">
+                {{#if entry.percent }}<span class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-graph-up"></i> {{score entry.percent }}</span>{{/if}}
+            </div>
             <div class="mdl-card__actions text-end mt-3 mdl-card--border">
                 <p>
                     {{#if entry.exclude }}

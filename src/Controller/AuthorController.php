@@ -46,93 +46,65 @@ class AuthorController extends AbstractAppController
 
         $parameters = [];
 
-        if ($filters->getBool('trendy')) {
-            $parameters['trendy'] = true;
+        if ($filters->getBool('excluded')) {
+            $parameters['excluded'] = true;
+            $parameters['member'] = $this->getMember();
+        }
 
-            if ($this->getMember()) {
-                $parameters['member'] = $this->getMember();
+        if ($filters->getInt('feed')) {
+            if ($feed = $this->feedManager->getOne(['id' => $filters->getInt('feed')])) {
+                $parameters['feed'] = $filters->getInt('feed');
+                $data['entry'] = $feed->toArray();
+                $data['entry_entity'] = 'feed';
             }
+        }
 
-            $results = $this->authorManager->getList($parameters);
+        if ($filters->getInt('days')) {
+            $parameters['days'] = $filters->getInt('days');
+        }
 
-            $data['entries'] = [];
+        $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
 
-            $max = false;
-            foreach ($results as $row) {
-                if (!$max) {
-                    $max = $row['count'];
-                }
-                $data['entries'][$row['ref']] = ['count' => $row['count'], 'id' => $row['id']];
-            }
-            //ksort($data['entries']);
-
-            foreach ($data['entries'] as $k => $v) {
-                $percent = ($v['count'] * 100) / $max;
-                $percent = $percent - ($percent % 10);
-                $percent = intval($percent) + 100;
-                $data['entries'][$k]['percent'] = $percent;
-            }
+        if ($sort) {
+            $parameters['sortDirection'] = $sort['direction'];
+            $parameters['sortField'] = $sort['field'];
         } else {
-            if ($filters->getBool('excluded')) {
-                $parameters['excluded'] = true;
-                $parameters['member'] = $this->getMember();
-            }
+            $parameters['sortDirection'] = 'ASC';
+            $parameters['sortField'] = 'aut.title';
+        }
 
-            if ($filters->getInt('feed')) {
-                if ($feed = $this->feedManager->getOne(['id' => $filters->getInt('feed')])) {
-                    $parameters['feed'] = $filters->getInt('feed');
-                    $data['entry'] = $feed->toArray();
-                    $data['entry_entity'] = 'feed';
-                }
-            }
+        $parameters['returnQueryBuilder'] = true;
 
-            if ($filters->getInt('days')) {
-                $parameters['days'] = $filters->getInt('days');
-            }
+        $pagination = $this->paginateAbstract($this->authorManager->getList($parameters));
 
-            $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+        $data['entries_entity'] = 'author';
+        $data = array_merge($data, $this->getEntriesInfo($pagination));
 
-            if ($sort) {
-                $parameters['sortDirection'] = $sort['direction'];
-                $parameters['sortField'] = $sort['field'];
-            } else {
-                $parameters['sortDirection'] = 'ASC';
-                $parameters['sortField'] = 'aut.title';
-            }
+        $data['entries'] = [];
 
-            $parameters['returnQueryBuilder'] = true;
+        $ids = [];
+        foreach ($pagination as $result) {
+            $ids[] = $result['id'];
+        }
 
-            $pagination = $this->paginateAbstract($this->authorManager->getList($parameters));
+        $results = $this->actionAuthorManager->getList(['member' => $this->getMember(), 'authors' => $ids])->getResult();
+        $actions = [];
+        foreach ($results as $actionAuthor) {
+            $actions[$actionAuthor->getAuthor()->getId()][] = $actionAuthor;
+        }
 
-            $data['entries_entity'] = 'author';
-            $data = array_merge($data, $this->getEntriesInfo($pagination));
+        foreach ($pagination as $result) {
+            $author = $this->authorManager->getOne(['id' => $result['id']]);
+            if ($author) {
+                $entry = $author->toArray();
 
-            $data['entries'] = [];
-
-            $ids = [];
-            foreach ($pagination as $result) {
-                $ids[] = $result['id'];
-            }
-
-            $results = $this->actionAuthorManager->getList(['member' => $this->getMember(), 'authors' => $ids])->getResult();
-            $actions = [];
-            foreach ($results as $actionAuthor) {
-                $actions[$actionAuthor->getAuthor()->getId()][] = $actionAuthor;
-            }
-
-            foreach ($pagination as $result) {
-                $author = $this->authorManager->getOne(['id' => $result['id']]);
-                if ($author) {
-                    $entry = $author->toArray();
-
-                    if (true === isset($actions[$result['id']])) {
-                        foreach ($actions[$result['id']] as $action) {
-                            $entry[$action->getAction()->getTitle()] = true;
-                        }
+                if (true === isset($actions[$result['id']])) {
+                    foreach ($actions[$result['id']] as $action) {
+                        $entry[$action->getAction()->getTitle()] = true;
                     }
-
-                    $data['entries'][] = $entry;
                 }
+
+                $data['entries'][] = $entry;
             }
         }
 
@@ -307,6 +279,46 @@ class AuthorController extends AbstractAppController
 
         $data['entry'] = $author->toArray();
         $data['entry_entity'] = 'author';
+
+        return $this->jsonResponse($data);
+    }
+
+    #[Route(path: '/authors/trendy', name: 'trendy', methods: ['GET'])]
+    public function trendy(Request $request): JsonResponse
+    {
+        $data = [];
+
+        $this->denyAccessUnlessGranted('LIST', 'author');
+
+        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+
+        $parameters = [];
+
+        $parameters['trendy'] = true;
+
+        if ($this->getMember()) {
+            $parameters['member'] = $this->getMember();
+        }
+
+        $results = $this->authorManager->getList($parameters);
+
+        $data['entries'] = [];
+
+        $max = false;
+        foreach ($results as $row) {
+            if (!$max) {
+                $max = $row['count'];
+            }
+            $data['entries'][$row['ref']] = ['count' => $row['count'], 'id' => $row['id']];
+        }
+        //ksort($data['entries']);
+
+        foreach ($data['entries'] as $k => $v) {
+            $percent = ($v['count'] * 100) / $max;
+            $percent = $percent - ($percent % 10);
+            $percent = intval($percent) + 100;
+            $data['entries'][$k]['percent'] = $percent;
+        }
 
         return $this->jsonResponse($data);
     }

@@ -43,89 +43,61 @@ class CategoryController extends AbstractAppController
 
         $parameters = [];
 
-        if ($filters->getBool('trendy')) {
-            $parameters['trendy'] = true;
+        if ($filters->getBool('excluded')) {
+            $parameters['excluded'] = true;
+            $parameters['member'] = $this->getMember();
+        }
 
-            if ($this->getMember()) {
-                $parameters['member'] = $this->getMember();
-            }
+        if ($filters->getBool('usedbyfeeds')) {
+            $parameters['usedbyfeeds'] = true;
+        }
 
-            $results = $this->categoryManager->getList($parameters);
+        if ($filters->getInt('days')) {
+            $parameters['days'] = $filters->getInt('days');
+        }
 
-            $data['entries'] = [];
+        $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
 
-            $max = false;
-            foreach ($results as $row) {
-                if (!$max) {
-                    $max = $row['count'];
-                }
-                $data['entries'][$row['ref']] = ['count' => $row['count'], 'id' => $row['id']];
-            }
-            //ksort($data['entries']);
-
-            foreach ($data['entries'] as $k => $v) {
-                $percent = ($v['count'] * 100) / $max;
-                $percent = $percent - ($percent % 10);
-                $percent = intval($percent) + 100;
-                $data['entries'][$k]['percent'] = $percent;
-            }
+        if ($sort) {
+            $parameters['sortDirection'] = $sort['direction'];
+            $parameters['sortField'] = $sort['field'];
         } else {
-            if ($filters->getBool('excluded')) {
-                $parameters['excluded'] = true;
-                $parameters['member'] = $this->getMember();
-            }
+            $parameters['sortDirection'] = 'ASC';
+            $parameters['sortField'] = 'cat.title';
+        }
 
-            if ($filters->getBool('usedbyfeeds')) {
-                $parameters['usedbyfeeds'] = true;
-            }
+        $parameters['returnQueryBuilder'] = true;
 
-            if ($filters->getInt('days')) {
-                $parameters['days'] = $filters->getInt('days');
-            }
+        $pagination = $this->paginateAbstract($this->categoryManager->getList($parameters));
 
-            $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+        $data['entries_entity'] = 'category';
+        $data = array_merge($data, $this->getEntriesInfo($pagination));
 
-            if ($sort) {
-                $parameters['sortDirection'] = $sort['direction'];
-                $parameters['sortField'] = $sort['field'];
-            } else {
-                $parameters['sortDirection'] = 'ASC';
-                $parameters['sortField'] = 'cat.title';
-            }
+        $data['entries'] = [];
 
-            $parameters['returnQueryBuilder'] = true;
+        $ids = [];
+        foreach ($pagination as $result) {
+            $ids[] = $result['id'];
+        }
 
-            $pagination = $this->paginateAbstract($this->categoryManager->getList($parameters));
+        $results = $this->actionCategoryManager->getList(['member' => $this->getMember(), 'categories' => $ids])->getResult();
+        $actions = [];
+        foreach ($results as $actionCategory) {
+            $actions[$actionCategory->getCategory()->getId()][] = $actionCategory;
+        }
 
-            $data['entries_entity'] = 'category';
-            $data = array_merge($data, $this->getEntriesInfo($pagination));
+        foreach ($pagination as $result) {
+            $category = $this->categoryManager->getOne(['id' => $result['id']]);
+            if ($category) {
+                $entry = $category->toArray();
 
-            $data['entries'] = [];
-
-            $ids = [];
-            foreach ($pagination as $result) {
-                $ids[] = $result['id'];
-            }
-
-            $results = $this->actionCategoryManager->getList(['member' => $this->getMember(), 'categories' => $ids])->getResult();
-            $actions = [];
-            foreach ($results as $actionCategory) {
-                $actions[$actionCategory->getCategory()->getId()][] = $actionCategory;
-            }
-
-            foreach ($pagination as $result) {
-                $category = $this->categoryManager->getOne(['id' => $result['id']]);
-                if ($category) {
-                    $entry = $category->toArray();
-
-                    if (true === isset($actions[$result['id']])) {
-                        foreach ($actions[$result['id']] as $action) {
-                            $entry[$action->getAction()->getTitle()] = true;
-                        }
+                if (true === isset($actions[$result['id']])) {
+                    foreach ($actions[$result['id']] as $action) {
+                        $entry[$action->getAction()->getTitle()] = true;
                     }
-
-                    $data['entries'][] = $entry;
                 }
+
+                $data['entries'][] = $entry;
             }
         }
 
@@ -305,6 +277,46 @@ class CategoryController extends AbstractAppController
 
         $data['entry'] = $category->toArray();
         $data['entry_entity'] = 'category';
+
+        return $this->jsonResponse($data);
+    }
+
+    #[Route(path: '/categories/trendy', name: 'trendy', methods: ['GET'])]
+    public function trendy(Request $request): JsonResponse
+    {
+        $data = [];
+
+        $this->denyAccessUnlessGranted('LIST', 'category');
+
+        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+
+        $parameters = [];
+
+        $parameters['trendy'] = true;
+
+        if ($this->getMember()) {
+            $parameters['member'] = $this->getMember();
+        }
+
+        $results = $this->categoryManager->getList($parameters);
+
+        $data['entries'] = [];
+
+        $max = false;
+        foreach ($results as $row) {
+            if (!$max) {
+                $max = $row['count'];
+            }
+            $data['entries'][$row['ref']] = ['count' => $row['count'], 'id' => $row['id']];
+        }
+        //ksort($data['entries']);
+
+        foreach ($data['entries'] as $k => $v) {
+            $percent = ($v['count'] * 100) / $max;
+            $percent = $percent - ($percent % 10);
+            $percent = intval($percent) + 100;
+            $data['entries'][$k]['percent'] = $percent;
+        }
 
         return $this->jsonResponse($data);
     }

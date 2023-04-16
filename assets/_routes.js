@@ -45,7 +45,7 @@ routes['#items/markallasread/author/{id}'] = {view: false, query: '/items/markal
 routes['#items/markallasread/category/{id}'] = {view: false, query: '/items/markallasread?filter[category]={id}'};
 
 //Category
-routes['#categories/trendy'] = {view: 'view-categories-trendy', query: '/categories?filter[trendy]=true', title: 'title.trendy_categories'};
+routes['#categories/trendy'] = {view: 'view-categories-trendy', query: '/categories/trendy', title: 'title.trendy_categories'};
 routes['#categories/excluded'] = {view: 'view-categories', viewUnit: 'view-categories-unit', query: '/categories?filter[excluded]=true', title: 'title.excluded_categories'};
 routes['#categories/usedbyfeeds'] = {view: 'view-categories', viewUnit: 'view-categories-unit', query: '/categories?filter[usedbyfeeds]=true', title: 'title.categories_usedbyfeeds'};
 
@@ -57,7 +57,7 @@ routes['#category/action/exclude/{id}'] = {view: false, query: '/category/action
 routes['#category/{id}'] = {view: 'view-category-read', query: '/category/{id}'};
 
 //Author
-routes['#authors/trendy'] = {view: 'view-authors-trendy', query: '/authors?filter[trendy]=true', title: 'title.trendy_authors'};
+routes['#authors/trendy'] = {view: 'view-authors-trendy', query: '/authors/trendy', title: 'title.trendy_authors'};
 routes['#authors/excluded'] = {view: 'view-authors', viewUnit: 'view-authors-unit', query: '/authors?filter[excluded]=true', title: 'title.excluded_authors'};
 
 routes['#authors/search'] = {view: 'view-search-authors', query: false, title: 'title.search_authors'};
