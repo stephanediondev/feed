@@ -47,6 +47,11 @@ class CollectionRepository extends AbstractRepository
         $query->addSelect('col');
         $query->from(Collection::class, 'col');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('col.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         $query->addOrderBy('col.id', 'DESC');
         $query->groupBy('col.id');
 

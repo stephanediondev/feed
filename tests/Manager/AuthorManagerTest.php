@@ -36,4 +36,11 @@ class AuthorManagerTest extends KernelTestCase
         $test = $this->authorManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->authorManager->getList(['id' => 0, 'sortField' => 'aut.id', 'sortDirection' => 'ASC'])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

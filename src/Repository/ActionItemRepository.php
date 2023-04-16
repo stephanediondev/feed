@@ -68,6 +68,11 @@ class ActionItemRepository extends AbstractRepository
         $query->leftJoin('act_itm.item', 'itm');
         $query->leftJoin('act_itm.member', 'mbr');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('act_itm.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['action']) == 1) {
             $query->andWhere('act_itm.action = :action');
             $query->setParameter(':action', $parameters['action']);

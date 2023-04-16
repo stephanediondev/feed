@@ -52,6 +52,11 @@ class MemberRepository extends AbstractRepository
         $query->addSelect('mbr');
         $query->from(Member::class, 'mbr');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('mbr.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         $query->addOrderBy('mbr.email');
         $query->groupBy('mbr.id');
 

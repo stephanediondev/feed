@@ -37,4 +37,11 @@ class FeedManagerTest extends KernelTestCase
         $test = $this->feedManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->feedManager->getList(['id' => 0, 'sortField' => 'fed.id', 'sortDirection' => 'ASC'])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

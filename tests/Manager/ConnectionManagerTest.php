@@ -52,4 +52,11 @@ class ConnectionManagerTest extends KernelTestCase
         $test = $this->connectionManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->connectionManager->getList(['id' => 0])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

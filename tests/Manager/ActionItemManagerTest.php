@@ -80,4 +80,11 @@ class ActionItemManagerTest extends KernelTestCase
         $test = $this->actionItemManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->actionItemManager->getList(['id' => 0])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

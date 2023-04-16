@@ -66,6 +66,11 @@ class ConnectionRepository extends AbstractRepository
         $query->from(Connection::class, 'cnt');
         $query->leftJoin('cnt.member', 'mbr');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('cnt.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['member']) == 1) {
             $query->andWhere('cnt.member = :member');
             $query->setParameter(':member', $parameters['member']);

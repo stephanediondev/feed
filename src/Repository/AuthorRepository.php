@@ -85,6 +85,11 @@ SQL;
         $query->addSelect('aut.id');
         $query->from(Author::class, 'aut');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('aut.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['excluded']) == 1 && $parameters['excluded']) {
             $query->andWhere('aut.id IN (SELECT IDENTITY(excluded.author) FROM '.ActionAuthor::class.' AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
             $query->setParameter(':member', $parameters['member']);

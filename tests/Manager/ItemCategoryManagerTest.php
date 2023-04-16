@@ -80,4 +80,11 @@ class ItemCategoryManagerTest extends KernelTestCase
         $test = $this->itemCategoryManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->itemCategoryManager->getList(['id' => 0])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

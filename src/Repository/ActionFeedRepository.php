@@ -68,6 +68,11 @@ class ActionFeedRepository extends AbstractRepository
         $query->leftJoin('act_fed.feed', 'fed');
         $query->leftJoin('act_fed.member', 'mbr');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('act_fed.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['action']) == 1) {
             $query->andWhere('act_fed.action = :action');
             $query->setParameter(':action', $parameters['action']);

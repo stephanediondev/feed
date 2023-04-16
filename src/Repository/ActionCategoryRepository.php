@@ -68,6 +68,11 @@ class ActionCategoryRepository extends AbstractRepository
         $query->leftJoin('act_cat.category', 'cat');
         $query->leftJoin('act_cat.member', 'mbr');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('act_cat.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['action']) == 1) {
             $query->andWhere('act_cat.action = :action');
             $query->setParameter(':action', $parameters['action']);

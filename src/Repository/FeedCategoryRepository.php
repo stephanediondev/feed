@@ -52,6 +52,11 @@ class FeedCategoryRepository extends AbstractRepository
         $query->leftJoin('fed_cat.feed', 'fed');
         $query->leftJoin('fed_cat.category', 'cat');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('fed_cat.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['feed']) == 1) {
             $query->andWhere('fed_cat.feed = :feed');
             $query->setParameter(':feed', $parameters['feed']);

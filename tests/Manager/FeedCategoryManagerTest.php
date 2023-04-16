@@ -64,4 +64,11 @@ class FeedCategoryManagerTest extends KernelTestCase
         $test = $this->feedCategoryManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->feedCategoryManager->getList(['id' => 0])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

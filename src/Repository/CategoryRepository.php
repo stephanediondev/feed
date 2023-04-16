@@ -86,6 +86,11 @@ SQL;
         $query->addSelect('cat.id');
         $query->from(Category::class, 'cat');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('cat.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['excluded']) == 1 && $parameters['excluded']) {
             $query->andWhere('cat.id IN (SELECT IDENTITY(excluded.category) FROM '.ActionCategory::class.' AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
             $query->setParameter(':member', $parameters['member']);

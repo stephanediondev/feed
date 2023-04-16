@@ -68,4 +68,11 @@ class EnclosureManagerTest extends KernelTestCase
         $test = $this->enclosureManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->enclosureManager->getList(['id' => 0])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

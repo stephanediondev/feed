@@ -52,6 +52,11 @@ class ItemRepository extends AbstractRepository
         $query->addSelect('itm.id');
         $query->from(Item::class, 'itm');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('itm.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['feed']) == 1) {
             $query->andWhere('itm.feed = :feed');
             $query->setParameter(':feed', $parameters['feed']);

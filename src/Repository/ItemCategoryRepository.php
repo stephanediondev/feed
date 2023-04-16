@@ -52,6 +52,11 @@ class ItemCategoryRepository extends AbstractRepository
         $query->leftJoin('itm_cat.item', 'itm');
         $query->leftJoin('itm_cat.category', 'cat');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('itm_cat.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['item']) == 1) {
             $query->andWhere('itm_cat.item = :item');
             $query->setParameter(':item', $parameters['item']);

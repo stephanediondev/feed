@@ -48,6 +48,11 @@ class EnclosureRepository extends AbstractRepository
         $query->from(Enclosure::class, 'enr');
         $query->leftJoin('enr.item', 'itm');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('enr.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['item']) == 1) {
             $query->andWhere('enr.item = :item');
             $query->setParameter(':item', $parameters['item']);

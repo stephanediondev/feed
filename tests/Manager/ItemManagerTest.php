@@ -53,4 +53,11 @@ class ItemManagerTest extends KernelTestCase
         $test = $this->itemManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->itemManager->getList(['id' => 0, 'sortField' => 'itm.id', 'sortDirection' => 'ASC'])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

@@ -63,4 +63,11 @@ class ActionCategoryManagerTest extends KernelTestCase
         $test = $this->actionCategoryManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->actionCategoryManager->getList(['id' => 0])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

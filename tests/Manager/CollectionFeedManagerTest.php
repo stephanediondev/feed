@@ -63,4 +63,11 @@ class CollectionFeedManagerTest extends KernelTestCase
         $test = $this->collectionFeedManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->collectionFeedManager->getList(['id' => 0])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

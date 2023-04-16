@@ -68,6 +68,11 @@ class ActionAuthorRepository extends AbstractRepository
         $query->leftJoin('act_aut.author', 'aut');
         $query->leftJoin('act_aut.member', 'mbr');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('act_aut.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         if (isset($parameters['action']) == 1) {
             $query->andWhere('act_aut.action = :action');
             $query->setParameter(':action', $parameters['action']);

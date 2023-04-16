@@ -36,4 +36,11 @@ class CategoryManagerTest extends KernelTestCase
         $test = $this->categoryManager->getOne(['id' => 0]);
         $this->assertNull($test);
     }
+
+    public function testGetList(): void
+    {
+        $test = $this->categoryManager->getList(['id' => 0, 'sortField' => 'cat.id', 'sortDirection' => 'ASC'])->getResult();
+        $this->assertIsArray($test);
+        $this->assertCount(0, $test);
+    }
 }

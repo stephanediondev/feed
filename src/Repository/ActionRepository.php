@@ -52,6 +52,11 @@ class ActionRepository extends AbstractRepository
         $query->addSelect('act');
         $query->from(Action::class, 'act');
 
+        if (isset($parameters['id']) == 1) {
+            $query->andWhere('act.id = :id');
+            $query->setParameter(':id', $parameters['id']);
+        }
+
         $query->groupBy('act.id');
 
         $getQuery = $query->getQuery();
