@@ -152,16 +152,16 @@
                     </div>
                     <div class="modal-body">
                         <p>
-                            <label for="title" class="form-label required">{{trans 'field.title'}}</label>
-                            <input type="text" class="form-control" id="title" name="title" required="required" value="{{ entry.title }}">
+                            <label for="title" class="form-label">{{trans 'field.title'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                            <input type="text" class="form-control" id="title" name="title" required value="{{ entry.title }}">
                         </p>
                         <p>
-                            <label for="link" class="form-label required">{{trans 'link'}}</label>
-                            <input type="url" class="form-control" id="link" name="link" required="required" value="{{ entry.link }}">
+                            <label for="link" class="form-label">{{trans 'link'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                            <input type="url" class="form-control" id="link" name="link" required value="{{ entry.link }}">
                         </p>
                         <p>
-                            <label for="website" class="form-label required">{{trans 'website'}}</label>
-                            <input type="url" class="form-control" id="website" name="website" required="required" value="{{ entry.website }}">
+                            <label for="website" class="form-label">{{trans 'website'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                            <input type="url" class="form-control" id="website" name="website" required value="{{ entry.website }}">
                         </p>
                         <p>
                             <label for="language" class="form-label">{{trans 'language'}}</label>

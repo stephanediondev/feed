@@ -52,13 +52,13 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                        <label for="title" class="form-label required">{{trans 'field.title'}}</label>
-                        <input type="text" class="form-control" id="title" name="title" required="required" value="">
+                        <label for="title" class="form-label">{{trans 'field.title'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                        <input type="text" class="form-control" id="title" name="title" required value="">
                     </p>
 
                     <p>
-                        <label for="link" class="form-label required">{{trans 'link'}}</label>
-                        <input type="url" class="form-control" id="link" name="link" required="required" value="">
+                        <label for="link" class="form-label">{{trans 'link'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                        <input type="url" class="form-control" id="link" name="link" required value="">
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -81,8 +81,8 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                        <label for="file" class="form-label required">{{trans 'import_opml'}}</label>
-                        <input type="file" class="form-control" id="file" name="file" required="required">
+                        <label for="file" class="form-label">{{trans 'import_opml'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                        <input type="file" class="form-control" id="file" name="file" required>
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -105,8 +105,8 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                        <label for="choice" class="form-label required">{{trans 'export_opml'}}</label>
-                        <select class="form-control" id="choice" name="choice" required="required">
+                        <label for="choice" class="form-label">{{trans 'export_opml'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                        <select class="form-control" id="choice" name="choice" required>
                             <option value="your_subscriptions">{{trans 'your_subscriptions'}}</option>
                             <option value="all_feeds">{{trans 'all_feeds'}}</option>
                         </select>
@@ -206,8 +206,8 @@
 
             <form action="#feeds/search/result" method="GET" id="form-search-feeds">
                 <p>
-                    <label for="query" class="form-label required">{{trans 'query'}}</label>
-                    <input type="text" class="form-control" id="query" name="filter[query]" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <label for="query" class="form-label">{{trans 'query'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                    <input type="text" class="form-control" id="query" name="filter[query]" required value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
@@ -239,8 +239,8 @@
 
             <form action="#categories/search/result" method="GET" id="form-search-categories">
                 <p>
-                    <label for="query" class="form-label required">{{trans 'query'}}</label>
-                    <input type="text" class="form-control" id="query" name="filter[query]" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <label for="query" class="form-label">{{trans 'query'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                    <input type="text" class="form-control" id="query" name="filter[query]" required value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
@@ -271,8 +271,8 @@
 
             <form action="#items/search/result" method="GET" id="form-search-items">
                 <p>
-                    <label for="query" class="form-label required">{{trans 'query'}}</label>
-                    <input type="text" class="form-control" id="query" name="filter[query]" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <label for="query" class="form-label">{{trans 'query'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                    <input type="text" class="form-control" id="query" name="filter[query]" required value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>
@@ -303,8 +303,8 @@
 
             <form action="#authors/search/result" method="GET" id="form-search-authors">
                 <p>
-                    <label for="query" class="form-label required">{{trans 'query'}}</label>
-                    <input type="text" class="form-control" id="query" name="filter[query]" required="required" value="{{#if current_q }}{{ current_q }}{{/if}}">
+                    <label for="query" class="form-label">{{trans 'query'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                    <input type="text" class="form-control" id="query" name="filter[query]" required value="{{#if current_q }}{{ current_q }}{{/if}}">
                 </p>
                 <p>
                     <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'search'}}</button>

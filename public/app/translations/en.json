@@ -35,6 +35,7 @@
     "delete": "Delete",
     "submit": "Submit",
     "query": "Query",
+    "required": "Required",
 
     "refresh": "Refresh",
     "up": "&nbsp;&nbsp;Up&nbsp;&nbsp;",

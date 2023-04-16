@@ -43,9 +43,6 @@ figure {
 textarea {
     min-height: 250px;
 }
-input[type="text"][required], input[type="email"][required], input[type="password"][required], input[type="url"][required], textarea[required] {
-    border-color: #d50000;
-}
 
 body.anonymous .connected {
     display: none;
