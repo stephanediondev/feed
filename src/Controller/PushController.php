@@ -44,6 +44,9 @@ class PushController extends AbstractAppController
 
             $connection->setMember($this->getMember());
             $connection->setType(Connection::TYPE_PUSH);
+            foreach ($extraFields as $k => $v) {
+                $connection->setExtraField($k, $v);
+            }
 
             $this->connectionManager->persist($connection);
 
