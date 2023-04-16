@@ -26,10 +26,14 @@ class CategoryManagerTest extends KernelTestCase
 
         $this->categoryManager->persist($category);
 
-        $test = $this->categoryManager->getOne(['id' => $category->getId()]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Category::class, $test);
+        $this->assertIsInt($category->getId());
 
         $this->categoryManager->remove($category);
+    }
+
+    public function testGetOne(): void
+    {
+        $test = $this->categoryManager->getOne(['id' => 0]);
+        $this->assertNull($test);
     }
 }

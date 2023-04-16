@@ -29,7 +29,7 @@ class ItemCategoryRepository extends AbstractRepository
         $query->leftJoin('itm_cat.category', 'cat');
 
         if (isset($parameters['id']) == 1) {
-            $query->andWhere('cmp.id = :id');
+            $query->andWhere('itm_cat.id = :id');
             $query->setParameter(':id', $parameters['id']);
         }
 

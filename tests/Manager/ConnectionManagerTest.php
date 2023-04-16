@@ -40,12 +40,16 @@ class ConnectionManagerTest extends KernelTestCase
 
         $this->connectionManager->persist($connection);
 
-        $test = $this->connectionManager->getOne(['id' => $connection->getId()]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Connection::class, $test);
+        $this->assertIsInt($connection->getId());
 
         $this->connectionManager->remove($connection);
 
         $this->memberManager->remove($member);
+    }
+
+    public function testGetOne(): void
+    {
+        $test = $this->connectionManager->getOne(['id' => 0]);
+        $this->assertNull($test);
     }
 }

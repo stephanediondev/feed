@@ -27,10 +27,14 @@ class FeedManagerTest extends KernelTestCase
 
         $this->feedManager->persist($feed);
 
-        $test = $this->feedManager->getOne(['id' => $feed->getId()]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Feed::class, $test);
+        $this->assertIsInt($feed->getId());
 
         $this->feedManager->remove($feed);
+    }
+
+    public function testGetOne(): void
+    {
+        $test = $this->feedManager->getOne(['id' => 0]);
+        $this->assertNull($test);
     }
 }

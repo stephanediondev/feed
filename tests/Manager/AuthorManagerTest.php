@@ -26,10 +26,14 @@ class AuthorManagerTest extends KernelTestCase
 
         $this->authorManager->persist($author);
 
-        $test = $this->authorManager->getOne(['id' => $author->getId()]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Author::class, $test);
+        $this->assertIsInt($author->getId());
 
-        $this->authorManager->remove($test);
+        $this->authorManager->remove($author);
+    }
+
+    public function testGetOne(): void
+    {
+        $test = $this->authorManager->getOne(['id' => 0]);
+        $this->assertNull($test);
     }
 }

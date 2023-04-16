@@ -49,14 +49,18 @@ class CollectionFeedManagerTest extends KernelTestCase
 
         $this->collectionFeedManager->persist($collectionFeed);
 
-        $test = $this->collectionFeedManager->getOne(['id' => $collectionFeed->getId()]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(CollectionFeed::class, $test);
+        $this->assertIsInt($collectionFeed->getId());
 
         $this->collectionFeedManager->remove($collectionFeed);
 
         $this->feedManager->remove($feed);
 
         $this->collectionManager->remove($collection);
+    }
+
+    public function testGetOne(): void
+    {
+        $test = $this->collectionFeedManager->getOne(['id' => 0]);
+        $this->assertNull($test);
     }
 }

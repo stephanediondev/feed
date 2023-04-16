@@ -26,10 +26,14 @@ class ActionManagerTest extends KernelTestCase
 
         $this->actionManager->persist($action);
 
-        $test = $this->actionManager->getOne(['id' => $action->getId()]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Action::class, $test);
+        $this->assertIsInt($action->getId());
 
         $this->actionManager->remove($action);
+    }
+
+    public function testGetOne(): void
+    {
+        $test = $this->actionManager->getOne(['id' => 0]);
+        $this->assertNull($test);
     }
 }

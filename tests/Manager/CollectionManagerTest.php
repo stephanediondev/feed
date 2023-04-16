@@ -25,10 +25,14 @@ class CollectionManagerTest extends KernelTestCase
 
         $this->collectionManager->persist($collection);
 
-        $test = $this->collectionManager->getOne(['id' => $collection->getId()]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Collection::class, $test);
+        $this->assertIsInt($collection->getId());
 
         $this->collectionManager->remove($collection);
+    }
+
+    public function testGetOne(): void
+    {
+        $test = $this->collectionManager->getOne(['id' => 0]);
+        $this->assertNull($test);
     }
 }

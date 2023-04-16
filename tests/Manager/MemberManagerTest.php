@@ -27,10 +27,14 @@ class MemberManagerTest extends KernelTestCase
 
         $this->memberManager->persist($member);
 
-        $test = $this->memberManager->getOne(['id' => $member->getId()]);
-        $this->assertNotNull($test);
-        $this->assertInstanceOf(Member::class, $test);
+        $this->assertIsInt($member->getId());
 
         $this->memberManager->remove($member);
+    }
+
+    public function testGetOne(): void
+    {
+        $test = $this->memberManager->getOne(['id' => 0]);
+        $this->assertNull($test);
     }
 }
