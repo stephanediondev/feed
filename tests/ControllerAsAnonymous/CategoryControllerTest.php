@@ -27,4 +27,25 @@ class CategoryControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(401);
     }
+
+    public function testRead(): void
+    {
+        $this->client->request('GET', '/api/category/0');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
+
+    public function testUpdate(): void
+    {
+        $this->client->request('PUT', '/api/category/0');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
+
+    public function testDelete(): void
+    {
+        $this->client->request('DELETE', '/api/category/0');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
 }

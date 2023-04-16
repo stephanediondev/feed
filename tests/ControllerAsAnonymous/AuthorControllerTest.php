@@ -27,4 +27,25 @@ class AuthorControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(401);
     }
+
+    public function testRead(): void
+    {
+        $this->client->request('GET', '/api/author/0');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
+
+    public function testUpdate(): void
+    {
+        $this->client->request('PUT', '/api/author/0');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
+
+    public function testDelete(): void
+    {
+        $this->client->request('DELETE', '/api/author/0');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
 }

@@ -20,4 +20,18 @@ class ItemControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(401);
     }
+
+    public function testRead(): void
+    {
+        $this->client->request('GET', '/api/item/0');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
+
+    public function testDelete(): void
+    {
+        $this->client->request('DELETE', '/api/item/0');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
 }
