@@ -64,7 +64,7 @@ class ConnectionController extends AbstractAppController
         $pagination = $this->paginateAbstract($this->connectionManager->getList($parameters));
 
         $data['entries_entity'] = 'connection';
-        $data = array_merge($data, $this->getEntriesInfo($pagination));
+        $data = array_merge($data, $this->jsonApi($pagination, 'api_connections_index', $request->query->get('sort'), $filters));
 
         $data['entries'] = [];
 

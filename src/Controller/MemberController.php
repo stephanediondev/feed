@@ -40,7 +40,7 @@ class MemberController extends AbstractAppController
         $pagination = $this->paginateAbstract($this->memberManager->getList($parameters));
 
         $data['entries_entity'] = 'member';
-        $data = array_merge($data, $this->getEntriesInfo($pagination));
+        $data = array_merge($data, $this->jsonApi($pagination, 'api_members_index', $request->query->get('sort'), null));
 
         $data['entries'] = [];
 

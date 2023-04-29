@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Member;
 use App\Manager\ConnectionManager;
+use App\Model\QueryParameterFilterModel;
 use App\Model\QueryParameterPageModel;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -15,6 +16,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class AbstractAppController extends AbstractController
 {
@@ -110,7 +112,7 @@ abstract class AbstractAppController extends AbstractController
     /**
      * @return PaginationInterface<mixed>
      */
-    public function paginateAbstract(?QueryBuilder $queryBuilder): PaginationInterface
+    protected function paginateAbstract(?QueryBuilder $queryBuilder): PaginationInterface
     {
         $pageNumber = 1;
         $pageSize = 20;
@@ -135,19 +137,47 @@ abstract class AbstractAppController extends AbstractController
      * @param PaginationInterface<mixed> $pagination
      * @return array<mixed>
      */
-    public function getEntriesInfo(PaginationInterface $pagination): array
+    protected function jsonApi(PaginationInterface $pagination, string $route, ?string $sort, ?QueryParameterFilterModel $filters): array
     {
         $data = [];
-        $data['entries_total'] = $pagination->getTotalItemCount();
-        $data['entries_pages'] = $pages = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
-        $data['entries_page_current'] = $pagination->getCurrentPageNumber();
+        $pages = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
         $pagePrevious = $pagination->getCurrentPageNumber() - 1;
         if ($pagePrevious >= 1) {
-            $data['entries_page_previous'] = $pagePrevious;
+            $data['meta']['page_previous'] = $pagePrevious;
         }
         $pageNext = $pagination->getCurrentPageNumber() + 1;
         if ($pageNext <= $pages) {
-            $data['entries_page_next'] = $pageNext;
+            $data['meta']['page_next'] = $pageNext;
+        }
+
+        $data['meta']['results'] = $pagination->getTotalItemCount();
+        $data['meta']['pages'] = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
+        $data['meta']['page_size'] = $pagination->getItemNumberPerPage();
+        $data['meta']['page_number'] = $pagination->getCurrentPageNumber();
+
+        $filtersNew = [];
+        if ($sort) {
+            $filtersNew['sort'] = $sort;
+        }
+        if ($filters) {
+            foreach ($filters->toArray() as $key => $value) {
+                $filtersNew['filter['.$key.']'] = $value;
+            }
+        }
+
+        if (0 < $pagination->getTotalItemCount()) {
+            $data['links']['first'] = $this->generateUrl($route, array_merge($filtersNew, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
+            $data['links']['last'] = $this->generateUrl($route, array_merge($filtersNew, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+
+        if (1 < $pagination->getCurrentPageNumber()) {
+            $previous = $pagination->getCurrentPageNumber() - 1;
+            $data['links']['prev'] = $this->generateUrl($route, array_merge($filtersNew, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
+        }
+
+        if ($data['meta']['pages'] > $pagination->getCurrentPageNumber()) {
+            $next = $pagination->getCurrentPageNumber() + 1;
+            $data['links']['next'] = $this->generateUrl($route, array_merge($filtersNew, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $data;

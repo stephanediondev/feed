@@ -6,9 +6,9 @@
                     <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a> /
                 {{/if}}
                 {{#if current_title }}
-                    {{trans current_title}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
+                    {{trans current_title}} <span class="badge bg-light text-dark">{{ meta.results }}</span>
                 {{else}}
-                    {{trans 'title.feeds'}} <span class="badge bg-light text-dark">{{ entries_total }}</span>
+                    {{trans 'title.feeds'}} <span class="badge bg-light text-dark">{{ meta.results }}</span>
                 {{/if}}
             </h1>
         </div>

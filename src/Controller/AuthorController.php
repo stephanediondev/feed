@@ -7,7 +7,6 @@ namespace App\Controller;
 use App\Controller\AbstractAppController;
 use App\Entity\ActionAuthor;
 use App\Entity\Author;
-use App\Entity\Member;
 use App\Form\Type\AuthorType;
 use App\Manager\ActionAuthorManager;
 use App\Manager\ActionManager;
@@ -78,7 +77,7 @@ class AuthorController extends AbstractAppController
         $pagination = $this->paginateAbstract($this->authorManager->getList($parameters));
 
         $data['entries_entity'] = 'author';
-        $data = array_merge($data, $this->getEntriesInfo($pagination));
+        $data = array_merge($data, $this->jsonApi($pagination, 'api_authors_index', $request->query->get('sort'), $filters));
 
         $data['entries'] = [];
 

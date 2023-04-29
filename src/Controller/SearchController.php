@@ -21,6 +21,7 @@ use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route(path: '/api', name: 'api_search_', priority: 20)]
 class SearchController extends AbstractAppController
@@ -132,19 +133,44 @@ class SearchController extends AbstractAppController
             if (true === isset($result['hits']['hits'])) {
                 $data['entries_entity'] = $type;
                 if (true == isset($result['hits']['total']['value'])) {
-                    $data['entries_total'] = $result['hits']['total']['value'];
+                    $data['meta']['results'] = $result['hits']['total']['value'];
                 } else {
-                    $data['entries_total'] = $result['hits']['total'];
+                    $data['meta']['results'] = $result['hits']['total'];
                 }
-                $data['entries_pages'] = $pages = ceil($data['entries_total'] / $page->getSize());
-                $data['entries_page_current'] = $page->getNumber();
+                $data['meta']['pages'] = $pages = ceil($data['meta']['results'] / $page->getSize());
+                $data['meta']['page_number'] = $page->getNumber();
                 $pagePrevious = $page->getNumber() - 1;
                 if ($pagePrevious >= 1) {
-                    $data['entries_page_previous'] = $pagePrevious;
+                    $data['meta']['page_previous'] = $pagePrevious;
                 }
                 $pageNext = $page->getNumber() + 1;
                 if ($pageNext <= $pages) {
-                    $data['entries_page_next'] = $pageNext;
+                    $data['meta']['page_next'] = $pageNext;
+                }
+
+                $data['meta']['page_size'] = $page->getSize();
+
+                $filtersNew = [];
+                if ($request->query->get('sort')) {
+                    $filtersNew['sort'] = $request->query->get('sort');
+                }
+                foreach ($filters->toArray() as $key => $value) {
+                    $filtersNew['filter['.$key.']'] = $value;
+                }
+
+                if (0 < $data['meta']['results']) {
+                    $data['links']['first'] = $this->generateUrl($request->get('_route'), array_merge($filtersNew, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $data['links']['last'] = $this->generateUrl($request->get('_route'), array_merge($filtersNew, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
+                }
+
+                if (1 < $data['meta']['page_number']) {
+                    $previous = $data['meta']['page_number'] - 1;
+                    $data['links']['prev'] = $this->generateUrl($request->get('_route'), array_merge($filtersNew, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
+                }
+
+                if ($data['meta']['pages'] > $data['meta']['page_number']) {
+                    $next = $data['meta']['page_number'] + 1;
+                    $data['links']['next'] = $this->generateUrl($request->get('_route'), array_merge($filtersNew, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
                 }
 
                 $data['entries'] = [];

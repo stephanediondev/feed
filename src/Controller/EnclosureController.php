@@ -67,7 +67,7 @@ class EnclosureController extends AbstractAppController
         $pagination = $this->paginateAbstract($this->enclosureManager->getList($parameters));
 
         $data['entries_entity'] = 'enclosure';
-        $data = array_merge($data, $this->getEntriesInfo($pagination));
+        $data = array_merge($data, $this->jsonApi($pagination, 'api_enclosures_index', $request->query->get('sort'), $filters));
 
         $data['entries'] = [];
 

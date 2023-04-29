@@ -110,7 +110,7 @@ class ItemController extends AbstractAppController
         $pagination = $this->paginateAbstract($this->itemManager->getList($parameters));
 
         $data['entries_entity'] = 'item';
-        $data = array_merge($data, $this->getEntriesInfo($pagination));
+        $data = array_merge($data, $this->jsonApi($pagination, 'api_items_index', $request->query->get('sort'), $filters));
 
         if ($this->getMember() && $this->getMember()->getId()) {
             $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());

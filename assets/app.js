@@ -645,11 +645,11 @@ function loadRoute(key, parameters) {
                                 }
 
                                 if (route.title) {
-                                    window.document.title = i18next.t(route.title) + ' [' + dataReturn.entries_total + ']';
+                                    window.document.title = i18next.t(route.title) + ' [' + dataReturn.meta.results + ']';
                                 }
-                                $('.count').text(dataReturn.entries_total);
+                                $('.count').text(dataReturn.meta.results);
 
-                                if (dataReturn.entries_page_next) {
+                                if (dataReturn.meta.page_next) {
                                     var template_more = getTemplate('view-more');
                                     document.querySelector('main > .mdl-grid').innerHTML += template_more(dataReturn);
                                 }

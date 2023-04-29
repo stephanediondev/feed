@@ -71,7 +71,7 @@ class CategoryController extends AbstractAppController
         $pagination = $this->paginateAbstract($this->categoryManager->getList($parameters));
 
         $data['entries_entity'] = 'category';
-        $data = array_merge($data, $this->getEntriesInfo($pagination));
+        $data = array_merge($data, $this->jsonApi($pagination, 'api_categories_index', $request->query->get('sort'), $filters));
 
         $data['entries'] = [];
 

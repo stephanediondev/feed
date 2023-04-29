@@ -33,4 +33,12 @@ class QueryParameterFilterModel
     {
         return true === isset($this->filters[$key]) ? intval($this->filters[$key]) : null;
     }
+
+    /**
+     * @return array<mixed>
+     */
+    public function toArray(): array
+    {
+        return $this->filters;
+    }
 }
