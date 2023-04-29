@@ -32,31 +32,31 @@ class EnclosureController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'enclosure');
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
 
         $parameters = [];
 
-        if ($filters->getInt('item')) {
-            if ($item = $this->itemManager->getOne(['id' => $filters->getInt('item')])) {
-                $parameters['item'] = $filters->getInt('item');
+        if ($filtersModel->getInt('item')) {
+            if ($item = $this->itemManager->getOne(['id' => $filtersModel->getInt('item')])) {
+                $parameters['item'] = $filtersModel->getInt('item');
                 $data['entry'] = $item->toArray();
                 $data['entry_entity'] = 'item';
             }
         }
 
-        if ($filters->get('type')) {
-            $parameters['type'] = $filters->get('type');
+        if ($filtersModel->get('type')) {
+            $parameters['type'] = $filtersModel->get('type');
         }
 
-        if ($filters->getInt('days')) {
-            $parameters['days'] = $filters->getInt('days');
+        if ($filtersModel->getInt('days')) {
+            $parameters['days'] = $filtersModel->getInt('days');
         }
 
-        $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
 
-        if ($sort) {
-            $parameters['sortDirection'] = $sort['direction'];
-            $parameters['sortField'] = $sort['field'];
+        if ($sortGet = $sortModel->get()) {
+            $parameters['sortDirection'] = $sortGet['direction'];
+            $parameters['sortField'] = $sortGet['field'];
         } else {
             $parameters['sortDirection'] = 'DESC';
             $parameters['sortField'] = 'itm.date';
@@ -64,10 +64,10 @@ class EnclosureController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($this->enclosureManager->getList($parameters));
+        $pagination = $this->paginateAbstract($request, $this->enclosureManager->getList($parameters));
 
         $data['entries_entity'] = 'enclosure';
-        $data = array_merge($data, $this->jsonApi($pagination, 'api_enclosures_index', $request->query->get('sort'), $filters));
+        $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
         $data['entries'] = [];
 

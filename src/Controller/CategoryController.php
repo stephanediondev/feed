@@ -39,28 +39,28 @@ class CategoryController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'category');
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
 
         $parameters = [];
 
-        if ($filters->getBool('excluded')) {
+        if ($filtersModel->getBool('excluded')) {
             $parameters['excluded'] = true;
             $parameters['member'] = $this->getMember();
         }
 
-        if ($filters->getBool('usedbyfeeds')) {
+        if ($filtersModel->getBool('usedbyfeeds')) {
             $parameters['usedbyfeeds'] = true;
         }
 
-        if ($filters->getInt('days')) {
-            $parameters['days'] = $filters->getInt('days');
+        if ($filtersModel->getInt('days')) {
+            $parameters['days'] = $filtersModel->getInt('days');
         }
 
-        $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
 
-        if ($sort) {
-            $parameters['sortDirection'] = $sort['direction'];
-            $parameters['sortField'] = $sort['field'];
+        if ($sortGet = $sortModel->get()) {
+            $parameters['sortDirection'] = $sortGet['direction'];
+            $parameters['sortField'] = $sortGet['field'];
         } else {
             $parameters['sortDirection'] = 'ASC';
             $parameters['sortField'] = 'cat.title';
@@ -68,10 +68,10 @@ class CategoryController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($this->categoryManager->getList($parameters));
+        $pagination = $this->paginateAbstract($request, $this->categoryManager->getList($parameters));
 
         $data['entries_entity'] = 'category';
-        $data = array_merge($data, $this->jsonApi($pagination, 'api_categories_index', $request->query->get('sort'), $filters));
+        $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
         $data['entries'] = [];
 

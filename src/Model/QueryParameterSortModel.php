@@ -13,6 +13,11 @@ class QueryParameterSortModel
         $this->sort = $sort;
     }
 
+    public function raw(): ?string
+    {
+        return $this->sort;
+    }
+
     /**
      * @return array<string>
      */

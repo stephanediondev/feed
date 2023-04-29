@@ -41,32 +41,32 @@ class AuthorController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'author');
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
 
         $parameters = [];
 
-        if ($filters->getBool('excluded')) {
+        if ($filtersModel->getBool('excluded')) {
             $parameters['excluded'] = true;
             $parameters['member'] = $this->getMember();
         }
 
-        if ($filters->getInt('feed')) {
-            if ($feed = $this->feedManager->getOne(['id' => $filters->getInt('feed')])) {
-                $parameters['feed'] = $filters->getInt('feed');
+        if ($filtersModel->getInt('feed')) {
+            if ($feed = $this->feedManager->getOne(['id' => $filtersModel->getInt('feed')])) {
+                $parameters['feed'] = $filtersModel->getInt('feed');
                 $data['entry'] = $feed->toArray();
                 $data['entry_entity'] = 'feed';
             }
         }
 
-        if ($filters->getInt('days')) {
-            $parameters['days'] = $filters->getInt('days');
+        if ($filtersModel->getInt('days')) {
+            $parameters['days'] = $filtersModel->getInt('days');
         }
 
-        $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
 
-        if ($sort) {
-            $parameters['sortDirection'] = $sort['direction'];
-            $parameters['sortField'] = $sort['field'];
+        if ($sortGet = $sortModel->get()) {
+            $parameters['sortDirection'] = $sortGet['direction'];
+            $parameters['sortField'] = $sortGet['field'];
         } else {
             $parameters['sortDirection'] = 'ASC';
             $parameters['sortField'] = 'aut.title';
@@ -74,10 +74,10 @@ class AuthorController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($this->authorManager->getList($parameters));
+        $pagination = $this->paginateAbstract($request, $this->authorManager->getList($parameters));
 
         $data['entries_entity'] = 'author';
-        $data = array_merge($data, $this->jsonApi($pagination, 'api_authors_index', $request->query->get('sort'), $filters));
+        $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
         $data['entries'] = [];
 

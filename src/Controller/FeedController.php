@@ -55,49 +55,49 @@ class FeedController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'feed');
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
 
         $parameters = [];
 
-        if ($filters->getBool('witherrors')) {
+        if ($filtersModel->getBool('witherrors')) {
             $parameters['witherrors'] = true;
         }
 
-        if ($filters->getBool('subscribed')) {
+        if ($filtersModel->getBool('subscribed')) {
             $parameters['subscribed'] = true;
             $parameters['member'] = $this->getMember();
         }
 
-        if ($filters->getBool('unsubscribed')) {
+        if ($filtersModel->getBool('unsubscribed')) {
             $parameters['unsubscribed'] = true;
             $parameters['member'] = $this->getMember();
         }
 
-        if ($filters->getInt('category')) {
-            if ($category = $this->categoryManager->getOne(['id' => $filters->getInt('category')])) {
-                $parameters['category'] = $filters->getInt('category');
+        if ($filtersModel->getInt('category')) {
+            if ($category = $this->categoryManager->getOne(['id' => $filtersModel->getInt('category')])) {
+                $parameters['category'] = $filtersModel->getInt('category');
                 $data['entry'] = $category->toArray();
                 $data['entry_entity'] = 'category';
             }
         }
 
-        if ($filters->getInt('author')) {
-            if ($author = $this->authorManager->getOne(['id' => $filters->getInt('author')])) {
-                $parameters['author'] = $filters->getInt('author');
+        if ($filtersModel->getInt('author')) {
+            if ($author = $this->authorManager->getOne(['id' => $filtersModel->getInt('author')])) {
+                $parameters['author'] = $filtersModel->getInt('author');
                 $data['entry'] = $author->toArray();
                 $data['entry_entity'] = 'author';
             }
         }
 
-        if ($filters->getInt('days')) {
-            $parameters['days'] = $filters->getInt('days');
+        if ($filtersModel->getInt('days')) {
+            $parameters['days'] = $filtersModel->getInt('days');
         }
 
-        $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
 
-        if ($sort) {
-            $parameters['sortDirection'] = $sort['direction'];
-            $parameters['sortField'] = $sort['field'];
+        if ($sortGet = $sortModel->get()) {
+            $parameters['sortDirection'] = $sortGet['direction'];
+            $parameters['sortField'] = $sortGet['field'];
         } else {
             $parameters['sortDirection'] = 'ASC';
             $parameters['sortField'] = 'fed.title';
@@ -105,10 +105,10 @@ class FeedController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($this->feedManager->getList($parameters));
+        $pagination = $this->paginateAbstract($request, $this->feedManager->getList($parameters));
 
         $data['entries_entity'] = 'feed';
-        $data = array_merge($data, $this->jsonApi($pagination, 'api_feeds_index', $request->query->get('sort'), $filters));
+        $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
         $data['entries'] = [];
 

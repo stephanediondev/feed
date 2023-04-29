@@ -39,6 +39,6 @@ class QueryParameterFilterModel
      */
     public function toArray(): array
     {
-        return $this->filters;
+        return $this->filters ?? [];
     }
 }

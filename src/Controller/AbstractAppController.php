@@ -8,6 +8,7 @@ use App\Entity\Member;
 use App\Manager\ConnectionManager;
 use App\Model\QueryParameterFilterModel;
 use App\Model\QueryParameterPageModel;
+use App\Model\QueryParameterSortModel;
 use Doctrine\ORM\QueryBuilder;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -15,13 +16,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class AbstractAppController extends AbstractController
 {
-    protected ?Request $request;
-
     protected PaginatorInterface $paginator;
 
     protected ConnectionManager $connectionManager;
@@ -29,11 +27,10 @@ abstract class AbstractAppController extends AbstractController
     /**
      * @required
      */
-    public function setRequired(RequestStack $requestStack, PaginatorInterface $paginator, ConnectionManager $connectionManager): void
+    public function setRequired(PaginatorInterface $paginator, ConnectionManager $connectionManager): void
     {
         date_default_timezone_set('UTC');
 
-        $this->request = $requestStack->getMainRequest();
         $this->paginator = $paginator;
         $this->connectionManager = $connectionManager;
     }
@@ -112,18 +109,16 @@ abstract class AbstractAppController extends AbstractController
     /**
      * @return PaginationInterface<mixed>
      */
-    protected function paginateAbstract(?QueryBuilder $queryBuilder): PaginationInterface
+    protected function paginateAbstract(Request $request, ?QueryBuilder $queryBuilder): PaginationInterface
     {
         $pageNumber = 1;
         $pageSize = 20;
 
-        if ($this->request) {
-            $page = new QueryParameterPageModel($this->request->query->all('page'));
+        $pageModel = new QueryParameterPageModel($request->query->all('page'));
 
-            if ($page->getNumber() && $page->getSize()) {
-                $pageNumber = $page->getNumber();
-                $pageSize = $page->getSize();
-            }
+        if ($pageModel->getNumber() && $pageModel->getSize()) {
+            $pageNumber = $pageModel->getNumber();
+            $pageSize = $pageModel->getSize();
         }
 
         return $this->paginator->paginate($queryBuilder, $pageNumber, $pageSize, [
@@ -137,7 +132,7 @@ abstract class AbstractAppController extends AbstractController
      * @param PaginationInterface<mixed> $pagination
      * @return array<mixed>
      */
-    protected function jsonApi(PaginationInterface $pagination, string $route, ?string $sort, ?QueryParameterFilterModel $filters): array
+    protected function jsonApi(Request $request, PaginationInterface $pagination, ?QueryParameterSortModel $sortModel, ?QueryParameterFilterModel $filtersModel): array
     {
         $data = [];
         $pages = ceil($pagination->getTotalItemCount() / $pagination->getItemNumberPerPage());
@@ -155,29 +150,31 @@ abstract class AbstractAppController extends AbstractController
         $data['meta']['page_size'] = $pagination->getItemNumberPerPage();
         $data['meta']['page_number'] = $pagination->getCurrentPageNumber();
 
-        $filtersNew = [];
-        if ($sort) {
-            $filtersNew['sort'] = $sort;
+        $filters = [];
+        if ($sortModel) {
+            if ($sortRaw = $sortModel->raw()) {
+                $filters['sort'] = $sortRaw;
+            }
         }
-        if ($filters) {
-            foreach ($filters->toArray() as $key => $value) {
-                $filtersNew['filter['.$key.']'] = $value;
+        if ($filtersModel) {
+            foreach ($filtersModel->toArray() as $key => $value) {
+                $filters['filter['.$key.']'] = $value;
             }
         }
 
         if (0 < $pagination->getTotalItemCount()) {
-            $data['links']['first'] = $this->generateUrl($route, array_merge($filtersNew, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
-            $data['links']['last'] = $this->generateUrl($route, array_merge($filtersNew, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
+            $data['links']['first'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
+            $data['links']['last'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (1 < $pagination->getCurrentPageNumber()) {
             $previous = $pagination->getCurrentPageNumber() - 1;
-            $data['links']['prev'] = $this->generateUrl($route, array_merge($filtersNew, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
+            $data['links']['prev'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if ($data['meta']['pages'] > $pagination->getCurrentPageNumber()) {
             $next = $pagination->getCurrentPageNumber() + 1;
-            $data['links']['next'] = $this->generateUrl($route, array_merge($filtersNew, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
+            $data['links']['next'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $data;

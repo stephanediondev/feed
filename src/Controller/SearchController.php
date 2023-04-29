@@ -77,23 +77,23 @@ class SearchController extends AbstractAppController
     {
         $data = [];
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
 
-        if ($filters->get('query')) {
-            $page = new QueryParameterPageModel($request->query->all('page'));
+        if ($filtersModel->get('query')) {
+            $pageModel = new QueryParameterPageModel($request->query->all('page'));
 
-            $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+            $sortModel = new QueryParameterSortModel($request->query->get('sort'));
 
-            if ($sort) {
-                $sortDirection = $sort['direction'];
-                $sortField = strtolower($sort['field']);
+            if ($sortGet = $sortModel->get()) {
+                $sortDirection = $sortGet['direction'];
+                $sortField = strtolower($sortGet['field']);
             } else {
                 $sortDirection = 'desc';
                 $sortField = '_score';
             }
 
-            $from = ($page->getSize() * $page->getNumber()) - $page->getSize();
-            $path = '/'.$this->searchManager->getIndex().'_'.$type.'/_search?size='.$page->getSize().'&from='.intval($from);
+            $from = ($pageModel->getSize() * $pageModel->getNumber()) - $pageModel->getSize();
+            $path = '/'.$this->searchManager->getIndex().'_'.$type.'/_search?size='.$pageModel->getSize().'&from='.intval($from);
 
             $body = [];
             $body['sort'] = [
@@ -123,7 +123,7 @@ class SearchController extends AbstractAppController
                 $body['query'] = [
                     'query_string' => [
                         'fields' => $fields,
-                        'query' => $filters->get('query'),
+                        'query' => $filtersModel->get('query'),
                     ],
                 ];
             }
@@ -137,40 +137,40 @@ class SearchController extends AbstractAppController
                 } else {
                     $data['meta']['results'] = $result['hits']['total'];
                 }
-                $data['meta']['pages'] = $pages = ceil($data['meta']['results'] / $page->getSize());
-                $data['meta']['page_number'] = $page->getNumber();
-                $pagePrevious = $page->getNumber() - 1;
+                $data['meta']['pages'] = $pages = ceil($data['meta']['results'] / $pageModel->getSize());
+                $data['meta']['page_number'] = $pageModel->getNumber();
+                $pagePrevious = $pageModel->getNumber() - 1;
                 if ($pagePrevious >= 1) {
                     $data['meta']['page_previous'] = $pagePrevious;
                 }
-                $pageNext = $page->getNumber() + 1;
+                $pageNext = $pageModel->getNumber() + 1;
                 if ($pageNext <= $pages) {
                     $data['meta']['page_next'] = $pageNext;
                 }
 
-                $data['meta']['page_size'] = $page->getSize();
+                $data['meta']['page_size'] = $pageModel->getSize();
 
-                $filtersNew = [];
+                $filters = [];
                 if ($request->query->get('sort')) {
-                    $filtersNew['sort'] = $request->query->get('sort');
+                    $filters['sort'] = $request->query->get('sort');
                 }
-                foreach ($filters->toArray() as $key => $value) {
-                    $filtersNew['filter['.$key.']'] = $value;
+                foreach ($filtersModel->toArray() as $key => $value) {
+                    $filters['filter['.$key.']'] = $value;
                 }
 
                 if (0 < $data['meta']['results']) {
-                    $data['links']['first'] = $this->generateUrl($request->get('_route'), array_merge($filtersNew, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
-                    $data['links']['last'] = $this->generateUrl($request->get('_route'), array_merge($filtersNew, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $data['links']['first'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $data['links']['last'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
                 }
 
                 if (1 < $data['meta']['page_number']) {
                     $previous = $data['meta']['page_number'] - 1;
-                    $data['links']['prev'] = $this->generateUrl($request->get('_route'), array_merge($filtersNew, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $data['links']['prev'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
                 }
 
                 if ($data['meta']['pages'] > $data['meta']['page_number']) {
                     $next = $data['meta']['page_number'] + 1;
-                    $data['links']['next'] = $this->generateUrl($request->get('_route'), array_merge($filtersNew, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $data['links']['next'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
                 }
 
                 $data['entries'] = [];

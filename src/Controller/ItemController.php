@@ -50,56 +50,56 @@ class ItemController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'item');
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
 
         $parameters = [];
         $parameters['member'] = $this->getMember();
 
-        if ($filters->getBool('starred')) {
+        if ($filtersModel->getBool('starred')) {
             $parameters['starred'] = true;
         }
 
-        if ($filters->getBool('unread')) {
+        if ($filtersModel->getBool('unread')) {
             $parameters['unread'] = true;
         }
 
-        if ($filters->getBool('geolocation')) {
+        if ($filtersModel->getBool('geolocation')) {
             $parameters['geolocation'] = true;
         }
 
-        if ($filters->getInt('feed')) {
-            if ($feed = $this->feedManager->getOne(['id' => $filters->getInt('feed')])) {
-                $parameters['feed'] = $filters->getInt('feed');
+        if ($filtersModel->getInt('feed')) {
+            if ($feed = $this->feedManager->getOne(['id' => $filtersModel->getInt('feed')])) {
+                $parameters['feed'] = $filtersModel->getInt('feed');
                 $data['entry'] = $feed->toArray();
                 $data['entry_entity'] = 'feed';
             }
         }
 
-        if ($filters->getInt('author')) {
-            if ($author = $this->authorManager->getOne(['id' => $filters->getInt('author')])) {
-                $parameters['author'] = $filters->getInt('author');
+        if ($filtersModel->getInt('author')) {
+            if ($author = $this->authorManager->getOne(['id' => $filtersModel->getInt('author')])) {
+                $parameters['author'] = $filtersModel->getInt('author');
                 $data['entry'] = $author->toArray();
                 $data['entry_entity'] = 'author';
             }
         }
 
-        if ($filters->getInt('category')) {
-            if ($category = $this->categoryManager->getOne(['id' => $filters->getInt('category')])) {
-                $parameters['category'] = $filters->getInt('category');
+        if ($filtersModel->getInt('category')) {
+            if ($category = $this->categoryManager->getOne(['id' => $filtersModel->getInt('category')])) {
+                $parameters['category'] = $filtersModel->getInt('category');
                 $data['entry'] = $category->toArray();
                 $data['entry_entity'] = 'category';
             }
         }
 
-        if ($filters->getInt('days')) {
-            $parameters['days'] = $filters->getInt('days');
+        if ($filtersModel->getInt('days')) {
+            $parameters['days'] = $filtersModel->getInt('days');
         }
 
-        $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
 
-        if ($sort) {
-            $parameters['sortDirection'] = $sort['direction'];
-            $parameters['sortField'] = $sort['field'];
+        if ($sortGet = $sortModel->get()) {
+            $parameters['sortDirection'] = $sortGet['direction'];
+            $parameters['sortField'] = $sortGet['field'];
         } else {
             $parameters['sortDirection'] = 'DESC';
             $parameters['sortField'] = 'itm.date';
@@ -107,10 +107,10 @@ class ItemController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($this->itemManager->getList($parameters));
+        $pagination = $this->paginateAbstract($request, $this->itemManager->getList($parameters));
 
         $data['entries_entity'] = 'item';
-        $data = array_merge($data, $this->jsonApi($pagination, 'api_items_index', $request->query->get('sort'), $filters));
+        $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
         if ($this->getMember() && $this->getMember()->getId()) {
             $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
@@ -221,7 +221,7 @@ class ItemController extends AbstractAppController
     {
         $data = [];
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
 
         $parameters = [];
 
@@ -229,24 +229,24 @@ class ItemController extends AbstractAppController
 
         $parameters['unread'] = true;
 
-        if ($filters->getBool('starred')) {
+        if ($filtersModel->getBool('starred')) {
             $parameters['starred'] = true;
         }
 
-        if ($filters->getInt('feed')) {
-            $parameters['feed'] = $filters->getInt('feed');
+        if ($filtersModel->getInt('feed')) {
+            $parameters['feed'] = $filtersModel->getInt('feed');
         }
 
-        if ($filters->getInt('author')) {
-            $parameters['author'] = $filters->getInt('author');
+        if ($filtersModel->getInt('author')) {
+            $parameters['author'] = $filtersModel->getInt('author');
         }
 
-        if ($filters->getInt('category')) {
-            $parameters['category'] = $filters->getInt('category');
+        if ($filtersModel->getInt('category')) {
+            $parameters['category'] = $filtersModel->getInt('category');
         }
 
-        if ($filters->getInt('age')) {
-            $parameters['age'] = $filters->getInt('age');
+        if ($filtersModel->getInt('age')) {
+            $parameters['age'] = $filtersModel->getInt('age');
         }
 
         $parameters['sortField'] = 'itm.id';

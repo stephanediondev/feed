@@ -29,31 +29,31 @@ class ConnectionController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('LIST', 'connection');
 
-        $filters = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
 
         $parameters = [];
 
-        if ($filters->getInt('member')) {
-            if ($member = $this->memberManager->getOne(['id' => $filters->getInt('member')])) {
-                $parameters['member'] = $filters->getInt('member');
+        if ($filtersModel->getInt('member')) {
+            if ($member = $this->memberManager->getOne(['id' => $filtersModel->getInt('member')])) {
+                $parameters['member'] = $filtersModel->getInt('member');
                 $data['entry'] = $member->toArray();
                 $data['entry_entity'] = 'member';
             }
         }
 
-        if ($filters->get('type')) {
-            $parameters['type'] = $filters->get('type');
+        if ($filtersModel->get('type')) {
+            $parameters['type'] = $filtersModel->get('type');
         }
 
-        if ($filters->getInt('days')) {
-            $parameters['days'] = $filters->getInt('days');
+        if ($filtersModel->getInt('days')) {
+            $parameters['days'] = $filtersModel->getInt('days');
         }
 
-        $sort = (new QueryParameterSortModel($request->query->get('sort')))->get();
+        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
 
-        if ($sort) {
-            $parameters['sortDirection'] = $sort['direction'];
-            $parameters['sortField'] = $sort['field'];
+        if ($sortGet = $sortModel->get()) {
+            $parameters['sortDirection'] = $sortGet['direction'];
+            $parameters['sortField'] = $sortGet['field'];
         } else {
             $parameters['sortDirection'] = 'DESC';
             $parameters['sortField'] = 'cnt.dateModified';
@@ -61,10 +61,10 @@ class ConnectionController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($this->connectionManager->getList($parameters));
+        $pagination = $this->paginateAbstract($request, $this->connectionManager->getList($parameters));
 
         $data['entries_entity'] = 'connection';
-        $data = array_merge($data, $this->jsonApi($pagination, 'api_connections_index', $request->query->get('sort'), $filters));
+        $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
         $data['entries'] = [];
 

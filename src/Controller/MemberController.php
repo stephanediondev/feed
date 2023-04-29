@@ -8,6 +8,7 @@ use App\Controller\AbstractAppController;
 use App\Entity\Member;
 use App\Form\Type\MemberType;
 use App\Manager\MemberManager;
+use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -37,10 +38,12 @@ class MemberController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($this->memberManager->getList($parameters));
+        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
+
+        $pagination = $this->paginateAbstract($request, $this->memberManager->getList($parameters));
 
         $data['entries_entity'] = 'member';
-        $data = array_merge($data, $this->jsonApi($pagination, 'api_members_index', $request->query->get('sort'), null));
+        $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, null));
 
         $data['entries'] = [];
 
