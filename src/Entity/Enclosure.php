@@ -158,4 +158,50 @@ class Enclosure
             'height' => $this->getHeight(),
         ];
     }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getJsonApiData(): array
+    {
+        $relationships = [];
+
+        if ($this->getitem()) {
+            $relationships['item'] = [
+                'data' => [
+                    'id' => strval($this->getitem()->getId()),
+                    'type' => 'item',
+                ],
+            ];
+        }
+
+        return [
+            'id' => strval($this->getId()),
+            'type' => 'enclosure',
+            'attributes' => [
+                'link' => $this->getLink(),
+                'type_full' => $this->getType(),
+                'type_group' => $this->getTypeGroup(),
+                'link_secure' => $this->isLinkSecure(),
+                'length' => $this->getLength(),
+                'width' => $this->getWidth(),
+                'height' => $this->getHeight(),
+            ],
+            'relationships' => $relationships,
+        ];
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getJsonApiIncluded(): array
+    {
+        $included = [];
+
+        if ($this->getitem()) {
+            $included['item-'.$this->getitem()->getId()] = $this->getitem()->getJsonApiData();
+        }
+
+        return $included;
+    }
 }

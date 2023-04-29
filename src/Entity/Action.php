@@ -77,4 +77,19 @@ class Action
             'title' => $this->getTitle(),
         ];
     }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getJsonApiData(): array
+    {
+        return [
+            'id' => strval($this->getId()),
+            'type' => 'action',
+            'attributes' => [
+                'title' => $this->getTitle(),
+                'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
+            ],
+        ];
+    }
 }

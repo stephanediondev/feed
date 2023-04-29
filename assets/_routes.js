@@ -15,8 +15,8 @@ routes['#feeds/search/result'] = {view: 'view-search-feeds', viewUnit: 'view-fee
 
 routes['#feed/action/subscribe/{id}'] = {view: false, query: '/feed/action/subscribe/{id}'};
 
-routes['#feeds/category/{id}'] = {view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?filter[category]={id}'};
-routes['#feeds/author/{id}'] = {view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?filter[author]={id}'};
+routes['#feeds/category/{id}'] = {hightlightIncluded: 'category', view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?filter[category]={id}'};
+routes['#feeds/author/{id}'] = {hightlightIncluded: 'author', view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?filter[author]={id}'};
 
 routes['#feed/{id}'] = {view: 'view-feed-read', query: '/feed/{id}'};
 
@@ -31,11 +31,11 @@ routes['#items/search/result'] = {view: 'view-search-items', viewUnit: 'view-ite
 routes['#item/action/read/{id}'] = {view: false, query: '/item/action/read/{id}'};
 routes['#item/action/star/{id}'] = {view: false, query: '/item/action/star/{id}'};
 
-routes['#items/feed/{id}'] = {view: 'view-items', viewUnit: 'view-items-unit', query: '/items?filter[feed]={id}'};
-routes['#items/author/{id}'] = {view: 'view-items', viewUnit: 'view-items-unit', query: '/items?filter[author]={id}'};
-routes['#items/category/{id}'] = {view: 'view-items', viewUnit: 'view-items-unit', query: '/items?filter[category]={id}'};
+routes['#items/feed/{id}'] = {hightlightIncluded: 'feed', view: 'view-items', viewUnit: 'view-items-unit', query: '/items?filter[feed]={id}'};
+routes['#items/author/{id}'] = {hightlightIncluded: 'author', view: 'view-items', viewUnit: 'view-items-unit', query: '/items?filter[author]={id}'};
+routes['#items/category/{id}'] = {hightlightIncluded: 'category', view: 'view-items', viewUnit: 'view-items-unit', query: '/items?filter[category]={id}'};
 
-routes['#item/{id}'] = {view: 'view-items-unit', query: '/item/{id}'};
+routes['#item/{id}'] = {view: 'view-items', viewUnit: 'view-items-unit', query: '/item/{id}'};
 
 routes['#items/markallasread/all'] = {view: false, query: '/items/markallasread'};
 routes['#items/markallasread/unread'] = {view: false, query: '/items/markallasread?filter[unread]=true'};

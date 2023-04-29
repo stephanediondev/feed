@@ -36,6 +36,7 @@ class CategoryController extends AbstractAppController
     public function index(Request $request): JsonResponse
     {
         $data = [];
+        $included = [];
 
         $this->denyAccessUnlessGranted('LIST', 'category');
 
@@ -73,7 +74,7 @@ class CategoryController extends AbstractAppController
         $data['entries_entity'] = 'category';
         $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
-        $data['entries'] = [];
+        $data['data'] = [];
 
         $ids = [];
         foreach ($pagination as $result) {
@@ -83,22 +84,33 @@ class CategoryController extends AbstractAppController
         $results = $this->actionCategoryManager->getList(['member' => $this->getMember(), 'categories' => $ids])->getResult();
         $actions = [];
         foreach ($results as $actionCategory) {
-            $actions[$actionCategory->getCategory()->getId()][] = $actionCategory;
+            $included['action-'.$actionCategory->getAction()->getId()] = $actionCategory->getAction()->getJsonApiData();
+            $actions[$actionCategory->getCategory()->getId()][] = $actionCategory->getAction()->getId();
         }
 
         foreach ($pagination as $result) {
             $category = $this->categoryManager->getOne(['id' => $result['id']]);
             if ($category) {
-                $entry = $category->toArray();
+                $entry = $category->getJsonApiData();
 
                 if (true === isset($actions[$result['id']])) {
-                    foreach ($actions[$result['id']] as $action) {
-                        $entry[$action->getAction()->getTitle()] = true;
+                    $entry['relationships']['actions'] = [
+                        'data' => [],
+                    ];
+                    foreach ($actions[$result['id']] as $actionId) {
+                        $entry['relationships']['actions']['data'][] = [
+                            'id'=> strval($actionId),
+                            'type' => 'action',
+                        ];
                     }
                 }
 
-                $data['entries'][] = $entry;
+                $data['data'][] = $entry;
             }
+        }
+
+        if (0 < count($included)) {
+            $data['included'] = array_values($included);
         }
 
         return $this->jsonResponse($data);
@@ -120,8 +132,7 @@ class CategoryController extends AbstractAppController
         if ($form->isValid()) {
             $this->categoryManager->persist($form->getData());
 
-            $data['entry'] = $category->toArray();
-            $data['entry_entity'] = 'category';
+            $data['data'] = $category->getJsonApiData();
         } else {
             $data = $this->getFormErrors($form);
             return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
@@ -143,13 +154,35 @@ class CategoryController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('READ', $category);
 
-        $actions = $this->actionCategoryManager->getList(['member' => $this->getMember(), 'category' => $category])->getResult();
+        $data['data'] = [];
+        $included = [];
 
-        $data['entry'] = $category->toArray();
-        foreach ($actions as $action) {
-            $data['entry'][$action->getAction()->getTitle()] = true;
+        $entry = $category->getJsonApiData();
+
+        $results = $this->actionCategoryManager->getList(['member' => $this->getMember(), 'category' => $category])->getResult();
+        $actions = [];
+        foreach ($results as $actionCategory) {
+            $included['action-'.$actionCategory->getAction()->getId()] = $actionCategory->getAction()->getJsonApiData();
+            $actions[$actionCategory->getCategory()->getId()][] = $actionCategory->getAction()->getId();
         }
-        $data['entry_entity'] = 'category';
+
+        if (true === isset($actions[$entry['id']])) {
+            $entry['relationships']['actions'] = [
+                'data' => [],
+            ];
+            foreach ($actions[$entry['id']] as $actionId) {
+                $entry['relationships']['actions']['data'][] = [
+                    'id'=> strval($actionId),
+                    'type' => 'action',
+                ];
+            }
+        }
+
+        $data['data'] = $entry;
+
+        if (0 < count($included)) {
+            $data['included'] = array_values($included);
+        }
 
         return $this->jsonResponse($data);
     }

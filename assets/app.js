@@ -376,20 +376,20 @@ function ready() {
                 }).then(function(response) {
                     if (response.ok && 200 === response.status) {
                         if (form.data('query') === '/feeds/export') {
-                            response.text().then(function(dataReturn) {
-                                var blob = new Blob([dataReturn], {type: 'application/xml;charset=utf-8'});
+                            response.text().then(function(jsonResponse) {
+                                var blob = new Blob([jsonResponse], {type: 'application/xml;charset=utf-8'});
                                 saveAs(blob, form.find('#choice').val() + '-' + getDate() + '.opml');
                             });
 
                         } else {
-                            response.json().then(function(dataReturn) {
-                                if (typeof dataReturn.entry !== 'undefined') {
-                                    if (dataReturn.entry.title) {
-                                        setToast({'title': i18next.t(form.attr('method')), 'body': dataReturn.entry.title});
+                            response.json().then(function(jsonResponse) {
+                                if (typeof jsonResponse.entry !== 'undefined') {
+                                    if (jsonResponse.entry.data.attributes.title) {
+                                        setToast({'title': i18next.t(form.attr('method')), 'body': jsonResponse.entry.data.attributes.title});
                                     }
                                 }
                                 if (form.data('query') === '/login') {
-                                    setCookie('token_signed', dataReturn.entry.token_signed, 365);
+                                    setCookie('token_signed', jsonResponse.entry.token_signed, 365);
 
                                     explainConnection();
 
@@ -485,6 +485,7 @@ function getTranslation(languageFinal) {
 }
 
 function getTemplate(key) {
+    console.log('template: ' + key);
     return Handlebars.compile( $('#' + key).text() );
 }
 
@@ -594,10 +595,10 @@ function loadRoute(key, parameters) {
         }
 
         if (!route.query && route.view) {
-            var dataReturn = {};
+            var jsonResponse = {};
 
             var template = getTemplate(route.view);
-            document.querySelector('main > .mdl-grid').innerHTML = template(dataReturn);
+            document.querySelector('main > .mdl-grid').innerHTML = template(jsonResponse);
 
         } else if (route.query) {
             fetch(url, {
@@ -610,52 +611,99 @@ function loadRoute(key, parameters) {
                 })
         	}).then(function(response) {
                 if (response.ok && 200 === response.status) {
-                    response.json().then(function(dataReturn) {
-                        dataReturn.current_key = key;
-                        dataReturn.current_key_markallasread = key.replace('#items', '#items/markallasread');
-                        dataReturn.current_q = parameters.q ? decodeURIComponent(parameters.q) : '';
+                    response.json().then(function(jsonResponse) {
+                        jsonResponse.current_key = key;
+                        jsonResponse.current_key_markallasread = key.replace('#items', '#items/markallasread');
+                        jsonResponse.current_q = parameters.q ? decodeURIComponent(parameters.q) : '';
 
                         if (route.title) {
-                            dataReturn.current_title = route.title;
+                            jsonResponse.current_title = route.title;
                         }
 
-                        if (typeof dataReturn.unread !== 'undefined') {
-                            setBadge(parseInt(dataReturn.unread));
+                        if (typeof jsonResponse.unread !== 'undefined') {
+                            setBadge(parseInt(jsonResponse.unread));
                         }
 
                         if (route.view) {
-                            if (typeof dataReturn.entry === 'object' && typeof dataReturn.entry_entity === 'string') {
-                                if (typeof dataReturn.entry.title === 'string') {
-                                    window.document.title = dataReturn.entry.title + ' (' + i18next.t(dataReturn.entry_entity) + ')';
+                            let included = {};
+                            if (Object.prototype.toString.call( jsonResponse.included ) === '[object Array]') {
+                                for (i in jsonResponse.included) {
+                                    if (jsonResponse.included.hasOwnProperty(i)) {
+                                        var entry = jsonResponse.included[i];
+                                        if (typeof included[entry.type] === 'undefined') {
+                                            included[entry.type] = [];
+                                        }
+                                        included[entry.type][entry.id] = entry;
+                                    }
                                 }
                             }
 
-                            if (!parameters.page || parameters.page === 1) {
-                                var template = getTemplate(route.view);
-                                document.querySelector('main > .mdl-grid').innerHTML = template(dataReturn);
+                            if (typeof route.hightlightIncluded !== 'undefined' && replaceId && typeof included[route.hightlightIncluded][replaceId] !== 'undefined') {
+                                jsonResponse.hightlightIncluded = included[route.hightlightIncluded][replaceId];
+                                window.document.title = jsonResponse.hightlightIncluded.attributes.title + ' (' + i18next.t(route.hightlightIncluded) + ')';
                             }
 
-                            if (Object.prototype.toString.call( dataReturn.entries ) === '[object Array]' && typeof route.viewUnit === 'string') {
-                                var templateUnit = getTemplate(route.viewUnit);
+                            if (!parameters.page || parameters.page === 1) {
+                                //var template = getTemplate(route.view);
+                                document.querySelector('main > .mdl-grid').innerHTML = '';//template(jsonResponse);
+                            }
 
-                                for(i in dataReturn.entries) {
-                                    if (dataReturn.entries.hasOwnProperty(i)) {
-                                        document.querySelector('main > .mdl-grid').innerHTML += templateUnit({entry: dataReturn.entries[i]});
+                            var jsonResponsedata = jsonResponse.data;
+
+                            if (Object.prototype.toString.call( jsonResponse.data ) === '[object Object]') {
+                                jsonResponsedata = [];
+                                jsonResponsedata[0] = jsonResponse.data;
+                            }
+
+                            if (Object.prototype.toString.call( jsonResponsedata ) === '[object Array]') {
+                                if (typeof route.viewUnit === 'string') {
+                                    var templateUnit = getTemplate(route.viewUnit);
+                                } else {
+                                    var templateUnit = getTemplate(route.view);
+                                }
+
+                                for (i in jsonResponsedata) {
+                                    if (jsonResponsedata.hasOwnProperty(i)) {
+                                        var entry = jsonResponsedata[i];
+                                        if (typeof entry.relationships !== 'undefined') {
+                                            for (var relationship in entry.relationships) {
+                                                if ('actions' === relationship) {
+                                                    if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Array]') {
+                                                        for (var j in entry.relationships[relationship]['data']) {
+                                                            var include = entry.relationships[relationship]['data'][j];
+                                                            entry[included[include.type][include.id]['title']] = true;
+                                                        }
+                                                    }
+                                                } else {
+                                                    if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Object]') {
+                                                        entry.relationships[relationship]['data']['attributes'] = included[relationship][entry.relationships[relationship]['data']['id']]['attributes'];
+                                                    }
+                                                    if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Array]') {
+                                                        for (var j in entry.relationships[relationship]['data']) {
+                                                            var include = entry.relationships[relationship]['data'][j];
+                                                            entry.relationships[relationship]['data'][j]['attributes'] = included[include.type][include.id]['attributes'];
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        console.log(entry);
+                                        document.querySelector('main > .mdl-grid').innerHTML += templateUnit({'entry': entry});
                                     }
                                 }
 
                                 if (route.title) {
-                                    window.document.title = i18next.t(route.title) + ' [' + dataReturn.meta.results + ']';
+                                    window.document.title = i18next.t(route.title) + ' [' + jsonResponse.meta.results + ']';
                                 }
-                                $('.count').text(dataReturn.meta.results);
+                                $('.count').text(jsonResponse.meta.results);
 
-                                if (dataReturn.meta.page_next) {
+                                if (jsonResponse.meta.page_next) {
                                     var template_more = getTemplate('view-more');
-                                    document.querySelector('main > .mdl-grid').innerHTML += template_more(dataReturn);
+                                    document.querySelector('main > .mdl-grid').innerHTML += template_more(jsonResponse);
                                 }
                             }
 
-                            if (Object.prototype.toString.call( dataReturn.entries ) === '[object Array]') {
+                            if (Object.prototype.toString.call( jsonResponsedata ) === '[object Array]') {
                                 $('body').removeClass('no_entries');
                             } else {
                                 $('body').addClass('no_entries');
@@ -668,13 +716,13 @@ function loadRoute(key, parameters) {
                             });
                         } else {
                             if (parameters.link) {
-                                parameters.link.text(i18next.t(dataReturn.action_reverse));
-                                parameters.link.addClass(dataReturn.action);
-                                parameters.link.removeClass(dataReturn.action_reverse);
+                                parameters.link.text(i18next.t(jsonResponse.action_reverse));
+                                parameters.link.addClass(jsonResponse.action);
+                                parameters.link.removeClass(jsonResponse.action_reverse);
                             }
-                            if (typeof dataReturn.entry === 'object' && typeof dataReturn.action === 'string') {
+                            if (typeof jsonResponse.entry === 'object' && typeof jsonResponse.action === 'string') {
                                 if (parameters.snackbar) {
-                                    setToast({'title': i18next.t(dataReturn.action), 'body': dataReturn.entry.title});
+                                    setToast({'title': i18next.t(jsonResponse.action), 'body': jsonResponse.entry.data.attributes.title});
                                 }
                             }
                         }

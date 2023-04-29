@@ -38,6 +38,7 @@ class AuthorController extends AbstractAppController
     public function index(Request $request): JsonResponse
     {
         $data = [];
+        $included = [];
 
         $this->denyAccessUnlessGranted('LIST', 'author');
 
@@ -53,8 +54,7 @@ class AuthorController extends AbstractAppController
         if ($filtersModel->getInt('feed')) {
             if ($feed = $this->feedManager->getOne(['id' => $filtersModel->getInt('feed')])) {
                 $parameters['feed'] = $filtersModel->getInt('feed');
-                $data['entry'] = $feed->toArray();
-                $data['entry_entity'] = 'feed';
+                $included['feed-'.$feed->getId()] = $feed->getJsonApiData();
             }
         }
 
@@ -76,10 +76,9 @@ class AuthorController extends AbstractAppController
 
         $pagination = $this->paginateAbstract($request, $this->authorManager->getList($parameters));
 
-        $data['entries_entity'] = 'author';
         $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
-        $data['entries'] = [];
+        $data['data'] = [];
 
         $ids = [];
         foreach ($pagination as $result) {
@@ -89,22 +88,33 @@ class AuthorController extends AbstractAppController
         $results = $this->actionAuthorManager->getList(['member' => $this->getMember(), 'authors' => $ids])->getResult();
         $actions = [];
         foreach ($results as $actionAuthor) {
-            $actions[$actionAuthor->getAuthor()->getId()][] = $actionAuthor;
+            $included['action-'.$actionAuthor->getAction()->getId()] = $actionAuthor->getAction()->getJsonApiData();
+            $actions[$actionAuthor->getAuthor()->getId()][] = $actionAuthor->getAction()->getId();
         }
 
         foreach ($pagination as $result) {
             $author = $this->authorManager->getOne(['id' => $result['id']]);
             if ($author) {
-                $entry = $author->toArray();
+                $entry = $author->getJsonApiData();
 
                 if (true === isset($actions[$result['id']])) {
-                    foreach ($actions[$result['id']] as $action) {
-                        $entry[$action->getAction()->getTitle()] = true;
+                    $entry['relationships']['actions'] = [
+                        'data' => [],
+                    ];
+                    foreach ($actions[$result['id']] as $actionId) {
+                        $entry['relationships']['actions']['data'][] = [
+                            'id'=> strval($actionId),
+                            'type' => 'action',
+                        ];
                     }
                 }
 
-                $data['entries'][] = $entry;
+                $data['data'][] = $entry;
             }
+        }
+
+        if (0 < count($included)) {
+            $data['included'] = array_values($included);
         }
 
         return $this->jsonResponse($data);
@@ -126,8 +136,7 @@ class AuthorController extends AbstractAppController
         if ($form->isValid()) {
             $this->authorManager->persist($form->getData());
 
-            $data['entry'] = $author->toArray();
-            $data['entry_entity'] = 'author';
+            $data['data'] = $author->getJsonApiData();
         } else {
             $data = $this->getFormErrors($form);
             return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
@@ -149,8 +158,35 @@ class AuthorController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('READ', $author);
 
-        $data['entry'] = $author->toArray();
-        $data['entry_entity'] = 'author';
+        $data['data'] = [];
+        $included = [];
+
+        $entry = $author->getJsonApiData();
+
+        $results = $this->actionAuthorManager->getList(['member' => $this->getMember(), 'author' => $author])->getResult();
+        $actions = [];
+        foreach ($results as $actionAuthor) {
+            $included['action-'.$actionAuthor->getAction()->getId()] = $actionAuthor->getAction()->getJsonApiData();
+            $actions[$actionAuthor->getAuthor()->getId()][] = $actionAuthor->getAction()->getId();
+        }
+
+        if (true === isset($actions[$entry['id']])) {
+            $entry['relationships']['actions'] = [
+                'data' => [],
+            ];
+            foreach ($actions[$entry['id']] as $actionId) {
+                $entry['relationships']['actions']['data'][] = [
+                    'id'=> strval($actionId),
+                    'type' => 'action',
+                ];
+            }
+        }
+
+        $data['data'] = $entry;
+
+        if (0 < count($included)) {
+            $data['included'] = array_values($included);
+        }
 
         return $this->jsonResponse($data);
     }

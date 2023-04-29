@@ -52,6 +52,7 @@ class FeedController extends AbstractAppController
     public function index(Request $request): JsonResponse
     {
         $data = [];
+        $included = [];
 
         $this->denyAccessUnlessGranted('LIST', 'feed');
 
@@ -76,16 +77,14 @@ class FeedController extends AbstractAppController
         if ($filtersModel->getInt('category')) {
             if ($category = $this->categoryManager->getOne(['id' => $filtersModel->getInt('category')])) {
                 $parameters['category'] = $filtersModel->getInt('category');
-                $data['entry'] = $category->toArray();
-                $data['entry_entity'] = 'category';
+                $included['category-'.$category->getId()] = $category->getJsonApiData();
             }
         }
 
         if ($filtersModel->getInt('author')) {
             if ($author = $this->authorManager->getOne(['id' => $filtersModel->getInt('author')])) {
                 $parameters['author'] = $filtersModel->getInt('author');
-                $data['entry'] = $author->toArray();
-                $data['entry_entity'] = 'author';
+                $included['author-'.$author->getId()] = $author->getJsonApiData();
             }
         }
 
@@ -107,10 +106,9 @@ class FeedController extends AbstractAppController
 
         $pagination = $this->paginateAbstract($request, $this->feedManager->getList($parameters));
 
-        $data['entries_entity'] = 'feed';
         $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
-        $data['entries'] = [];
+        $data['data'] = [];
 
         $ids = [];
         foreach ($pagination as $result) {
@@ -120,32 +118,52 @@ class FeedController extends AbstractAppController
         $results = $this->actionFeedManager->getList(['member' => $this->getMember(), 'feeds' => $ids])->getResult();
         $actions = [];
         foreach ($results as $actionFeed) {
-            $actions[$actionFeed->getFeed()->getId()][] = $actionFeed;
+            $included['action-'.$actionFeed->getAction()->getId()] = $actionFeed->getAction()->getJsonApiData();
+            $actions[$actionFeed->getFeed()->getId()][] = $actionFeed->getAction()->getId();
         }
 
         $results = $this->categoryManager->feedCategoryManager->getList(['member' => $this->getMember(), 'feeds' => $ids])->getResult();
         $categories = [];
         foreach ($results as $feedCategory) {
-            $categories[$feedCategory->getFeed()->getId()][] = $feedCategory->toArray();
+            $included['category-'.$feedCategory->getCategory()->getId()] = $feedCategory->getCategory()->getJsonApiData();
+            $categories[$feedCategory->getFeed()->getId()][] = $feedCategory->getCategory()->getId();
         }
 
         foreach ($pagination as $result) {
             $feed = $this->feedManager->getOne(['id' => $result['id']]);
             if ($feed) {
-                $entry = $feed->toArray();
+                $entry = $feed->getJsonApiData();
 
                 if (true === isset($actions[$result['id']])) {
-                    foreach ($actions[$result['id']] as $action) {
-                        $entry[$action->getAction()->getTitle()] = true;
+                    $entry['relationships']['actions'] = [
+                        'data' => [],
+                    ];
+                    foreach ($actions[$result['id']] as $actionId) {
+                        $entry['relationships']['actions']['data'][] = [
+                            'id'=> strval($actionId),
+                            'type' => 'action',
+                        ];
                     }
                 }
 
                 if (true === isset($categories[$result['id']])) {
-                    $entry['categories'] = $categories[$result['id']];
+                    $entry['relationships']['categories'] = [
+                        'data' => [],
+                    ];
+                    foreach ($categories[$result['id']] as $categoryId) {
+                        $entry['relationships']['categories']['data'][] = [
+                            'id'=> strval($categoryId),
+                            'type' => 'category',
+                        ];
+                    }
                 }
 
-                $data['entries'][] = $entry;
+                $data['data'][] = $entry;
             }
+        }
+
+        if (0 < count($included)) {
+            $data['included'] = array_values($included);
         }
 
         return $this->jsonResponse($data);
@@ -172,8 +190,7 @@ class FeedController extends AbstractAppController
                 $this->collectionManager->start($feed->getId());
             }
 
-            $data['entry'] = $feed->toArray();
-            $data['entry_entity'] = 'feed';
+            $data['data'] = $feed->getJsonApiData();
         } else {
             $data = $this->getFormErrors($form);
             return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
@@ -195,25 +212,71 @@ class FeedController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('READ', $feed);
 
-        $actions = $this->actionFeedManager->getList(['member' => $this->getMember(), 'feed' => $feed])->getResult();
+        $data['data'] = [];
+        $included = [];
+
+        $entry = $feed->getJsonApiData();
+
+        $results = $this->actionFeedManager->getList(['member' => $this->getMember(), 'feed' => $feed])->getResult();
+        $actions = [];
+        foreach ($results as $actionFeed) {
+            $included['action-'.$actionFeed->getAction()->getId()] = $actionFeed->getAction()->getJsonApiData();
+            $actions[$actionFeed->getFeed()->getId()][] = $actionFeed->getAction()->getId();
+        }
 
         $categories = [];
         foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $this->getMember(), 'feed' => $feed])->getResult() as $feedCategory) {
-            $categories[] = $feedCategory->toArray();
+            $included['category-'.$feedCategory->getCategory()->getId()] = $feedCategory->getCategory()->getJsonApiData();
+            $categories[$feedCategory->getFeed()->getId()][] = $feedCategory->getCategory()->getId();
+        }
+
+        if (true === isset($actions[$entry['id']])) {
+            $entry['relationships']['actions'] = [
+                'data' => [],
+            ];
+            foreach ($actions[$entry['id']] as $actionId) {
+                $entry['relationships']['actions']['data'][] = [
+                    'id'=> strval($actionId),
+                    'type' => 'action',
+                ];
+            }
+        }
+
+        if (true === isset($categories[$entry['id']])) {
+            $entry['relationships']['categories'] = [
+                'data' => [],
+            ];
+            foreach ($categories[$entry['id']] as $categoryId) {
+                $entry['relationships']['categories']['data'][] = [
+                    'id'=> strval($categoryId),
+                    'type' => 'category',
+                ];
+            }
         }
 
         $collections = [];
-        foreach ($this->feedManager->collectionFeedManager->getList(['feed' => $feed])->getResult() as $collection) {
-            $collections[] = $collection->toArray();
+        foreach ($this->feedManager->collectionFeedManager->getList(['feed' => $feed, 'error_notnull' => true])->getResult() as $collectionFeed) {
+            $included['collection_feed-'.$collectionFeed->getId()] = $collectionFeed->getJsonApiData();
+            $collections[$collectionFeed->getFeed()->getId()][] = $collectionFeed->getId();
         }
 
-        $data['entry'] = $feed->toArray();
-        foreach ($actions as $action) {
-            $data['entry'][$action->getAction()->getTitle()] = true;
+        if (true === isset($collections[$feed->getId()])) {
+            $entry['relationships']['collections'] = [
+                'data' => [],
+            ];
+            foreach ($collections[$feed->getId()] as $collectionFeedId) {
+                $entry['relationships']['collections']['data'][] = [
+                    'id'=> strval($collectionFeedId),
+                    'type' => 'collection_feed',
+                ];
+            }
         }
-        $data['entry']['categories'] = $categories;
-        $data['entry']['collections'] = $collections;
-        $data['entry_entity'] = 'feed';
+
+        $data['data'] = $entry;
+
+        if (0 < count($included)) {
+            $data['included'] = array_values($included);
+        }
 
         return $this->jsonResponse($data);
     }
