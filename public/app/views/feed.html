@@ -3,7 +3,7 @@
         <div class="mdl-card__title col-xl-6 col-12">
             <h1 class="mdl-card__title-text fs-5">
                 {{#if entry }}
-                    <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a> /
+                    <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.attributes.title }} ({{trans entry_entity}})</a> /
                 {{/if}}
                 {{#if current_title }}
                     {{trans current_title}} <span class="badge bg-light text-dark">{{ meta.results }}</span>
@@ -30,17 +30,17 @@
 </script>
 
 <script type="text/template" id="view-feeds-unit">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="feed-{{ entry.id }}" dir="{{ entry.direction }}">
+    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="feed-{{ entry.id }}" dir="{{ entry.attributes.direction }}">
         <div class="mdl-card__title mb-3">
             <h1 class="mdl-card__title-text fs-5">
-                <a href="#feed/{{ entry.id }}" class="load-route favicon"{{#if entry.hostname }} style="background-image:url({{ entry.icon_url }});"{{/if}}>
-                    {{ entry.title }}
+                <a href="#feed/{{ entry.id }}" class="load-route favicon"{{#if entry.attributes.hostname }} style="background-image:url({{ entry.attributes.icon_url }});"{{/if}}>
+                    {{ entry.attributes.title }}
                 </a>
             </h1>
             <div class="mdl-card__subtitle-text">
-                {{#if entry.score }}<span class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-graph-up"></i> {{score entry.score }}</span>{{/if}}
-                {{#if entry.language }}<span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-translate"></i> {{ entry.language }}</span>{{/if}}
-                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.date_created }}"></span></span>
+                {{#if entry.attributes.score }}<span class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-graph-up"></i> {{score entry.attributes.score }}</span>{{/if}}
+                {{#if entry.attributes.language }}<span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-translate"></i> {{ entry.attributes.language }}</span>{{/if}}
+                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.attributes.date_created }}"></span></span>
                 {{#if entry.categories }}
                     {{#each entry.categories as |category category_index|}}
                         <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-tag-fill"></i> {{ category.title }}</a>
@@ -48,9 +48,9 @@
                 {{/if}}
             </div>
         </div>
-        {{#if entry.description }}
+        {{#if entry.attributes.description }}
         <div class="mdl-card__supporting-text">
-            {{ entry.description }}
+            {{ entry.attributes.description }}
         </div>
         {{/if}}
         <div class="mdl-card__actions text-end mt-3 mdl-card--border">
@@ -87,14 +87,14 @@
         </div>
     </div>
 
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="feed" dir="{{ entry.direction }}">
+    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="feed" dir="{{ entry.attributes.direction }}">
         <div class="mdl-card__title mb-3">
-            <h1 class="favicon mdl-card__title-text fs-5"{{#if entry.hostname }} style="background-image:url({{ entry.icon_url }});"{{/if}}>
-                {{ entry.title }}
+            <h1 class="favicon mdl-card__title-text fs-5"{{#if entry.attributes.hostname }} style="background-image:url({{ entry.attributes.icon_url }});"{{/if}}>
+                {{ entry.attributes.title }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                {{#if entry.language }}<span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-translate"></i> {{ entry.language }}</span>{{/if}}
-                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.date_created }}"></span></span>
+                {{#if entry.attributes.language }}<span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-translate"></i> {{ entry.attributes.language }}</span>{{/if}}
+                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.attributes.date_created }}"></span></span>
                 {{#if entry.categories }}
                     {{#each entry.categories as |category category_index|}}
                         <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-tag-fill"></i> {{ category.title }}</a>
@@ -105,22 +105,22 @@
         <div class="mdl-card__supporting-text">
             <p>
                 <span class="label">{{trans 'link'}}</span>
-                <a href="{{ entry.link }}" target="_blank">{{ entry.link }}</a>
+                <a href="{{ entry.attributes.link }}" target="_blank">{{ entry.attributes.link }}</a>
             </p>
             <p>
                 <span class="label">{{trans 'website'}}</span>
-                <a href="{{ entry.website }}" target="_blank">{{ entry.website }}</a>
+                <a href="{{ entry.attributes.website }}" target="_blank">{{ entry.attributes.website }}</a>
             </p>
-            {{#if entry.description }}
+            {{#if entry.attributes.description }}
             <p>
                 <span class="label">{{trans 'description'}}</span>
-                {{ entry.description }}
+                {{ entry.attributes.description }}
             </p>
             {{/if}}
-            {{#if entry.language }}
+            {{#if entry.attributes.language }}
             <p>
                 <span class="label">{{trans 'language'}}</span>
-                {{ entry.language }}
+                {{ entry.attributes.language }}
             </p>
             {{/if}}
         </div>
@@ -146,26 +146,26 @@
                     <form action="#feed/{{ entry.id }}" data-query="/feed/{{ entry.id }}" method="PUT">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            {{ entry.title }} ({{trans 'feed'}})
+                            {{ entry.attributes.title }} ({{trans 'feed'}})
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <p>
                             <label for="title" class="form-label">{{trans 'field.title'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
-                            <input type="text" class="form-control" id="title" name="title" required value="{{ entry.title }}">
+                            <input type="text" class="form-control" id="title" name="title" required value="{{ entry.attributes.title }}">
                         </p>
                         <p>
                             <label for="link" class="form-label">{{trans 'link'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
-                            <input type="url" class="form-control" id="link" name="link" required value="{{ entry.link }}">
+                            <input type="url" class="form-control" id="link" name="link" required value="{{ entry.attributes.link }}">
                         </p>
                         <p>
                             <label for="website" class="form-label">{{trans 'website'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
-                            <input type="url" class="form-control" id="website" name="website" required value="{{ entry.website }}">
+                            <input type="url" class="form-control" id="website" name="website" required value="{{ entry.attributes.website }}">
                         </p>
                         <p>
                             <label for="language" class="form-label">{{trans 'language'}}</label>
-                            <input type="text" class="form-control" id="language" name="language" value="{{ entry.language }}">
+                            <input type="text" class="form-control" id="language" name="language" value="{{ entry.attributes.language }}">
                         </p>
                     </div>
                     <div class="modal-footer">
@@ -182,7 +182,7 @@
                     <form action="#feeds/recent" data-query="/feed/{{ entry.id }}" method="DELETE">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            {{ entry.title }} ({{trans 'feed'}})
+                            {{ entry.attributes.title }} ({{trans 'feed'}})
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -197,18 +197,20 @@
         </div>
     </div>
 
-    {{#each entry.collections as |collection collection_index|}}
-        {{#if collection.error }}
-            <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative connected" id="collection-{{ collection.id }}">
-                <div class="mdl-card__title mb-3">
-                    <h1 class="mdl-card__title-text fs-5">
-                        {{ collection.error }}
-                    </h1>
-                    <div class="mdl-card__subtitle-text">
-                        <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ collection.date_created }}"></span></span>
+    {{#if entry.relationships.collections.data }}
+        {{#each entry.relationships.collections.data as |collection collection_index|}}
+            {{#if collection.attributes.error }}
+                <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative connected" id="collection-{{ collection.id }}">
+                    <div class="mdl-card__title mb-3">
+                        <h1 class="mdl-card__title-text fs-5">
+                            {{ collection.attributes.error }}
+                        </h1>
+                        <div class="mdl-card__subtitle-text">
+                            <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ collection.attributes.date_created }}"></span></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {{/if}}
-    {{/each}}
+            {{/if}}
+        {{/each}}
+    {{/if}}
 </script>

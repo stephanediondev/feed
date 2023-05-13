@@ -74,10 +74,10 @@ class ItemManager extends AbstractManager
         foreach ($item->getEnclosures() as $enclosure) {
             $src = $enclosure->getLink();
             if ($item->getContent() && $src && !strstr($item->getContent(), $src)) {
-                $enclosures[$index_enclosures] = $enclosure->toArray();
+                $enclosures[$index_enclosures] = $enclosure->getJsonApiData();
                 if (!$enclosure->isLinkSecure() && $enclosure->getTypeGroup() == 'image') {
                     $token = urlencode(base64_encode($src));
-                    $enclosures[$index_enclosures]['link'] = '/proxy?token='.$token;
+                    $enclosures[$index_enclosures]['attributes']['link'] = '/proxy?token='.$token;
                 }
                 $index_enclosures++;
             }

@@ -2,8 +2,8 @@
     <div class="mdl-card row position-relative" id="title-entries">
         <div class="mdl-card__title col-xl-6 col-12">
             <h1 class="mdl-card__title-text fs-5">
-                {{#if entry }}
-                    <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.title }} ({{trans entry_entity}})</a> /
+                {{#if hightlightIncluded }}
+                    <a href="#{{ hightlightIncluded.type }}/{{ hightlightIncluded.id }}" class="load-route">{{ hightlightIncluded.attributes.title }} ({{trans hightlightIncluded.type}})</a> /
                 {{/if}}
                 {{#if current_title }}
                     {{trans current_title}} <span class="badge bg-light text-dark count">{{ meta.results }}</span>
@@ -30,7 +30,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title">
                             {{#if entry }}
-                                {{ entry.title }} ({{trans entry_entity}})<br>
+                                {{ entry.attributes.title }} ({{trans entry_entity}})<br>
                             {{/if}}
                             {{#if current_title }}
                                 {{trans current_title}} <span class="badge bg-light text-dark">{{ meta.results }}</span>
@@ -50,58 +50,58 @@
 </script>
 
 <script type="text/template" id="view-items-unit">
-    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative item" id="item-{{ entry.id }}" dir="{{ entry.feed.direction }}">
+    <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative item" id="item-{{ entry.id }}" dir="{{ entry.relationships.feed.data.attributes.direction }}">
         <div class="mdl-card__title mb-3">
             <h1 class="mdl-card__title-text fs-5">
-                <a title="{{trans 'shortcut_v'}}" class="favicon" href="{{ entry.link }}" {{#if entry.feed.hostname }} style="background-image:url({{ entry.feed.icon_url }});"{{/if}}>
-                    {{ entry.title }}
+                <a title="{{trans 'shortcut_v'}}" class="favicon" href="{{ entry.attributes.link }}" {{#if entry.relationships.feed.data.attributes.hostname }} style="background-image:url({{ entry.relationships.feed.data.attributes.icon_url }});"{{/if}}>
+                    {{ entry.attributes.title }}
                 </a>
             </h1>
             <div class="mdl-card__subtitle-text">
                 {{#if entry.score }}<span class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-graph-up"></i> {{score entry.score }}</span>{{/if}}
-                <a href="#item/{{ entry.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.date }}"></span></a>
+                <a href="#item/{{ entry.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.attributes.date }}"></span></a>
                 {{#if entry.latitude }}
                     {{#if entry.longitude }}
                         <a class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap" target="_blank" href="https://www.google.com/maps?q={{ entry.latitude }},{{ entry.longitude }}&oe=UTF-8&ie=UTF-8"><i class="bi bi-geo-alt-fill"></i> {{ entry.latitude }},{{ entry.longitude }}</a>
                     {{/if}}
                 {{/if}}
-                <a href="#items/feed/{{ entry.feed.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none"><i class="bi bi-rss-fill"></i> {{ entry.feed.title }}</a>
-                {{#if entry.author }}<a href="#items/author/{{ entry.author.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-person-fill"></i> {{ entry.author.title }}</a>{{/if}}
-                {{#if entry.categories }}
-                    {{#each entry.categories as |category category_index|}}
-                        <a href="#items/category/{{ category.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-tag-fill"></i> {{ category.title }}</a>
+                <a href="#items/feed/{{ entry.relationships.feed.data.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none"><i class="bi bi-rss-fill"></i> {{ entry.relationships.feed.data.attributes.title }}</a>
+                {{#if entry.relationships.author }}<a href="#items/author/{{ entry.relationships.author.data.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-person-fill"></i> {{ entry.relationships.author.data.attributes.title }}</a>{{/if}}
+                {{#if entry.relationships.categories.data }}
+                    {{#each entry.relationships.categories.data as |category category_index|}}
+                        <a href="#items/category/{{ category.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-tag-fill"></i> {{ category.attributes.title }}</a>
                     {{/each}}
                 {{/if}}
             </div>
         </div>
         <div class="mdl-card__supporting-text">
-            {{{ entry.content }}}
+            {{{ entry.attributes.content }}}
 
             <div class="enclosures">
-                {{#if entry.enclosures }}
-                    {{#each entry.enclosures as |enclosure enclosure_index|}}
-                        {{#equal enclosure.type_group 'image' }}
-                            <p><img src="{{ enclosure.link }}" alt="" loading="lazy"></p>
+                {{#if entry.relationships.enclosures.data }}
+                    {{#each entry.relationships.enclosures.data as |enclosure enclosure_index|}}
+                        {{#equal enclosure.attributes.type_group 'image' }}
+                            <p><img src="{{ enclosure.attributes.link }}" alt="" loading="lazy"></p>
                         {{/equal}}
 
-                        {{#equal enclosure.type_group 'video' }}
-                            {{#if enclosure.link_secure }}
-                                <p><video controls src="{{ enclosure.link }}"></video></p>
+                        {{#equal enclosure.attributes.type_group 'video' }}
+                            {{#if enclosure.attributes.link_secure }}
+                                <p><video controls src="{{ enclosure.attributes.link }}"></video></p>
                             {{else}}
-                                <p><a href="{{ enclosure.link }}" target="_blank"><i class="bi bi-camera-video-fill"></i> {{ enclosure.link }}</a>
+                                <p><a href="{{ enclosure.attributes.link }}" target="_blank"><i class="bi bi-camera-video-fill"></i> {{ enclosure.attributes.link }}</a>
                             {{/if}}
                         {{/equal}}
 
-                        {{#equal enclosure.type_group 'audio' }}
-                            {{#if enclosure.link_secure }}
-                                <p><audio controls src="{{ enclosure.link }}"></audio></p>
+                        {{#equal enclosure.attributes.type_group 'audio' }}
+                            {{#if enclosure.attributes.link_secure }}
+                                <p><audio controls src="{{ enclosure.attributes.link }}"></audio></p>
                             {{else}}
-                                <p><a href="{{ enclosure.link }}" target="_blank"><i class="bi bi-mic-fill"></i> {{ enclosure.link }}</a>
+                                <p><a href="{{ enclosure.attributes.link }}" target="_blank"><i class="bi bi-mic-fill"></i> {{ enclosure.attributes.link }}</a>
                             {{/if}}
                         {{/equal}}
 
-                        {{#equal enclosure.type 'application/pdf' }}
-                            <p><a href="{{ enclosure.link }}" target="_blank"><i class="bi bi-file-pdf-fill"></i> {{ enclosure.link }}</a>
+                        {{#equal enclosure.attributes.type_full 'application/pdf' }}
+                            <p><a href="{{ enclosure.attributes.link }}" target="_blank"><i class="bi bi-file-pdf-fill"></i> {{ enclosure.attributes.link }}</a>
                         {{/equal}}
                     {{/each}}
                 {{/if}}
@@ -123,7 +123,7 @@
                 {{else}}
                     <a href="#item/action/star/{{ entry.id }}" class="load-route mdl-button btn btn-primary btn-sm action-star connected" title="s">{{trans 'star'}}</a>
                 {{/if}}
-                <button type="button" class="mdl-button btn btn-primary btn-sm dialog action-share" data-bs-target="#dialog-share-{{ entry.id }}" data-title="{{ encode entry.title }}" data-url="{{ encode entry.link }}" title="{{trans 'shortcut_shift_s'}}">{{trans 'share'}}</button>
+                <button type="button" class="mdl-button btn btn-primary btn-sm dialog action-share" data-bs-target="#dialog-share-{{ entry.id }}" data-title="{{ encode entry.attributes.title }}" data-url="{{ encode entry.attributes.link }}" title="{{trans 'shortcut_shift_s'}}">{{trans 'share'}}</button>
             </p>
         </div>
 
@@ -133,45 +133,45 @@
                     <form action="" method="GET" class="share-form">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            {{ entry.title }}
+                            {{ entry.attributes.title }}
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-email" class="form-check-input" required name="share-{{ entry.id }}" value="mailto:?subject={{ encode entry.title }}&body={{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-email" class="form-check-input" required name="share-{{ entry.id }}" value="mailto:?subject={{ encode entry.attributes.title }}&body={{ encode entry.attributes.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-email">Email</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-evernote" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.evernote.com/clip.action?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
+                            <input type="radio" id="share-{{ entry.id }}-evernote" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.evernote.com/clip.action?url={{ encode entry.attributes.link }}&amp;title={{ encode entry.attributes.title }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-evernote">Evernote</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-facebook" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.facebook.com/sharer.php?u={{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-facebook" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.facebook.com/sharer.php?u={{ encode entry.attributes.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-facebook">Facebook</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-gmail" class="form-check-input" required name="share-{{ entry.id }}" value="https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to&su={{ encode entry.title }}&body={{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-gmail" class="form-check-input" required name="share-{{ entry.id }}" value="https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to&su={{ encode entry.attributes.title }}&body={{ encode entry.attributes.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-gmail">Gmail</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-instapaper" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.instapaper.com/e2?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
+                            <input type="radio" id="share-{{ entry.id }}-instapaper" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.instapaper.com/e2?url={{ encode entry.attributes.link }}&amp;title={{ encode entry.attributes.title }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-instapaper">Instapaper</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-linkedin" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-linkedin" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.linkedin.com/shareArticle?mini=true&amp;url={{ encode entry.attributes.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-linkedin">LinkedIn</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-pocket" class="form-check-input" required name="share-{{ entry.id }}" value="https://getpocket.com/edit?url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
+                            <input type="radio" id="share-{{ entry.id }}-pocket" class="form-check-input" required name="share-{{ entry.id }}" value="https://getpocket.com/edit?url={{ encode entry.attributes.link }}&amp;title={{ encode entry.attributes.title }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-pocket">Pocket</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-tumblr" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&amp;url={{ encode entry.link }}&amp;title={{ encode entry.title }}">
+                            <input type="radio" id="share-{{ entry.id }}-tumblr" class="form-check-input" required name="share-{{ entry.id }}" value="https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&amp;url={{ encode entry.attributes.link }}&amp;title={{ encode entry.attributes.title }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-tumblr">Tumblr</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" id="share-{{ entry.id }}-twitter" class="form-check-input" required name="share-{{ entry.id }}" value="https://twitter.com/intent/tweet?source=webclient&amp;text={{ encode entry.title }}+{{ encode entry.link }}">
+                            <input type="radio" id="share-{{ entry.id }}-twitter" class="form-check-input" required name="share-{{ entry.id }}" value="https://twitter.com/intent/tweet?source=webclient&amp;text={{ encode entry.attributes.title }}+{{ encode entry.attributes.link }}">
                             <label class="form-check-label" for="share-{{ entry.id }}-twitter">Twitter</label>
                         </div>
                     </div>

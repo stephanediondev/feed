@@ -49,8 +49,15 @@ abstract class AbstractAppController extends AbstractController
      */
     protected function jsonResponse(array $data, int $status = JsonResponse::HTTP_OK): JsonResponse
     {
+        $data['jsonapi']['version'] = '1.1';
         $data['meta']['datetime'] = (new \Datetime())->format('Y-m-d H:i:s');
         $data['meta']['timezone'] = date_default_timezone_get();
+
+        switch($status) {
+            case 404:
+                $data['errors'] = [['status' => '404', 'title' => 'Not Found']];
+                break;
+        }
 
         $response = new JsonResponse($data, $status);
         return $response;

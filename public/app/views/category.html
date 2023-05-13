@@ -64,12 +64,12 @@
         <div class="mdl-card__title mb-3">
             <h1 class="mdl-card__title-text fs-5">
                 <a href="#category/{{ entry.id }}" class="load-route">
-                    {{ entry.title }}
+                    {{ entry.attributes.title }}
                 </a>
             </h1>
             <div class="mdl-card__subtitle-text">
-                {{#if entry.score }}<span class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-graph-up"></i> {{score entry.score }}</span>{{/if}}
-                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.date_created }}"></span></span>
+                {{#if entry.score }}<span class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-graph-up"></i> {{score entry.attributes.score }}</span>{{/if}}
+                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.attributes.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__actions text-end mt-3 mdl-card--border">
@@ -108,10 +108,10 @@
     <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative mdl-cell--12-col-tablet mdl-cell--12-col-phone" id="category">
         <div class="mdl-card__title mb-3">
             <h1 class="mdl-card__title-text fs-5">
-                {{ entry.title }}
+                {{ entry.attributes.title }}
             </h1>
             <div class="mdl-card__subtitle-text">
-                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.date_created }}"></span></span>
+                <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.attributes.date_created }}"></span></span>
             </div>
         </div>
         <div class="mdl-card__actions text-end mt-3 mdl-card--border">

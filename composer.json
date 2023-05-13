@@ -100,6 +100,7 @@
         }
     },
     "require-dev": {
+        "art4/json-api-client": "^1.1",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.2.*",

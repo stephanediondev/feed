@@ -95,4 +95,19 @@ class CollectionFeed
             'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
         ];
     }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getJsonApiData(): array
+    {
+        return [
+            'id' => strval($this->getId()),
+            'type' => 'collection_feed',
+            'attributes' => [
+                'error' => $this->getError(),
+                'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
+            ],
+        ];
+    }
 }

@@ -312,4 +312,65 @@ class Item
             'link_secure' => $this->isLinkSecure(),
         ];
     }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getJsonApiData(): array
+    {
+        $relationships = [];
+
+        if ($this->getFeed()) {
+            $relationships['feed'] = [
+                'data' => [
+                    'id' => strval($this->getFeed()->getId()),
+                    'type' => 'feed',
+                ],
+            ];
+        }
+
+        if ($this->getAuthor()) {
+            $relationships['author'] = [
+                'data' => [
+                    'id' => strval($this->getAuthor()->getId()),
+                    'type' => 'author',
+                ],
+            ];
+        }
+
+        return [
+            'id' => strval($this->getId()),
+            'type' => 'item',
+            'attributes' => [
+                'title' => $this->getTitle(),
+                'link' => $this->getLink(),
+                'date' => $this->getDate() ? $this->getDate()->format('Y-m-d H:i:s') : null,
+                'content' => $this->getContent(),
+                'latitude' => $this->getLatitude(),
+                'longitude' => $this->getLongitude(),
+                'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
+                'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : null,
+                'link_secure' => $this->isLinkSecure(),
+            ],
+            'relationships' => $relationships,
+        ];
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getJsonApiIncluded(): array
+    {
+        $included = [];
+
+        if ($this->getFeed()) {
+            $included['feed-'.$this->getFeed()->getId()] = $this->getFeed()->getJsonApiData();
+        }
+
+        if ($this->getAuthor()) {
+            $included['author-'.$this->getAuthor()->getId()] = $this->getAuthor()->getJsonApiData();
+        }
+
+        return $included;
+    }
 }

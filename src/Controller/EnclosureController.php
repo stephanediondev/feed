@@ -29,6 +29,7 @@ class EnclosureController extends AbstractAppController
     public function index(Request $request): JsonResponse
     {
         $data = [];
+        $included = [];
 
         $this->denyAccessUnlessGranted('LIST', 'enclosure');
 
@@ -39,8 +40,7 @@ class EnclosureController extends AbstractAppController
         if ($filtersModel->getInt('item')) {
             if ($item = $this->itemManager->getOne(['id' => $filtersModel->getInt('item')])) {
                 $parameters['item'] = $filtersModel->getInt('item');
-                $data['entry'] = $item->toArray();
-                $data['entry_entity'] = 'item';
+                $included['item-'.$item->getId()] = $item->getJsonApiData();
             }
         }
 
@@ -69,11 +69,18 @@ class EnclosureController extends AbstractAppController
         $data['entries_entity'] = 'enclosure';
         $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
-        $data['entries'] = [];
+        $data['data'] = [];
 
         foreach ($pagination as $result) {
-            $entry = $result->toArray();
-            $data['entries'][] = $entry;
+            $entry = $result->getJsonApiData();
+
+            $included = array_merge($included, $result->getJsonApiIncluded());
+
+            $data['data'][] = $entry;
+        }
+
+        if (0 < count($included)) {
+            $data['included'] = array_values($included);
         }
 
         return $this->jsonResponse($data);
@@ -83,6 +90,7 @@ class EnclosureController extends AbstractAppController
     public function read(Request $request, int $id): JsonResponse
     {
         $data = [];
+        $included = [];
 
         $enclosure = $this->enclosureManager->getOne(['id' => $id]);
 
@@ -92,8 +100,13 @@ class EnclosureController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('READ', $enclosure);
 
-        $data['entry'] = $enclosure->toArray();
-        $data['entry_entity'] = 'enclosure';
+        $data['data'] = $enclosure->getJsonApiData();
+
+        $included = array_merge($included, $enclosure->getJsonApiIncluded());
+
+        if (0 < count($included)) {
+            $data['included'] = array_values($included);
+        }
 
         return $this->jsonResponse($data);
     }
