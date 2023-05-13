@@ -131,7 +131,6 @@ class SearchController extends AbstractAppController
             $result = $this->searchManager->query('GET', $path, $body);
 
             if (true === isset($result['hits']['hits'])) {
-                $data['entries_entity'] = $type;
                 if (true === isset($result['hits']['total']['value'])) {
                     $data['meta']['results'] = $result['hits']['total']['value'];
                 } else {
@@ -173,28 +172,56 @@ class SearchController extends AbstractAppController
                     $data['links']['next'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
                 }
 
-                $data['entries'] = [];
+                $data['data'] = [];
+                $included = [];
 
                 foreach ($result['hits']['hits'] as $hit) {
                     switch ($type) {
                         case 'feed':
                             $feed = $this->feedManager->getOne(['id' => $hit['_id']]);
                             if ($feed) {
-                                $actions = $this->actionFeedManager->getList(['member' => $this->getMember(), 'feed' => $feed])->getResult();
+                                $results = $this->actionFeedManager->getList(['member' => $this->getMember(), 'feed' => $feed])->getResult();
+                                $actions = [];
+                                foreach ($results as $actionFeed) {
+                                    $included['action-'.$actionFeed->getAction()->getId()] = $actionFeed->getAction()->getJsonApiData();
+                                    $actions[$actionFeed->getFeed()->getId()][] = $actionFeed->getAction()->getId();
+                                }
 
+                                $results = $this->categoryManager->feedCategoryManager->getList(['member' => $this->getMember(), 'feed' => $feed])->getResult();
                                 $categories = [];
-                                foreach ($this->categoryManager->feedCategoryManager->getList(['member' => $this->getMember(), 'feed' => $feed])->getResult() as $feedCategory) {
-                                    $categories[] = $feedCategory->toArray();
+                                foreach ($results as $itemCategory) {
+                                    $included['category-'.$itemCategory->getCategory()->getId()] = $itemCategory->getCategory()->getJsonApiData();
+                                    $categories[$itemCategory->getFeed()->getId()][] = $itemCategory->getCategory()->getId();
                                 }
 
-                                $entry = $feed->toArray();
+                                $entry = $feed->getJsonApiData();
                                 $entry['score'] = $hit['_score'];
-                                foreach ($actions as $action) {
-                                    $entry[$action->getAction()->getTitle()] = true;
-                                }
-                                $entry['categories'] = $categories;
 
-                                $data['entries'][] = $entry;
+                                if (true === isset($actions[$feed->getId()])) {
+                                    $entry['relationships']['actions'] = [
+                                        'data' => [],
+                                    ];
+                                    foreach ($actions[$feed->getId()] as $actionId) {
+                                        $entry['relationships']['actions']['data'][] = [
+                                            'id'=> strval($actionId),
+                                            'type' => 'action',
+                                        ];
+                                    }
+                                }
+
+                                if (true === isset($categories[$feed->getId()])) {
+                                    $entry['relationships']['categories'] = [
+                                        'data' => [],
+                                    ];
+                                    foreach ($categories[$feed->getId()] as $categoryId) {
+                                        $entry['relationships']['categories']['data'][] = [
+                                            'id'=> strval($categoryId),
+                                            'type' => 'category',
+                                        ];
+                                    }
+                                }
+
+                                $data['data'][] = $entry;
                             } else {
                                 $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/feed/'.$hit['_id'];
@@ -205,15 +232,29 @@ class SearchController extends AbstractAppController
                         case 'category':
                             $category = $this->categoryManager->getOne(['id' => $hit['_id']]);
                             if ($category) {
-                                $actions = $this->actionCategoryManager->getList(['member' => $this->getMember(), 'category' => $category])->getResult();
-
-                                $entry = $category->toArray();
-                                $entry['score'] = $hit['_score'];
-                                foreach ($actions as $action) {
-                                    $entry[$action->getAction()->getTitle()] = true;
+                                $results = $this->actionCategoryManager->getList(['member' => $this->getMember(), 'category' => $category])->getResult();
+                                $actions = [];
+                                foreach ($results as $actionCategory) {
+                                    $included['action-'.$actionCategory->getAction()->getId()] = $actionCategory->getAction()->getJsonApiData();
+                                    $actions[$actionCategory->getCategory()->getId()][] = $actionCategory->getAction()->getId();
                                 }
 
-                                $data['entries'][] = $entry;
+                                $entry = $category->getJsonApiData();
+                                $entry['score'] = $hit['_score'];
+
+                                if (true === isset($actions[$category->getId()])) {
+                                    $entry['relationships']['actions'] = [
+                                        'data' => [],
+                                    ];
+                                    foreach ($actions[$category->getId()] as $actionId) {
+                                        $entry['relationships']['actions']['data'][] = [
+                                            'id'=> strval($actionId),
+                                            'type' => 'action',
+                                        ];
+                                    }
+                                }
+
+                                $data['data'][] = $entry;
                             } else {
                                 $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/category/'.$hit['_id'];
@@ -224,15 +265,29 @@ class SearchController extends AbstractAppController
                         case 'author':
                             $author = $this->authorManager->getOne(['id' => $hit['_id']]);
                             if ($author) {
-                                $actions = $this->actionAuthorManager->getList(['member' => $this->getMember(), 'author' => $author])->getResult();
-
-                                $entry = $author->toArray();
-                                $entry['score'] = $hit['_score'];
-                                foreach ($actions as $action) {
-                                    $entry[$action->getAction()->getTitle()] = true;
+                                $results = $this->actionAuthorManager->getList(['member' => $this->getMember(), 'author' => $author])->getResult();
+                                $actions = [];
+                                foreach ($results as $actionAuthor) {
+                                    $included['action-'.$actionAuthor->getAction()->getId()] = $actionAuthor->getAction()->getJsonApiData();
+                                    $actions[$actionAuthor->getAuthor()->getId()][] = $actionAuthor->getAction()->getId();
                                 }
 
-                                $data['entries'][] = $entry;
+                                $entry = $author->getJsonApiData();
+                                $entry['score'] = $hit['_score'];
+
+                                if (true === isset($actions[$author->getId()])) {
+                                    $entry['relationships']['actions'] = [
+                                        'data' => [],
+                                    ];
+                                    foreach ($actions[$author->getId()] as $actionId) {
+                                        $entry['relationships']['actions']['data'][] = [
+                                            'id'=> strval($actionId),
+                                            'type' => 'action',
+                                        ];
+                                    }
+                                }
+
+                                $data['data'][] = $entry;
                             } else {
                                 $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/author/'.$hit['_id'];
@@ -243,24 +298,67 @@ class SearchController extends AbstractAppController
                         case 'item':
                             $item = $this->itemManager->getOne(['id' => $hit['_id']]);
                             if ($item) {
-                                $actions = $this->actionItemManager->getList(['member' => $this->getMember(), 'item' => $item])->getResult();
+                                $results = $this->actionItemManager->getList(['member' => $this->getMember(), 'item' => $item])->getResult();
+                                $actions = [];
+                                foreach ($results as $actionItem) {
+                                    $included['action-'.$actionItem->getAction()->getId()] = $actionItem->getAction()->getJsonApiData();
+                                    $actions[$actionItem->getItem()->getId()][] = $actionItem->getAction()->getId();
+                                }
 
+                                $results = $this->categoryManager->itemCategoryManager->getList(['member' => $this->getMember(), 'item' => $item])->getResult();
                                 $categories = [];
-                                foreach ($this->categoryManager->itemCategoryManager->getList(['member' => $this->getMember(), 'item' => $item])->getResult() as $itemCategory) {
-                                    $categories[] = $itemCategory->toArray();
+                                foreach ($results as $itemCategory) {
+                                    $included['category-'.$itemCategory->getCategory()->getId()] = $itemCategory->getCategory()->getJsonApiData();
+                                    $categories[$itemCategory->getItem()->getId()][] = $itemCategory->getCategory()->getId();
                                 }
 
-                                $entry = $item->toArray();
+                                $entry = $item->getJsonApiData();
+                                $included = array_merge($included, $item->getJsonApiIncluded());
+
                                 $entry['score'] = $hit['_score'];
-                                foreach ($actions as $action) {
-                                    $entry[$action->getAction()->getTitle()] = true;
+
+                                if (true === isset($actions[$item->getId()])) {
+                                    $entry['relationships']['actions'] = [
+                                        'data' => [],
+                                    ];
+                                    foreach ($actions[$item->getId()] as $actionId) {
+                                        $entry['relationships']['actions']['data'][] = [
+                                            'id'=> strval($actionId),
+                                            'type' => 'action',
+                                        ];
+                                    }
                                 }
-                                $entry['categories'] = $categories;
-                                $entry['enclosures'] = $this->itemManager->prepareEnclosures($item, $request);
 
-                                $entry['content'] = CleanHelper::cleanContent($item->getContent(), 'display');
+                                if (true === isset($categories[$item->getId()])) {
+                                    $entry['relationships']['categories'] = [
+                                        'data' => [],
+                                    ];
+                                    foreach ($categories[$item->getId()] as $categoryId) {
+                                        $entry['relationships']['categories']['data'][] = [
+                                            'id'=> strval($categoryId),
+                                            'type' => 'category',
+                                        ];
+                                    }
+                                }
 
-                                $data['entries'][] = $entry;
+                                $enclosures = $this->itemManager->prepareEnclosures($item, $request);
+                                if (0 < count($enclosures)) {
+                                    $entry['relationships']['enclosures'] = [
+                                        'data' => [],
+                                    ];
+                                    foreach ($enclosures as $enclosure) {
+                                        $included['enclosure-'.$enclosure['id']] = $enclosure;
+                                        $entry['relationships']['enclosures']['data'][] = [
+                                            'id'=> strval($enclosure['id']),
+                                            'type' => 'enclosure',
+                                        ];
+                                    }
+
+                                }
+
+                                $entry['attributes']['content'] = CleanHelper::cleanContent($item->getContent(), 'display');
+
+                                $data['data'][] = $entry;
                             } else {
                                 $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/item/'.$hit['_id'];
@@ -269,6 +367,10 @@ class SearchController extends AbstractAppController
                             }
                             break;
                     }
+                }
+
+                if (0 < count($included)) {
+                    $data['included'] = array_values($included);
                 }
             }
         }
