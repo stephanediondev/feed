@@ -383,11 +383,11 @@ function ready() {
 
                         } else {
                             response.json().then(function(jsonResponse) {
-                                if (typeof jsonResponse.entry !== 'undefined') {
+                                /*if (typeof jsonResponse.entry !== 'undefined') {
                                     if (jsonResponse.entry.data.attributes.title) {
                                         setToast({'title': i18next.t(form.attr('method')), 'body': jsonResponse.entry.data.attributes.title});
                                     }
-                                }
+                                }*/
                                 if (form.data('query') === '/login') {
                                     setCookie('token_signed', jsonResponse.entry.token_signed, 365);
 
@@ -643,9 +643,16 @@ function loadRoute(key, parameters) {
                                 window.document.title = jsonResponse.hightlightIncluded.attributes.title + ' (' + i18next.t(route.hightlightIncluded) + ')';
                             }
 
+                            var renderRouteView = false;
+
                             if (!parameters.page || parameters.page === 1) {
-                                //var template = getTemplate(route.view);
-                                document.querySelector('main > .mdl-grid').innerHTML = '';//template(jsonResponse);
+                                //if (typeof route.hightlightIncluded === 'undefined') {
+                                    renderRouteView = true;
+                                    var template = getTemplate(route.view);
+                                    document.querySelector('main > .mdl-grid').innerHTML = template(jsonResponse);
+                                /*} else {
+                                    document.querySelector('main > .mdl-grid').innerHTML = '';
+                                }*/
                             }
 
                             var jsonResponsedata = jsonResponse.data;
@@ -656,39 +663,42 @@ function loadRoute(key, parameters) {
                             }
 
                             if (Object.prototype.toString.call( jsonResponsedata ) === '[object Array]') {
+                                var templateUnit = false;
                                 if (typeof route.viewUnit === 'string') {
-                                    var templateUnit = getTemplate(route.viewUnit);
-                                } else {
-                                    var templateUnit = getTemplate(route.view);
+                                    templateUnit = getTemplate(route.viewUnit);
+                                } else if (false === renderRouteView) {
+                                    templateUnit = getTemplate(route.view);
                                 }
 
-                                for (i in jsonResponsedata) {
-                                    if (jsonResponsedata.hasOwnProperty(i)) {
-                                        var entry = jsonResponsedata[i];
-                                        if (typeof entry.relationships !== 'undefined') {
-                                            for (var relationship in entry.relationships) {
-                                                if ('actions' === relationship) {
-                                                    if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Array]') {
-                                                        for (var j in entry.relationships[relationship]['data']) {
-                                                            var include = entry.relationships[relationship]['data'][j];
-                                                            entry[included[include.type][include.id]['title']] = true;
+                                if (templateUnit) {
+                                    for (i in jsonResponsedata) {
+                                        if (jsonResponsedata.hasOwnProperty(i)) {
+                                            var entry = jsonResponsedata[i];
+                                            if (typeof entry.relationships !== 'undefined') {
+                                                for (var relationship in entry.relationships) {
+                                                    if ('actions' === relationship) {
+                                                        if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Array]') {
+                                                            for (var j in entry.relationships[relationship]['data']) {
+                                                                var include = entry.relationships[relationship]['data'][j];
+                                                                entry[included[include.type][include.id]['title']] = true;
+                                                            }
                                                         }
-                                                    }
-                                                } else {
-                                                    if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Object]') {
-                                                        entry.relationships[relationship]['data']['attributes'] = included[relationship][entry.relationships[relationship]['data']['id']]['attributes'];
-                                                    }
-                                                    if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Array]') {
-                                                        for (var j in entry.relationships[relationship]['data']) {
-                                                            var include = entry.relationships[relationship]['data'][j];
-                                                            entry.relationships[relationship]['data'][j]['attributes'] = included[include.type][include.id]['attributes'];
+                                                    } else {
+                                                        if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Object]') {
+                                                            entry.relationships[relationship]['data']['attributes'] = included[relationship][entry.relationships[relationship]['data']['id']]['attributes'];
+                                                        }
+                                                        if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Array]') {
+                                                            for (var j in entry.relationships[relationship]['data']) {
+                                                                var include = entry.relationships[relationship]['data'][j];
+                                                                entry.relationships[relationship]['data'][j]['attributes'] = included[include.type][include.id]['attributes'];
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
+                                            console.log(entry);
+                                            document.querySelector('main > .mdl-grid').innerHTML += templateUnit({'entry': entry});
                                         }
-                                        console.log(entry);
-                                        document.querySelector('main > .mdl-grid').innerHTML += templateUnit({'entry': entry});
                                     }
                                 }
 

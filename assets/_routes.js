@@ -18,7 +18,7 @@ routes['#feed/action/subscribe/{id}'] = {view: false, query: '/feed/action/subsc
 routes['#feeds/category/{id}'] = {hightlightIncluded: 'category', view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?filter[category]={id}'};
 routes['#feeds/author/{id}'] = {hightlightIncluded: 'author', view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?filter[author]={id}'};
 
-routes['#feed/{id}'] = {view: 'view-feed-read', query: '/feed/{id}'};
+routes['#feed/{id}'] = {view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feed/{id}'};
 
 //Item
 routes['#items/recent'] = {view: 'view-items', viewUnit: 'view-items-unit', query: '/items?filter[days]=7', title: 'title.recent_items'};
@@ -54,7 +54,7 @@ routes['#categories/search/result'] = {view: 'view-search-categories', viewUnit:
 
 routes['#category/action/exclude/{id}'] = {view: false, query: '/category/action/exclude/{id}'};
 
-routes['#category/{id}'] = {view: 'view-category-read', query: '/category/{id}'};
+routes['#category/{id}'] = {view: 'view-categories', viewUnit: 'view-categories-unit', query: '/category/{id}'};
 
 //Author
 routes['#authors/trendy'] = {view: 'view-authors-trendy', query: '/authors/trendy', title: 'title.trendy_authors'};
@@ -67,6 +67,6 @@ routes['#author/action/exclude/{id}'] = {view: false, query: '/author/action/exc
 
 routes['#authors/feed/{id}'] = {view: 'view-authors', viewUnit: 'view-authors-unit', query: '/authors?filter[feed]={id}'};
 
-routes['#author/{id}'] = {view: 'view-author-read', query: '/author/{id}'};
+routes['#author/{id}'] = {view: 'view-authors', viewUnit: 'view-authors-unit', query: '/author/{id}'};
 
 export { routes };
