@@ -23,7 +23,7 @@ class ProxyController extends AbstractAppController
                 $opts = [
                     'http' => [
                         'method' => 'GET',
-                        'user_agent'=> $_SERVER['HTTP_USER_AGENT']
+                        'user_agent'=> $request->headers->get('User-Agent'),
                     ]
                 ];
 

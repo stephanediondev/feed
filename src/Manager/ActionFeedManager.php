@@ -36,7 +36,7 @@ class ActionFeedManager extends AbstractManager
 
     public function persist(ActionFeed $actionFeed): void
     {
-        if ($actionFeed->getDateCreated() == null) {
+        if ($actionFeed->getDateCreated() === null) {
             $eventName = ActionFeedEvent::CREATED;
             $actionFeed->setDateCreated(new \Datetime());
         } else {

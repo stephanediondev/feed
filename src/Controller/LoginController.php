@@ -87,6 +87,7 @@ class LoginController extends AbstractAppController
                             if ($ldapGetEntries && true === is_numeric($ldapGetEntries['count']) && 0 < $ldapGetEntries['count']) {
                                 try {
                                     $ldapSearch2 = ldap_search($ldapConnect, $this->ldapBaseDn, $this->ldapSearchGroupAdmin, []);
+                                    $ldapGetEntries2 = false;
                                     if ($ldapSearch2 && $ldapSearch2 instanceof \LDAP\Result) {
                                         $ldapGetEntries2 = ldap_get_entries($ldapConnect, $ldapSearch2);
                                     }
@@ -101,7 +102,7 @@ class LoginController extends AbstractAppController
                                         $member->setPassword($this->passwordHasher->hashPassword($member, $login->getPassword()));
 
                                         $administrator = false;
-                                        if (isset($ldapGetEntries2)) {
+                                        if ($ldapGetEntries2) {
                                             if (true === isset($ldapGetEntries[0]['uid'][0]) && true === isset($ldapGetEntries2[0]['memberuid']) && in_array($ldapGetEntries[0]['uid'][0], $ldapGetEntries2[0]['memberuid'])) {
                                                 $administrator = true;
                                             }

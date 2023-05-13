@@ -36,7 +36,7 @@ class ActionItemManager extends AbstractManager
 
     public function persist(ActionItem $actionItem): void
     {
-        if ($actionItem->getDateCreated() == null) {
+        if ($actionItem->getDateCreated() === null) {
             $eventName = ActionItemEvent::CREATED;
             $actionItem->setDateCreated(new \Datetime());
         } else {

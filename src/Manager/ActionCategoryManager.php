@@ -36,7 +36,7 @@ class ActionCategoryManager extends AbstractManager
 
     public function persist(ActionCategory $actionCategory): void
     {
-        if ($actionCategory->getDateCreated() == null) {
+        if ($actionCategory->getDateCreated() === null) {
             $eventName = ActionCategoryEvent::CREATED;
             $actionCategory->setDateCreated(new \Datetime());
         } else {

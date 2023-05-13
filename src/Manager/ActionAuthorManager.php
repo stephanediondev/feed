@@ -36,7 +36,7 @@ class ActionAuthorManager extends AbstractManager
 
     public function persist(ActionAuthor $actionAuthor): void
     {
-        if ($actionAuthor->getDateCreated() == null) {
+        if ($actionAuthor->getDateCreated() === null) {
             $eventName = ActionAuthorEvent::CREATED;
             $actionAuthor->setDateCreated(new \Datetime());
         } else {

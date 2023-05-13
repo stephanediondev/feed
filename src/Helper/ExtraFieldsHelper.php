@@ -63,11 +63,11 @@ final class ExtraFieldsHelper
                 return (bool) $value;
 
             case self::TYPE_DATETIME:
-                if (true == is_array($value)) {
+                if (true === is_array($value)) {
                     return new \DateTime($value['date'], new \DateTimeZone($value['timezone']));
                 } elseif ($value instanceof \DateTime) {
                     return $value;
-                } elseif (true == is_string($value)) {
+                } elseif (true === is_string($value)) {
                     return new \DateTime($value);
                 }
 

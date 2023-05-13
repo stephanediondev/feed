@@ -132,7 +132,7 @@ class SearchController extends AbstractAppController
 
             if (true === isset($result['hits']['hits'])) {
                 $data['entries_entity'] = $type;
-                if (true == isset($result['hits']['total']['value'])) {
+                if (true === isset($result['hits']['total']['value'])) {
                     $data['meta']['results'] = $result['hits']['total']['value'];
                 } else {
                     $data['meta']['results'] = $result['hits']['total'];

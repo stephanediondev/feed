@@ -36,7 +36,7 @@ class CollectionFeedManager extends AbstractManager
 
     public function persist(CollectionFeed $collectionFeed): void
     {
-        if ($collectionFeed->getDateCreated() == null) {
+        if ($collectionFeed->getDateCreated() === null) {
             $eventName = CollectionFeedEvent::CREATED;
             $collectionFeed->setDateCreated(new \Datetime());
         } else {
