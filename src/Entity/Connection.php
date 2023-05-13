@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ConnectionRepository;
-use App\Trait\Entity\ExtraFieldsEntityTrait;
+use App\Entity\ExtraFieldsTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ConnectionRepository::class)]
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: "member_id", columns: ["member_id"])]
 class Connection
 {
-    use ExtraFieldsEntityTrait;
+    use ExtraFieldsTrait;
 
     public const TYPE_LOGIN = 'login';
     public const TYPE_PUSH = 'push';

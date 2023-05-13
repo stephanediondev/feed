@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Trait\Entity;
+namespace App\Entity;
 
 use App\Helper\ExtraFieldsHelper;
 use Doctrine\ORM\Mapping as ORM;
 
-trait ExtraFieldsEntityTrait
+trait ExtraFieldsTrait
 {
     /**
      * @var ?array<mixed> $extraFields
