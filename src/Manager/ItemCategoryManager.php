@@ -36,7 +36,7 @@ class ItemCategoryManager extends AbstractManager
 
     public function persist(ItemCategory $itemCategory): void
     {
-        if ($itemCategory->getId() == null) {
+        if ($itemCategory->getId() === null) {
             $eventName = ItemCategoryEvent::CREATED;
         } else {
             $eventName = ItemCategoryEvent::UPDATED;

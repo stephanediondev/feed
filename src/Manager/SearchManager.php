@@ -402,19 +402,20 @@ class SearchManager extends AbstractManager
     public function remove(): void
     {
         if ($this->getEnabled()) {
-            $path = '/'.$this->getIndex();
-            $result = $this->query('DELETE', $path);
-
-            $types = ['author', 'category', 'feed', 'item'];
-            foreach ($types as $type) {
+            $types = [
+                'author' => 'DELETE FROM author WHERE action_id = :action_id',
+                'category' => 'DELETE FROM category WHERE action_id = :action_id',
+                'feed' => null,
+                'item' => 'DELETE FROM item WHERE action_id = :action_id',
+            ];
+            foreach ($types as $type => $sql) {
                 $path = '/'.$this->getIndex().'_'.$type;
-                $result = $this->query('DELETE', $path);
+                $this->query('DELETE', $path);
 
-                if ('feed' !== $type) {
-                    $sql = 'DELETE FROM action_'.$type.' WHERE action_id = :action_id';
+                if (null !== $sql) {
                     $stmt = $this->connection->prepare($sql);
                     $stmt->bindValue('action_id', 11);
-                    $resultSet = $stmt->executeQuery();
+                    $stmt->executeQuery();
                 }
             }
         }

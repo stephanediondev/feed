@@ -36,7 +36,7 @@ class FeedCategoryManager extends AbstractManager
 
     public function persist(FeedCategory $feedCategory): void
     {
-        if ($feedCategory->getId() == null) {
+        if ($feedCategory->getId() === null) {
             $eventName = FeedCategoryEvent::CREATED;
         } else {
             $eventName = FeedCategoryEvent::UPDATED;
