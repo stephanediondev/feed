@@ -353,7 +353,6 @@ class SearchController extends AbstractAppController
                                             'type' => 'enclosure',
                                         ];
                                     }
-
                                 }
 
                                 $entry['attributes']['content'] = CleanHelper::cleanContent($item->getContent(), 'display');

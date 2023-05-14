@@ -14,7 +14,6 @@ class ItemManager extends AbstractManager
 {
     private ItemRepository $itemRepository;
 
-
     public function __construct(ItemRepository $itemRepository)
     {
         $this->itemRepository = $itemRepository;
@@ -92,7 +91,7 @@ class ItemManager extends AbstractManager
     {
         foreach ($this->itemRepository->getList($parameters)->getResult() as $result) {
             $sql = 'SELECT id FROM action_item WHERE member_id = :member_id AND item_id = :item_id AND action_id = :action_id';
-            $stmt = $this->connection->prepare($sql);
+            $stmt = $this->itemRepository->getConnection()->prepare($sql);
             $stmt->bindValue('member_id', $parameters['member']->getId());
             $stmt->bindValue('item_id', $result['id']);
             $stmt->bindValue('action_id', 1);
@@ -107,10 +106,10 @@ class ItemManager extends AbstractManager
                     'action_id' => 1,
                     'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                 ];
-                $this->insert('action_item', $insertActionItem);
+                $this->itemRepository->insert('action_item', $insertActionItem);
 
                 $sql = 'DELETE FROM action_item WHERE action_id = :action_id AND item_id = :item_id AND member_id = :member_id';
-                $stmt = $this->connection->prepare($sql);
+                $stmt = $this->itemRepository->getConnection()->prepare($sql);
                 $stmt->bindValue('action_id', 12);
                 $stmt->bindValue('item_id', $result['id']);
                 $stmt->bindValue('member_id', $parameters['member']->getId());

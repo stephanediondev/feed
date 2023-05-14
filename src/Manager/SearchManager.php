@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Manager;
 
 use App\Manager\AbstractManager;
+use App\Repository\ActionRepository;
 
 class SearchManager extends AbstractManager
 {
@@ -20,7 +21,9 @@ class SearchManager extends AbstractManager
 
     private bool $sslVerifyPeer;
 
-    public function __construct(bool $elasticsearchEnabled, string $elasticsearchIndex, string $elasticsearchUrl, string $elasticsearchUsername, string $elasticsearchPassword, bool $sslVerifyPeer)
+    private ActionRepository $actionRepository;
+
+    public function __construct(bool $elasticsearchEnabled, string $elasticsearchIndex, string $elasticsearchUrl, string $elasticsearchUsername, string $elasticsearchPassword, bool $sslVerifyPeer, ActionRepository $actionRepository)
     {
         $this->elasticsearchEnabled = $elasticsearchEnabled;
         $this->elasticsearchIndex = $elasticsearchIndex;
@@ -28,6 +31,7 @@ class SearchManager extends AbstractManager
         $this->elasticsearchUsername = $elasticsearchUsername;
         $this->elasticsearchPassword = $elasticsearchPassword;
         $this->sslVerifyPeer = $sslVerifyPeer;
+        $this->actionRepository = $actionRepository;
     }
 
     public function getEnabled(): bool
@@ -65,7 +69,7 @@ class SearchManager extends AbstractManager
         if ($this->getEnabled()) {
             //feeds
             $sql = 'SELECT fed.* FROM feed AS fed';
-            $stmt = $this->connection->prepare($sql);
+            $stmt = $this->actionRepository->getConnection()->prepare($sql);
             $resultSet = $stmt->executeQuery();
             $results = $resultSet->fetchAllAssociative();
 
@@ -92,7 +96,7 @@ class SearchManager extends AbstractManager
             FROM category AS cat
             WHERE cat.id NOT IN (SELECT act_cat.category_id FROM action_category AS act_cat WHERE act_cat.category_id = cat.id AND act_cat.action_id = 11)
             ORDER BY cat.id DESC LIMIT 0,1000';
-            $stmt = $this->connection->prepare($sql);
+            $stmt = $this->actionRepository->getConnection()->prepare($sql);
             $resultSet = $stmt->executeQuery();
             $results = $resultSet->fetchAllAssociative();
 
@@ -111,7 +115,7 @@ class SearchManager extends AbstractManager
                     'action_id' => 11,
                     'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                 ];
-                $this->insert('action_category', $insertActionCategory);
+                $this->actionRepository->insert('action_category', $insertActionCategory);
             }
 
             $action = 'POST';
@@ -123,7 +127,7 @@ class SearchManager extends AbstractManager
             FROM author AS aut
             WHERE aut.id NOT IN (SELECT act_aut.author_id FROM action_author AS act_aut WHERE act_aut.author_id = aut.id AND act_aut.action_id = 11)
             ORDER BY aut.id DESC LIMIT 0,1000';
-            $stmt = $this->connection->prepare($sql);
+            $stmt = $this->actionRepository->getConnection()->prepare($sql);
             $resultSet = $stmt->executeQuery();
             $results = $resultSet->fetchAllAssociative();
 
@@ -142,7 +146,7 @@ class SearchManager extends AbstractManager
                     'action_id' => 11,
                     'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                 ];
-                $this->insert('action_author', $insertActionCategory);
+                $this->actionRepository->insert('action_author', $insertActionCategory);
             }
 
             $action = 'POST';
@@ -156,7 +160,7 @@ class SearchManager extends AbstractManager
             LEFT JOIN feed AS fed ON fed.id = itm.feed_id
             WHERE itm.content IS NOT NULL AND itm.id NOT IN (SELECT act_itm.item_id FROM action_item AS act_itm WHERE act_itm.item_id = itm.id AND act_itm.action_id = 11)
             ORDER BY itm.id DESC LIMIT 0,1000';
-            $stmt = $this->connection->prepare($sql);
+            $stmt = $this->actionRepository->getConnection()->prepare($sql);
             $resultSet = $stmt->executeQuery();
             $results = $resultSet->fetchAllAssociative();
 
@@ -187,7 +191,7 @@ class SearchManager extends AbstractManager
                     'action_id' => 11,
                     'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                 ];
-                $this->insert('action_item', $insertActionItem);
+                $this->actionRepository->insert('action_item', $insertActionItem);
             }
 
             $action = 'POST';
@@ -413,7 +417,7 @@ class SearchManager extends AbstractManager
                 $this->query('DELETE', $path);
 
                 if (null !== $sql) {
-                    $stmt = $this->connection->prepare($sql);
+                    $stmt = $this->actionRepository->getConnection()->prepare($sql);
                     $stmt->bindValue('action_id', 11);
                     $stmt->executeQuery();
                 }

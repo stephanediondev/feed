@@ -84,11 +84,11 @@ class CollectionManager extends AbstractManager
 
         if ($feed_id) {
             $sql = 'SELECT id, link FROM feed WHERE id = :feed_id';
-            $stmt = $this->connection->prepare($sql);
+            $stmt = $this->collectionRepository->getConnection()->prepare($sql);
             $stmt->bindValue('feed_id', $feed_id);
         } else {
             $sql = 'SELECT id, link FROM feed WHERE next_collection IS NULL OR next_collection <= :date';
-            $stmt = $this->connection->prepare($sql);
+            $stmt = $this->collectionRepository->getConnection()->prepare($sql);
             $stmt->bindValue('date', (new \Datetime())->format('Y-m-d H:i:s'));
         }
         $resultSet = $stmt->executeQuery();
@@ -161,7 +161,7 @@ class CollectionManager extends AbstractManager
 
                             $updateFeed['date_modified'] = (new \Datetime())->format('Y-m-d H:i:s');
 
-                            $this->update('feed', $updateFeed, $feed['id']);
+                            $this->collectionRepository->update('feed', $updateFeed, $feed['id']);
                         }
                     }
                     $simplepieFeed->__destruct();
@@ -172,7 +172,7 @@ class CollectionManager extends AbstractManager
                 }
             }
 
-            $this->insert('collection_feed', $insertCollectionFeed);
+            $this->collectionRepository->insert('collection_feed', $insertCollectionFeed);
         }
 
         $collection->setFeeds($feeds);
@@ -182,7 +182,7 @@ class CollectionManager extends AbstractManager
         $this->persist($collection);
 
         $sql = 'SELECT id FROM member';
-        $stmt = $this->connection->prepare($sql);
+        $stmt = $this->collectionRepository->getConnection()->prepare($sql);
         $resultSet = $stmt->executeQuery();
         $members_result = $resultSet->fetchAllAssociative();
 
@@ -197,7 +197,7 @@ class CollectionManager extends AbstractManager
     public function setNextCollection(array $feed): ?string
     {
         $sql = 'SELECT date_created FROM item WHERE feed_id = :feed_id GROUP BY id ORDER BY id DESC';
-        $stmt = $this->connection->prepare($sql);
+        $stmt = $this->collectionRepository->getConnection()->prepare($sql);
         $stmt->bindValue('feed_id', $feed['id']);
         $resultSet = $stmt->executeQuery();
         $result = $resultSet->fetchAssociative();
@@ -234,7 +234,7 @@ class CollectionManager extends AbstractManager
                 $link = CleanHelper::cleanLink($link);
 
                 $sql = 'SELECT id FROM item WHERE link = :link';
-                $stmt = $this->connection->prepare($sql);
+                $stmt = $this->collectionRepository->getConnection()->prepare($sql);
                 $stmt->bindValue('link', $link);
                 $resultSet = $stmt->executeQuery();
                 $result = $resultSet->fetchAssociative();
@@ -309,7 +309,7 @@ class CollectionManager extends AbstractManager
                 $insertItem['date_created'] = $dateReference;
                 $insertItem['date_modified'] = $dateReference;
 
-                $item_id = $this->insert('item', $insertItem);
+                $item_id = $this->collectionRepository->insert('item', $insertItem);
 
                 if ($categories = $simplepieItem->get_categories()) {
                     $this->setCategories($item_id, $categories);
@@ -350,7 +350,7 @@ class CollectionManager extends AbstractManager
                 $author_id = $cacheItem->get();
             } else {
                 $sql = 'SELECT id FROM author WHERE title = :title';
-                $stmt = $this->connection->prepare($sql);
+                $stmt = $this->collectionRepository->getConnection()->prepare($sql);
                 $stmt->bindValue('title', $title);
                 $resultSet = $stmt->executeQuery();
                 $result = $resultSet->fetchAssociative();
@@ -362,7 +362,7 @@ class CollectionManager extends AbstractManager
                         'title' => $title,
                         'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                     ];
-                    $author_id = $this->insert('author', $insertAuthor);
+                    $author_id = $this->collectionRepository->insert('author', $insertAuthor);
                 }
                 $cacheItem->set($author_id);
                 $this->cacheDriver->save($cacheItem);
@@ -403,10 +403,24 @@ class CollectionManager extends AbstractManager
 
             $titles = array_unique($titles);
             foreach ($titles as $title) {
-                $category_id = $this->setCategory($title);
+                $sql = 'SELECT id FROM category WHERE title = :title';
+                $stmt = $this->collectionRepository->getConnection()->prepare($sql);
+                $stmt->bindValue('title', $title);
+                $resultSet = $stmt->executeQuery();
+                $result = $resultSet->fetchAssociative();
+
+                if ($result) {
+                    $category_id = $result['id'];
+                } else {
+                    $insertCategory = [
+                        'title' => $title,
+                        'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
+                    ];
+                    $category_id = $this->collectionRepository->insert('category', $insertCategory);
+                }
 
                 $sql = 'SELECT id FROM item_category WHERE item_id = :item_id AND category_id = :category_id';
-                $stmt = $this->connection->prepare($sql);
+                $stmt = $this->collectionRepository->getConnection()->prepare($sql);
                 $stmt->bindValue('item_id', $item_id);
                 $stmt->bindValue('category_id', $category_id);
                 $resultSet = $stmt->executeQuery();
@@ -418,7 +432,7 @@ class CollectionManager extends AbstractManager
                         'item_id' => $item_id,
                         'category_id' => $category_id,
                     ];
-                    $this->insert('item_category', $insertItemCategory);
+                    $this->collectionRepository->insert('item_category', $insertItemCategory);
                 }
             }
             unset($titles);
@@ -450,7 +464,7 @@ class CollectionManager extends AbstractManager
                             'height' => $simplepieEnclosure->get_height() && is_numeric($simplepieEnclosure->get_height()) ? $simplepieEnclosure->get_height() : null,
                             'date_created' => (new \Datetime())->format('Y-m-d H:i:s'),
                         ];
-                        $this->insert('enclosure', $insertEnclosure);
+                        $this->collectionRepository->insert('enclosure', $insertEnclosure);
 
                         $links[] = $link;
                     }

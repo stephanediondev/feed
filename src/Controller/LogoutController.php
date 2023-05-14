@@ -9,7 +9,7 @@ use App\Entity\Connection;
 use App\Helper\JwtHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api', name: 'api_logout_', priority: 20)]
@@ -35,7 +35,7 @@ class LogoutController extends AbstractAppController
                 }
             }
         } catch (\Exception $e) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         return $this->jsonResponse($data);
