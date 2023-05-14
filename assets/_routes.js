@@ -18,7 +18,7 @@ routes['#feed/action/subscribe/{id}'] = {view: false, query: '/feed/action/subsc
 routes['#feeds/category/{id}'] = {hightlightIncluded: 'category', view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?filter[category]={id}'};
 routes['#feeds/author/{id}'] = {hightlightIncluded: 'author', view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?filter[author]={id}'};
 
-routes['#feed/{id}'] = {view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feed/{id}'};
+routes['#feed/{id}'] = {view: 'view-feeds', viewUnit: 'view-feed-read', query: '/feed/{id}'};
 
 //Item
 routes['#items/recent'] = {view: 'view-items', viewUnit: 'view-items-unit', query: '/items?filter[days]=7', title: 'title.recent_items'};

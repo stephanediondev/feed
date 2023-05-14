@@ -288,8 +288,7 @@ class ItemController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('DELETE', $item);
 
-        $data['entry'] = $item->toArray();
-        $data['entry_entity'] = 'item';
+        $data['data'] = $item->getJsonApiData();
 
         $this->itemManager->remove($item);
 
@@ -416,8 +415,7 @@ class ItemController extends AbstractAppController
             }
         }
 
-        $data['entry'] = $item->toArray();
-        $data['entry_entity'] = 'item';
+        $data['data'] = $item->getJsonApiData();
 
         if ($case == 'read' && $this->getMember() && $this->getMember()->getId()) {
             $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());

@@ -302,8 +302,7 @@ class FeedController extends AbstractAppController
         if ($form->isValid()) {
             $this->feedManager->persist($form->getData());
 
-            $data['entry'] = $feed->toArray();
-            $data['entry_entity'] = 'feed';
+            $data['data'] = $feed->getJsonApiData();
         } else {
             $data = $this->getFormErrors($form);
             return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
@@ -325,8 +324,7 @@ class FeedController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('DELETE', $feed);
 
-        $data['entry'] = $feed->toArray();
-        $data['entry_entity'] = 'feed';
+        $data['data'] = $feed->getJsonApiData();
 
         $this->feedManager->remove($feed);
 
@@ -402,8 +400,7 @@ class FeedController extends AbstractAppController
             }
         }
 
-        $data['entry'] = $feed->toArray();
-        $data['entry_entity'] = 'feed';
+        $data['data'] = $feed->getJsonApiData();
 
         if ($case == 'subscribe' && $this->getMember() && $this->getMember()->getId()) {
             $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());

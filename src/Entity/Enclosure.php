@@ -145,23 +145,6 @@ class Enclosure
     /**
      * @return array<mixed>
      */
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'link' => $this->getLink(),
-            'type' => $this->getType(),
-            'type_group' => $this->getTypeGroup(),
-            'link_secure' => $this->isLinkSecure(),
-            'length' => $this->getLength(),
-            'width' => $this->getWidth(),
-            'height' => $this->getHeight(),
-        ];
-    }
-
-    /**
-     * @return array<mixed>
-     */
     public function getJsonApiData(): array
     {
         $relationships = [];

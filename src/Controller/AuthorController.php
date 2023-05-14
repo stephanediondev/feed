@@ -212,8 +212,7 @@ class AuthorController extends AbstractAppController
         if ($form->isValid()) {
             $this->authorManager->persist($form->getData());
 
-            $data['entry'] = $author->toArray();
-            $data['entry_entity'] = 'author';
+            $data['data'] = $author->getJsonApiData();
         } else {
             $data = $this->getFormErrors($form);
             return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
@@ -235,8 +234,7 @@ class AuthorController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('DELETE', $author);
 
-        $data['entry'] = $author->toArray();
-        $data['entry_entity'] = 'author';
+        $data['data'] = $author->getJsonApiData();
 
         $this->authorManager->remove($author);
 
@@ -312,8 +310,7 @@ class AuthorController extends AbstractAppController
             }
         }
 
-        $data['entry'] = $author->toArray();
-        $data['entry_entity'] = 'author';
+        $data['data'] = $author->getJsonApiData();
 
         return $this->jsonResponse($data);
     }
@@ -344,7 +341,6 @@ class AuthorController extends AbstractAppController
             }
             $data['entries'][$row['ref']] = ['count' => $row['count'], 'id' => $row['id']];
         }
-        //ksort($data['entries']);
 
         foreach ($data['entries'] as $k => $v) {
             $percent = ($v['count'] * 100) / $max;

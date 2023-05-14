@@ -70,23 +70,6 @@
 </script>
 
 <script type="text/template" id="view-feed-read">
-    <div class="mdl-card row position-relative" id="feeds">
-        <div class="mdl-card__title col-xl-6 col-12">
-            <h1 class="mdl-card__title-text fs-5">
-                {{trans 'title.feeds'}}
-            </h1>
-        </div>
-        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
-            <p>
-                <a href="#feeds/recent" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'button.recent_feeds'}}</a>
-                <a href="#feeds/subscribed" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.subscribed_feeds'}}</a>
-                <a href="#feeds/unsubscribed" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.unsubscribed_feeds'}}</a>
-                <a href="#feeds/witherrors" class="load-route mdl-button btn btn-secondary btn-sm connected">{{trans 'button.feeds_witherrors'}}</a>
-                <a href="#feeds/search" class="load-route mdl-button btn btn-secondary btn-sm online">{{trans 'button.search_feeds'}}</a>
-            </p>
-        </div>
-    </div>
-
     <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="feed" dir="{{ entry.attributes.direction }}">
         <div class="mdl-card__title mb-3">
             <h1 class="favicon mdl-card__title-text fs-5"{{#if entry.attributes.hostname }} style="background-image:url({{ entry.attributes.icon_url }});"{{/if}}>

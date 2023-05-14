@@ -124,8 +124,7 @@ class EnclosureController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('DELETE', $enclosure);
 
-        $data['entry'] = $enclosure->toArray();
-        $data['entry_entity'] = 'enclosure';
+        $data['data'] = $enclosure->getJsonApiData();
 
         $this->enclosureManager->remove($enclosure);
 

@@ -61,4 +61,42 @@ class AuthorControllerTest extends AbstractControllerTest
         $this->assertEquals('author', $content['data']['type']);
         $this->assertEquals($test, $content['data']['attributes']['title']);
     }
+
+    public function testUpdate404(): void
+    {
+        $test = 'test'.uniqid();
+
+        $data = [
+            'title' => $test,
+        ];
+        $this->client->request('PUT', '/api/author/0', [], [], [], json_encode($data));
+        $json = $this->client->getResponse()->getContent();
+        $isValidResponseString = $this->isValidResponseString($json);
+        $content = json_decode($json, true);
+
+        $this->assertTrue($isValidResponseString);
+        $this->assertResponseStatusCodeSame(404);
+        $this->assertEquals('404', $content['errors'][0]['status']);
+        $this->assertEquals('Not Found', $content['errors'][0]['title']);
+    }
+
+    public function testUpdate(): void
+    {
+        if ($id = $this->retrieveOneId('/api/authors')) {
+            $test = 'test'.uniqid();
+
+            $data = [
+                'title' => $test,
+            ];
+            $this->client->request('PUT', '/api/author/'.$id, [], [], [], json_encode($data));
+            $json = $this->client->getResponse()->getContent();
+            $isValidResponseString = $this->isValidResponseString($json);
+            $content = json_decode($json, true);
+
+            $this->assertTrue($isValidResponseString);
+            $this->assertResponseStatusCodeSame(200);
+            $this->assertEquals('author', $content['data']['type']);
+            $this->assertEquals($id, $content['data']['id']);
+        }
+    }
 }

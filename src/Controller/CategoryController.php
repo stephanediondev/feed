@@ -208,8 +208,7 @@ class CategoryController extends AbstractAppController
         if ($form->isValid()) {
             $this->categoryManager->persist($form->getData());
 
-            $data['entry'] = $category->toArray();
-            $data['entry_entity'] = 'category';
+            $data['data'] = $category->getJsonApiData();
         } else {
             $data = $this->getFormErrors($form);
             return $this->jsonResponse($data, JsonResponse::HTTP_BAD_REQUEST);
@@ -231,8 +230,7 @@ class CategoryController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('DELETE', $category);
 
-        $data['entry'] = $category->toArray();
-        $data['entry_entity'] = 'category';
+        $data['data'] = $category->getJsonApiData();
 
         $this->categoryManager->remove($category);
 
@@ -308,8 +306,7 @@ class CategoryController extends AbstractAppController
             }
         }
 
-        $data['entry'] = $category->toArray();
-        $data['entry_entity'] = 'category';
+        $data['data'] = $category->getJsonApiData();
 
         return $this->jsonResponse($data);
     }
@@ -340,7 +337,6 @@ class CategoryController extends AbstractAppController
             }
             $data['entries'][$row['ref']] = ['count' => $row['count'], 'id' => $row['id']];
         }
-        //ksort($data['entries']);
 
         foreach ($data['entries'] as $k => $v) {
             $percent = ($v['count'] * 100) / $max;

@@ -296,28 +296,6 @@ class Feed
     /**
      * @return array<mixed>
      */
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'link' => $this->getLink(),
-            'website' => $this->getWebsite(),
-            'hostname' => $this->getHostname(),
-            'icon_url' => $this->getIconUrl(),
-            'description' => $this->getDescription(),
-            'language' => $this->getLanguage(),
-            'direction' => $this->getDirection(),
-            'date_created' => $this->getDateCreated() ? $this->getDateCreated()->format('Y-m-d H:i:s') : null,
-            'date_modified' => $this->getDateModified() ? $this->getDateModified()->format('Y-m-d H:i:s') : null,
-            'link_secure' => $this->isLinkSecure(),
-            'website_secure' => $this->isWebsiteSecure(),
-        ];
-    }
-
-    /**
-     * @return array<mixed>
-     */
     public function getJsonApiData(): array
     {
         return [
