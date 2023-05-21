@@ -2,13 +2,13 @@
 
 namespace App\Tests\ControllerAsConnected;
 
-use App\Manager\ConnectionManager;
 use App\Helper\JwtHelper;
+use App\Manager\ConnectionManager;
 use App\Model\JwtPayloadModel;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Art4\JsonApiClient\Helper\Parser;
 use Art4\JsonApiClient\Exception\InputException;
 use Art4\JsonApiClient\Exception\ValidationException;
+use Art4\JsonApiClient\Helper\Parser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class AbstractControllerTest extends WebTestCase
 {
