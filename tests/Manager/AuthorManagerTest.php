@@ -22,7 +22,7 @@ class AuthorManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $author = new Author();
-        $author->setTitle('test-'.uniqid('', true));
+        $author->setTitle(uniqid('phpunit-'));
 
         $this->authorManager->persist($author);
 

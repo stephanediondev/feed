@@ -60,6 +60,10 @@ class FeedController extends AbstractAppController
 
         $parameters = [];
 
+        if ($filtersModel->get('link')) {
+            $parameters['link'] = $filtersModel->get('link');
+        }
+
         if ($filtersModel->getBool('witherrors')) {
             $parameters['witherrors'] = true;
         }

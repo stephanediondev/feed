@@ -22,8 +22,8 @@ class MemberManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $member = new Member();
-        $member->setEmail('test-'.uniqid('', true));
-        $member->setPassword('test-'.uniqid('', true));
+        $member->setEmail(uniqid('phpunit-'));
+        $member->setPassword(uniqid('phpunit-'));
 
         $this->memberManager->persist($member);
 

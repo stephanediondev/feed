@@ -22,7 +22,7 @@ class ActionManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $action = new Action();
-        $action->setTitle('test-'.uniqid('', true));
+        $action->setTitle(uniqid('phpunit-'));
 
         $this->actionManager->persist($action);
 

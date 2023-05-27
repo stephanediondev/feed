@@ -38,8 +38,8 @@ class CollectionFeedManagerTest extends KernelTestCase
         $this->collectionManager->persist($collection);
 
         $feed = new Feed();
-        $feed->setTitle('test-'.uniqid('', true));
-        $feed->setLink('test-'.uniqid('', true));
+        $feed->setTitle(uniqid('phpunit-'));
+        $feed->setLink(uniqid('phpunit-'));
 
         $this->feedManager->persist($feed);
 

@@ -40,20 +40,20 @@ class ItemCategoryManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $category = new Category();
-        $category->setTitle('test-'.uniqid('', true));
+        $category->setTitle(uniqid('phpunit-'));
 
         $this->categoryManager->persist($category);
 
         $feed = new Feed();
-        $feed->setTitle('test-'.uniqid('', true));
-        $feed->setLink('test-'.uniqid('', true));
+        $feed->setTitle(uniqid('phpunit-'));
+        $feed->setLink(uniqid('phpunit-'));
 
         $this->feedManager->persist($feed);
 
         $item = new Item();
         $item->setFeed($feed);
-        $item->setTitle('test-'.uniqid('', true));
-        $item->setLink('test-'.uniqid('', true));
+        $item->setTitle(uniqid('phpunit-'));
+        $item->setLink(uniqid('phpunit-'));
         $item->setDate(new \Datetime());
 
         $this->itemManager->persist($item);

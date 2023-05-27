@@ -90,6 +90,11 @@ SQL;
             $query->setParameter(':id', $parameters['id']);
         }
 
+        if (true === isset($parameters['title'])) {
+            $query->andWhere('aut.title LIKE :title');
+            $query->setParameter(':title', $parameters['title']);
+        }
+
         if (true === isset($parameters['excluded']) && $parameters['excluded']) {
             $query->andWhere('aut.id IN (SELECT IDENTITY(excluded.author) FROM '.ActionAuthor::class.' AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
             $query->setParameter(':member', $parameters['member']);

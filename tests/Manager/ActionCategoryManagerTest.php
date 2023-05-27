@@ -34,12 +34,12 @@ class ActionCategoryManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $action = new Action();
-        $action->setTitle('test-'.uniqid('', true));
+        $action->setTitle(uniqid('phpunit-'));
 
         $this->actionManager->persist($action);
 
         $category = new Category();
-        $category->setTitle('test-'.uniqid('', true));
+        $category->setTitle(uniqid('phpunit-'));
 
         $this->categoryManager->persist($category);
 

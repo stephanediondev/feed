@@ -28,15 +28,15 @@ class ConnectionManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $member = new Member();
-        $member->setEmail('test-'.uniqid('', true));
-        $member->setPassword('test-'.uniqid('', true));
+        $member->setEmail(uniqid('phpunit-'));
+        $member->setPassword(uniqid('phpunit-'));
 
         $this->memberManager->persist($member);
 
         $connection = new Connection();
         $connection->setMember($member);
-        $connection->setType('test-'.uniqid('', true));
-        $connection->setToken('test-'.uniqid('', true));
+        $connection->setType(uniqid('phpunit-'));
+        $connection->setToken(uniqid('phpunit-'));
 
         $this->connectionManager->persist($connection);
 

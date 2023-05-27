@@ -34,12 +34,12 @@ class ActionAuthorManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $action = new Action();
-        $action->setTitle('test-'.uniqid('', true));
+        $action->setTitle(uniqid('phpunit-'));
 
         $this->actionManager->persist($action);
 
         $author = new Author();
-        $author->setTitle('test-'.uniqid('', true));
+        $author->setTitle(uniqid('phpunit-'));
 
         $this->authorManager->persist($author);
 

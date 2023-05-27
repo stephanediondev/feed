@@ -40,20 +40,20 @@ class ActionItemManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $action = new Action();
-        $action->setTitle('test-'.uniqid('', true));
+        $action->setTitle(uniqid('phpunit-'));
 
         $this->actionManager->persist($action);
 
         $feed = new Feed();
-        $feed->setTitle('test-'.uniqid('', true));
-        $feed->setLink('test-'.uniqid('', true));
+        $feed->setTitle(uniqid('phpunit-'));
+        $feed->setLink(uniqid('phpunit-'));
 
         $this->feedManager->persist($feed);
 
         $item = new Item();
         $item->setFeed($feed);
-        $item->setTitle('test-'.uniqid('', true));
-        $item->setLink('test-'.uniqid('', true));
+        $item->setTitle(uniqid('phpunit-'));
+        $item->setLink(uniqid('phpunit-'));
         $item->setDate(new \Datetime());
 
         $this->itemManager->persist($item);

@@ -34,23 +34,23 @@ class EnclosureManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $feed = new Feed();
-        $feed->setTitle('test-'.uniqid('', true));
-        $feed->setLink('test-'.uniqid('', true));
+        $feed->setTitle(uniqid('phpunit-'));
+        $feed->setLink(uniqid('phpunit-'));
 
         $this->feedManager->persist($feed);
 
         $item = new Item();
         $item->setFeed($feed);
-        $item->setTitle('test-'.uniqid('', true));
-        $item->setLink('test-'.uniqid('', true));
+        $item->setTitle(uniqid('phpunit-'));
+        $item->setLink(uniqid('phpunit-'));
         $item->setDate(new \Datetime());
 
         $this->itemManager->persist($item);
 
         $enclosure = new Enclosure();
         $enclosure->setItem($item);
-        $enclosure->setLink('test-'.uniqid('', true));
-        $enclosure->setType('test-'.uniqid('', true));
+        $enclosure->setLink(uniqid('phpunit-'));
+        $enclosure->setType(uniqid('phpunit-'));
 
         $this->enclosureManager->persist($enclosure);
 

@@ -61,6 +61,11 @@ class FeedRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
+        if (true === isset($parameters['link'])) {
+            $query->andWhere('fed.link LIKE :link');
+            $query->setParameter(':link', $parameters['link']);
+        }
+
         if (true === isset($parameters['witherrors']) && $parameters['witherrors']) {
             $date = new \Datetime();
             $query->andWhere('fed.id IN (SELECT IDENTITY(errors.feed) FROM '.CollectionFeed::class.' AS errors WHERE errors.error IS NOT NULL AND errors.dateCreated > DATE_SUB(:date, 12, \'HOUR\'))');

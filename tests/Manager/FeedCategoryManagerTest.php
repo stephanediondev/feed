@@ -34,13 +34,13 @@ class FeedCategoryManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $category = new Category();
-        $category->setTitle('test-'.uniqid('', true));
+        $category->setTitle(uniqid('phpunit-'));
 
         $this->categoryManager->persist($category);
 
         $feed = new Feed();
-        $feed->setTitle('test-'.uniqid('', true));
-        $feed->setLink('test-'.uniqid('', true));
+        $feed->setTitle(uniqid('phpunit-'));
+        $feed->setLink(uniqid('phpunit-'));
 
         $this->feedManager->persist($feed);
 

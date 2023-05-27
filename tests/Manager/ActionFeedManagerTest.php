@@ -34,13 +34,13 @@ class ActionFeedManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $action = new Action();
-        $action->setTitle('test-'.uniqid('', true));
+        $action->setTitle(uniqid('phpunit-'));
 
         $this->actionManager->persist($action);
 
         $feed = new Feed();
-        $feed->setTitle('test-'.uniqid('', true));
-        $feed->setLink('test-'.uniqid('', true));
+        $feed->setTitle(uniqid('phpunit-'));
+        $feed->setLink(uniqid('phpunit-'));
 
         $this->feedManager->persist($feed);
 

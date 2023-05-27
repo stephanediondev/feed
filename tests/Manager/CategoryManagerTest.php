@@ -22,7 +22,7 @@ class CategoryManagerTest extends KernelTestCase
     public function testPersist(): void
     {
         $category = new Category();
-        $category->setTitle('test-'.uniqid('', true));
+        $category->setTitle(uniqid('phpunit-'));
 
         $this->categoryManager->persist($category);
 

@@ -44,6 +44,10 @@ class CategoryController extends AbstractAppController
 
         $parameters = [];
 
+        if ($filtersModel->get('title')) {
+            $parameters['title'] = $filtersModel->get('title');
+        }
+
         if ($filtersModel->getBool('excluded')) {
             $parameters['excluded'] = true;
             $parameters['member'] = $this->getMember();
