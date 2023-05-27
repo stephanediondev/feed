@@ -485,7 +485,6 @@ function getTranslation(languageFinal) {
 }
 
 function getTemplate(key) {
-    console.log('template: ' + key);
     return Handlebars.compile( $('#' + key).text() );
 }
 
@@ -696,7 +695,6 @@ function loadRoute(key, parameters) {
                                                     }
                                                 }
                                             }
-                                            console.log(entry);
                                             document.querySelector('main > .mdl-grid').innerHTML += templateUnit({'entry': entry});
                                         }
                                     }
