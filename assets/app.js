@@ -679,7 +679,7 @@ function loadRoute(key, parameters) {
                                                         if (Object.prototype.toString.call( entry.relationships[relationship]['data'] ) === '[object Array]') {
                                                             for (var j in entry.relationships[relationship]['data']) {
                                                                 var include = entry.relationships[relationship]['data'][j];
-                                                                entry[included[include.type][include.id]['title']] = true;
+                                                                entry[included[include.type][include.id]['attributes']['title']] = true;
                                                             }
                                                         }
                                                     } else {
