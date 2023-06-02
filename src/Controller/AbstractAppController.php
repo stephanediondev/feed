@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class AbstractAppController extends AbstractController
 {
@@ -24,9 +25,7 @@ abstract class AbstractAppController extends AbstractController
 
     protected ConnectionManager $connectionManager;
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setRequired(PaginatorInterface $paginator, ConnectionManager $connectionManager): void
     {
         date_default_timezone_set('UTC');
