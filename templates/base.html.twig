@@ -14,7 +14,7 @@
 <link rel="apple-touch-icon" sizes="512x512" href="{{ asset('build/images/icon-512x512.png') }}">
 <link rel="apple-touch-icon-precomposed" sizes="512x512" href="{{ asset('build/images/icon-512x512.png') }}">
 <link rel="manifest" href="{{ path('app_manifest_index') }}">
-{% block encore_entry %}
+{% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
 {% endblock %}
 </head>
@@ -57,7 +57,7 @@
     </main>
 </div>
 
-{% block encore_entry_script %}
+{% block javascripts %}
     <script type="text/javascript">
         var applicationServerKey = '{{ vapidPublicKey }}';
     </script>
