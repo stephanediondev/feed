@@ -78,8 +78,10 @@ class ItemRepository extends AbstractRepository
             if (true === isset($parameters['unread']) && $parameters['unread']) {
                 $memberSet = true;
 
-                $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribed.feed) FROM '.ActionFeed::class.' AS subscribed WHERE subscribed.member = :member AND subscribed.action = 3)');
-                $query->andWhere('itm.id NOT IN (SELECT IDENTITY(alreadyRead.item) FROM '.ActionItem::class.' AS alreadyRead WHERE alreadyRead.member = :member AND alreadyRead.action IN(1,4))');
+                $query->leftJoin('itm.actions', 'act_itm');
+                $query->andWhere('act_itm.member = :member');
+                $query->andWhere('act_itm.action = 12');
+                $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM '.ActionFeed::class.' AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
             }
 
             if (true === isset($parameters['starred']) && $parameters['starred']) {

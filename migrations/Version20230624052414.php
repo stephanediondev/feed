@@ -19,7 +19,7 @@ final class Version20230624052414 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('DELETE  FROM action_item WHERE action_id = 12;');
+        $this->addSql('DELETE FROM action_item WHERE action_id = 12;');
     }
 
     public function down(Schema $schema): void

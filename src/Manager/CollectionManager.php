@@ -180,6 +180,15 @@ class CollectionManager extends AbstractManager
         $collection->setTime(microtime(true) - $startTime);
         $collection->setMemory(memory_get_peak_usage());
         $this->persist($collection);
+
+        $sql = 'SELECT id FROM member';
+        $stmt = $this->collectionRepository->getConnection()->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        $members_result = $resultSet->fetchAllAssociative();
+
+        foreach ($members_result as $member) {
+            $this->memberManager->syncUnread($member['id']);
+        }
     }
 
     /**
