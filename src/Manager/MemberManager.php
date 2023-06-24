@@ -62,13 +62,6 @@ class MemberManager extends AbstractManager
         $this->clearCache();
     }
 
-    public function syncUnread(?int $member_id): void
-    {
-        if ($member_id) {
-            $this->memberRepository->syncUnread($member_id);
-        }
-    }
-
     public function countUnread(int $member_id): int
     {
         return $this->memberRepository->countUnread($member_id);

@@ -78,20 +78,14 @@ class ItemRepository extends AbstractRepository
             if (true === isset($parameters['unread']) && $parameters['unread']) {
                 $memberSet = true;
 
-                $query->leftJoin('itm.actions', 'act_itm');
-                $query->andWhere('act_itm.member = :member');
-                $query->andWhere('act_itm.action = 12');
-                $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM '.ActionFeed::class.' AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
-                //$query->andWhere('itm.id NOT IN (SELECT IDENTITY(unread.item) FROM '.ActionItem::class.' AS unread WHERE unread.member = :member AND unread.action IN(1,4))');
+                $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribed.feed) FROM '.ActionFeed::class.' AS subscribed WHERE subscribed.member = :member AND subscribed.action = 3)');
+                $query->andWhere('itm.id NOT IN (SELECT IDENTITY(alreadyRead.item) FROM '.ActionItem::class.' AS alreadyRead WHERE alreadyRead.member = :member AND alreadyRead.action IN(1,4))');
             }
 
             if (true === isset($parameters['starred']) && $parameters['starred']) {
                 $memberSet = true;
 
-                $query->leftJoin('itm.actions', 'act_itm');
-                $query->andWhere('act_itm.member = :member');
-                $query->andWhere('act_itm.action = 2');
-                //$query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM '.ActionItem::class.' AS starred WHERE starred.member = :member AND starred.action = 2)');
+                $query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM '.ActionItem::class.' AS starred WHERE starred.member = :member AND starred.action = 2)');
             }
 
             if (true === $memberSet) {
@@ -113,10 +107,6 @@ class ItemRepository extends AbstractRepository
             $query->andWhere('itm.date < :date');
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }
-
-        //$query->leftJoin('itm.enclosures', 'enr');
-        //$query->andWhere('enr.type = \'application/pdf\'');
-        //$query->andWhere('(enr.type LIKE \'video%\' OR enr.type LIKE \'audio%\' OR enr.type LIKE \'image%\')');
 
         $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
         $query->groupBy('itm.id');
