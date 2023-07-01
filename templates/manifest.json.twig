@@ -1,6 +1,7 @@
 {
     "name": "Stéphane Dion - feed",
     "short_name": "feed",
+    "description": "Self-hosted atom/rss reader - Progressive Web App - Google Reader alternative",
     "categories": [
         "news",
         "productivity",
@@ -105,6 +106,15 @@
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
+    "display_override": [
+        "window-controls-overlay",
+        "standalone"
+    ],
+    "launch_handler": {
+        "client_mode": "navigate-existing"
+    },
+    "handle_links": "preferred",
+    "dir": "auto",
     "background_color": "#3f51b5",
     "theme_color": "#3f51b5"
 }
