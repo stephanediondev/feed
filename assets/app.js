@@ -239,6 +239,11 @@ function ready() {
             event.preventDefault();
 
             loadRoute($(this).attr('href'), {page: $(this).data('page'), q: $(this).data('q'), link: $(this)});
+
+            if ($(this).data('close-dialog')) {
+                const myModal = bootstrap.Modal.getOrCreateInstance($(this).data('close-dialog'), {});
+                myModal.hide();
+            }
         });
 
         $(document).on('click', '.dialog', function(event) {
@@ -250,7 +255,7 @@ function ready() {
                     url: decodeURIComponent($(this).data('url'))
                 });
             } else {
-                const myModal = new bootstrap.Modal($(this).data('bs-target'), {});
+                const myModal = bootstrap.Modal.getOrCreateInstance($(this).data('bs-target'), {});
                 myModal.show();
             }
         });
@@ -374,7 +379,7 @@ function ready() {
                     headers: headers,
                     body: body
                 }).then(function(response) {
-                    if (response.ok && 200 === response.status) {
+                    if (response.ok && 200 <= response.status && 300 > response.status) {
                         if (form.data('query') === '/feeds/export') {
                             response.text().then(function(jsonResponse) {
                                 var blob = new Blob([jsonResponse], {type: 'application/xml;charset=utf-8'});
@@ -395,9 +400,13 @@ function ready() {
 
                                     setToast({'title': i18next.t('login')});
                                 }
-                                $('.modal-backdrop').remove();
                                 loadRoute(form.attr('action'));
                             });
+                        }
+
+                        if (form.data('close-dialog')) {
+                            const myModal = bootstrap.Modal.getOrCreateInstance(form.data('close-dialog'), {});
+                            myModal.hide();
                         }
                     } else {
                         handleBadResponse(response);
@@ -609,7 +618,7 @@ function loadRoute(key, parameters) {
                     'Content-Type': 'application/json'
                 })
         	}).then(function(response) {
-                if (response.ok && 200 === response.status) {
+                if (response.ok && 200 <= response.status && 300 > response.status) {
                     response.json().then(function(jsonResponse) {
                         jsonResponse.current_key = key;
                         jsonResponse.current_key_markallasread = key.replace('#items', '#items/markallasread');
@@ -967,7 +976,7 @@ function sendSubscribe(PushSubscription) {
             headers: headers,
             body: JSON.stringify(body)
         }).then(function(response) {
-            if (response.ok && 200 === response.status) {
+            if (response.ok && 200 <= response.status && 300 > response.status) {
                 setToast({'title': i18next.t('notifications'), 'body': i18next.t('notifications_enabled')});
             } else {
                 handleBadResponse(response);
@@ -997,7 +1006,7 @@ function sendUnbscribe(PushSubscription) {
             headers: headers,
             body: JSON.stringify(body)
         }).then(function(response) {
-            if (response.ok && 200 === response.status) {
+            if (response.ok && 200 <= response.status && 300 > response.status) {
                 setToast({'title': i18next.t('notifications'), 'body': i18next.t('notifications_disabled')});
             } else {
                 handleBadResponse(response);
@@ -1173,17 +1182,17 @@ document.addEventListener('keydown', function(event) {
         } else if (keycode === 65 && $('body').hasClass('connected') && $('body').hasClass('online')) {
             //shift + a: dialog mark all as read
             if (event.shiftKey) {
-                const myModal = new bootstrap.Modal('#dialog-mark_all_as_read', {});
+                const myModal = bootstrap.Modal.getOrCreateInstance('#dialog-mark_all_as_read', {});
                 myModal.show();
             //a: add a feed
             } else {
-                const myModal = new bootstrap.Modal('#dialog-add_feed', {});
+                const myModal = bootstrap.Modal.getOrCreateInstance('#dialog-add_feed', {});
                 myModal.show();
             }
 
         //h or ? : open shortcuts dialog
         } else if(keycode == 72 || keycode == 188) {
-            const myModal = new bootstrap.Modal('#dialog-shortcuts', {});
+            const myModal = bootstrap.Modal.getOrCreateInstance('#dialog-shortcuts', {});
             myModal.show();
 
         //slash

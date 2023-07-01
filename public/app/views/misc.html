@@ -55,7 +55,7 @@
     <div class="modal fade" id="dialog-add_feed" tabindex="-1" aria-labelledby="{{trans 'add'}}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="#feeds/recent" data-query="/feeds" method="POST">
+                <form action="#feeds/recent" data-query="/feeds" method="POST" data-close-dialog="#dialog-add_feed">
                 <div class="modal-header">
                     <h5 class="modal-title">
                         {{trans 'title.add_feed'}}
@@ -84,7 +84,7 @@
     <div class="modal fade" id="dialog-import_feed" tabindex="-1" aria-labelledby="{{trans 'import'}}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="#feeds/recent" data-query="/feeds/import" method="POST" enctype="multipart/form-data">
+                <form action="#feeds/recent" data-query="/feeds/import" method="POST" data-close-dialog="#dialog-import_feed" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title">
                         {{trans 'title.import_feeds'}}
@@ -108,7 +108,7 @@
     <div class="modal fade" id="dialog-export_feed" tabindex="-1" aria-labelledby="{{trans 'export'}}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="#feeds/recent" data-query="/feeds/export" method="POST">
+                <form action="#feeds/recent" data-query="/feeds/export" method="POST" data-close-dialog="#dialog-export_feed">
                 <div class="modal-header">
                     <h5 class="modal-title">
                         {{trans 'title.export_feeds'}}
