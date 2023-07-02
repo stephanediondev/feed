@@ -26,6 +26,16 @@ class Action
     #[ORM\JoinColumn(name: "reverse", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
     private ?Action $reverse = null;
 
+    public function __construct()
+    {
+        $this->dateCreated = new \Datetime();
+    }
+
+    public function __toString()
+    {
+        return $this->getTitle() ?? '';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

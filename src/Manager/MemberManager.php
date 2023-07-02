@@ -36,9 +36,8 @@ class MemberManager extends AbstractManager
 
     public function persist(Member $member): void
     {
-        if ($member->getDateCreated() === null) {
+        if ($member->getId() === null) {
             $eventName = MemberEvent::CREATED;
-            $member->setDateCreated(new \Datetime());
         } else {
             $eventName = MemberEvent::UPDATED;
         }

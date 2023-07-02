@@ -65,9 +65,16 @@ class Feed
 
     public function __construct()
     {
+        $this->dateCreated = new \Datetime();
+        $this->dateModified = new \Datetime();
         $this->categories = new ArrayCollection();
         $this->collections = new ArrayCollection();
         $this->actions = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getTitle() ?? '';
     }
 
     public function getId(): ?int

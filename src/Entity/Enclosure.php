@@ -38,6 +38,11 @@ class Enclosure
     #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id", onDelete: "cascade", nullable: true)]
     private ?Item $item = null;
 
+    public function __construct()
+    {
+        $this->dateCreated = new \Datetime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

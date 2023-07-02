@@ -73,9 +73,16 @@ class Item
 
     public function __construct()
     {
+        $this->dateCreated = new \Datetime();
+        $this->dateModified = new \Datetime();
         $this->categories = new ArrayCollection();
         $this->enclosures = new ArrayCollection();
         $this->actions = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getTitle() ?? '';
     }
 
     public function getId(): ?int

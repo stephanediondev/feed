@@ -31,7 +31,13 @@ class Category
 
     public function __construct()
     {
+        $this->dateCreated = new \Datetime();
         $this->actions = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getTitle() ?? '';
     }
 
     public function getId(): ?int

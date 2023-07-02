@@ -44,9 +44,8 @@ class CategoryManager extends AbstractManager
 
     public function persist(Category $category): void
     {
-        if ($category->getDateCreated() === null) {
+        if ($category->getId() === null) {
             $eventName = CategoryEvent::CREATED;
-            $category->setDateCreated(new \Datetime());
         } else {
             $eventName = CategoryEvent::UPDATED;
         }

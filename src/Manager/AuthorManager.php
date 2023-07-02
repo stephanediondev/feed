@@ -36,9 +36,8 @@ class AuthorManager extends AbstractManager
 
     public function persist(Author $author): void
     {
-        if ($author->getDateCreated() === null) {
+        if ($author->getId() === null) {
             $eventName = AuthorEvent::CREATED;
-            $author->setDateCreated(new \Datetime());
         } else {
             $eventName = AuthorEvent::UPDATED;
         }

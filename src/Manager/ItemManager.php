@@ -37,9 +37,8 @@ class ItemManager extends AbstractManager
 
     public function persist(Item $item): void
     {
-        if ($item->getDateCreated() === null) {
+        if ($item->getId() === null) {
             $eventName = ItemEvent::CREATED;
-            $item->setDateCreated(new \Datetime());
         } else {
             $eventName = ItemEvent::UPDATED;
         }

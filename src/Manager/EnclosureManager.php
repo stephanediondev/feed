@@ -36,9 +36,8 @@ class EnclosureManager extends AbstractManager
 
     public function persist(Enclosure $enclosure): void
     {
-        if ($enclosure->getDateCreated() === null) {
+        if ($enclosure->getId() === null) {
             $eventName = EnclosureEvent::CREATED;
-            $enclosure->setDateCreated(new \Datetime());
         } else {
             $eventName = EnclosureEvent::UPDATED;
         }

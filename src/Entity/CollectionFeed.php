@@ -31,6 +31,11 @@ class CollectionFeed
     #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateCreated = null;
 
+    public function __construct()
+    {
+        $this->dateCreated = new \Datetime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

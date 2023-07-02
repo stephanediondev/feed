@@ -42,9 +42,8 @@ class FeedManager extends AbstractManager
 
     public function persist(Feed $feed): void
     {
-        if ($feed->getDateCreated() === null) {
+        if ($feed->getId() === null) {
             $eventName = FeedEvent::CREATED;
-            $feed->setDateCreated(new \Datetime());
         } else {
             $eventName = FeedEvent::UPDATED;
         }

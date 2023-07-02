@@ -32,6 +32,11 @@ class ActionItem
     #[ORM\JoinColumn(name: "member_id", referencedColumnName: "id", onDelete: "cascade", nullable: true)]
     private ?Member $member = null;
 
+    public function __construct()
+    {
+        $this->dateCreated = new \Datetime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

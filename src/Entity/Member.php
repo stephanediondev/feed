@@ -34,6 +34,11 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
+    public function __construct()
+    {
+        $this->dateCreated = new \Datetime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

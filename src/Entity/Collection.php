@@ -32,6 +32,11 @@ class Collection
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
 
+    public function __construct()
+    {
+        $this->dateCreated = new \Datetime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

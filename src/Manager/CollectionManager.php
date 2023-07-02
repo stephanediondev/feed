@@ -49,9 +49,8 @@ class CollectionManager extends AbstractManager
 
     public function persist(Collection $collection): void
     {
-        if ($collection->getDateCreated() === null) {
+        if ($collection->getId() === null) {
             $eventName = CollectionEvent::CREATED;
-            $collection->setDateCreated(new \Datetime());
         } else {
             $eventName = CollectionEvent::UPDATED;
         }
