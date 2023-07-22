@@ -2,8 +2,8 @@
     <div class="mdl-card row position-relative" id="title-entries">
         <div class="mdl-card__title col-xl-6 col-12">
             <h1 class="mdl-card__title-text fs-5">
-                {{#if entry }}
-                    <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.attributes.title }} ({{trans entry_entity}})</a> /
+                {{#if hightlightIncluded }}
+                    <a href="#{{ hightlightIncluded.type }}/{{ hightlightIncluded.id }}" class="load-route">{{ hightlightIncluded.attributes.title }} ({{trans hightlightIncluded.type}})</a> /
                 {{/if}}
                 {{#if current_title }}
                     {{trans current_title}} <span class="badge bg-light text-dark">{{ meta.results }}</span>

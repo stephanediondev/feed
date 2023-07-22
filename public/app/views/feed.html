@@ -2,8 +2,8 @@
     <div class="mdl-card row position-relative" id="title-entries">
         <div class="mdl-card__title col-xl-6 col-12">
             <h1 class="mdl-card__title-text fs-5">
-                {{#if entry }}
-                    <a href="#{{ entry_entity }}/{{ entry.id }}" class="load-route">{{ entry.attributes.title }} ({{trans entry_entity}})</a> /
+                {{#if hightlightIncluded }}
+                    <a href="#{{ hightlightIncluded.type }}/{{ hightlightIncluded.id }}" class="load-route">{{ hightlightIncluded.attributes.title }} ({{trans hightlightIncluded.type}})</a> /
                 {{/if}}
                 {{#if current_title }}
                     {{trans current_title}} <span class="badge bg-light text-dark">{{ meta.results }}</span>
@@ -41,9 +41,9 @@
                 {{#if entry.attributes.score }}<span class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-graph-up"></i> {{score entry.attributes.score }}</span>{{/if}}
                 {{#if entry.attributes.language }}<span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-translate"></i> {{ entry.attributes.language }}</span>{{/if}}
                 <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.attributes.date_created }}"></span></span>
-                {{#if entry.categories }}
-                    {{#each entry.categories as |category category_index|}}
-                        <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-tag-fill"></i> {{ category.title }}</a>
+                {{#if entry.relationships.categories.data }}
+                    {{#each entry.relationships.categories.data as |category category_index|}}
+                        <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-tag-fill"></i> {{ category.attributes.title }}</a>
                     {{/each}}
                 {{/if}}
             </div>
@@ -78,9 +78,9 @@
             <div class="mdl-card__subtitle-text">
                 {{#if entry.attributes.language }}<span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-translate"></i> {{ entry.attributes.language }}</span>{{/if}}
                 <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ entry.attributes.date_created }}"></span></span>
-                {{#if entry.categories }}
-                    {{#each entry.categories as |category category_index|}}
-                        <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-tag-fill"></i> {{ category.title }}</a>
+                {{#if entry.relationships.categories.data }}
+                    {{#each entry.relationships.categories.data as |category category_index|}}
+                        <a href="#feeds/category/{{ category.id }}" class="load-route mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-tag-fill"></i> {{ category.attributes.title }}</a>
                     {{/each}}
                 {{/if}}
             </div>

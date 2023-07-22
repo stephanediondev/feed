@@ -29,8 +29,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            {{#if entry }}
-                                {{ entry.attributes.title }} ({{trans entry_entity}})<br>
+                            {{#if hightlightIncluded }}
+                                {{ hightlightIncluded.attributes.title }} ({{trans hightlightIncluded.type}}) /
                             {{/if}}
                             {{#if current_title }}
                                 {{trans current_title}} <span class="badge bg-light text-dark">{{ meta.results }}</span>
