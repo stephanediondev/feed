@@ -68,7 +68,13 @@ class ItemRepository extends AbstractRepository
         }
 
         if (true === isset($parameters['category'])) {
-            $query->andWhere('itm.id IN (SELECT IDENTITY(category.item) FROM '.ItemCategory::class.' AS category WHERE category.category = :category)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(itm_cat.item)');
+            $subQuery->from(ItemCategory::class, 'itm_cat');
+            $subQuery->andWhere('itm_cat.category = :category');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->in('itm.id', $subQuery->getDQL()));
             $query->setParameter(':category', $parameters['category']);
         }
 
@@ -81,13 +87,26 @@ class ItemRepository extends AbstractRepository
                 $query->leftJoin('itm.actions', 'act_itm');
                 $query->andWhere('act_itm.member = :member');
                 $query->andWhere('act_itm.action = 12');
-                $query->andWhere('itm.feed IN (SELECT IDENTITY(subscribe.feed) FROM '.ActionFeed::class.' AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
+
+                $subQuery = $this->getEntityManager()->createQueryBuilder();
+                $subQuery->select('IDENTITY(act_fed.feed)');
+                $subQuery->from(ActionFeed::class, 'act_fed');
+                $subQuery->andWhere('act_fed.member = :member AND act_fed.action = 3');
+                $subQuery->distinct();
+
+                $query->andWhere($query->expr()->in('itm.feed', $subQuery->getDQL()));
             }
 
             if (true === isset($parameters['starred']) && $parameters['starred']) {
                 $memberSet = true;
 
-                $query->andWhere('itm.id IN (SELECT IDENTITY(starred.item) FROM '.ActionItem::class.' AS starred WHERE starred.member = :member AND starred.action = 2)');
+                $subQuery = $this->getEntityManager()->createQueryBuilder();
+                $subQuery->select('IDENTITY(act_itm.item)');
+                $subQuery->from(ActionItem::class, 'act_itm');
+                $subQuery->andWhere('act_itm.member = :member AND act_itm.action = 2');
+                $subQuery->distinct();
+
+                $query->andWhere($query->expr()->in('itm.id', $subQuery->getDQL()));
             }
 
             if (true === $memberSet) {

@@ -96,12 +96,24 @@ SQL;
         }
 
         if (true === isset($parameters['excluded']) && $parameters['excluded']) {
-            $query->andWhere('aut.id IN (SELECT IDENTITY(excluded.author) FROM '.ActionAuthor::class.' AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(act_aut.author)');
+            $subQuery->from(ActionAuthor::class, 'act_aut');
+            $subQuery->andWhere('act_aut.member = :member AND act_aut.action = 5');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->in('aut.id', $subQuery->getDQL()));
             $query->setParameter(':member', $parameters['member']);
         }
 
         if (true === isset($parameters['feed'])) {
-            $query->andWhere('aut.id IN (SELECT IDENTITY(item.author) FROM '.Item::class.' AS item WHERE item.feed = :feed)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(item.author)');
+            $subQuery->from(Item::class, 'item');
+            $subQuery->andWhere('item.feed = :feed');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->in('aut.id', $subQuery->getDQL()));
             $query->setParameter(':feed', $parameters['feed']);
         }
 

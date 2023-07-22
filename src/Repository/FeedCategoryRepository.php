@@ -73,7 +73,13 @@ class FeedCategoryRepository extends AbstractRepository
         }
 
         if (true === isset($parameters['member'])) {
-            $query->andWhere('cat.id NOT IN (SELECT IDENTITY(exclude.category) FROM '.ActionCategory::class.' AS exclude WHERE exclude.member = :member AND exclude.action = 5)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(act_cat.category)');
+            $subQuery->from(ActionCategory::class, 'act_cat');
+            $subQuery->andWhere('act_cat.member = :member AND act_cat.action = 5');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->notIn('cat.id', $subQuery->getDQL()));
             $query->setParameter(':member', $parameters['member']);
         }
 

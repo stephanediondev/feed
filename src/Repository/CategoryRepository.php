@@ -97,12 +97,23 @@ SQL;
         }
 
         if (true === isset($parameters['excluded']) && $parameters['excluded']) {
-            $query->andWhere('cat.id IN (SELECT IDENTITY(excluded.category) FROM '.ActionCategory::class.' AS excluded WHERE excluded.member = :member AND excluded.action = 5)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(act_cat.category)');
+            $subQuery->from(ActionCategory::class, 'act_cat');
+            $subQuery->andWhere('act_cat.member = :member AND act_cat.action = 5');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->in('cat.id', $subQuery->getDQL()));
             $query->setParameter(':member', $parameters['member']);
         }
 
         if (true === isset($parameters['usedbyfeeds']) && $parameters['usedbyfeeds']) {
-            $query->andWhere('cat.id IN (SELECT IDENTITY(feed.category) FROM '.FeedCategory::class.' AS feed)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(fed_cat.category)');
+            $subQuery->from(FeedCategory::class, 'fed_cat');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->in('cat.id', $subQuery->getDQL()));
         }
 
         if (true === isset($parameters['days'])) {

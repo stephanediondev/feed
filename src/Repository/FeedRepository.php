@@ -67,28 +67,57 @@ class FeedRepository extends AbstractRepository
         }
 
         if (true === isset($parameters['witherrors']) && $parameters['witherrors']) {
-            $date = new \Datetime();
-            $query->andWhere('fed.id IN (SELECT IDENTITY(errors.feed) FROM '.CollectionFeed::class.' AS errors WHERE errors.error IS NOT NULL AND errors.dateCreated > DATE_SUB(:date, 12, \'HOUR\'))');
-            $query->setParameter(':date', $date);
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(col_fed.feed)');
+            $subQuery->from(CollectionFeed::class, 'col_fed');
+            $subQuery->andWhere('col_fed.error IS NOT NULL AND col_fed.dateCreated > DATE_SUB(:date, 12, \'HOUR\')');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->in('fed.id', $subQuery->getDQL()));
+            $query->setParameter(':date', new \Datetime());
         }
 
         if (true === isset($parameters['subscribed']) && $parameters['subscribed']) {
-            $query->andWhere('fed.id IN (SELECT IDENTITY(subscribe.feed) FROM '.ActionFeed::class.' AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(act_fed.feed)');
+            $subQuery->from(ActionFeed::class, 'act_fed');
+            $subQuery->andWhere('act_fed.member = :member AND act_fed.action = 3');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->in('fed.id', $subQuery->getDQL()));
             $query->setParameter(':member', $parameters['member']);
         }
 
         if (true === isset($parameters['unsubscribed']) && $parameters['unsubscribed']) {
-            $query->andWhere('fed.id NOT IN (SELECT IDENTITY(subscribe.feed) FROM '.ActionFeed::class.' AS subscribe WHERE subscribe.member = :member AND subscribe.action = 3)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(act_fed.feed)');
+            $subQuery->from(ActionFeed::class, 'act_fed');
+            $subQuery->andWhere('act_fed.member = :member AND act_fed.action = 3');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->notIn('fed.id', $subQuery->getDQL()));
             $query->setParameter(':member', $parameters['member']);
         }
 
         if (true === isset($parameters['category'])) {
-            $query->andWhere('fed.id IN (SELECT IDENTITY(category.feed) FROM '.FeedCategory::class.' AS category WHERE category.category = :category)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(fed_cat.feed)');
+            $subQuery->from(FeedCategory::class, 'fed_cat');
+            $subQuery->andWhere('fed_cat.category = :category');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->in('fed.id', $subQuery->getDQL()));
             $query->setParameter(':category', $parameters['category']);
         }
 
         if (true === isset($parameters['author'])) {
-            $query->andWhere('fed.id IN (SELECT IDENTITY(item.feed) FROM '.Item::class.' AS item WHERE item.author = :author)');
+            $subQuery = $this->getEntityManager()->createQueryBuilder();
+            $subQuery->select('IDENTITY(item.feed)');
+            $subQuery->from(Item::class, 'item');
+            $subQuery->andWhere('item.author = :author');
+            $subQuery->distinct();
+
+            $query->andWhere($query->expr()->in('fed.id', $subQuery->getDQL()));
             $query->setParameter(':author', $parameters['author']);
         }
 
