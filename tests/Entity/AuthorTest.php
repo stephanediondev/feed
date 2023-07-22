@@ -3,8 +3,8 @@
 namespace App\Tests\Entity;
 
 use App\Entity\Action;
-use App\Entity\Author;
 use App\Entity\ActionAuthor;
+use App\Entity\Author;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

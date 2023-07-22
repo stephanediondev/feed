@@ -3,10 +3,10 @@
 namespace App\Tests\Entity;
 
 use App\Entity\Action;
+use App\Entity\ActionFeed;
 use App\Entity\Category;
 use App\Entity\Feed;
 use App\Entity\FeedCategory;
-use App\Entity\ActionFeed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

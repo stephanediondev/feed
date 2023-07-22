@@ -2,14 +2,14 @@
 
 namespace App\Tests\Entity;
 
-use App\Entity\Author;
 use App\Entity\Action;
+use App\Entity\ActionItem;
+use App\Entity\Author;
+use App\Entity\Category;
 use App\Entity\Enclosure;
 use App\Entity\Feed;
-use App\Entity\Category;
 use App\Entity\Item;
 use App\Entity\ItemCategory;
-use App\Entity\ActionItem;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

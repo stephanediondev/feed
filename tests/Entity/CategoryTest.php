@@ -3,8 +3,8 @@
 namespace App\Tests\Entity;
 
 use App\Entity\Action;
-use App\Entity\Category;
 use App\Entity\ActionCategory;
+use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
