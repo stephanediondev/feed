@@ -10,7 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:elasticsearch', description: 'Elastic Search indexation')]
+#[AsCommand(name: 'app:elasticsearch', description: 'Elasticsearch indexation')]
 class ElasticsearchCommand extends Command
 {
     private SearchManager $searchManager;
@@ -25,6 +25,7 @@ class ElasticsearchCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         date_default_timezone_set('UTC');
+
         $this->searchManager->start();
 
         return Command::SUCCESS;

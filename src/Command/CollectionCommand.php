@@ -25,6 +25,7 @@ class CollectionCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         date_default_timezone_set('UTC');
+
         $this->collectionManager->start();
 
         return Command::SUCCESS;

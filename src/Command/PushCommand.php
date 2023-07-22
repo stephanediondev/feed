@@ -25,6 +25,7 @@ class PushCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         date_default_timezone_set('UTC');
+
         $this->pushManager->sendNotifications();
 
         return Command::SUCCESS;

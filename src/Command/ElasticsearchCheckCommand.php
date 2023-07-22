@@ -11,7 +11,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:elasticsearch:check', description: 'Check Elastic Search records')]
+#[AsCommand(name: 'app:elasticsearch:check', description: 'Check Elasticsearch records')]
 class ElasticsearchCheckCommand extends Command
 {
     private SearchManager $searchManager;
