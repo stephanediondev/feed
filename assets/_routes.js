@@ -65,7 +65,7 @@ routes['#authors/search/result'] = {view: 'view-search-authors', viewUnit: 'view
 
 routes['#author/action/exclude/{id}'] = {view: false, query: '/author/action/exclude/{id}'};
 
-routes['#authors/feed/{id}'] = {view: 'view-authors', viewUnit: 'view-authors-unit', query: '/authors?filter[feed]={id}'};
+routes['#authors/feed/{id}'] = {hightlightIncluded: 'feed', view: 'view-authors', viewUnit: 'view-authors-unit', query: '/authors?filter[feed]={id}'};
 
 routes['#author/{id}'] = {view: 'view-authors', viewUnit: 'view-authors-unit', query: '/author/{id}'};
 

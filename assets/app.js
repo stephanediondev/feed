@@ -668,6 +668,7 @@ function loadRoute(key, parameters) {
                             if (Object.prototype.toString.call( jsonResponse.data ) === '[object Object]') {
                                 jsonResponsedata = [];
                                 jsonResponsedata[0] = jsonResponse.data;
+                                window.document.title = jsonResponse.data.attributes.title + ' (' + i18next.t(jsonResponse.data.type) + ')';
                             }
 
                             if (Object.prototype.toString.call( jsonResponsedata ) === '[object Array]') {
