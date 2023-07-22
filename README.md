@@ -3,7 +3,7 @@
 - PHP 8.2 with apcu, curl, gmp, iconv, json, mbstring, tidy, xml
 - Composer
 - MySQL 8
-- Yarn
+- npm
 
 # Installation
 
@@ -36,8 +36,8 @@ bin/console doctrine:schema:create
 bin/console app:setup
 bin/console app:member:create
 
-yarn install
-yarn run build
+npm install
+npm run build
 ```
 
 ## Notifications
@@ -81,8 +81,8 @@ git reset --hard origin/main
 composer install
 bin/console doctrine:migrations:migrate -n
 
-yarn install
-yarn run build
+npm install
+npm run build
 ```
 
 # Screenshots
