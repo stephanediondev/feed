@@ -29,6 +29,8 @@ global.saveAs = saveAs;
 
 import {routes} from './_routes.js'
 
+let observer;
+
 var serviceWorkerEnabled = false;
 
 if ('serviceWorker' in navigator && window.location.protocol == 'https:') {
@@ -145,6 +147,37 @@ function removeCookie(cname) {
     document.cookie = cookie;
 }
 
+function handleIntersect(entries, observer) {
+    entries.forEach((entry) => {
+        //console.log(entry.target.getAttribute('id'));
+
+        var entryElement = document.querySelector('#' + entry.target.getAttribute('id'));
+        if (entryElement) {
+            console.log(entry.target);
+            console.log(entryElement);
+            entryElement.style.border = '2px dashed #00FF00';
+        }
+
+        entry.target.style.border = '3px dotted #0000FF';
+
+        //entry.target.innerText = `${Math.round(entry.intersectionRatio * 100)}%`
+
+        /*if (entry.intersectionRatio > prevRatio) {
+        entry.target.style.backgroundColor = increasingColor.replace(
+          "ratio",
+          entry.intersectionRatio,
+        );
+      } else {
+        entry.target.style.backgroundColor = decreasingColor.replace(
+          "ratio",
+          entry.intersectionRatio,
+        );
+      }
+
+      prevRatio = entry.intersectionRatio;*/
+    });
+}
+
 function ready() {
     Promise.all(readyPromises).then(function() {
         updateOnlineStatus();
@@ -234,6 +267,14 @@ function ready() {
                 loadRoute('#login');
             }
         }
+
+        let options = {
+            root: document.querySelector('main > .mdl-grid'),
+            //rootMargin: '20px',
+            //threshold: 1,
+        };
+
+        observer = new IntersectionObserver(handleIntersect, options);
 
         $(document).on('click', '.load-route', function(event) {
             event.preventDefault();
@@ -705,7 +746,18 @@ function loadRoute(key, parameters) {
                                                     }
                                                 }
                                             }
-                                            document.querySelector('main > .mdl-grid').innerHTML += templateUnit({'entry': entry});
+                                            //document.querySelector('main > .mdl-grid').innerHTML += templateUnit({'entry': entry});
+                                            document.querySelector('main > .mdl-grid').insertAdjacentHTML('beforeend', templateUnit({'entry': entry}));
+
+                                            if ('item' === entry.type) {
+                                                var entryElement = document.querySelector('#item-' + entry.id);
+                                                if (entryElement) {
+                                                    //console.log(entryElement);
+                                                    entryElement.classList.remove('bg-body-tertiary');
+                                                    entryElement.style.border = '2px solid #FF0000';
+                                                    observer.observe(entryElement);
+                                                }
+                                            }
                                         }
                                     }
                                 }
