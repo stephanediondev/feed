@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\IdTrait;
 use App\Entity\DateCreatedTrait;
 use App\Repository\CollectionRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,10 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "collection")]
 class Collection
 {
+    use IdTrait;
     use DateCreatedTrait;
-
-    #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
 
     #[ORM\Column(name: "feeds", type: "integer", nullable: false, options: ["unsigned" => true, "default" => 0])]
     private int $feeds = 0;
@@ -35,11 +34,6 @@ class Collection
     public function __construct()
     {
         $this->dateCreated = new \Datetime();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getFeeds(): int

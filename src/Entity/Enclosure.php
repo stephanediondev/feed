@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\IdTrait;
 use App\Entity\DateCreatedTrait;
 use App\Repository\EnclosureRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,10 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: "item_id", columns: ["item_id"])]
 class Enclosure
 {
+    use IdTrait;
     use DateCreatedTrait;
-
-    #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
 
     #[ORM\Column(name: "link", type: "string", length: 255, nullable: false)]
     private ?string $link = null;
@@ -41,11 +40,6 @@ class Enclosure
     public function __construct()
     {
         $this->dateCreated = new \Datetime();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getLink(): ?string

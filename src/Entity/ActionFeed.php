@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\ActionTrait;
+use App\Entity\IdTrait;
 use App\Entity\DateCreatedTrait;
 use App\Repository\ActionFeedRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ActionFeed
 {
     use ActionTrait;
+    use IdTrait;
     use DateCreatedTrait;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "actions", fetch: "LAZY")]

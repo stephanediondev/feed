@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\IdTrait;
 use App\Entity\DateCreatedTrait;
 use App\Repository\MemberRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,10 +16,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\UniqueConstraint(name: "email", columns: ["email"])]
 class Member implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use IdTrait;
     use DateCreatedTrait;
-
-    #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
 
     #[ORM\Column(name: "email", type: "string", length: 255, nullable: false)]
     private ?string $email = null;
@@ -37,11 +36,6 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->dateCreated = new \Datetime();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getEmail(): ?string

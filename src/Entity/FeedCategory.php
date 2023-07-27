@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\IdTrait;
 use App\Repository\FeedCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,8 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: "category_id", columns: ["category_id"])]
 class FeedCategory
 {
-    #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
+    use IdTrait;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Category", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
@@ -24,11 +24,6 @@ class FeedCategory
     #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "categories", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Feed $feed = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getCategory(): ?Category
     {

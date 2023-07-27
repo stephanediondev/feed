@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\IdTrait;
 use App\Entity\DateCreatedTrait;
 use App\Repository\FeedRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,10 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: "link", columns: ["link"])]
 class Feed
 {
+    use IdTrait;
     use DateCreatedTrait;
-
-    #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
 
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: true)]
     private ?string $title = null;
@@ -75,11 +74,6 @@ class Feed
     public function __toString()
     {
         return $this->getTitle() ?? '';
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getTitle(): ?string

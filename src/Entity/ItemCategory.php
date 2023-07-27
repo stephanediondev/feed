@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\IdTrait;
 use App\Repository\ItemCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,8 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: "category_id", columns: ["category_id"])]
 class ItemCategory
 {
-    #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
-    private ?int $id = null;
+    use IdTrait;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Category", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
@@ -24,11 +24,6 @@ class ItemCategory
     #[ORM\ManyToOne(targetEntity: "App\Entity\Item", inversedBy: "categories", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "item_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Item $item = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getCategory(): ?Category
     {
