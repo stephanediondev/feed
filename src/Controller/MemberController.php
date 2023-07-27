@@ -151,7 +151,7 @@ class MemberController extends AbstractAppController
         $data['entry'] = $member->toArray();
         $data['entry_entity'] = 'member';
 
-        //$this->memberManager->remove($member);
+        $this->memberManager->remove($member);
 
         return $this->jsonResponse($data);
     }

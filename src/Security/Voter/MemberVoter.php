@@ -22,7 +22,7 @@ class MemberVoter extends AbstractVoter
 
         switch ($attribute) {
             case 'DELETE':
-                if ($user->getId() === $subject->getId()) {
+                if ($user->getId() === $subject->getId() || true === $subject->getAdministrator()) {
                     return false;
                 }
         }
