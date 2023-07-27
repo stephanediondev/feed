@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\ActionTrait;
-use App\Entity\IdTrait;
 use App\Entity\DateCreatedTrait;
+use App\Entity\IdTrait;
 use App\Repository\ActionCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 

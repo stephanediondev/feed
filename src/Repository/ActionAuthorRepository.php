@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\ActionAuthor;
 use App\Repository\AbstractRepository;
+use Doctrine\ORM\QueryBuilder;
 
 class ActionAuthorRepository extends AbstractRepository
 {
@@ -28,25 +29,7 @@ class ActionAuthorRepository extends AbstractRepository
         $query->leftJoin('act_aut.author', 'aut');
         $query->leftJoin('act_aut.member', 'mbr');
 
-        if (true === isset($parameters['id'])) {
-            $query->andWhere('act_aut.id = :id');
-            $query->setParameter(':id', $parameters['id']);
-        }
-
-        if (true === isset($parameters['action'])) {
-            $query->andWhere('act_aut.action = :action');
-            $query->setParameter(':action', $parameters['action']);
-        }
-
-        if (true === isset($parameters['author'])) {
-            $query->andWhere('act_aut.author = :author');
-            $query->setParameter(':author', $parameters['author']);
-        }
-
-        if (true === isset($parameters['member'])) {
-            $query->andWhere('act_aut.member = :member');
-            $query->setParameter(':member', $parameters['member']);
-        }
+        $this->applyParameters($query, $parameters);
 
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
@@ -68,6 +51,37 @@ class ActionAuthorRepository extends AbstractRepository
         $query->leftJoin('act_aut.author', 'aut');
         $query->leftJoin('act_aut.member', 'mbr');
 
+        $this->applyParameters($query, $parameters);
+
+        $query->groupBy('act_aut.id');
+
+        $getQuery = $query->getQuery();
+        return $getQuery;
+    }
+
+    public function persist(ActionAuthor $actionAuthor, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($actionAuthor);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(ActionAuthor $actionAuthor, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($actionAuthor);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function applyParameters(QueryBuilder $query, array $parameters): void
+    {
         if (true === isset($parameters['id'])) {
             $query->andWhere('act_aut.id = :id');
             $query->setParameter(':id', $parameters['id']);
@@ -91,29 +105,6 @@ class ActionAuthorRepository extends AbstractRepository
         if (true === isset($parameters['member'])) {
             $query->andWhere('act_aut.member = :member');
             $query->setParameter(':member', $parameters['member']);
-        }
-
-        $query->groupBy('act_aut.id');
-
-        $getQuery = $query->getQuery();
-        return $getQuery;
-    }
-
-    public function persist(ActionAuthor $actionAuthor, bool $flush = true): void
-    {
-        $this->getEntityManager()->persist($actionAuthor);
-
-        if (true === $flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(ActionAuthor $actionAuthor, bool $flush = true): void
-    {
-        $this->getEntityManager()->remove($actionAuthor);
-
-        if (true === $flush) {
-            $this->getEntityManager()->flush();
         }
     }
 }

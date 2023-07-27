@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\ActionFeed;
 use App\Repository\AbstractRepository;
+use Doctrine\ORM\QueryBuilder;
 
 class ActionFeedRepository extends AbstractRepository
 {
@@ -28,25 +29,7 @@ class ActionFeedRepository extends AbstractRepository
         $query->leftJoin('act_fed.feed', 'fed');
         $query->leftJoin('act_fed.member', 'mbr');
 
-        if (true === isset($parameters['id'])) {
-            $query->andWhere('act_fed.id = :id');
-            $query->setParameter(':id', $parameters['id']);
-        }
-
-        if (true === isset($parameters['action'])) {
-            $query->andWhere('act_fed.action = :action');
-            $query->setParameter(':action', $parameters['action']);
-        }
-
-        if (true === isset($parameters['feed'])) {
-            $query->andWhere('act_fed.feed = :feed');
-            $query->setParameter(':feed', $parameters['feed']);
-        }
-
-        if (true === isset($parameters['member'])) {
-            $query->andWhere('act_fed.member = :member');
-            $query->setParameter(':member', $parameters['member']);
-        }
+        $this->applyParameters($query, $parameters);
 
         $getQuery = $query->getQuery();
         $getQuery->setMaxResults(1);
@@ -68,6 +51,37 @@ class ActionFeedRepository extends AbstractRepository
         $query->leftJoin('act_fed.feed', 'fed');
         $query->leftJoin('act_fed.member', 'mbr');
 
+        $this->applyParameters($query, $parameters);
+
+        $query->groupBy('act_fed.id');
+
+        $getQuery = $query->getQuery();
+        return $getQuery;
+    }
+
+    public function persist(ActionFeed $actionFeed, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($actionFeed);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(ActionFeed $actionFeed, bool $flush = true): void
+    {
+        $this->getEntityManager()->remove($actionFeed);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    /**
+     * @param array<mixed> $parameters
+     */
+    public function applyParameters(QueryBuilder $query, array $parameters): void
+    {
         if (true === isset($parameters['id'])) {
             $query->andWhere('act_fed.id = :id');
             $query->setParameter(':id', $parameters['id']);
@@ -91,29 +105,6 @@ class ActionFeedRepository extends AbstractRepository
         if (true === isset($parameters['member'])) {
             $query->andWhere('act_fed.member = :member');
             $query->setParameter(':member', $parameters['member']);
-        }
-
-        $query->groupBy('act_fed.id');
-
-        $getQuery = $query->getQuery();
-        return $getQuery;
-    }
-
-    public function persist(ActionFeed $actionFeed, bool $flush = true): void
-    {
-        $this->getEntityManager()->persist($actionFeed);
-
-        if (true === $flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(ActionFeed $actionFeed, bool $flush = true): void
-    {
-        $this->getEntityManager()->remove($actionFeed);
-
-        if (true === $flush) {
-            $this->getEntityManager()->flush();
         }
     }
 }

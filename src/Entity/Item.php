@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\IdTrait;
 use App\Entity\DateCreatedTrait;
 use App\Entity\Enclosure;
+use App\Entity\IdTrait;
 use App\Repository\ItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
