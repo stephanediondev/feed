@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\DateCreatedTrait;
 use App\Repository\ActionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,14 +14,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: "UNIQ_47CC8C92AA779117", columns: ["reverse"])]
 class Action
 {
+    use DateCreatedTrait;
+
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
     private ?int $id = null;
 
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: false)]
     private ?string $title = null;
-
-    #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
-    private ?\DateTimeInterface $dateCreated = null;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Action", inversedBy: "", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "reverse", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
@@ -49,18 +49,6 @@ class Action
     public function setTitle(?string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getDateCreated(): ?\DateTimeInterface
-    {
-        return $this->dateCreated;
-    }
-
-    public function setDateCreated(?\DateTimeInterface $dateCreated): self
-    {
-        $this->dateCreated = $dateCreated;
 
         return $this;
     }

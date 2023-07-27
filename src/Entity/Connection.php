@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\DateCreatedTrait;
 use App\Entity\ExtraFieldsTrait;
 use App\Repository\ConnectionRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Connection
 {
     use ExtraFieldsTrait;
+    use DateCreatedTrait;
 
     public const TYPE_LOGIN = 'login';
     public const TYPE_PUSH = 'push';
@@ -28,9 +30,6 @@ class Connection
 
     #[ORM\Column(name: "token", type: "string", length: 500, nullable: false)]
     private ?String $token = null;
-
-    #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
-    private ?\DateTimeInterface $dateCreated = null;
 
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
@@ -69,18 +68,6 @@ class Connection
     public function setToken(?string $token): self
     {
         $this->token = $token;
-
-        return $this;
-    }
-
-    public function getDateCreated(): ?\DateTimeInterface
-    {
-        return $this->dateCreated;
-    }
-
-    public function setDateCreated(?\DateTimeInterface $dateCreated): self
-    {
-        $this->dateCreated = $dateCreated;
 
         return $this;
     }

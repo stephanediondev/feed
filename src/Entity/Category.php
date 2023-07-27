@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\DateCreatedTrait;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,14 +15,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: "title", columns: ["title"])]
 class Category
 {
+    use DateCreatedTrait;
+
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
     private ?int $id = null;
 
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: false)]
     private ?string $title = null;
-
-    #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
-    private ?\DateTimeInterface $dateCreated = null;
 
     /**
      * @var Collection<int, ActionCategory> $actions
@@ -53,18 +53,6 @@ class Category
     public function setTitle(?string $title): self
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getDateCreated(): ?\DateTimeInterface
-    {
-        return $this->dateCreated;
-    }
-
-    public function setDateCreated(?\DateTimeInterface $dateCreated): self
-    {
-        $this->dateCreated = $dateCreated;
 
         return $this;
     }

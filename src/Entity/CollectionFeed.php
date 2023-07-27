@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\DateCreatedTrait;
 use App\Repository\CollectionFeedRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: "feed_id", columns: ["feed_id"])]
 class CollectionFeed
 {
+    use DateCreatedTrait;
+
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
     private ?int $id = null;
 
@@ -27,9 +30,6 @@ class CollectionFeed
     #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "collections", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Feed $feed = null;
-
-    #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
-    private ?\DateTimeInterface $dateCreated = null;
 
     public function __construct()
     {
@@ -49,18 +49,6 @@ class CollectionFeed
     public function setError(?string $error): self
     {
         $this->error = $error;
-
-        return $this;
-    }
-
-    public function getDateCreated(): ?\DateTimeInterface
-    {
-        return $this->dateCreated;
-    }
-
-    public function setDateCreated(?\DateTimeInterface $dateCreated): self
-    {
-        $this->dateCreated = $dateCreated;
 
         return $this;
     }

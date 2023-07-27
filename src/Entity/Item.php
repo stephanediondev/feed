@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\DateCreatedTrait;
 use App\Entity\Enclosure;
 use App\Repository\ItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,6 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\UniqueConstraint(name: "link", columns: ["link"])]
 class Item
 {
+    use DateCreatedTrait;
+
     #[ORM\Column(name: "id", type: "integer", options: ["unsigned" => true]), ORM\Id, ORM\GeneratedValue(strategy: "IDENTITY")]
     private ?int $id = null;
 
@@ -38,9 +41,6 @@ class Item
 
     #[ORM\Column(name: "longitude", type: "float", nullable: true)]
     private ?float $longitude = null;
-
-    #[ORM\Column(name: "date_created", type: "datetime", nullable: false)]
-    private ?\DateTimeInterface $dateCreated = null;
 
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
@@ -158,18 +158,6 @@ class Item
     public function setLongitude(?float $longitude): self
     {
         $this->longitude = $longitude;
-
-        return $this;
-    }
-
-    public function getDateCreated(): ?\DateTimeInterface
-    {
-        return $this->dateCreated;
-    }
-
-    public function setDateCreated(?\DateTimeInterface $dateCreated): self
-    {
-        $this->dateCreated = $dateCreated;
 
         return $this;
     }

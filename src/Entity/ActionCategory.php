@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\ActionTrait;
+use App\Entity\DateCreatedTrait;
 use App\Repository\ActionCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,10 +17,16 @@ use Doctrine\ORM\Mapping as ORM;
 class ActionCategory
 {
     use ActionTrait;
+    use DateCreatedTrait;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Category", inversedBy: "actions", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "category_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Category $category = null;
+
+    public function __construct()
+    {
+        $this->dateCreated = new \Datetime();
+    }
 
     public function getCategory(): ?Category
     {

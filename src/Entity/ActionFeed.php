@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\ActionTrait;
+use App\Entity\DateCreatedTrait;
 use App\Repository\ActionFeedRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,10 +17,16 @@ use Doctrine\ORM\Mapping as ORM;
 class ActionFeed
 {
     use ActionTrait;
+    use DateCreatedTrait;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "actions", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Feed $feed = null;
+
+    public function __construct()
+    {
+        $this->dateCreated = new \Datetime();
+    }
 
     public function getFeed(): ?Feed
     {
