@@ -284,45 +284,20 @@ class ItemController extends AbstractAppController
     }
 
     #[Route('/item/action/read/{id}', name: 'action_read', methods: ['GET'])]
-    public function actionRead(Request $request, int $id): JsonResponse
+    public function actionRead(int $id): JsonResponse
     {
-        $data = [];
-        $case = 'read';
-
-        $item = $this->itemManager->getOne(['id' => $id]);
-
-        if (!$item) {
-            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
-        }
-
-        $action = $this->actionManager->getOne(['title' => $case]);
-
-        if (!$action) {
-            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
-        }
-
-        $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $item);
-
-        $actionItem = $this->actionItemManager->getOne([
-            'action' => $action,
-            'item' => $item,
-            'member' => $this->getMember(),
-        ]);
-
-        $data = $this->actionItemManager->setAction($case, $action, $item, $actionItem, $this->getMember());
-
-        if ($this->getMember() && $this->getMember()->getId()) {
-            $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
-        }
-
-        return $this->jsonResponse($data);
+        return $this->setAction('read', $id);
     }
 
     #[Route('/item/action/star/{id}', name: 'action_star', methods: ['GET'])]
-    public function actionStar(Request $request, int $id): JsonResponse
+    public function actionStar(int $id): JsonResponse
+    {
+        return $this->setAction('star', $id);
+    }
+
+    private function setAction(string $case, int $id): JsonResponse
     {
         $data = [];
-        $case = 'star';
 
         $item = $this->itemManager->getOne(['id' => $id]);
 
@@ -343,6 +318,10 @@ class ItemController extends AbstractAppController
             'item' => $item,
             'member' => $this->getMember(),
         ]);
+
+        if ($case == 'read' && $this->getMember() && $this->getMember()->getId()) {
+            $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
+        }
 
         $data = $this->actionItemManager->setAction($case, $action, $item, $actionItem, $this->getMember());
 
