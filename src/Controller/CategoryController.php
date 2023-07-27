@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
-use App\Entity\ActionCategory;
 use App\Entity\Category;
-use App\Entity\Member;
 use App\Form\Type\CategoryType;
 use App\Manager\ActionCategoryManager;
 use App\Manager\ActionManager;
@@ -244,12 +242,8 @@ class CategoryController extends AbstractAppController
     #[Route('/category/action/exclude/{id}', name: 'action_exclude', methods: ['GET'])]
     public function actionExclude(Request $request, int $id): JsonResponse
     {
-        return $this->setAction('exclude', $request, $id);
-    }
-
-    private function setAction(string $case, Request $request, int $id): JsonResponse
-    {
         $data = [];
+        $case = 'exclude';
 
         $category = $this->categoryManager->getOne(['id' => $id]);
 
@@ -265,52 +259,13 @@ class CategoryController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $category);
 
-        if ($actionCategory = $this->actionCategoryManager->getOne([
+        $actionCategory = $this->actionCategoryManager->getOne([
             'action' => $action,
             'category' => $category,
             'member' => $this->getMember(),
-        ])) {
-            $this->actionCategoryManager->remove($actionCategory);
+        ]);
 
-            $data['action'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
-            $data['action_reverse'] = $action->getTitle();
-
-            if ($action->getReverse()) {
-                if ($actionCategoryReverse = $this->actionCategoryManager->getOne([
-                    'action' => $action->getReverse(),
-                    'category' => $category,
-                    'member' => $this->getMember(),
-                ])) {
-                } else {
-                    $actionCategoryReverse = new ActionCategory();
-                    $actionCategoryReverse->setAction($action->getReverse());
-                    $actionCategoryReverse->setCategory($category);
-                    $actionCategoryReverse->setMember($this->getMember());
-                    $this->actionCategoryManager->persist($actionCategoryReverse);
-                }
-            }
-        } else {
-            $actionCategory = new ActionCategory();
-            $actionCategory->setAction($action);
-            $actionCategory->setCategory($category);
-            $actionCategory->setMember($this->getMember());
-            $this->actionCategoryManager->persist($actionCategory);
-
-            $data['action'] = $action->getTitle();
-            $data['action_reverse'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
-
-            if ($action->getReverse()) {
-                if ($actionCategoryReverse = $this->actionCategoryManager->getOne([
-                    'action' => $action->getReverse(),
-                    'category' => $category,
-                    'member' => $this->getMember(),
-                ])) {
-                    $this->actionCategoryManager->remove($actionCategoryReverse);
-                }
-            }
-        }
-
-        $data['data'] = $category->getJsonApiData();
+        $data = $this->actionCategoryManager->setAction($case, $action, $category, $actionCategory, $this->getMember());
 
         return $this->jsonResponse($data);
     }

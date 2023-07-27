@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
-use App\Entity\ActionItem;
-use App\Entity\Member;
 use App\Helper\CleanHelper;
 use App\Manager\ActionItemManager;
 use App\Manager\ActionManager;
@@ -343,18 +341,8 @@ class ItemController extends AbstractAppController
     #[Route('/item/action/read/{id}', name: 'action_read', methods: ['GET'])]
     public function actionRead(Request $request, int $id): JsonResponse
     {
-        return $this->setAction('read', $request, $id);
-    }
-
-    #[Route('/item/action/star/{id}', name: 'action_star', methods: ['GET'])]
-    public function actionStar(Request $request, int $id): JsonResponse
-    {
-        return $this->setAction('star', $request, $id);
-    }
-
-    private function setAction(string $case, Request $request, int $id): JsonResponse
-    {
         $data = [];
+        $case = 'read';
 
         $item = $this->itemManager->getOne(['id' => $id]);
 
@@ -370,56 +358,48 @@ class ItemController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $item);
 
-        if ($actionItem = $this->actionItemManager->getOne([
+        $actionItem = $this->actionItemManager->getOne([
             'action' => $action,
             'item' => $item,
             'member' => $this->getMember(),
-        ])) {
-            $this->actionItemManager->remove($actionItem);
+        ]);
 
-            $data['action'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
-            $data['action_reverse'] = $action->getTitle();
+        $data = $this->actionItemManager->setAction($case, $action, $item, $actionItem, $this->getMember());
 
-            if ($action->getReverse()) {
-                if ($actionItemReverse = $this->actionItemManager->getOne([
-                    'action' => $action->getReverse(),
-                    'item' => $item,
-                    'member' => $this->getMember(),
-                ])) {
-                } else {
-                    $actionItemReverse = new ActionItem();
-                    $actionItemReverse->setAction($action->getReverse());
-                    $actionItemReverse->setItem($item);
-                    $actionItemReverse->setMember($this->getMember());
-                    $this->actionItemManager->persist($actionItemReverse);
-                }
-            }
-        } else {
-            $actionItem = new ActionItem();
-            $actionItem->setAction($action);
-            $actionItem->setItem($item);
-            $actionItem->setMember($this->getMember());
-            $this->actionItemManager->persist($actionItem);
-
-            $data['action'] = $action->getTitle();
-            $data['action_reverse'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
-
-            if ($action->getReverse()) {
-                if ($actionItemReverse = $this->actionItemManager->getOne([
-                    'action' => $action->getReverse(),
-                    'item' => $item,
-                    'member' => $this->getMember(),
-                ])) {
-                    $this->actionItemManager->remove($actionItemReverse);
-                }
-            }
-        }
-
-        $data['data'] = $item->getJsonApiData();
-
-        if ($case == 'read' && $this->getMember() && $this->getMember()->getId()) {
+        if ($this->getMember() && $this->getMember()->getId()) {
             $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
         }
+
+        return $this->jsonResponse($data);
+    }
+
+    #[Route('/item/action/star/{id}', name: 'action_star', methods: ['GET'])]
+    public function actionStar(Request $request, int $id): JsonResponse
+    {
+        $data = [];
+        $case = 'star';
+
+        $item = $this->itemManager->getOne(['id' => $id]);
+
+        if (!$item) {
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $action = $this->actionManager->getOne(['title' => $case]);
+
+        if (!$action) {
+            return $this->jsonResponse($data, JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $item);
+
+        $actionItem = $this->actionItemManager->getOne([
+            'action' => $action,
+            'item' => $item,
+            'member' => $this->getMember(),
+        ]);
+
+        $data = $this->actionItemManager->setAction($case, $action, $item, $actionItem, $this->getMember());
 
         return $this->jsonResponse($data);
     }

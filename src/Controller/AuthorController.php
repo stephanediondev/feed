@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
-use App\Entity\ActionAuthor;
 use App\Entity\Author;
 use App\Form\Type\AuthorType;
 use App\Manager\ActionAuthorManager;
@@ -248,12 +247,8 @@ class AuthorController extends AbstractAppController
     #[Route('/author/action/exclude/{id}', name: 'action_exclude', methods: ['GET'])]
     public function actionExclude(Request $request, int $id): JsonResponse
     {
-        return $this->setAction('exclude', $request, $id);
-    }
-
-    private function setAction(string $case, Request $request, int $id): JsonResponse
-    {
         $data = [];
+        $case = 'exclude';
 
         $author = $this->authorManager->getOne(['id' => $id]);
 
@@ -269,52 +264,13 @@ class AuthorController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $author);
 
-        if ($actionAuthor = $this->actionAuthorManager->getOne([
+        $actionAuthor = $this->actionAuthorManager->getOne([
             'action' => $action,
             'author' => $author,
             'member' => $this->getMember(),
-        ])) {
-            $this->actionAuthorManager->remove($actionAuthor);
+        ]);
 
-            $data['action'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
-            $data['action_reverse'] = $action->getTitle();
-
-            if ($action->getReverse()) {
-                if ($actionAuthorReverse = $this->actionAuthorManager->getOne([
-                    'action' => $action->getReverse(),
-                    'author' => $author,
-                    'member' => $this->getMember(),
-                ])) {
-                } else {
-                    $actionAuthorReverse = new ActionAuthor();
-                    $actionAuthorReverse->setAction($action->getReverse());
-                    $actionAuthorReverse->setAuthor($author);
-                    $actionAuthorReverse->setMember($this->getMember());
-                    $this->actionAuthorManager->persist($actionAuthorReverse);
-                }
-            }
-        } else {
-            $actionAuthor = new ActionAuthor();
-            $actionAuthor->setAction($action);
-            $actionAuthor->setAuthor($author);
-            $actionAuthor->setMember($this->getMember());
-            $this->actionAuthorManager->persist($actionAuthor);
-
-            $data['action'] = $action->getTitle();
-            $data['action_reverse'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
-
-            if ($action->getReverse()) {
-                if ($actionAuthorReverse = $this->actionAuthorManager->getOne([
-                    'action' => $action->getReverse(),
-                    'author' => $author,
-                    'member' => $this->getMember(),
-                ])) {
-                    $this->actionAuthorManager->remove($actionAuthorReverse);
-                }
-            }
-        }
-
-        $data['data'] = $author->getJsonApiData();
+        $data = $this->actionAuthorManager->setAction($case, $action, $author, $actionAuthor, $this->getMember());
 
         return $this->jsonResponse($data);
     }

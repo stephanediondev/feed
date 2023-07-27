@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
-use App\Entity\ActionFeed;
 use App\Entity\Feed;
-use App\Entity\Member;
 use App\Form\Type\FeedType;
 use App\Form\Type\ImportOpmlType;
 use App\Manager\ActionFeedManager;
@@ -177,6 +175,7 @@ class FeedController extends AbstractAppController
     public function create(Request $request): JsonResponse
     {
         $data = [];
+        $case = 'subscribe';
 
         $this->denyAccessUnlessGranted('CREATE', 'feed');
 
@@ -190,7 +189,18 @@ class FeedController extends AbstractAppController
             $this->feedManager->persist($form->getData());
 
             if ($feed->getId()) {
-                $this->setAction('subscribe', $request, $feed->getId());
+                $action = $this->actionManager->getOne(['title' => $case]);
+
+                if ($action) {
+                    $actionFeed = $this->actionFeedManager->getOne([
+                        'action' => $action,
+                        'feed' => $feed,
+                        'member' => $this->getMember(),
+                    ]);
+
+                    $this->actionFeedManager->setAction($case, $action, $feed, $actionFeed, $this->getMember());
+                }
+
                 $this->collectionManager->start($feed->getId());
             }
 
@@ -338,12 +348,8 @@ class FeedController extends AbstractAppController
     #[Route('/feed/action/subscribe/{id}', name: 'action_subscribe', methods: ['GET'])]
     public function actionSubscribe(Request $request, int $id): JsonResponse
     {
-        return $this->setAction('subscribe', $request, $id);
-    }
-
-    private function setAction(string $case, Request $request, int $id): JsonResponse
-    {
         $data = [];
+        $case = 'subscribe';
 
         $feed = $this->feedManager->getOne(['id' => $id]);
 
@@ -359,54 +365,15 @@ class FeedController extends AbstractAppController
 
         $this->denyAccessUnlessGranted('ACTION_'.strtoupper($case), $feed);
 
-        if ($actionFeed = $this->actionFeedManager->getOne([
+        $actionFeed = $this->actionFeedManager->getOne([
             'action' => $action,
             'feed' => $feed,
             'member' => $this->getMember(),
-        ])) {
-            $this->actionFeedManager->remove($actionFeed);
+        ]);
 
-            $data['action'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
-            $data['action_reverse'] = $action->getTitle();
+        $data = $this->actionFeedManager->setAction($case, $action, $feed, $actionFeed, $this->getMember());
 
-            if ($action->getReverse()) {
-                if ($actionFeedReverse = $this->actionFeedManager->getOne([
-                    'action' => $action->getReverse(),
-                    'feed' => $feed,
-                    'member' => $this->getMember(),
-                ])) {
-                } else {
-                    $actionFeedReverse = new ActionFeed();
-                    $actionFeedReverse->setAction($action->getReverse());
-                    $actionFeedReverse->setFeed($feed);
-                    $actionFeedReverse->setMember($this->getMember());
-                    $this->actionFeedManager->persist($actionFeedReverse);
-                }
-            }
-        } else {
-            $actionFeed = new ActionFeed();
-            $actionFeed->setAction($action);
-            $actionFeed->setFeed($feed);
-            $actionFeed->setMember($this->getMember());
-            $this->actionFeedManager->persist($actionFeed);
-
-            $data['action'] = $action->getTitle();
-            $data['action_reverse'] = $action->getReverse() ? $action->getReverse()->getTitle() : null;
-
-            if ($action->getReverse()) {
-                if ($actionFeedReverse = $this->actionFeedManager->getOne([
-                    'action' => $action->getReverse(),
-                    'feed' => $feed,
-                    'member' => $this->getMember(),
-                ])) {
-                    $this->actionFeedManager->remove($actionFeedReverse);
-                }
-            }
-        }
-
-        $data['data'] = $feed->getJsonApiData();
-
-        if ($case == 'subscribe' && $this->getMember() && $this->getMember()->getId()) {
+        if ($this->getMember() && $this->getMember()->getId()) {
             $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
         }
 
