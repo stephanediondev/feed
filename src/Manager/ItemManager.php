@@ -65,7 +65,7 @@ class ItemManager extends AbstractManager
     /**
      * @return array<mixed>
      */
-    public function prepareEnclosures(Item $item, Request $request): array
+    public function prepareEnclosures(Item $item): array
     {
         $enclosures = [];
         $index_enclosures = 0;

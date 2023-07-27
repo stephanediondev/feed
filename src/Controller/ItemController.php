@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Controller\AbstractAppController;
+use App\Entity\Item;
 use App\Helper\CleanHelper;
 use App\Manager\ActionItemManager;
 use App\Manager\ActionManager;
@@ -135,35 +136,11 @@ class ItemController extends AbstractAppController
         foreach ($pagination as $result) {
             $item = $this->itemManager->getOne(['id' => $result['id']]);
             if ($item) {
-                $entry = $item->getJsonApiData();
+                $data['data'][] = $this->getEntry($item, $included, $categories, $actions);
 
                 $included = array_merge($included, $item->getJsonApiIncluded());
 
-                if (true === isset($actions[$result['id']])) {
-                    $entry['relationships']['actions'] = [
-                        'data' => [],
-                    ];
-                    foreach ($actions[$result['id']] as $actionId) {
-                        $entry['relationships']['actions']['data'][] = [
-                            'id'=> strval($actionId),
-                            'type' => 'action',
-                        ];
-                    }
-                }
-
-                if (true === isset($categories[$result['id']])) {
-                    $entry['relationships']['categories'] = [
-                        'data' => [],
-                    ];
-                    foreach ($categories[$result['id']] as $categoryId) {
-                        $entry['relationships']['categories']['data'][] = [
-                            'id'=> strval($categoryId),
-                            'type' => 'category',
-                        ];
-                    }
-                }
-
-                $enclosures = $this->itemManager->prepareEnclosures($item, $request);
+                $enclosures = $this->itemManager->prepareEnclosures($item);
                 if (0 < count($enclosures)) {
                     $entry['relationships']['enclosures'] = [
                         'data' => [],
@@ -176,10 +153,6 @@ class ItemController extends AbstractAppController
                         ];
                     }
                 }
-
-                $entry['attributes']['content'] = CleanHelper::cleanContent($item->getContent(), 'display');
-
-                $data['data'][] = $entry;
             }
         }
 
@@ -220,35 +193,11 @@ class ItemController extends AbstractAppController
             $categories[$itemCategory->getItem()->getId()][] = $itemCategory->getCategory()->getId();
         }
 
-        $entry = $item->getJsonApiData();
+        $data['data'] = $this->getEntry($item, $included, $categories, $actions);
 
         $included = array_merge($included, $item->getJsonApiIncluded());
 
-        if (true === isset($actions[$entry['id']])) {
-            $entry['relationships']['actions'] = [
-                'data' => [],
-            ];
-            foreach ($actions[$entry['id']] as $actionId) {
-                $entry['relationships']['actions']['data'][] = [
-                    'id'=> strval($actionId),
-                    'type' => 'action',
-                ];
-            }
-        }
-
-        if (true === isset($categories[$entry['id']])) {
-            $entry['relationships']['categories'] = [
-                'data' => [],
-            ];
-            foreach ($categories[$entry['id']] as $categoryId) {
-                $entry['relationships']['categories']['data'][] = [
-                    'id'=> strval($categoryId),
-                    'type' => 'category',
-                ];
-            }
-        }
-
-        $enclosures = $this->itemManager->prepareEnclosures($item, $request);
+        $enclosures = $this->itemManager->prepareEnclosures($item);
         if (0 < count($enclosures)) {
             $entry['relationships']['enclosures'] = [
                 'data' => [],
@@ -261,10 +210,6 @@ class ItemController extends AbstractAppController
                 ];
             }
         }
-
-        $entry['attributes']['content'] = CleanHelper::cleanContent($item->getContent(), 'display');
-
-        $data['data'] = $entry;
 
         if (0 < count($included)) {
             $data['included'] = array_values($included);
@@ -402,5 +347,44 @@ class ItemController extends AbstractAppController
         $data = $this->actionItemManager->setAction($case, $action, $item, $actionItem, $this->getMember());
 
         return $this->jsonResponse($data);
+    }
+
+    /**
+     * @param array<mixed> $included
+     * @param array<mixed> $categories
+     * @param array<mixed> $actions
+     * @return array<mixed>
+     */
+    private function getEntry(Item $item, array $included, array $categories, array $actions): array
+    {
+        $entry = $item->getJsonApiData();
+
+        if (true === isset($actions[$entry['id']])) {
+            $entry['relationships']['actions'] = [
+                'data' => [],
+            ];
+            foreach ($actions[$entry['id']] as $actionId) {
+                $entry['relationships']['actions']['data'][] = [
+                    'id'=> strval($actionId),
+                    'type' => 'action',
+                ];
+            }
+        }
+
+        if (true === isset($categories[$entry['id']])) {
+            $entry['relationships']['categories'] = [
+                'data' => [],
+            ];
+            foreach ($categories[$entry['id']] as $categoryId) {
+                $entry['relationships']['categories']['data'][] = [
+                    'id'=> strval($categoryId),
+                    'type' => 'category',
+                ];
+            }
+        }
+
+        $entry['attributes']['content'] = CleanHelper::cleanContent($item->getContent(), 'display');
+
+        return $entry;
     }
 }

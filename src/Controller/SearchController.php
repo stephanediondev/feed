@@ -341,7 +341,7 @@ class SearchController extends AbstractAppController
                                     }
                                 }
 
-                                $enclosures = $this->itemManager->prepareEnclosures($item, $request);
+                                $enclosures = $this->itemManager->prepareEnclosures($item);
                                 if (0 < count($enclosures)) {
                                     $entry['relationships']['enclosures'] = [
                                         'data' => [],
