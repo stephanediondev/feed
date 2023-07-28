@@ -298,25 +298,16 @@ class SearchController extends AbstractAppController
                         case 'item':
                             $item = $this->itemManager->getOne(['id' => $hit['_id']]);
                             if ($item) {
+                                $entry = $item->getJsonApiData();
+
+                                $entry['score'] = $hit['_score'];
+
                                 $results = $this->actionItemManager->getList(['member' => $this->getMember(), 'item' => $item])->getResult();
                                 $actions = [];
                                 foreach ($results as $actionItem) {
                                     $included['action-'.$actionItem->getAction()->getId()] = $actionItem->getAction()->getJsonApiData();
                                     $actions[$actionItem->getItem()->getId()][] = $actionItem->getAction()->getId();
                                 }
-
-                                $results = $this->categoryManager->itemCategoryManager->getList(['member' => $this->getMember(), 'item' => $item])->getResult();
-                                $categories = [];
-                                foreach ($results as $itemCategory) {
-                                    $included['category-'.$itemCategory->getCategory()->getId()] = $itemCategory->getCategory()->getJsonApiData();
-                                    $categories[$itemCategory->getItem()->getId()][] = $itemCategory->getCategory()->getId();
-                                }
-
-                                $entry = $item->getJsonApiData();
-                                $included = array_merge($included, $item->getJsonApiIncluded());
-
-                                $entry['score'] = $hit['_score'];
-
                                 if (true === isset($actions[$item->getId()])) {
                                     $entry['relationships']['actions'] = [
                                         'data' => [],
@@ -329,6 +320,12 @@ class SearchController extends AbstractAppController
                                     }
                                 }
 
+                                $results = $this->categoryManager->itemCategoryManager->getList(['member' => $this->getMember(), 'item' => $item])->getResult();
+                                $categories = [];
+                                foreach ($results as $itemCategory) {
+                                    $included['category-'.$itemCategory->getCategory()->getId()] = $itemCategory->getCategory()->getJsonApiData();
+                                    $categories[$itemCategory->getItem()->getId()][] = $itemCategory->getCategory()->getId();
+                                }
                                 if (true === isset($categories[$item->getId()])) {
                                     $entry['relationships']['categories'] = [
                                         'data' => [],
@@ -340,6 +337,8 @@ class SearchController extends AbstractAppController
                                         ];
                                     }
                                 }
+
+                                $included = array_merge($included, $item->getJsonApiIncluded());
 
                                 $enclosures = $this->itemManager->prepareEnclosures($item);
                                 if (0 < count($enclosures)) {
