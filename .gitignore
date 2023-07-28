@@ -33,4 +33,5 @@ yarn-error.log
 /GeoLite2-ASN
 /GeoLite2-City
 /GeoLite2-Country
+/public/.htaccess
 ###< app ###

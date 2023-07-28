@@ -1,11 +1,102 @@
 # Requirements
 
+- Web server
 - PHP 8.2 with apcu, curl, gmp, iconv, json, mbstring, tidy, xml
 - Composer
 - MySQL 8
 - npm
 
 # Installation
+
+## Web server
+
+Configure a vhost with the document root set to the ```public``` folder (ie /var/www/feed/public)
+
+### Apache
+
+Add the vhost below
+
+```
+<VirtualHost *:80>
+    DocumentRoot "/var/www/feed/public"
+    ServerName your-domain-or-sub-domain
+    ErrorLog ${APACHE_LOG_DIR}/feed-error.log
+    CustomLog ${APACHE_LOG_DIR}/feed-access.log combined
+
+    <Directory /var/www/feed/public>
+        AllowOverride None
+
+        DirectoryIndex index.php index.html
+
+        <IfModule mod_negotiation.c>
+            Options -MultiViews
+        </IfModule>
+
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
+
+            RewriteCond %{REQUEST_URI}::$0 ^(/.+)/(.*)::\2$
+            RewriteRule .* - [E=BASE:%1]
+
+            RewriteCond %{HTTP:Authorization} .+
+            RewriteRule ^ - [E=HTTP_AUTHORIZATION:%0]
+
+            RewriteCond %{ENV:REDIRECT_STATUS} =""
+            RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
+
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteRule ^ %{ENV:BASE}/index.php [L]
+        </IfModule>
+
+        <IfModule !mod_rewrite.c>
+            <IfModule mod_alias.c>
+                RedirectMatch 307 ^/$ /index.php/
+            </IfModule>
+        </IfModule>
+    </Directory>
+</VirtualHost>
+```
+
+If you can't edit a vhost, add the Apache pack to get the ```.htaccess``` file in the ```public``` folder
+
+```
+composer require symfony/apache-pack
+```
+
+### nginx
+
+Add the server definition below
+
+```
+server {
+    listen [::]:8080 default_server;
+    listen 8080 default_server;
+    server_name your-domain-or-sub-domain;
+
+    sendfile off;
+
+    root /var/www/feed/public;
+    index index.php index.html;
+
+    location / {
+        try_files $uri /index.php$is_args$args;
+    }
+
+    location ~ ^/index\.php(/|$) {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        internal;
+    }
+
+    location ~ \.php$ {
+        return 404;
+    }
+}
+```
 
 ## MySQL user and database
 
