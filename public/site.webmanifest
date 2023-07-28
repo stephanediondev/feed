@@ -1,6 +1,6 @@
 {
-    "name": "Stéphane Dion - feed",
-    "short_name": "feed",
+    "name": "Feed",
+    "short_name": "Feed",
     "description": "Self-hosted atom/rss reader - Progressive Web App - Google Reader alternative",
     "categories": [
         "news",
@@ -27,49 +27,49 @@
     ],
     "screenshots": [
         {
-            "src": "{{ asset('build/images/screenshots/androidphone-item-dark.png') }}",
+            "src": "/app/images/screenshots/androidphone-item-dark.png",
             "sizes": "720x1520",
             "platform": "android",
             "type": "image/png",
             "label": "Android phone item dark"
         },
         {
-            "src": "{{ asset('build/images/screenshots/androidphone-item-light.png') }}",
+            "src": "/app/images/screenshots/androidphone-item-light.png",
             "sizes": "720x1520",
             "platform": "android",
             "type": "image/png",
             "label": "Android phone item light"
         },
         {
-            "src": "{{ asset('build/images/screenshots/ipad-homescreen.jpg') }}",
+            "src": "/app/images/screenshots/ipad-homescreen.jpg",
             "sizes": "1536x2048",
             "platform": "ipados",
             "type": "image/jpeg",
             "label": "iPad homescreen"
         },
         {
-            "src": "{{ asset('build/images/screenshots/ipad-item-light.png') }}",
+            "src": "/app/images/screenshots/ipad-item-light.png",
             "sizes": "1536x2048",
             "platform": "ipados",
             "type": "image/png",
             "label": "iPad item light"
         },
         {
-            "src": "{{ asset('build/images/screenshots/ipad-item-dark.png') }}",
+            "src": "/app/images/screenshots/ipad-item-dark.png",
             "sizes": "1536x2048",
             "platform": "ipados",
             "type": "image/png",
             "label": "iPad item dark"
         },
         {
-            "src": "{{ asset('build/images/screenshots/ipad-item-share.png') }}",
+            "src": "/app/images/screenshots/ipad-item-share.png",
             "sizes": "1536x2048",
             "platform": "ipados",
             "type": "image/png",
             "label": "iPad item share"
         },
         {
-            "src": "{{ asset('build/images/screenshots/ipad-feeds-search.png') }}",
+            "src": "/app/images/screenshots/ipad-feeds-search.png",
             "sizes": "1536x2048",
             "platform": "ipados",
             "type": "image/png",
@@ -78,25 +78,25 @@
     ],
     "icons": [
         {
-            "src": "{{ asset('build/images/icon-192x192.png') }}",
+            "src": "/app/images/icon-192x192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "{{ asset('build/images/icon-192x192.png') }}",
+            "src": "/app/images/icon-192x192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "maskable"
         },
         {
-            "src": "{{ asset('build/images/icon-512x512.png') }}",
+            "src": "/app/images/icon-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "{{ asset('build/images/icon-512x512.png') }}",
+            "src": "/app/images/icon-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"

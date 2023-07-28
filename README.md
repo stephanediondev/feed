@@ -87,5 +87,5 @@ npm run build
 
 # Screenshots
 
-![iPad item dark](assets/images/screenshots/ipad-item-dark.png)
-![iPad feeds search](assets/images/screenshots/ipad-feeds-search.png)
+![iPad item dark](public/app/images/screenshots/ipad-item-dark.png)
+![iPad feeds search](public/app/images/screenshots/ipad-feeds-search.png)
