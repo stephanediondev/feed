@@ -22,7 +22,7 @@ trait ExtraFieldsTrait
     }
 
     /**
-     * @param array<mixed> $extraFields
+     * @param array<mixed>|null $extraFields
      */
     public function setExtraFields(?array $extraFields): self
     {

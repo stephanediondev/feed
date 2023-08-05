@@ -12,7 +12,7 @@ final class ExtraFieldsHelper
     public const TYPE_STRING = 'string';
 
     /**
-     * @param array<mixed> $fields
+     * @param array<mixed>|null $fields
      */
     public static function getPath(string $path, ?array $fields = [], ?string $type = null): mixed
     {
@@ -33,7 +33,7 @@ final class ExtraFieldsHelper
     }
 
     /**
-     * @param array<mixed> $fields
+     * @param array<mixed>|null $fields
      */
     public static function setPath(string $path, mixed $value, ?array &$fields = []): void
     {

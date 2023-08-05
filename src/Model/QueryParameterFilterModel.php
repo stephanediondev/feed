@@ -12,7 +12,7 @@ class QueryParameterFilterModel
     private ?array $filters = null;
 
     /**
-     * @param array<mixed> $filters
+     * @param array<mixed>|null $filters
      */
     public function __construct(?array $filters)
     {

@@ -12,7 +12,7 @@ class QueryParameterPageModel
     private ?array $page = null;
 
     /**
-     * @param array<int> $page
+     * @param array<int>|null $page
      */
     public function __construct(?array $page)
     {
