@@ -98,9 +98,9 @@ class SearchManager extends AbstractManager
             $resultSet = $stmt->executeQuery();
             $results = $resultSet->fetchAllAssociative();
 
-            $body = '';
+            $body = [];
             foreach ($results as $result) {
-                $body .= json_encode(['index' => ['_id' => $result['id']]])."\r\n";
+                $body[] = json_encode(['index' => ['_id' => $result['id']]]);
 
                 $line = [
                     'title' => $result['title'],
@@ -109,7 +109,7 @@ class SearchManager extends AbstractManager
                     'language' => $result['language'],
                     'date_created' => $result['date_created'],
                 ];
-                $body .= json_encode($line)."\r\n";
+                $body[] = json_encode($line);
             }
 
             $path = '/'.$this->getIndex().'_feed/_bulk';
@@ -124,15 +124,15 @@ class SearchManager extends AbstractManager
             $resultSet = $stmt->executeQuery();
             $results = $resultSet->fetchAllAssociative();
 
-            $body = '';
+            $body = [];
             foreach ($results as $result) {
-                $body .= json_encode(['index' => ['_id' => $result['id']]])."\r\n";
+                $body[] = json_encode(['index' => ['_id' => $result['id']]]);
 
                 $line = [
                     'title' => $result['title'],
                     'date_created' => $result['date_created'],
                 ];
-                $body .= json_encode($line)."\r\n";
+                $body[] = json_encode($line);
 
                 $insertActionCategory = [
                     'category_id' => $result['id'],
@@ -154,15 +154,15 @@ class SearchManager extends AbstractManager
             $resultSet = $stmt->executeQuery();
             $results = $resultSet->fetchAllAssociative();
 
-            $body = '';
+            $body = [];
             foreach ($results as $result) {
-                $body .= json_encode(['index' => ['_id' => $result['id']]])."\r\n";
+                $body[] = json_encode(['index' => ['_id' => $result['id']]]);
 
                 $line = [
                     'title' => $result['title'],
                     'date_created' => $result['date_created'],
                 ];
-                $body .= json_encode($line)."\r\n";
+                $body[] = json_encode($line);
 
                 $insertActionCategory = [
                     'author_id' => $result['id'],
@@ -186,9 +186,9 @@ class SearchManager extends AbstractManager
             $resultSet = $stmt->executeQuery();
             $results = $resultSet->fetchAllAssociative();
 
-            $body = '';
+            $body = [];
             foreach ($results as $result) {
-                $body .= json_encode(['index' => ['_id' => $result['id']]])."\r\n";
+                $body[] = json_encode(['index' => ['_id' => $result['id']]]);
 
                 $line = [
                     'feed' => [
@@ -206,7 +206,7 @@ class SearchManager extends AbstractManager
                         'title' => $result['author_title'],
                     ];
                 }
-                $body .= json_encode($line)."\r\n";
+                $body[] = json_encode($line);
 
                 $insertActionItem = [
                     'item_id' => $result['id'],
@@ -224,7 +224,7 @@ class SearchManager extends AbstractManager
     /**
      * @param array<mixed> $body
      */
-    public function query(string $action, string $path, mixed $body = null, bool $ndjson = false): mixed
+    public function query(string $action, string $path, ?array $body = null, bool $ndjson = false): mixed
     {
         if ($this->getEnabled()) {
             $path = $this->getUrl().$path;
@@ -247,11 +247,11 @@ class SearchManager extends AbstractManager
             curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->getSslVerifyPeer());
             curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, $this->getSslVerifyHost());
-            if ($body) {
-                if (false === $ndjson && true === is_array($body)) {
-                    curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($body));
+            if ($body && true === is_array($body) && 0 < count($body)) {
+                if (true === $ndjson) {
+                    curl_setopt($ci, CURLOPT_POSTFIELDS, implode("\r\n", $body)."\r\n");
                 } else {
-                    curl_setopt($ci, CURLOPT_POSTFIELDS, $body);
+                    curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($body));
                 }
             }
             $exec = curl_exec($ci);
