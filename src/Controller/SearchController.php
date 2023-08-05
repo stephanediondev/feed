@@ -223,10 +223,8 @@ class SearchController extends AbstractAppController
 
                                 $data['data'][] = $entry;
                             } else {
-                                $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/feed/'.$hit['_id'];
-                                $body = [];
-                                $this->searchManager->query($action, $path, $body);
+                                $this->searchManager->query('DELETE', $path);
                             }
                             break;
                         case 'category':
@@ -256,10 +254,8 @@ class SearchController extends AbstractAppController
 
                                 $data['data'][] = $entry;
                             } else {
-                                $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/category/'.$hit['_id'];
-                                $body = [];
-                                $this->searchManager->query($action, $path, $body);
+                                $this->searchManager->query('DELETE', $path);
                             }
                             break;
                         case 'author':
@@ -289,10 +285,8 @@ class SearchController extends AbstractAppController
 
                                 $data['data'][] = $entry;
                             } else {
-                                $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/author/'.$hit['_id'];
-                                $body = [];
-                                $this->searchManager->query($action, $path, $body);
+                                $this->searchManager->query('DELETE', $path);
                             }
                             break;
                         case 'item':
@@ -358,10 +352,8 @@ class SearchController extends AbstractAppController
 
                                 $data['data'][] = $entry;
                             } else {
-                                $action = 'DELETE';
                                 $path = '/'.$this->searchManager->getIndex().'/item/'.$hit['_id'];
-                                $body = [];
-                                $this->searchManager->query($action, $path, $body);
+                                $this->searchManager->query('DELETE', $path);
                             }
                             break;
                     }

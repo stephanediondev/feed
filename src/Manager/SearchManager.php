@@ -19,18 +19,33 @@ class SearchManager extends AbstractManager
 
     private string $elasticsearchPassword;
 
+    private string $elasticsearchApiKey;
+
     private bool $sslVerifyPeer;
+
+    private bool $sslVerifyHost;
 
     private ActionRepository $actionRepository;
 
-    public function __construct(bool $elasticsearchEnabled, string $elasticsearchIndex, string $elasticsearchUrl, string $elasticsearchUsername, string $elasticsearchPassword, bool $sslVerifyPeer, ActionRepository $actionRepository)
-    {
+    public function __construct(
+        bool $elasticsearchEnabled,
+        string $elasticsearchIndex,
+        string $elasticsearchUrl,
+        string $elasticsearchUsername,
+        string $elasticsearchPassword,
+        string $elasticsearchApiKey,
+        bool $sslVerifyPeer,
+        bool $sslVerifyHost,
+        ActionRepository $actionRepository
+    ) {
         $this->elasticsearchEnabled = $elasticsearchEnabled;
         $this->elasticsearchIndex = $elasticsearchIndex;
         $this->elasticsearchUrl = $elasticsearchUrl;
         $this->elasticsearchUsername = $elasticsearchUsername;
         $this->elasticsearchPassword = $elasticsearchPassword;
+        $this->elasticsearchApiKey = $elasticsearchApiKey;
         $this->sslVerifyPeer = $sslVerifyPeer;
+        $this->sslVerifyHost = $sslVerifyHost;
         $this->actionRepository = $actionRepository;
     }
 
@@ -59,9 +74,19 @@ class SearchManager extends AbstractManager
         return $this->elasticsearchPassword;
     }
 
+    public function getApiKey(): string
+    {
+        return $this->elasticsearchApiKey;
+    }
+
     public function getSslVerifyPeer(): bool
     {
         return $this->sslVerifyPeer;
+    }
+
+    public function getSslVerifyHost(): int
+    {
+        return $this->sslVerifyHost ? 2 : 0;
     }
 
     public function start(): void
@@ -87,9 +112,8 @@ class SearchManager extends AbstractManager
                 $body .= json_encode($line)."\r\n";
             }
 
-            $action = 'POST';
             $path = '/'.$this->getIndex().'_feed/_bulk';
-            $this->queryPlain($action, $path, $body);
+            $this->query('POST', $path, $body, true);
 
             //categories
             $sql = 'SELECT cat.*
@@ -118,9 +142,8 @@ class SearchManager extends AbstractManager
                 $this->actionRepository->insert('action_category', $insertActionCategory);
             }
 
-            $action = 'POST';
             $path = '/'.$this->getIndex().'_category/_bulk';
-            $this->queryPlain($action, $path, $body);
+            $this->query('POST', $path, $body, true);
 
             //authors
             $sql = 'SELECT aut.*
@@ -149,9 +172,8 @@ class SearchManager extends AbstractManager
                 $this->actionRepository->insert('action_author', $insertActionCategory);
             }
 
-            $action = 'POST';
             $path = '/'.$this->getIndex().'_author/_bulk';
-            $this->queryPlain($action, $path, $body);
+            $this->query('POST', $path, $body, true);
 
             //items
             $sql = 'SELECT itm.*, auh.title AS author_title, fed.title AS feed_title, fed.language AS feed_language
@@ -194,16 +216,15 @@ class SearchManager extends AbstractManager
                 $this->actionRepository->insert('action_item', $insertActionItem);
             }
 
-            $action = 'POST';
             $path = '/'.$this->getIndex().'_item/_bulk';
-            $this->queryPlain($action, $path, $body);
+            $this->query('POST', $path, $body, true);
         }
     }
 
     /**
      * @param array<mixed> $body
      */
-    public function query(string $action, string $path, ?array $body = null): mixed
+    public function query(string $action, string $path, mixed $body = null, bool $ndjson = false): mixed
     {
         if ($this->getEnabled()) {
             $path = $this->getUrl().$path;
@@ -212,7 +233,9 @@ class SearchManager extends AbstractManager
                 'Content-Type: application/json',
             ];
 
-            if ($this->getUsername() && $this->getPassword()) {
+            if ($this->getApiKey()) {
+                $headers[] = 'Authorization: ApiKey '.$this->getApiKey();
+            } elseif ($this->getUsername() && $this->getPassword()) {
                 $headers[] = 'Authorization: Basic '.base64_encode($this->getUsername().':'.$this->getPassword());
             }
 
@@ -223,46 +246,13 @@ class SearchManager extends AbstractManager
             curl_setopt($ci, CURLOPT_URL, $path);
             curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->getSslVerifyPeer());
+            curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, $this->getSslVerifyHost());
             if ($body) {
-                curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($body));
-            }
-            $exec = curl_exec($ci);
-            if ($exec && is_string($exec)) {
-                $result = json_decode($exec, true);
-                if ($action == 'HEAD') {
-                    $result = curl_getinfo($ci, CURLINFO_HTTP_CODE);
+                if (false === $ndjson && true === is_array($body)) {
+                    curl_setopt($ci, CURLOPT_POSTFIELDS, json_encode($body));
+                } else {
+                    curl_setopt($ci, CURLOPT_POSTFIELDS, $body);
                 }
-                return $result;
-            } else {
-                return curl_error($ci);
-            }
-        }
-
-        return null;
-    }
-
-    public function queryPlain(string $action, string $path, ?string $body = null): mixed
-    {
-        if ($this->getEnabled()) {
-            $path = $this->getUrl().$path;
-
-            $headers = [
-                'Content-Type: application/json',
-            ];
-
-            if ($this->getUsername() && $this->getPassword()) {
-                $headers[] = 'Authorization: Basic '.base64_encode($this->getUsername().':'.$this->getPassword());
-            }
-
-            $ci = curl_init();
-            curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 5);
-            curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ci, CURLOPT_CUSTOMREQUEST, $action);
-            curl_setopt($ci, CURLOPT_URL, $path);
-            curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->getSslVerifyPeer());
-            if ($body) {
-                curl_setopt($ci, CURLOPT_POSTFIELDS, $body);
             }
             $exec = curl_exec($ci);
             if ($exec && is_string($exec)) {
