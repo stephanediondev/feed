@@ -222,7 +222,7 @@ class SearchManager extends AbstractManager
     }
 
     /**
-     * @param array<mixed> $body
+     * @param array<mixed>|null $body
      */
     public function query(string $action, string $path, ?array $body = null, bool $ndjson = false): mixed
     {
@@ -247,7 +247,7 @@ class SearchManager extends AbstractManager
             curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->getSslVerifyPeer());
             curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, $this->getSslVerifyHost());
-            if ($body && true === is_array($body) && 0 < count($body)) {
+            if (null !== $body && true === is_array($body) && 0 < count($body)) {
                 if (true === $ndjson) {
                     curl_setopt($ci, CURLOPT_POSTFIELDS, implode("\r\n", $body)."\r\n");
                 } else {
