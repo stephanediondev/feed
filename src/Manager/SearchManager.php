@@ -407,10 +407,10 @@ class SearchManager extends AbstractManager
     {
         if ($this->getEnabled()) {
             $types = [
-                'author' => 'DELETE FROM author WHERE action_id = :action_id',
-                'category' => 'DELETE FROM category WHERE action_id = :action_id',
+                'author' => 'DELETE FROM action_author WHERE action_id = :action_id',
+                'category' => 'DELETE FROM action_category WHERE action_id = :action_id',
                 'feed' => null,
-                'item' => 'DELETE FROM item WHERE action_id = :action_id',
+                'item' => 'DELETE FROM action_item WHERE action_id = :action_id',
             ];
             foreach ($types as $type => $sql) {
                 $path = '/'.$this->getIndex().'_'.$type;
