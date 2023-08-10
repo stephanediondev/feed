@@ -319,11 +319,11 @@ class ItemController extends AbstractAppController
             'member' => $this->getMember(),
         ]);
 
+        $data = $this->actionItemManager->setAction($case, $action, $item, $actionItem, $this->getMember());
+
         if ($case == 'read' && $this->getMember() && $this->getMember()->getId()) {
             $data['unread'] = $this->memberManager->countUnread($this->getMember()->getId());
         }
-
-        $data = $this->actionItemManager->setAction($case, $action, $item, $actionItem, $this->getMember());
 
         return $this->jsonResponse($data);
     }
