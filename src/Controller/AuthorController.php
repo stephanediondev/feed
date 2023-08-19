@@ -12,9 +12,11 @@ use App\Manager\ActionManager;
 use App\Manager\AuthorManager;
 use App\Manager\FeedManager;
 use App\Model\QueryParameterFilterModel;
+use App\Model\QueryParameterPageModel;
 use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api', name: 'api_authors_', priority: 15)]
@@ -33,15 +35,19 @@ class AuthorController extends AbstractAppController
         $this->feedManager = $feedManager;
     }
 
+    /**
+     * @param array<mixed> $filter
+     * @param array<mixed> $page
+     */
     #[Route(path: '/authors', name: 'index', methods: ['GET'])]
-    public function index(Request $request): JsonResponse
+    public function index(Request $request, #[MapQueryParameter] ?array $page, #[MapQueryParameter] ?array $filter, #[MapQueryParameter] ?string $sort): JsonResponse
     {
         $data = [];
         $included = [];
 
         $this->denyAccessUnlessGranted('LIST', 'author');
 
-        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($filter);
 
         $parameters = [];
 
@@ -65,7 +71,7 @@ class AuthorController extends AbstractAppController
             $parameters['days'] = $filtersModel->getInt('days');
         }
 
-        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
+        $sortModel = new QueryParameterSortModel($sort);
 
         if ($sortGet = $sortModel->get()) {
             $parameters['sortDirection'] = $sortGet['direction'];
@@ -77,7 +83,9 @@ class AuthorController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($request, $this->authorManager->getList($parameters));
+        $pageModel = new QueryParameterPageModel($page);
+
+        $pagination = $this->paginateAbstract($pageModel, $this->authorManager->getList($parameters));
 
         $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 

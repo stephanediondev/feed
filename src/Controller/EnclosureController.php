@@ -8,9 +8,11 @@ use App\Controller\AbstractAppController;
 use App\Manager\EnclosureManager;
 use App\Manager\ItemManager;
 use App\Model\QueryParameterFilterModel;
+use App\Model\QueryParameterPageModel;
 use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api', name: 'api_enclosures_', priority: 15)]
@@ -25,15 +27,19 @@ class EnclosureController extends AbstractAppController
         $this->itemManager = $itemManager;
     }
 
+    /**
+     * @param array<mixed> $filter
+     * @param array<mixed> $page
+     */
     #[Route(path: '/enclosures', name: 'index', methods: ['GET'])]
-    public function index(Request $request): JsonResponse
+    public function index(Request $request, #[MapQueryParameter] ?array $page, #[MapQueryParameter] ?array $filter, #[MapQueryParameter] ?string $sort): JsonResponse
     {
         $data = [];
         $included = [];
 
         $this->denyAccessUnlessGranted('LIST', 'enclosure');
 
-        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($filter);
 
         $parameters = [];
 
@@ -52,7 +58,7 @@ class EnclosureController extends AbstractAppController
             $parameters['days'] = $filtersModel->getInt('days');
         }
 
-        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
+        $sortModel = new QueryParameterSortModel($sort);
 
         if ($sortGet = $sortModel->get()) {
             $parameters['sortDirection'] = $sortGet['direction'];
@@ -64,7 +70,9 @@ class EnclosureController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($request, $this->enclosureManager->getList($parameters));
+        $pageModel = new QueryParameterPageModel($page);
+
+        $pagination = $this->paginateAbstract($pageModel, $this->enclosureManager->getList($parameters));
 
         $data['entries_entity'] = 'enclosure';
         $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));

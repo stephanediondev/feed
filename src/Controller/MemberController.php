@@ -8,9 +8,11 @@ use App\Controller\AbstractAppController;
 use App\Entity\Member;
 use App\Form\Type\MemberType;
 use App\Manager\MemberManager;
+use App\Model\QueryParameterPageModel;
 use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -27,8 +29,11 @@ class MemberController extends AbstractAppController
         $this->passwordHasher = $passwordHasher;
     }
 
+    /**
+     * @param array<mixed> $page
+     */
     #[Route(path: '/members', name: 'index', methods: ['GET'])]
-    public function index(Request $request): JsonResponse
+    public function index(Request $request, #[MapQueryParameter] ?array $page, #[MapQueryParameter] ?string $sort): JsonResponse
     {
         $data = [];
 
@@ -38,9 +43,11 @@ class MemberController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
+        $sortModel = new QueryParameterSortModel($sort);
 
-        $pagination = $this->paginateAbstract($request, $this->memberManager->getList($parameters));
+        $pageModel = new QueryParameterPageModel($page);
+
+        $pagination = $this->paginateAbstract($pageModel, $this->memberManager->getList($parameters));
 
         $data['entries_entity'] = 'member';
         $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, null));

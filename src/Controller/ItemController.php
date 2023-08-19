@@ -15,9 +15,11 @@ use App\Manager\FeedManager;
 use App\Manager\ItemManager;
 use App\Manager\MemberManager;
 use App\Model\QueryParameterFilterModel;
+use App\Model\QueryParameterPageModel;
 use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/api', name: 'api_items_', priority: 15)]
@@ -42,15 +44,19 @@ class ItemController extends AbstractAppController
         $this->memberManager = $memberManager;
     }
 
+    /**
+     * @param array<mixed> $filter
+     * @param array<mixed> $page
+     */
     #[Route(path: '/items', name: 'index', methods: ['GET'])]
-    public function index(Request $request): JsonResponse
+    public function index(Request $request, #[MapQueryParameter] ?array $page, #[MapQueryParameter] ?array $filter, #[MapQueryParameter] ?string $sort): JsonResponse
     {
         $data = [];
         $included = [];
 
         $this->denyAccessUnlessGranted('LIST', 'item');
 
-        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($filter);
 
         $parameters = [];
         $parameters['member'] = $this->getMember();
@@ -92,7 +98,7 @@ class ItemController extends AbstractAppController
             $parameters['days'] = $filtersModel->getInt('days');
         }
 
-        $sortModel = new QueryParameterSortModel($request->query->get('sort'));
+        $sortModel = new QueryParameterSortModel($sort);
 
         if ($sortGet = $sortModel->get()) {
             $parameters['sortDirection'] = $sortGet['direction'];
@@ -104,7 +110,9 @@ class ItemController extends AbstractAppController
 
         $parameters['returnQueryBuilder'] = true;
 
-        $pagination = $this->paginateAbstract($request, $this->itemManager->getList($parameters));
+        $pageModel = new QueryParameterPageModel($page);
+
+        $pagination = $this->paginateAbstract($pageModel, $this->itemManager->getList($parameters));
 
         $data = array_merge($data, $this->jsonApi($request, $pagination, $sortModel, $filtersModel));
 
@@ -238,12 +246,15 @@ class ItemController extends AbstractAppController
         return $this->jsonResponse($data);
     }
 
+    /**
+     * @param array<mixed> $filter
+     */
     #[Route('/items/markallasread', name: 'markallasread', methods: ['GET'])]
-    public function markallasread(Request $request): JsonResponse
+    public function markallasread(#[MapQueryParameter] ?array $filter): JsonResponse
     {
         $data = [];
 
-        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($filter);
 
         $parameters = [];
 

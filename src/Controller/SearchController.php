@@ -20,6 +20,7 @@ use App\Model\QueryParameterPageModel;
 use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -49,40 +50,60 @@ class SearchController extends AbstractAppController
         $this->categoryManager = $categoryManager;
     }
 
+    /**
+     * @param array<mixed> $filter
+     * @param array<mixed> $page
+     */
     #[Route(path: '/feeds/search', name: 'feeds', methods: ['GET'])]
-    public function feeds(Request $request): JsonResponse
+    public function feeds(Request $request, #[MapQueryParameter] ?array $page, #[MapQueryParameter] ?array $filter, #[MapQueryParameter] ?string $sort): JsonResponse
     {
-        return $this->getResults($request, 'feed');
+        return $this->getResults($request, 'feed', $page, $filter, $sort);
     }
 
+    /**
+     * @param array<mixed> $filter
+     * @param array<mixed> $page
+     */
     #[Route(path: '/categories/search', name: 'categories', methods: ['GET'])]
-    public function categories(Request $request): JsonResponse
+    public function categories(Request $request, #[MapQueryParameter] ?array $page, #[MapQueryParameter] ?array $filter, #[MapQueryParameter] ?string $sort): JsonResponse
     {
-        return $this->getResults($request, 'category');
+        return $this->getResults($request, 'category', $page, $filter, $sort);
     }
 
+    /**
+     * @param array<mixed> $filter
+     * @param array<mixed> $page
+     */
     #[Route(path: '/authors/search', name: 'authors', methods: ['GET'])]
-    public function authors(Request $request): JsonResponse
+    public function authors(Request $request, #[MapQueryParameter] ?array $page, #[MapQueryParameter] ?array $filter, #[MapQueryParameter] ?string $sort): JsonResponse
     {
-        return $this->getResults($request, 'author');
+        return $this->getResults($request, 'author', $page, $filter, $sort);
     }
 
+    /**
+     * @param array<mixed> $filter
+     * @param array<mixed> $page
+     */
     #[Route(path: '/items/search', name: 'items', methods: ['GET'])]
-    public function items(Request $request): JsonResponse
+    public function items(Request $request, #[MapQueryParameter] ?array $page, #[MapQueryParameter] ?array $filter, #[MapQueryParameter] ?string $sort): JsonResponse
     {
-        return $this->getResults($request, 'item');
+        return $this->getResults($request, 'item', $page, $filter, $sort);
     }
 
-    private function getResults(Request $request, string $type): JsonResponse
+    /**
+     * @param array<mixed> $filter
+     * @param array<mixed> $page
+     */
+    private function getResults(Request $request, string $type, ?array $page, ?array $filter, ?string $sort): JsonResponse
     {
         $data = [];
 
-        $filtersModel = new QueryParameterFilterModel($request->query->all('filter'));
+        $filtersModel = new QueryParameterFilterModel($filter);
 
         if ($filtersModel->get('query')) {
-            $pageModel = new QueryParameterPageModel($request->query->all('page'));
+            $pageModel = new QueryParameterPageModel($page);
 
-            $sortModel = new QueryParameterSortModel($request->query->get('sort'));
+            $sortModel = new QueryParameterSortModel($sort);
 
             if ($sortGet = $sortModel->get()) {
                 $sortDirection = $sortGet['direction'];
@@ -150,8 +171,8 @@ class SearchController extends AbstractAppController
                 $data['meta']['page_size'] = $pageModel->getSize();
 
                 $filters = [];
-                if ($request->query->get('sort')) {
-                    $filters['sort'] = $request->query->get('sort');
+                if ($sort) {
+                    $filters['sort'] = $sort;
                 }
                 foreach ($filtersModel->toArray() as $key => $value) {
                     $filters['filter['.$key.']'] = $value;

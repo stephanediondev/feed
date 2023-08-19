@@ -115,12 +115,10 @@ abstract class AbstractAppController extends AbstractController
     /**
      * @return PaginationInterface<mixed>
      */
-    protected function paginateAbstract(Request $request, ?QueryBuilder $queryBuilder): PaginationInterface
+    protected function paginateAbstract(QueryParameterPageModel $pageModel, ?QueryBuilder $queryBuilder): PaginationInterface
     {
         $pageNumber = 1;
         $pageSize = 20;
-
-        $pageModel = new QueryParameterPageModel($request->query->all('page'));
 
         if ($pageModel->getNumber() && $pageModel->getSize()) {
             $pageNumber = $pageModel->getNumber();
