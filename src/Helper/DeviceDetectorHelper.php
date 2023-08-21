@@ -8,9 +8,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class DeviceDetectorHelper
 {
-    public static function get(Request $request): ?DeviceDetectorModel
+    public static function get(Request $request): DeviceDetectorModel
     {
-        $deviceDetector = [];
+        $deviceDetector = new DeviceDetectorModel();
+
+        if ($clientIp = $request->getClientIp()) {
+            $deviceDetector->setIp($clientIp);
+            if ($hostbyaddr = gethostbyaddr($clientIp)) {
+                $deviceDetector->setHostname($hostbyaddr);
+            }
+        }
+
         if ($userAgent = $request->headers->get('User-Agent')) {
             $dd = new DeviceDetector($userAgent);
             $dd->skipBotDetection();
@@ -22,15 +30,6 @@ final class DeviceDetectorHelper
             $brand = $dd->getBrandName();
             $model = $dd->getModel();
 
-            $clientIp = $request->getClientIp();
-
-            $deviceDetector = new DeviceDetectorModel();
-            if ($clientIp) {
-                $deviceDetector->setIp($clientIp);
-                if ($hostbyaddr = gethostbyaddr($clientIp)) {
-                    $deviceDetector->setHostname($hostbyaddr);
-                }
-            }
             if (true === is_array($client) && true === array_key_exists('name', $client) && true === array_key_exists('version', $client)) {
                 $deviceDetector->setClient($client['name'].' '.$client['version']);
             }
@@ -40,10 +39,9 @@ final class DeviceDetectorHelper
             $deviceDetector->setDevice($device);
             $deviceDetector->setBrand($brand);
             $deviceDetector->setModel($model);
-            return $deviceDetector;
         }
 
-        return null;
+        return $deviceDetector;
     }
 
     /**
