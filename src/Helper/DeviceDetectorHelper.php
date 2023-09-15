@@ -49,17 +49,16 @@ final class DeviceDetectorHelper
      */
     public static function asArray(Request $request): array
     {
-        $extraFields = [];
+        $deviceDetector = DeviceDetectorHelper::get($request);
 
-        if ($deviceDetector = DeviceDetectorHelper::get($request)) {
-            $extraFields['ip'] = $deviceDetector->getIp();
-            $extraFields['hostname'] = $deviceDetector->getHostname();
-            $extraFields['client'] = $deviceDetector->getClient();
-            $extraFields['os'] = $deviceDetector->getOs();
-            $extraFields['device'] = $deviceDetector->getDevice();
-            $extraFields['brand'] = $deviceDetector->getBrand();
-            $extraFields['model'] = $deviceDetector->getModel();
-        }
+        $extraFields = [];
+        $extraFields['ip'] = $deviceDetector->getIp();
+        $extraFields['hostname'] = $deviceDetector->getHostname();
+        $extraFields['client'] = $deviceDetector->getClient();
+        $extraFields['os'] = $deviceDetector->getOs();
+        $extraFields['device'] = $deviceDetector->getDevice();
+        $extraFields['brand'] = $deviceDetector->getBrand();
+        $extraFields['model'] = $deviceDetector->getModel();
 
         return $extraFields;
     }
