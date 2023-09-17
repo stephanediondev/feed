@@ -1,20 +1,20 @@
 {
+    "name": "feed",
+    "description": "Self-hosted atom/rss reader - Progressive Web App - Google Reader alternative",
+    "homepage": "https://github.com/stephanediondev/feed",
+    "license": "MIT",
+    "private": true,
     "devDependencies": {
         "@babel/core": "^7.17.0",
         "@babel/preset-env": "^7.16.0",
         "@symfony/webpack-encore": "^4.0.0",
         "core-js": "^3.23.0",
-        "file-loader": "^6.0.0",
-        "postcss-loader": "^7.0.0",
-        "regenerator-runtime": "^0.14.0",
         "sass": "^1.59.2",
-        "sass-loader": "^13.0.0",
+        "sass-loader": "^13.0.2",
         "webpack": "^5.74.0",
         "webpack-cli": "^5.0.1",
         "webpack-notifier": "^1.15.0"
     },
-    "license": "UNLICENSED",
-    "private": true,
     "scripts": {
         "dev-server": "encore dev-server",
         "dev": "encore dev",
@@ -23,7 +23,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.11.7",
-        "bootstrap": "^5.3.0",
+        "bootstrap": "^5.3.2",
         "bootstrap-icons": "^1.10.3",
         "file-saver": "^2.0.5",
         "handlebars": "^4.7.7",
