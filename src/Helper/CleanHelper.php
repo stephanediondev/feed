@@ -35,11 +35,9 @@ final class CleanHelper
             try {
                 libxml_use_internal_errors(true);
 
-                if ($iconv = iconv('UTF-8', 'ISO-8859-1', htmlentities($content, ENT_COMPAT, 'UTF-8'))) {
-                    $content = htmlspecialchars_decode($iconv, ENT_QUOTES);
-                }
-
                 if ($content && is_string($content)) {
+                    $content = mb_encode_numericentity($content, [0x80, 0x10FFFF, 0, ~0], 'UTF-8');
+
                     $dom = new \DOMDocument();
                     $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT | LIBXML_NOWARNING);
 
@@ -80,7 +78,7 @@ final class CleanHelper
                                         $src = str_replace('autoplay=1', 'autoplay=0', $src);
                                         $node->setAttribute('src', $src);
                                         $node->setAttribute('frameborder', '0');
-                                        $node->removeAttribute('sandbox');
+                                        $node->setAttribute('sandbox', 'allow-presentation allow-same-origin allow-scripts');
                                     } else {
                                         if ($node->parentNode) {
                                             $node->parentNode->removeChild($node);
