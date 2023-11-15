@@ -71,7 +71,7 @@ class SecurityMemberProvider implements UserProviderInterface, PasswordUpgraderI
      *
      * @return Member
      */
-    public function refreshUser(UserInterface $member): ?Member
+    public function refreshUser(UserInterface $member): UserInterface
     {
         if (!$member instanceof Member) {
             throw new UnsupportedUserException(sprintf('Invalid Member class "%s".', get_class($member)));
