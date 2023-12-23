@@ -20,11 +20,20 @@ class SecurityMemberProvider implements UserProviderInterface, PasswordUpgraderI
         $this->memberManager = $memberManager;
     }
 
-    public function loadUserByIdentifier(string $identifier): Member
+    /**
+     * Symfony calls this method if you use features like switch_user
+     * or remember_me.
+     *
+     * If you're not using these features, you do not need to implement
+     * this method.
+     *
+     * @throws UserNotFoundException if the user is not found
+     */
+    public function loadUserByIdentifier(string $identifier): UserInterface
     {
-        // Load a User object from your data source or throw UsernameNotFoundException.
-        // The $username argument may not actually be a username:
-        // it is whatever value is being returned by the getUsername()
+        // Load a User object from your data source or throw UserNotFoundException.
+        // The $identifier argument may not actually be a username:
+        // it is whatever value is being returned by the getUserIdentifier()
         // method in your User class.
 
         if ($member = $this->memberManager->getOne(['email' => $identifier])) {
@@ -35,22 +44,10 @@ class SecurityMemberProvider implements UserProviderInterface, PasswordUpgraderI
     }
 
     /**
-     * Symfony calls this method if you use features like switch_user
-     * or remember_me.
-     *
-     * If you're not using these features, you do not need to implement
-     * this method.
-     *
-     * @return Member
-     *
+     * @deprecated since Symfony 5.3, loadUserByIdentifier() is used instead
      */
-    public function loadUserByUsername(string $email): Member
+    public function loadUserByUsername(string $email): UserInterface
     {
-        // Load a User object from your data source or throw UsernameNotFoundException.
-        // The $username argument may not actually be a username:
-        // it is whatever value is being returned by the getUsername()
-        // method in your User class.
-
         if ($member = $this->memberManager->getOne(['email' => $email])) {
             return $member;
         }
@@ -68,8 +65,6 @@ class SecurityMemberProvider implements UserProviderInterface, PasswordUpgraderI
      *
      * If your firewall is "stateless: true" (for a pure API), this
      * method is not called.
-     *
-     * @return Member
      */
     public function refreshUser(UserInterface $member): UserInterface
     {
@@ -79,7 +74,11 @@ class SecurityMemberProvider implements UserProviderInterface, PasswordUpgraderI
 
         // Return a User object after making sure its data is "fresh".
         // Or throw a UsernameNotFoundException if the user no longer exists.
-        return $this->memberManager->getOne(['id' => $member->getId()]);
+        if ($member = $this->memberManager->getOne(['id' => $member->getId()])) {
+            return $member;
+        }
+
+        throw new UserNotFoundException('Member not found');
     }
 
     /**
@@ -87,16 +86,16 @@ class SecurityMemberProvider implements UserProviderInterface, PasswordUpgraderI
      */
     public function supportsClass(string $class): bool
     {
-        return Member::class === $class;
+        return Member::class === $class || is_subclass_of($class, Member::class);
     }
 
     /**
-     * Upgrades the encoded password of a user, typically for using a better hash algorithm.
+     * Upgrades the hashed password of a user, typically for using a better hash algorithm.
      */
-    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newEncodedPassword): void
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        // When encoded passwords are in use, this method should:
+        // TODO: when hashed passwords are in use, this method should:
         // 1. persist the new password in the user storage
-        // 2. update the $user object with $user->setPassword($newEncodedPassword);
+        // 2. update the $user object with $user->setPassword($newHashedPassword);
     }
 }
