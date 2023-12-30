@@ -14,7 +14,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
         "firebase/php-jwt": "^6.4",
-        "geoip2/geoip2": "^2.13",
+        "geoip2/geoip2": "^3.0",
         "knplabs/knp-paginator-bundle": "*",
         "matomo/device-detector": "^6.1",
         "minishlink/web-push": "^8.0",
