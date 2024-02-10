@@ -135,6 +135,12 @@ class CollectionManager extends AbstractManager
                     ]);
 
                     if ($simplepieFeed->error()) {
+                        //next collection in 12 hours
+                        $nextCollection = new \DateTime(date('Y-m-d H:i:s', time() + 3600 * 12));
+                        $updateFeed = [];
+                        $updateFeed['next_collection'] = $nextCollection->format('Y-m-d H:i:s');
+                        $this->collectionRepository->update('feed', $updateFeed, $feed['id']);
+
                         $errors++;
                         $insertCollectionFeed['error'] = $simplepieFeed->error();
                     }
