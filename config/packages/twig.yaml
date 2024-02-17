@@ -2,6 +2,7 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     globals:
         vapidPublicKey: '%env(VAPID_PUBLIC_KEY)%'
+    file_name_pattern: '*.twig'
 
 when@test:
     twig:
