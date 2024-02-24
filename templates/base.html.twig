@@ -14,9 +14,6 @@
 <link rel="apple-touch-icon" sizes="512x512" href="/app/images/icon-512x512.png">
 <link rel="apple-touch-icon-precomposed" sizes="512x512" href="/app/images/icon-512x512.png">
 <link rel="manifest" href="/site.webmanifest">
-{% block stylesheets %}
-    {{ encore_entry_link_tags('app') }}
-{% endblock %}
 </head>
 
 <body class="anonymous online not_administrator no_entries">
@@ -61,7 +58,7 @@
     <script type="text/javascript">
         var applicationServerKey = '{{ vapidPublicKey }}';
     </script>
-    {{ encore_entry_script_tags('app') }}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
 {% endblock %}
 </body>
 </html>
