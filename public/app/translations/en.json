@@ -56,6 +56,7 @@
     "notifications": "Notifications",
     "notifications_enabled": "Notifications enabled",
     "notifications_disabled": "Notifications disabled",
+    "network": "Network",
 
     "subscribe": "Subscribe",
     "unsubscribe": "Unsubscribe",
