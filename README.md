@@ -4,7 +4,6 @@
 - PHP 8.2 with apcu, curl, gmp, iconv, json, mbstring, tidy, xml
 - Composer
 - MySQL 8
-- npm
 
 # Installation
 
@@ -127,8 +126,7 @@ bin/console doctrine:schema:create
 bin/console app:setup
 bin/console app:member:create
 
-npm install
-npm run build
+bin/console asset-map:compile
 ```
 
 ## Notifications
@@ -172,8 +170,7 @@ git reset --hard origin/main
 composer install
 bin/console doctrine:migrations:migrate -n
 
-npm install
-npm run build
+bin/console asset-map:compile
 ```
 
 # Screenshots

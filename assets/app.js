@@ -1,31 +1,20 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.min.css';
+import './styles/app.css';
 
-// any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.scss';
+import { Modal, Toast } from 'bootstrap';
 
-var bootstrap = require('bootstrap');
-
-require('jquery');
-global.$ = global.jQuery = $;
+import $ from 'jquery';
 
 import i18next from 'i18next';
-global.i18next = i18next;
 
-var moment = require('moment-timezone');
-global.moment = moment;
+import moment from 'moment-timezone';
 
-require('jquery.scrollto');
+import 'jquery.scrollto';
 
-import Handlebars from 'handlebars/dist/cjs/handlebars'
-global.Handlebars = Handlebars;
+import Handlebars from 'handlebars'
 
 import saveAs from 'file-saver';
-global.saveAs = saveAs;
 
 import {routes} from './_routes.js'
 
@@ -241,7 +230,7 @@ function ready() {
             loadRoute($(this).attr('href'), {page: $(this).data('page'), q: $(this).data('q'), link: $(this)});
 
             if ($(this).data('close-dialog')) {
-                const myModal = bootstrap.Modal.getOrCreateInstance($(this).data('close-dialog'), {});
+                const myModal = Modal.getOrCreateInstance($(this).data('close-dialog'), {});
                 myModal.hide();
             }
         });
@@ -255,7 +244,7 @@ function ready() {
                     url: decodeURIComponent($(this).data('url'))
                 });
             } else {
-                const myModal = bootstrap.Modal.getOrCreateInstance($(this).data('bs-target'), {});
+                const myModal = Modal.getOrCreateInstance($(this).data('bs-target'), {});
                 myModal.show();
             }
         });
@@ -405,7 +394,7 @@ function ready() {
                         }
 
                         if (form.data('close-dialog')) {
-                            const myModal = bootstrap.Modal.getOrCreateInstance(form.data('close-dialog'), {});
+                            const myModal = Modal.getOrCreateInstance(form.data('close-dialog'), {});
                             myModal.hide();
                         }
                     } else {
@@ -786,7 +775,7 @@ function setToast(content) {
 
     var toastEl = document.getElementById(id);
     if (toastEl) {
-        var toast = new bootstrap.Toast(toastEl, {'autohide': true, 'delay': 2500});
+        var toast = new Toast(toastEl, {'autohide': true, 'delay': 2500});
         toast.show();
     }
 }
@@ -1109,11 +1098,11 @@ window.addEventListener('appinstalled', function(appinstalled) {
 });
 
 window.addEventListener('online', function() {
-    setToast({'title': i18next.t('install'), 'body': 'Online'});
+    setToast({'title': i18next.t('network'), 'body': 'Online'});
 });
 
 window.addEventListener('offline', function() {
-    setToast({'title': i18next.t('install'), 'body': 'Offline'});
+    setToast({'title': i18next.t('network'), 'body': 'Offline'});
 });
 
 var gKey = false;
@@ -1183,17 +1172,17 @@ document.addEventListener('keydown', function(event) {
         } else if (keycode === 65 && $('body').hasClass('connected') && $('body').hasClass('online')) {
             //shift + a: dialog mark all as read
             if (event.shiftKey) {
-                const myModal = bootstrap.Modal.getOrCreateInstance('#dialog-mark_all_as_read', {});
+                const myModal = Modal.getOrCreateInstance('#dialog-mark_all_as_read', {});
                 myModal.show();
             //a: add a feed
             } else {
-                const myModal = bootstrap.Modal.getOrCreateInstance('#dialog-add_feed', {});
+                const myModal = Modal.getOrCreateInstance('#dialog-add_feed', {});
                 myModal.show();
             }
 
         //h or ? : open shortcuts dialog
         } else if(keycode == 72 || keycode == 188) {
-            const myModal = bootstrap.Modal.getOrCreateInstance('#dialog-shortcuts', {});
+            const myModal = Modal.getOrCreateInstance('#dialog-shortcuts', {});
             myModal.show();
 
         //slash
