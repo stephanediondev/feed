@@ -23,9 +23,7 @@
 .php-cs-fixer.cache
 /config/jwt-keys/application.key
 /config/jwt-keys/application.pub
-/GeoLite2-ASN
-/GeoLite2-City
-/GeoLite2-Country
+/maxmind
 /public/.htaccess
 ###< app ###
 

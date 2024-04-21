@@ -15,6 +15,7 @@ services:
             $vapidPublicKey: '%env(VAPID_PUBLIC_KEY)%'
             $vapidPrivateKey: '%env(VAPID_PRIVATE_KEY)%'
             $maxmindEnabled: '%env(bool:MAXMIND_ENABLED)%'
+            $maxmindAccountId: '%env(MAXMIND_ACCOUNT_ID)%'
             $maxmindLicenseKey: '%env(MAXMIND_LICENSE_KEY)%'
             $elasticsearchEnabled: '%env(bool:ELASTICSEARCH_ENABLED)%'
             $elasticsearchIndex: '%env(ELASTICSEARCH_INDEX)%'

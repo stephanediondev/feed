@@ -13,7 +13,7 @@ final class MaxmindHelper
     {
         $data = [];
 
-        $file = __DIR__.'/../../GeoLite2-City/GeoLite2-City.mmdb';
+        $file = __DIR__.'/../../maxmind/GeoLite2-City/GeoLite2-City.mmdb';
 
         if (file_exists($file)) {
             $reader = new Reader($file);
