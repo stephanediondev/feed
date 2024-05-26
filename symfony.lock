@@ -280,7 +280,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "1.0",
-            "ref": "aece95c8a188f6e6d04f01ccb8678d1764fd2642"
+            "ref": "7d5c5e282f7e2c36a2c3bbb1504f78456c352407"
         },
         "files": [
             "config/packages/messenger.yaml"
