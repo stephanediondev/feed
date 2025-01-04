@@ -96,6 +96,7 @@
     "feed": "Flux",
 
     "connections": "Connexions",
+    "passkeys": "Passkeys",
 
     "field": {
         "title": "Titre",

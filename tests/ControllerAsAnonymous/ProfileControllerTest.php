@@ -28,6 +28,13 @@ class ProfileControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(401);
     }
 
+    public function testPasskeys(): void
+    {
+        $this->client->request('GET', '/api/profile/passkeys');
+
+        $this->assertResponseStatusCodeSame(401);
+    }
+
     public function testUpdate(): void
     {
         $this->client->request('PUT', '/api/profile');
