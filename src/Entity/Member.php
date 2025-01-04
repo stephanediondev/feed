@@ -144,12 +144,20 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPasskeyChallenge(): ?string
     {
-        return base64_decode($this->passkeyChallenge);
+        if (null !== $this->passkeyChallenge) {
+            return base64_decode($this->passkeyChallenge);
+        }
+
+        return null;
     }
 
     public function setPasskeyChallenge(?string $passkeyChallenge): self
     {
-        $this->passkeyChallenge = base64_encode($passkeyChallenge);
+        if (null !== $passkeyChallenge) {
+            $this->passkeyChallenge = base64_encode($passkeyChallenge);
+        } else {
+            $this->passkeyChallenge = null;
+        }
 
         return $this;
     }

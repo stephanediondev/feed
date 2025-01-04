@@ -1254,7 +1254,6 @@ async function registerPasskey() {
 
         // create credentials
         const cred = await navigator.credentials.create(createArgs);
-        console.log(cred);
 
         // create object
         const authenticatorAttestationResponse = {
@@ -1318,7 +1317,6 @@ async function passkeyLogin() {
 
         // check credentials with hardware
         const cred = await navigator.credentials.get(getArgs);
-        console.log(cred);
 
         // create object for transmission to server
         const authenticatorAttestationResponse = {
