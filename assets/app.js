@@ -174,7 +174,7 @@ function ready() {
         });
 
         window.addEventListener('popstate', function() {
-            if (lastHistory !== window.location.hash) {
+            if (lastHistory !== window.location.hash && '' !== window.location.hash) {
                 loadRoute(window.location.hash);
             }
         });
@@ -243,6 +243,8 @@ function ready() {
                     title: decodeURIComponent($(this).data('title')),
                     url: decodeURIComponent($(this).data('url'))
                 });
+            } else if ($(this).hasClass('passkey-login')) {
+                passkeyLogin();
             } else {
                 const myModal = Modal.getOrCreateInstance($(this).data('bs-target'), {});
                 myModal.show();
@@ -1288,7 +1290,73 @@ async function registerPasskey() {
 
     } catch (err) {
         //reloadServerPreview();
-        window.alert(err.message || 'unknown error occured');
+        setToast({'title': 'Passkey register', 'body': err.message || 'unknown error occured'});
+    }
+}
+
+const urlPasskeyBegin = '/passkey/options';
+const urlPasskeyFinish = '/passkey/login';
+
+async function passkeyLogin() {
+    try {
+        if (!window.fetch || !navigator.credentials || !navigator.credentials.create) {
+            throw new Error('Browser not supported.');
+        }
+
+        // get check args
+        let rep = await window.fetch(urlPasskeyBegin, {method:'GET',cache:'no-cache'});
+        const getArgs = await rep.json();
+
+        // error handling
+        if (getArgs.success === false) {
+            throw new Error(getArgs.msg);
+        }
+
+        // replace binary base64 data with ArrayBuffer. a other way to do this
+        // is the reviver function of JSON.parse()
+        recursiveBase64StrToArrayBuffer(getArgs);
+
+        // check credentials with hardware
+        const cred = await navigator.credentials.get(getArgs);
+        console.log(cred);
+
+        // create object for transmission to server
+        const authenticatorAttestationResponse = {
+            id: cred.id ? cred.id : null,
+            rawId: cred.rawId ? arrayBufferToBase64(cred.rawId) : null,
+            clientDataJSON: cred.response.clientDataJSON  ? arrayBufferToBase64(cred.response.clientDataJSON) : null,
+            authenticatorData: cred.response.authenticatorData ? arrayBufferToBase64(cred.response.authenticatorData) : null,
+            signature: cred.response.signature ? arrayBufferToBase64(cred.response.signature) : null,
+            userHandle: cred.response.userHandle ? arrayBufferToBase64(cred.response.userHandle) : null
+        };
+
+        // send to server
+        rep = await window.fetch(urlPasskeyFinish, {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(authenticatorAttestationResponse),
+            cache:'no-cache'
+        });
+        const authenticatorAttestationServerResponse = await rep.json();
+
+        // check server response
+        if (authenticatorAttestationServerResponse.success) {
+            if (200 === rep.status) {
+                setCookie('token_signed', authenticatorAttestationServerResponse.entry.token_signed, 365);
+
+                explainConnection();
+
+                loadRoute('#items/unread');
+            }
+        } else {
+            throw new Error(authenticatorAttestationServerResponse.msg);
+        }
+
+    } catch (err) {
+        //reloadServerPreview();
+        setToast({'title': 'Passkey login', 'body': err.message || 'unknown error occured'});
     }
 }
 

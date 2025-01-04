@@ -29,6 +29,7 @@
     "logout": "Logout",
     "forgotpassword": "Forgot password?",
     "profile": "Profile",
+    "passkey_login": "Passkey login",
 
     "add": "Add",
     "update": "Update",

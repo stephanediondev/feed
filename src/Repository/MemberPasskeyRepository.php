@@ -32,6 +32,11 @@ class MemberPasskeyRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
+        if (true === isset($parameters['credential_id'])) {
+            $query->andWhere('mbr_psk.credentialId = :credential_id');
+            $query->setParameter(':credential_id', $parameters['credential_id']);
+        }
+
         if (true === isset($parameters['member'])) {
             $query->andWhere('mbr.id = :member');
             $query->setParameter(':member', $parameters['member']);

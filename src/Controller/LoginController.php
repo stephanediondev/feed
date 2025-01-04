@@ -12,16 +12,21 @@ use App\Helper\DeviceDetectorHelper;
 use App\Helper\JwtHelper;
 use App\Helper\MaxmindHelper;
 use App\Manager\MemberManager;
+use App\Manager\MemberPasskeyManager;
 use App\Model\JwtPayloadModel;
 use App\Model\LoginModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use lbuchs\WebAuthn\WebAuthn;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class LoginController extends AbstractAppController
 {
     private MemberManager $memberManager;
+
+    private MemberPasskeyManager $memberPasskeyManager;
 
     private UserPasswordHasherInterface $passwordHasher;
 
@@ -45,9 +50,10 @@ class LoginController extends AbstractAppController
 
     private string $ldapSearchGroupAdmin = 'cn=admingroup';
 
-    public function __construct(MemberManager $memberManager, UserPasswordHasherInterface $passwordHasher, bool $maxmindEnabled, bool $ldapEnabled, string $ldapServer, int $ldapPort, int $ldapProtocol, string $ldapRootDn, string $ldapRootPw, string $ldapBaseDn, string $ldapSearchUser, string $ldapSearchGroupAdmin)
+    public function __construct(MemberManager $memberManager, MemberPasskeyManager $memberPasskeyManager, UserPasswordHasherInterface $passwordHasher, bool $maxmindEnabled, bool $ldapEnabled, string $ldapServer, int $ldapPort, int $ldapProtocol, string $ldapRootDn, string $ldapRootPw, string $ldapBaseDn, string $ldapSearchUser, string $ldapSearchGroupAdmin)
     {
         $this->memberManager = $memberManager;
+        $this->memberPasskeyManager = $memberPasskeyManager;
         $this->passwordHasher = $passwordHasher;
         $this->maxmindEnabled = $maxmindEnabled;
         $this->ldapEnabled = $ldapEnabled;
@@ -155,5 +161,106 @@ class LoginController extends AbstractAppController
         }
 
         return $this->jsonResponse($data, $status);
+    }
+
+    #[Route(path: '/passkey/options', name: 'passkey_options', methods: ['GET'])]
+    public function passkeyBegin(Request $request): JsonResponse
+    {
+        $data = [];
+        $status = JsonResponse::HTTP_OK;
+
+        $session = $request->getSession();
+
+        $rpId = $request->getHost();
+        $webAuthn = new WebAuthn('WebAuthn Library', $rpId);
+
+        $ids = [];
+        $data = $webAuthn->getGetArgs($ids, 60*4, true, true, true, true, true, false);
+
+        // save challange to session. you have to deliver it to processGet later.
+        $session->set('challenge', $webAuthn->getChallenge());
+
+        return new JsonResponse($data, $status);
+    }
+
+    #[Route(path: '/passkey/login', name: 'passkey_login', methods: ['POST'])]
+    public function passkeyFinish(Request $request, Security $security): JsonResponse
+    {
+        $data = [];
+        $status = JsonResponse::HTTP_OK;
+
+        $content = $this->getContent($request);
+
+        $memberPasskey = $this->memberPasskeyManager->getOne(['credential_id' => $content['id']]);
+
+        if (null !== $memberPasskey) {
+            $member = $memberPasskey->getMember();
+
+            $session = $request->getSession();
+
+            $rpId = $request->getHost();
+            $webAuthn = new WebAuthn('WebAuthn Library', $rpId);
+
+            $clientDataJSON = base64_decode($content['clientDataJSON']);
+            $authenticatorData = base64_decode($content['authenticatorData']);
+            $signature = base64_decode($content['signature']);
+            $userHandle = base64_decode($content['userHandle']);
+            $id = $content['id'];
+            $rawId = base64_decode($content['rawId']);
+            $challenge = $session->get('challenge') ?? '';
+            $credentialPublicKey = null;
+
+            if ($memberPasskey->getCredentialId() === $id) {
+                $credentialPublicKey = $memberPasskey->getPublicKey();
+            }
+
+            if ($credentialPublicKey === null) {
+                throw new \Exception('Public Key for credential ID not found!');
+            }
+
+            // if we have resident key, we have to verify that the userHandle is the provided userId at registration
+            /*if ($requireResidentKey && $userHandle !== hex2bin($reg->userId)) {
+                throw new \Exception('userId doesnt match (is ' . bin2hex($userHandle) . ' but expect ' . $reg->userId . ')');
+            }*/
+
+            // process the get request. throws WebAuthnException if it fails
+            $userVerification = 'preferred';
+            $webAuthn->processGet($clientDataJSON, $authenticatorData, $signature, $credentialPublicKey, $challenge, null, $userVerification === 'required');
+
+            $memberPasskey->setLastTimeActive(new \Datetime());
+            $this->memberPasskeyManager->persist($memberPasskey);
+
+            $identifier = JwtHelper::generateUniqueIdentifier();
+
+            $extraFields = DeviceDetectorHelper::asArray($request);
+
+            if ($extraFields['ip'] && '127.0.0.1' != $extraFields['ip'] && true === $this->maxmindEnabled) {
+                $data = MaxmindHelper::get($extraFields['ip']);
+                $extraFields = array_merge($extraFields, $data);
+            }
+
+            $connection = new Connection();
+            $connection->setMember($member);
+            $connection->setType(Connection::TYPE_LOGIN);
+            $connection->setToken($identifier);
+            $connection->setExtraFields($extraFields);
+
+            $this->connectionManager->persist($connection);
+
+            $data['entry'] = $connection->toArray();
+            $data['entry_entity'] = 'connection';
+
+            $jwtPayloadModel = new JwtPayloadModel();
+            $jwtPayloadModel->setJwtId($identifier);
+            $jwtPayloadModel->setAudience(strval($member->getId()));
+
+            $data['entry']['token_signed'] = JwtHelper::createToken($jwtPayloadModel);
+
+            $data['success'] = true;
+
+            $status = JsonResponse::HTTP_OK;
+        }
+
+        return new JsonResponse($data, $status);
     }
 }

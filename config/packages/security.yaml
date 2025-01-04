@@ -25,7 +25,7 @@ security:
         main:
             lazy: true
             provider: app_member_provider
-            stateless: true
+            stateless: false
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
