@@ -1281,6 +1281,9 @@ async function registerPasskey() {
 
         // prompt server response
         if (authenticatorAttestationServerResponse.success) {
+            const myModal = Modal.getOrCreateInstance('#dialog-add_passkey', {});
+            myModal.hide();
+
             loadRoute('#profile/passkeys');
 
         } else {
