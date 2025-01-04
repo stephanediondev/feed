@@ -9,6 +9,7 @@ use App\Entity\Connection;
 use App\Form\Type\ProfileType;
 use App\Helper\JwtHelper;
 use App\Manager\MemberManager;
+use App\Manager\MemberPasskeyManager;
 use App\Model\ProfileModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,11 +21,14 @@ class ProfileController extends AbstractAppController
 {
     private MemberManager $memberManager;
 
+    private MemberPasskeyManager $memberPasskeyManager;
+
     private UserPasswordHasherInterface $passwordHasher;
 
-    public function __construct(MemberManager $memberManager, UserPasswordHasherInterface $passwordHasher)
+    public function __construct(MemberManager $memberManager, MemberPasskeyManager $memberPasskeyManager, UserPasswordHasherInterface $passwordHasher)
     {
         $this->memberManager = $memberManager;
+        $this->memberPasskeyManager = $memberPasskeyManager;
         $this->passwordHasher = $passwordHasher;
     }
 
@@ -82,6 +86,28 @@ class ProfileController extends AbstractAppController
         }
 
         $data['entries_entity'] = 'connection';
+
+        return $this->jsonResponse($data);
+    }
+
+    #[Route(path: '/passkeys', name: 'passkeys', methods: ['GET'])]
+    public function passkeys(): JsonResponse
+    {
+        $data = [];
+
+        $data['entries'] = [];
+
+        foreach ($this->memberPasskeyManager->getList(['member' => $this->getMember()])->getResult() as $passkey) {
+            $entry = $passkey->toArray();
+            $data['entries'][] = $entry;
+        }
+
+        if ($this->getMember()) {
+            $data['entry'] = $this->getMember()->toArray();
+            $data['entry_entity'] = 'member';
+        }
+
+        $data['entries_entity'] = 'member_passkey';
 
         return $this->jsonResponse($data);
     }

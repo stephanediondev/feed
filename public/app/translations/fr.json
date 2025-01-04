@@ -29,6 +29,7 @@
     "logout": "Déconnexion",
     "forgotpassword": "Forgot password?",
     "profile": "Profil",
+    "passkey_login": "Passkey login",
 
     "add": "Ajouter",
     "update": "Modifier",
@@ -96,6 +97,7 @@
     "feed": "Flux",
 
     "connections": "Connexions",
+    "passkeys": "Passkeys",
 
     "field": {
         "title": "Titre",

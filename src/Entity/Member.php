@@ -10,6 +10,8 @@ use App\Repository\MemberRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
 #[ORM\Table(name: "member")]
@@ -33,8 +35,12 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
+    #[ORM\Column(name: "passkey_challenge", type: "string", length: 255, nullable: true)]
+    private ?string $passkeyChallenge = null;
+
     public function __construct()
     {
+        $this->passkeys = new ArrayCollection();
         $this->dateCreated = new \Datetime();
     }
 
@@ -134,5 +140,48 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->getEmail() ?? '';
+    }
+
+    public function getPasskeyChallenge(): ?string
+    {
+        return base64_decode($this->passkeyChallenge);
+    }
+
+    public function setPasskeyChallenge(?string $passkeyChallenge): self
+    {
+        $this->passkeyChallenge = base64_encode($passkeyChallenge);
+
+        return $this;
+    }
+
+    /** @var Collection<int, MemberPasskey> $passkeys */
+    #[ORM\OneToMany(targetEntity: "App\Entity\MemberPasskey", mappedBy: "member", fetch: "LAZY", cascade: ["persist"], orphanRemoval: true)]
+    private Collection $passkeys;
+    /**
+     * @return Collection<int, MemberPasskey>
+     */
+    public function getPasskeys(): Collection
+    {
+        return $this->passkeys;
+    }
+    public function addPasskey(MemberPasskey $memberPasskey): self
+    {
+        if (false === $this->hasPasskey($memberPasskey)) {
+            $this->passkeys->add($memberPasskey);
+            $memberPasskey->setMember($this);
+        }
+        return $this;
+    }
+    public function removePasskey(MemberPasskey $memberPasskey): self
+    {
+        if (true === $this->hasPasskey($memberPasskey)) {
+            $this->passkeys->removeElement($memberPasskey);
+            $memberPasskey->setMember(null);
+        }
+        return $this;
+    }
+    public function hasPasskey(MemberPasskey $memberPasskey): bool
+    {
+        return $this->passkeys->contains($memberPasskey);
     }
 }

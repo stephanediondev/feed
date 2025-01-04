@@ -3,6 +3,7 @@ routes['#login'] = {view: 'view-login', query: false, title: 'login'};
 routes['#logout'] = {view: 'view-logout', query: '/logout'};
 routes['#profile'] = {view: 'view-profile', query: '/profile', title: 'profile'};
 routes['#profile/connections'] = {view: 'view-profile-connections', query: '/profile/connections', title: 'profile'};
+routes['#profile/passkeys'] = {view: 'view-profile-passkeys', query: '/profile/passkeys', title: 'profile'};
 
 //Feed
 routes['#feeds/recent'] = {view: 'view-feeds', viewUnit: 'view-feeds-unit', query: '/feeds?sort=-fed.dateCreated', title: 'title.recent_feeds'};

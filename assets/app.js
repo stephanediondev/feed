@@ -174,7 +174,7 @@ function ready() {
         });
 
         window.addEventListener('popstate', function() {
-            if (lastHistory !== window.location.hash) {
+            if (lastHistory !== window.location.hash && '' !== window.location.hash) {
                 loadRoute(window.location.hash);
             }
         });
@@ -243,6 +243,8 @@ function ready() {
                     title: decodeURIComponent($(this).data('title')),
                     url: decodeURIComponent($(this).data('url'))
                 });
+            } else if ($(this).hasClass('passkey-login')) {
+                passkeyLogin();
             } else {
                 const myModal = Modal.getOrCreateInstance($(this).data('bs-target'), {});
                 myModal.show();
@@ -333,6 +335,10 @@ function ready() {
                         window.open(choice, 'share');
                     }
                 }
+
+            } else if (form.hasClass('passkey-form')) {
+                event.preventDefault();
+                registerPasskey();
 
             } else if (typeof id !== 'undefined' && id.indexOf('form-search-') !== -1) {
                 loadRoute(form.attr('action'), {page: 1, q: encodeURIComponent( form.find('input[name="filter[query]"]').val() )});
@@ -1212,3 +1218,189 @@ document.addEventListener('keydown', function(event) {
         }
     }
 });
+
+const urlPasskeyCreateBegin = '/api/passkeys/create/options';
+const urlPasskeyCreateFinish = '/api/passkeys/create';
+
+async function registerPasskey() {
+    try {
+
+        // check browser support
+        if (!window.fetch || !navigator.credentials || !navigator.credentials.create) {
+            throw new Error('Browser not supported.');
+        }
+
+        // get create args
+        let rep = await window.fetch(urlPasskeyCreateBegin, {
+            method:'GET',
+            credentials: 'omit',
+            mode: 'cors',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + getCookie('token_signed'),
+                'Content-Type': 'application/json'
+            }),
+            cache:'no-cache'
+        });
+        const createArgs = await rep.json();
+
+        // error handling
+        if (createArgs.success === false) {
+            throw new Error(createArgs.msg || 'unknown error occured');
+        }
+
+        // replace binary base64 data with ArrayBuffer. a other way to do this
+        // is the reviver function of JSON.parse()
+        recursiveBase64StrToArrayBuffer(createArgs);
+
+        // create credentials
+        const cred = await navigator.credentials.create(createArgs);
+        console.log(cred);
+
+        // create object
+        const authenticatorAttestationResponse = {
+            title: $('#passkey-title').val(),
+            id: cred.id ? cred.id : null,
+            rawId: cred.rawId ? arrayBufferToBase64(cred.rawId) : null,
+            transports: cred.response.getTransports  ? cred.response.getTransports() : null,
+            clientDataJSON: cred.response.clientDataJSON  ? arrayBufferToBase64(cred.response.clientDataJSON) : null,
+            attestationObject: cred.response.attestationObject ? arrayBufferToBase64(cred.response.attestationObject) : null
+        };
+
+        // check auth on server side
+        rep = await window.fetch(urlPasskeyCreateFinish, {
+            method  : 'POST',
+            credentials: 'omit',
+            mode: 'cors',
+            headers: new Headers({
+                'Authorization': 'Bearer ' + getCookie('token_signed'),
+                'Content-Type': 'application/json'
+            }),
+            body    : JSON.stringify(authenticatorAttestationResponse),
+            cache   : 'no-cache'
+        });
+        const authenticatorAttestationServerResponse = await rep.json();
+
+        // prompt server response
+        if (authenticatorAttestationServerResponse.success) {
+            loadRoute('#profile/passkeys');
+
+        } else {
+            throw new Error(authenticatorAttestationServerResponse.msg);
+        }
+
+    } catch (err) {
+        //reloadServerPreview();
+        setToast({'title': 'Passkey register', 'body': err.message || 'unknown error occured'});
+    }
+}
+
+const urlPasskeyBegin = '/passkey/options';
+const urlPasskeyFinish = '/passkey/login';
+
+async function passkeyLogin() {
+    try {
+        if (!window.fetch || !navigator.credentials || !navigator.credentials.create) {
+            throw new Error('Browser not supported.');
+        }
+
+        // get check args
+        let rep = await window.fetch(urlPasskeyBegin, {method:'GET',cache:'no-cache'});
+        const getArgs = await rep.json();
+
+        // error handling
+        if (getArgs.success === false) {
+            throw new Error(getArgs.msg);
+        }
+
+        // replace binary base64 data with ArrayBuffer. a other way to do this
+        // is the reviver function of JSON.parse()
+        recursiveBase64StrToArrayBuffer(getArgs);
+
+        // check credentials with hardware
+        const cred = await navigator.credentials.get(getArgs);
+        console.log(cred);
+
+        // create object for transmission to server
+        const authenticatorAttestationResponse = {
+            id: cred.id ? cred.id : null,
+            rawId: cred.rawId ? arrayBufferToBase64(cred.rawId) : null,
+            clientDataJSON: cred.response.clientDataJSON  ? arrayBufferToBase64(cred.response.clientDataJSON) : null,
+            authenticatorData: cred.response.authenticatorData ? arrayBufferToBase64(cred.response.authenticatorData) : null,
+            signature: cred.response.signature ? arrayBufferToBase64(cred.response.signature) : null,
+            userHandle: cred.response.userHandle ? arrayBufferToBase64(cred.response.userHandle) : null
+        };
+
+        // send to server
+        rep = await window.fetch(urlPasskeyFinish, {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(authenticatorAttestationResponse),
+            cache:'no-cache'
+        });
+        const authenticatorAttestationServerResponse = await rep.json();
+
+        // check server response
+        if (authenticatorAttestationServerResponse.success) {
+            if (200 === rep.status) {
+                setCookie('token_signed', authenticatorAttestationServerResponse.entry.token_signed, 365);
+
+                explainConnection();
+
+                loadRoute('#items/unread');
+            }
+        } else {
+            throw new Error(authenticatorAttestationServerResponse.msg);
+        }
+
+    } catch (err) {
+        //reloadServerPreview();
+        setToast({'title': 'Passkey login', 'body': err.message || 'unknown error occured'});
+    }
+}
+
+/**
+ * convert RFC 1342-like base64 strings to array buffer
+ * @param {mixed} obj
+ * @returns {undefined}
+ */
+ function recursiveBase64StrToArrayBuffer(obj) {
+    let prefix = '=?BINARY?B?';
+    let suffix = '?=';
+    if (typeof obj === 'object') {
+        for (let key in obj) {
+            if (typeof obj[key] === 'string') {
+                let str = obj[key];
+                if (str.substring(0, prefix.length) === prefix && str.substring(str.length - suffix.length) === suffix) {
+                    str = str.substring(prefix.length, str.length - suffix.length);
+
+                    let binary_string = window.atob(str);
+                    let len = binary_string.length;
+                    let bytes = new Uint8Array(len);
+                    for (let i = 0; i < len; i++)        {
+                        bytes[i] = binary_string.charCodeAt(i);
+                    }
+                    obj[key] = bytes.buffer;
+                }
+            } else {
+                recursiveBase64StrToArrayBuffer(obj[key]);
+            }
+        }
+    }
+}
+
+/**
+ * Convert a ArrayBuffer to Base64
+ * @param {ArrayBuffer} buffer
+ * @returns {String}
+ */
+function arrayBufferToBase64(buffer) {
+    let binary = '';
+    let bytes = new Uint8Array(buffer);
+    let len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa(binary);
+}

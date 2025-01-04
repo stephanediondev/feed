@@ -16,6 +16,7 @@
             </div>
             <div class="mdl-card__actions text-end mt-3 mdl-card--border">
                 <p>
+                    <a href="#" class="mdl-button btn btn-secondary btn-sm dialog passkey-login">{{trans 'passkey_login'}}</a>
                     <a href="#forgotpassword" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'forgotpassword'}}</a>
                 </p>
             </div>
@@ -34,6 +35,7 @@
             <p>
                 <a href="#profile" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'profile'}}</a>
                 <a href="#profile/connections" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'connections'}}</a>
+                <a href="#profile/passkeys" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'passkeys'}}</a>
             </p>
         </div>
     </div>
@@ -108,6 +110,7 @@
             <p>
                 <a href="#profile" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'profile'}}</a>
                 <a href="#profile/connections" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'connections'}}</a>
+                <a href="#profile/passkeys" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'passkeys'}}</a>
             </p>
         </div>
     </div>
@@ -126,7 +129,7 @@
                         {{#if connection.longitude }}
                             <a class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap" target="_blank" href="https://www.google.com/maps?q={{ connection.latitude }},{{ connection.longitude }}&oe=UTF-8&ie=UTF-8"><i class="bi bi-geo-alt-fill"></i> {{ connection.latitude }},{{ connection.longitude }}</a>
                         {{/if}}
-                {{/if}}
+                    {{/if}}
                 </div>
             </div>
             <div class="mdl-card__supporting-text">
@@ -141,6 +144,70 @@
             <div class="mdl-card__actions text-end mt-3 mdl-card--border online">
                 <form action="#profile/connections" data-query="/connection/{{ connection.id }}" method="DELETE">
                     <button type="submit" class="mdl-button btn {{#if connection.currentToken }}btn-danger{{else}}btn-primary{{/if}} btn-sm">{{trans 'delete'}}</button>
+                </form>
+            </div>
+        </div>
+    {{/each}}
+</script>
+
+<script type="text/template" id="view-profile-passkeys">
+    <div class="mdl-card row position-relative" id="profile-passkeys">
+        <div class="mdl-card__title col-xl-6 col-12">
+            <h1 class="mdl-card__title-text fs-5">
+                {{ entry.email }}
+            </h1>
+        </div>
+        <div class="mdl-card__actions text-end mdl-card--border col-xl-6 col-12">
+            <p>
+                <a href="#profile" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'profile'}}</a>
+                <a href="#profile/connections" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'connections'}}</a>
+                <a href="#profile/passkeys" class="load-route mdl-button btn btn-secondary btn-sm">{{trans 'passkeys'}}</a>
+            </p>
+            <p>
+                <button type="button" class="mdl-button btn btn-primary btn-sm dialog connected online" data-bs-target="#dialog-add_passkey">{{trans 'add'}}</button>
+            </p>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dialog-add_passkey" tabindex="-1" aria-labelledby="{{trans 'add'}}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="#profile/passkeys" data-query="/passkeys" method="POST" data-close-dialog="#dialog-add_passkey" class="passkey-form">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        {{trans 'title.add_passkey'}}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <label for="passkey-title" class="form-label">{{trans 'field.title'}} <small class="badge bg-secondary">{{trans 'required'}}</small></label>
+                        <input type="text" class="form-control" id="passkey-title" name="title" required value="">
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'submit'}}</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{#each entries as |passkey passkey_index|}}
+        <div class="mdl-card shadow p-3 mb-3 bg-body-tertiary rounded-3 position-relative" id="passkey-{{ passkey.id }}">
+            <div class="mdl-card__title mb-3">
+                <h1 class="mdl-card__title-text fs-5">
+                    {{ passkey.title }}
+                </h1>
+                <div class="mdl-card__subtitle-text">
+                    <span class="mdl-navigation__link text-secondary-emphasis text-decoration-none text-nowrap"><i class="bi bi-clock-history"></i> <span class="timeago" data-date="{{ passkey.date_created }}"></span></span>
+                </div>
+            </div>
+            <div class="mdl-card__supporting-text">
+            </div>
+            <div class="mdl-card__actions text-end mt-3 mdl-card--border online">
+                <form action="#profile/passkeys" data-query="/passkey/{{ passkey.id }}" method="DELETE">
+                    <button type="submit" class="mdl-button btn btn-primary btn-sm">{{trans 'delete'}}</button>
                 </form>
             </div>
         </div>
