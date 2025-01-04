@@ -7,6 +7,8 @@ var FETCH_EXCLUDE = [
     '/api',
     '/login',
     '/forgotpassword',
+    '/passkey/options',
+    '/passkey/login',
     '/proxy',
     '/_profiler',
     '/_wdt',
