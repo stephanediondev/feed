@@ -142,9 +142,34 @@
                 </p>
             </div>
             <div class="mdl-card__actions text-end mt-3 mdl-card--border online">
-                <form action="#profile/connections" data-query="/connection/{{ connection.id }}" method="DELETE">
-                    <button type="submit" class="mdl-button btn {{#if connection.currentToken }}btn-danger{{else}}btn-primary{{/if}} btn-sm">{{trans 'delete'}}</button>
-                </form>
+                <button type="button" class="mdl-button btn {{#if connection.currentToken }}btn-danger{{else}}btn-primary{{/if}} btn-sm dialog online" data-bs-target="#dialog-delete-{{ connection.id }}">{{trans 'delete'}}</button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="dialog-delete-{{ connection.id }}" tabindex="-1" aria-labelledby="{{trans 'delete'}}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="#profile/connections" data-query="/connection/{{ connection.id }}" method="DELETE" data-close-dialog="#dialog-delete-{{ connection.id }}">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            {{#if connection.currentToken }}<i class="bi bi-star-fill"></i> {{/if}}{{ connection.type }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            {{ connection.brand }} {{ connection.model }} ({{ connection.device }})
+                        </p>
+
+                        <p>
+                            {{ connection.os }} / {{ connection.client }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'delete'}}</button>
+                    </div>
+                    </form>
+                </div>
             </div>
         </div>
     {{/each}}
@@ -206,9 +231,27 @@
             <div class="mdl-card__supporting-text">
             </div>
             <div class="mdl-card__actions text-end mt-3 mdl-card--border online">
-                <form action="#profile/passkeys" data-query="/passkey/{{ passkey.id }}" method="DELETE">
-                    <button type="submit" class="mdl-button btn btn-primary btn-sm">{{trans 'delete'}}</button>
-                </form>
+                <button type="button" class="mdl-button btn btn-primary btn-sm dialog online" data-bs-target="#dialog-delete-{{ passkey.id }}">{{trans 'delete'}}</button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="dialog-delete-{{ passkey.id }}" tabindex="-1" aria-labelledby="{{trans 'delete'}}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="#profile/passkeys" data-query="/passkey/{{ passkey.id }}" method="DELETE" data-close-dialog="#dialog-delete-{{ passkey.id }}">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            {{ passkey.title }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="mdl-button btn btn-primary btn-lg">{{trans 'delete'}}</button>
+                    </div>
+                    </form>
+                </div>
             </div>
         </div>
     {{/each}}

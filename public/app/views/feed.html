@@ -162,7 +162,7 @@
         <div class="modal fade" id="dialog-delete-{{ entry.id }}" tabindex="-1" aria-labelledby="{{trans 'delete'}}" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="#feeds/recent" data-query="/feed/{{ entry.id }}" method="DELETE">
+                    <form action="#feeds/recent" data-query="/feed/{{ entry.id }}" method="DELETE" data-close-dialog="#dialog-delete-{{ entry.id }}">
                     <div class="modal-header">
                         <h5 class="modal-title">
                             {{ entry.attributes.title }} ({{trans 'feed'}})
