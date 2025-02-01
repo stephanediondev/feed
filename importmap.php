@@ -31,7 +31,7 @@ return [
         'type' => 'css',
     ],
     'moment-timezone' => [
-        'version' => '0.5.45',
+        'version' => '0.5.47',
     ],
     'moment' => [
         'version' => '2.30.1',
@@ -46,7 +46,7 @@ return [
         'version' => '4.7.8',
     ],
     'i18next' => [
-        'version' => '23.11.5',
+        'version' => '24.2.2',
     ],
     'file-saver' => [
         'version' => '2.0.5',
