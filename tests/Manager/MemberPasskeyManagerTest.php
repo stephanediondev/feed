@@ -34,6 +34,9 @@ class MemberPasskeyManagerTest extends KernelTestCase
         $this->memberManager->persist($member);
 
         $memberPasskey = new MemberPasskey();
+        $memberPasskey->setTitle(uniqid('phpunit-'));
+        $memberPasskey->setCredentialId(uniqid('phpunit-'));
+        $memberPasskey->setPublicKey(uniqid('phpunit-'));
         $memberPasskey->setMember($member);
 
         $this->memberPasskeyManager->persist($memberPasskey);
