@@ -53,7 +53,7 @@ final class ExtraFieldsHelper
         $propertyAccessor->setValue($fields, $path, $value);
     }
 
-    private static function resolve(mixed $value, string $type = null): mixed
+    private static function resolve(mixed $value, ?string $type = null): mixed
     {
         switch ($type) {
             case null:

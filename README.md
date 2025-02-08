@@ -1,7 +1,7 @@
 # Requirements
 
 - Web server
-- PHP 8.2 with apcu, curl, gmp, iconv, json, mbstring, tidy, xml
+- PHP 8.4 with apcu, curl, gmp, iconv, json, mbstring, tidy, xml
 - Composer
 - MySQL 8
 

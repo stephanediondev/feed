@@ -30,7 +30,7 @@ trait ExtraFieldsTrait
         return $this;
     }
 
-    public function getExtraField(string $path, string $type = null): mixed
+    public function getExtraField(string $path, ?string $type = null): mixed
     {
         return ExtraFieldsHelper::getPath($path, $this->extraFields, $type);
     }
