@@ -127,12 +127,12 @@ class CollectionManager extends AbstractManager
                     $simplepieFeed->enable_cache(false);
                     $simplepieFeed->set_timeout(15);
                     $simplepieFeed->force_feed(true);
-                    $simplepieFeed->init();
-                    $simplepieFeed->handle_content_type();
                     $simplepieFeed->set_curl_options([
                         CURLOPT_SSL_VERIFYHOST => false,
                         CURLOPT_SSL_VERIFYPEER => false
                     ]);
+                    $simplepieFeed->init();
+                    $simplepieFeed->handle_content_type();
 
                     if ($simplepieFeed->error()) {
                         //next collection in 12 hours
