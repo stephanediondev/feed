@@ -46,4 +46,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
     {
         $this->connection->update($table, $fields, ['id' => $id]);
     }
+
+    protected function getSortDirection(string $direction): \SortDirection
+    {
+        return 'DESC' === strtoupper($direction) ? \SortDirection::Descending : \SortDirection::Ascending;
+    }
 }

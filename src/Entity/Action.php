@@ -21,7 +21,7 @@ class Action
     #[ORM\Column(name: "title", type: "string", length: 255, nullable: false)]
     private ?string $title = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Action", inversedBy: "", fetch: "LAZY")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Action", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "reverse", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
     private ?Action $reverse = null;
 

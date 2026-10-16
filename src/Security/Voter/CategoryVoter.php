@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Member;
 use App\Security\Voter\AbstractVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 
 class CategoryVoter extends AbstractVoter
 {
@@ -14,7 +15,7 @@ class CategoryVoter extends AbstractVoter
         return $subject instanceof Category || 'category' === $subject;
     }
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
         if (false === $user instanceof Member) {

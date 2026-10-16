@@ -21,7 +21,7 @@ use App\Model\QueryParameterSortModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route(path: '/api', name: 'api_search_', priority: 20)]
@@ -179,18 +179,18 @@ class SearchController extends AbstractAppController
                 }
 
                 if (0 < $data['meta']['results']) {
-                    $data['links']['first'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
-                    $data['links']['last'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $data['links']['first'] = $this->generateUrl($request->attributes->getString('_route'), array_merge($filters, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $data['links']['last'] = $this->generateUrl($request->attributes->getString('_route'), array_merge($filters, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
                 }
 
                 if (1 < $data['meta']['page_number']) {
                     $previous = $data['meta']['page_number'] - 1;
-                    $data['links']['prev'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $data['links']['prev'] = $this->generateUrl($request->attributes->getString('_route'), array_merge($filters, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
                 }
 
                 if ($data['meta']['pages'] > $data['meta']['page_number']) {
                     $next = $data['meta']['page_number'] + 1;
-                    $data['links']['next'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
+                    $data['links']['next'] = $this->generateUrl($request->attributes->getString('_route'), array_merge($filters, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
                 }
 
                 $data['data'] = [];

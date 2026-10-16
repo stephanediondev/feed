@@ -6,4 +6,3 @@ parameters:
         - public/
         - src/
         - tests/
-    checkGenericClassInNonGenericObjectType: false

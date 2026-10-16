@@ -167,18 +167,18 @@ abstract class AbstractAppController extends AbstractController
         }
 
         if (0 < $pagination->getTotalItemCount()) {
-            $data['links']['first'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
-            $data['links']['last'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
+            $data['links']['first'] = $this->generateUrl($request->attributes->getString('_route'), array_merge($filters, ['page[number]' => 1]), UrlGeneratorInterface::ABSOLUTE_URL);
+            $data['links']['last'] = $this->generateUrl($request->attributes->getString('_route'), array_merge($filters, ['page[number]' => $data['meta']['pages']]), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if (1 < $pagination->getCurrentPageNumber()) {
             $previous = $pagination->getCurrentPageNumber() - 1;
-            $data['links']['prev'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
+            $data['links']['prev'] = $this->generateUrl($request->attributes->getString('_route'), array_merge($filters, ['page[number]' => $previous]), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         if ($data['meta']['pages'] > $pagination->getCurrentPageNumber()) {
             $next = $pagination->getCurrentPageNumber() + 1;
-            $data['links']['next'] = $this->generateUrl($request->get('_route'), array_merge($filters, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
+            $data['links']['next'] = $this->generateUrl($request->attributes->getString('_route'), array_merge($filters, ['page[number]' => $next]), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         return $data;

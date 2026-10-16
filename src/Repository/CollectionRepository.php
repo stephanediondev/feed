@@ -52,7 +52,7 @@ class CollectionRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
-        $query->addOrderBy('col.id', 'DESC');
+        $query->addOrderBy('col.id', \SortDirection::Descending);
         $query->groupBy('col.id');
 
         $getQuery = $query->getQuery();

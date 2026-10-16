@@ -57,7 +57,7 @@ class MemberRepository extends AbstractRepository
             $query->setParameter(':id', $parameters['id']);
         }
 
-        $query->addOrderBy('mbr.email');
+        $query->addOrderBy('mbr.email', \SortDirection::Ascending);
         $query->groupBy('mbr.id');
 
         if (true === isset($parameters['returnQueryBuilder']) && true === $parameters['returnQueryBuilder']) {

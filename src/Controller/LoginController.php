@@ -18,7 +18,7 @@ use App\Model\LoginModel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use lbuchs\WebAuthn\WebAuthn;
 use Symfony\Bundle\SecurityBundle\Security;
 

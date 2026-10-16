@@ -6,6 +6,7 @@ use App\Entity\Enclosure;
 use App\Entity\Member;
 use App\Security\Voter\AbstractVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 
 class EnclosureVoter extends AbstractVoter
 {
@@ -14,7 +15,7 @@ class EnclosureVoter extends AbstractVoter
         return $subject instanceof Enclosure || 'enclosure' === $subject;
     }
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
         if (false === $user instanceof Member) {

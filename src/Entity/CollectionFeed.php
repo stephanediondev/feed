@@ -22,7 +22,7 @@ class CollectionFeed
     #[ORM\Column(name: "error", type: "text", length: 65535, nullable: true)]
     private ?string $error = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Collection", inversedBy: "", fetch: "LAZY")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Collection", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "collection_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Collection $collection = null;
 

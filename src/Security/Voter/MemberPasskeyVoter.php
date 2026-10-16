@@ -6,6 +6,7 @@ use App\Entity\MemberPasskey;
 use App\Entity\Member;
 use App\Security\Voter\AbstractVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 
 class MemberPasskeyVoter extends AbstractVoter
 {
@@ -14,7 +15,7 @@ class MemberPasskeyVoter extends AbstractVoter
         return $subject instanceof MemberPasskey || 'member_passkey' === $subject;
     }
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
         if (false === $user instanceof Member) {

@@ -11,7 +11,7 @@ use App\Helper\DeviceDetectorHelper;
 use App\Helper\MaxmindHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/api', name: 'api_push_', priority: 15)]
 class PushController extends AbstractAppController

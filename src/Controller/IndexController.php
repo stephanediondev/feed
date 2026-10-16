@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Controller\AbstractAppController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class IndexController extends AbstractAppController
 {

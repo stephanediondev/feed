@@ -6,6 +6,7 @@ use App\Entity\Feed;
 use App\Entity\Member;
 use App\Security\Voter\AbstractVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 
 class FeedVoter extends AbstractVoter
 {
@@ -14,7 +15,7 @@ class FeedVoter extends AbstractVoter
         return $subject instanceof Feed || 'feed' === $subject;
     }
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
         if (false === $user instanceof Member) {

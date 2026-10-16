@@ -86,7 +86,7 @@ class ConnectionRepository extends AbstractRepository
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }
 
-        $query->addOrderBy('cnt.dateModified', 'DESC');
+        $query->addOrderBy('cnt.dateModified', \SortDirection::Descending);
         $query->groupBy('cnt.id');
 
         if (true === isset($parameters['returnQueryBuilder']) && true === $parameters['returnQueryBuilder']) {

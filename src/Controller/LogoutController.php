@@ -9,7 +9,7 @@ use App\Entity\Connection;
 use App\Helper\JwtHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route(path: '/api', name: 'api_logout_', priority: 20)]

@@ -65,7 +65,7 @@ class CollectionFeedRepository extends AbstractRepository
             $query->andWhere('col_fed.error IS NOT NULL');
         }
 
-        $query->addOrderBy('col_fed.id', 'DESC');
+        $query->addOrderBy('col_fed.id', \SortDirection::Descending);
         $query->groupBy('col_fed.id');
 
         $getQuery = $query->getQuery();

@@ -10,7 +10,7 @@ use App\Helper\DeviceDetectorHelper;
 use App\Helper\MaxmindHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/api', name: 'api_pinboard_', priority: 20)]
 class PinboardController extends AbstractAppController

@@ -121,7 +121,7 @@ SQL;
             $query->setParameter(':date', new \DateTime('-'.$parameters['days'].' days'));
         }
 
-        $query->addOrderBy($parameters['sortField'], $parameters['sortDirection']);
+        $query->addOrderBy($parameters['sortField'], $this->getSortDirection($parameters['sortDirection']));
         $query->groupBy('cat.id');
 
         if (true === isset($parameters['returnQueryBuilder']) && true === $parameters['returnQueryBuilder']) {

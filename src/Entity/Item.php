@@ -32,7 +32,7 @@ class Item
     #[ORM\Column(name: "date", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(name: "content", type: "string", length: 4294967295, nullable: true)]
+    #[ORM\Column(name: "content", type: "text", length: 4294967295, nullable: true)]
     private ?string $content = null;
 
     #[ORM\Column(name: "latitude", type: "float", nullable: true)]
@@ -44,11 +44,11 @@ class Item
     #[ORM\Column(name: "date_modified", type: "datetime", nullable: false)]
     private ?\DateTimeInterface $dateModified = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", inversedBy: "", fetch: "LAZY")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Feed", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "feed_id", referencedColumnName: "id", onDelete: "cascade", nullable: false)]
     private ?Feed $feed = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Author", inversedBy: "", fetch: "LAZY")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Author", fetch: "LAZY")]
     #[ORM\JoinColumn(name: "author_id", referencedColumnName: "id", onDelete: "SET NULL", nullable: true)]
     private ?Author $author = null;
 
